@@ -4,11 +4,11 @@ import repository.dao.TaskRepository;
 import repository.entity.Task;
 import service.api.TaskService;
 import service.converter.Converter;
-import service.vo.Priority;
+import util.types.Priority;
 import service.vo.TaskModel;
 import service.vo.UserModel;
 
-public class SimpleTaskService implements TaskService {
+public abstract class SimpleTaskService implements TaskService {
     private TaskRepository repo;
     private Converter<Task, TaskModel> converter;
 
