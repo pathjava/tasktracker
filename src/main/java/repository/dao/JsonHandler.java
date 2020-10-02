@@ -1,8 +1,6 @@
 package repository.dao;
 
-import java.util.List;
-
-public interface JsonHandler<T, E> {
+public interface JsonHandler {
     void write();
-    List<E> read();
+    void read();
 }

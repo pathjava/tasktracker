@@ -4,8 +4,6 @@ import util.types.Priority;
 import util.types.TaskType;
 import util.types.WorkflowStatus;
 
-import java.time.ZonedDateTime;
-
 public class TaskModel {
 
     private final Long id;
@@ -15,8 +13,8 @@ public class TaskModel {
     private final Priority priority;
     private final Long authorUserId;
     private final Long executorUserId;
-    private final ZonedDateTime created;
-    private final ZonedDateTime updated;
+    private final Long created;
+    private final Long updated;
     private final int storyPoint;
     private final Long projectId;
     private final String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
@@ -26,13 +24,13 @@ public class TaskModel {
     private final Long spentDuration;
     private final Long leftDuration;
 
+
     public TaskModel(Long id, String name, String description,
                      TaskType type, Priority priority,
                      Long authorUserId, Long executorUserId,
-                     ZonedDateTime created, ZonedDateTime updated,
-                     int storyPoint, Long projectId, String strCode,
-                     WorkflowStatus wfStatus, String version,
-                     Long planDuration, Long spentDuration, Long leftDuration) {
+                     Long created, Long updated, int storyPoint,
+                     Long projectId, String strCode, WorkflowStatus wfStatus,
+                     String version, Long planDuration, Long spentDuration, Long leftDuration) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -80,11 +78,11 @@ public class TaskModel {
         return executorUserId;
     }
 
-    public ZonedDateTime getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public ZonedDateTime getUpdated() {
+    public Long getUpdated() {
         return updated;
     }
 

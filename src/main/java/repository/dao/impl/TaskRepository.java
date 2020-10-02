@@ -1,41 +1,53 @@
 package repository.dao.impl;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import repository.dao.Repository;
 import repository.entity.Task;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class TaskRepository implements Repository<Task, Task> {
+@Component
+public class TaskRepository implements Repository<Long, Task> {
 
     private JsonHandlerImpl jsonHandler;
 
-    @Override
-    public Collection<Task> get() {
-        return jsonHandler.tasks.values().stream().collect(Collectors.toUnmodifiableList());
+    @Autowired
+    public void setJsonHandler(JsonHandlerImpl jsonHandler) {
+        this.jsonHandler = jsonHandler;
     }
 
     @Override
-    public Task get(Task id) {
-        Task temp = jsonHandler.tasks.get(id.getId());
+    public Collection<Task> get() {
+        return jsonHandler.tasks.values().stream()
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public Task get(Long id) {
+        Task temp = jsonHandler.tasks.get(id);
         if (temp == null)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(); //TODO определить своё или более подходящее исключение
         return temp;
     }
 
     @Override
-    public void create(Task id) {
+    public void create(Task task) {
+        Task temp = jsonHandler.tasks.put(task.getId(), task);
+        if (temp == null)
+            jsonHandler.write();
     }
 
     @Override
-    public void update(Task id) {
-
+    public void update(Task task) {
+        create(task);
     }
 
     @Override
-    public void delete(Task id) {
-        Task temp = jsonHandler.tasks.remove(id.getId());
+    public void delete(Long id) {
+        Task temp = jsonHandler.tasks.remove(id);
         if (temp != null)
             jsonHandler.write();
     }

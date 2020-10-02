@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerImpl implements JsonHandler<Task, Task> {
+public class JsonHandlerImpl implements JsonHandler {
 
     public final Map<Long, Task> tasks = new ConcurrentHashMap<>();
     private final static String TASKS_PATH
@@ -39,7 +39,7 @@ public class JsonHandlerImpl implements JsonHandler<Task, Task> {
     }
 
     @Override
-    public List<Task> read() {
+    public void read() {
         synchronized (this) {
             try {
                 tasks.clear();
@@ -52,6 +52,5 @@ public class JsonHandlerImpl implements JsonHandler<Task, Task> {
                 e.printStackTrace();
             }
         }
-        return tasks.values().stream().collect(Collectors.toUnmodifiableList());
     }
 }

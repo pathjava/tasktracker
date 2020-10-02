@@ -1,5 +1,6 @@
 package service.api.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import repository.dao.impl.TaskRepository;
 import repository.entity.Task;
 import service.api.ChangeTaskService;
@@ -9,18 +10,29 @@ import service.vo.TaskModel;
 import service.vo.UserModel;
 
 public abstract class SimpleTaskService implements ChangeTaskService {
+
     private TaskRepository repo;
     private Converter<Task, TaskModel> converter;
 
-    public void createTask(TaskModel model) {
-        repo.create(converter.convertFrom(model));
+    @Autowired
+    public void setRepo(TaskRepository repo) {
+        this.repo = repo;
     }
 
-    public void setUser(UserModel model, TaskModel model2) {
-        //
+    @Autowired
+    public void setConverter(Converter<Task, TaskModel> converter) {
+        this.converter = converter;
     }
 
-    public void setPriority(Priority priority, TaskModel model) {
+    public void createTask(TaskModel taskModel) {
+        repo.create(converter.convertFrom(taskModel));
+    }
+
+    public void setUser(UserModel userModel, TaskModel taskModel) {
+
+    }
+
+    public void setPriority(Priority priority, TaskModel taskModel) {
 
     }
 }
