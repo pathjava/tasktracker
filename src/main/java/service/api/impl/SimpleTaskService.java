@@ -1,6 +1,6 @@
 package service.api.impl;
 
-import repository.dao.TaskRepository;
+import repository.dao.impl.TaskRepository;
 import repository.entity.Task;
 import service.api.ChangeTaskService;
 import service.converter.Converter;
@@ -13,7 +13,7 @@ public abstract class SimpleTaskService implements ChangeTaskService {
     private Converter<Task, TaskModel> converter;
 
     public void createTask(TaskModel model) {
-        repo.save(converter.convertFrom(model));
+        repo.create(converter.convertFrom(model));
     }
 
     public void setUser(UserModel model, TaskModel model2) {
