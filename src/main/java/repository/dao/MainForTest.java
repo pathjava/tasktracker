@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContext;
 import repository.dao.impl.JsonHandlerImpl;
 import repository.dao.impl.TaskRepository;
 import repository.entity.Task;
+import service.converter.impl.ConverterTask;
+import service.vo.TaskModel;
 import util.types.Priority;
 import util.types.TaskType;
 import util.types.WorkflowStatus;
@@ -18,6 +20,7 @@ public class MainForTest {
         ApplicationContext context = SpringApplication.run(MainForTest.class, args);
         JsonHandlerImpl jsonHandler = context.getBean(JsonHandlerImpl.class);
         TaskRepository taskRepository = context.getBean(TaskRepository.class);
+        ConverterTask converterTask = context.getBean(ConverterTask.class);
 
         jsonHandler.tasks.put(1L, new Task(1L, "task1", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L,
@@ -31,10 +34,13 @@ public class MainForTest {
                 123456L, 123456L, 123456L));
         jsonHandler.write();
 
-        for (Task task : taskRepository.get()) {
-            System.out.println(task);
-        }
+//        for (Task task : taskRepository.get()) {
+//            System.out.println(task);
+//        }
 
 //        taskRepository.delete(1L);
+
+        TaskModel taskModel = converterTask.convertTo(taskRepository.get(1L));
+        System.out.println(taskModel);
     }
 }
