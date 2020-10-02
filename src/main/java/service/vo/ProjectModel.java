@@ -1,10 +1,10 @@
 package service.vo;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class ProjectModel {
-    List<TaskModel> taskModels;
-    private String id;
-    private LocalDateTime time;
+    private List<TaskModel> taskModels;
+    private Long id;
+    private ZonedDateTime created;
 }

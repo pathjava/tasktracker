@@ -2,13 +2,13 @@ package service.api.impl;
 
 import repository.dao.TaskRepository;
 import repository.entity.Task;
-import service.api.TaskService;
+import service.api.ChangeTaskService;
 import service.converter.Converter;
 import util.types.Priority;
 import service.vo.TaskModel;
 import service.vo.UserModel;
 
-public abstract class SimpleTaskService implements TaskService {
+public abstract class SimpleTaskService implements ChangeTaskService {
     private TaskRepository repo;
     private Converter<Task, TaskModel> converter;
 

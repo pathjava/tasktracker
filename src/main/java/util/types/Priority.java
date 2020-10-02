@@ -1,5 +1,5 @@
 package util.types;
 
-public enum  Priority {
+public enum Priority {
     BLOCKER, CRITICAL, MAJOR, MINOR
 }

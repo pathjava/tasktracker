@@ -1,6 +1,6 @@
 package service.converter;
 
 public interface Converter<E, V> {
-    V converTo(E entity);
+    V convertTo(E entity);
     E convertFrom(V valueObject);
 }

@@ -1,8 +1,8 @@
 package service.api;
 
 import service.vo.TaskModel;
-import util.types.Status;
+import util.types.TaskStatus;
 
 public interface ChangeTaskService {
-    void changeStatus(Status status, TaskModel model);
+    void changeStatus(TaskStatus status, TaskModel model);
 }
