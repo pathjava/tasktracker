@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerImpl implements JsonHandler {
+public class JsonHandlerTask implements JsonHandler {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
     private final static String TASKS_PATH
