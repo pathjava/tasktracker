@@ -1,4 +1,4 @@
 package ru.progwards.repository.dao;
 
-public interface Pagable {
+public interface Pageable {
 }

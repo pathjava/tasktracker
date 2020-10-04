@@ -7,6 +7,7 @@ import ru.progwards.repository.dao.impl.JsonHandlerTask;
 import ru.progwards.repository.dao.impl.TaskRepository;
 import ru.progwards.repository.entity.TaskEntity;
 import ru.progwards.service.converter.impl.ConverterTask;
+import ru.progwards.service.facade.impl.TaskRemoveService;
 import ru.progwards.service.vo.Task;
 import ru.progwards.util.types.Priority;
 import ru.progwards.util.types.TaskType;
@@ -21,6 +22,7 @@ public class MainForTest {
         JsonHandlerTask jsonHandler = context.getBean(JsonHandlerTask.class);
         TaskRepository taskRepository = context.getBean(TaskRepository.class);
         ConverterTask converterTask = context.getBean(ConverterTask.class);
+        TaskRemoveService taskRemoveService = context.getBean(TaskRemoveService.class);
 
         jsonHandler.tasks.put(1L, new TaskEntity(1L, "task1", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L,
@@ -40,7 +42,9 @@ public class MainForTest {
 
 //        taskRepository.delete(1L);
 
-        Task taskModel = converterTask.convertTo(taskRepository.get(1L));
-        System.out.println(taskModel);
+        Task task = converterTask.convertTo(taskRepository.get(1L));
+        System.out.println(task);
+
+        taskRemoveService.remove(task);
     }
 }

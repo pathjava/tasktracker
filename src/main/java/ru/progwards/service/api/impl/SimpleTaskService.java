@@ -11,12 +11,12 @@ import ru.progwards.service.vo.User;
 
 public abstract class SimpleTaskService implements ChangeTaskService {
 
-    private TaskRepository repo;
+    private TaskRepository taskRepository;
     private Converter<TaskEntity, Task> converter;
 
     @Autowired
-    public void setRepo(TaskRepository repo) {
-        this.repo = repo;
+    public void setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 
     @Autowired
@@ -24,15 +24,15 @@ public abstract class SimpleTaskService implements ChangeTaskService {
         this.converter = converter;
     }
 
-    public void createTask(Task taskModel) {
-        repo.create(converter.convertFrom(taskModel));
+    public void createTask(Task task) {
+        taskRepository.create(converter.convertFrom(task));
     }
 
-    public void setUser(User userModel, Task taskModel) {
+    public void setUser(User user, Task task) {
 
     }
 
-    public void setPriority(Priority priority, Task taskModel) {
+    public void setPriority(Priority priority, Task task) {
 
     }
 }
