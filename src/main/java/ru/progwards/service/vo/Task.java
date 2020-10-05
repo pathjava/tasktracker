@@ -1,6 +1,6 @@
 package ru.progwards.service.vo;
 
-import ru.progwards.util.types.Priority;
+import ru.progwards.util.types.PriorityType;
 import ru.progwards.util.types.TaskType;
 import ru.progwards.util.types.WorkflowStatus;
 
@@ -9,17 +9,17 @@ import java.time.ZonedDateTime;
 public class Task {
 
     private final Long id;
-    private final String name;
+    private String name;
     private final String description;
     private final TaskType type;
-    private final Priority priority;
+    private final PriorityType priority;
     private final Long authorUserId;
     private final Long executorUserId;
     private final ZonedDateTime created;
     private final ZonedDateTime updated;
     private final int storyPoint;
     private final Long projectId;
-    private final String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
+    private String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
     private final WorkflowStatus wfStatus;
     private final String version;
     private final Long planDuration;
@@ -27,7 +27,7 @@ public class Task {
     private final Long leftDuration;
 
     public Task(Long id, String name, String description,
-                TaskType type, Priority priority,
+                TaskType type, PriorityType priority,
                 Long authorUserId, Long executorUserId,
                 ZonedDateTime created, ZonedDateTime updated,
                 int storyPoint, Long projectId, String strCode,
@@ -68,7 +68,7 @@ public class Task {
         return type;
     }
 
-    public Priority getPriority() {
+    public PriorityType getPriority() {
         return priority;
     }
 
@@ -118,5 +118,13 @@ public class Task {
 
     public Long getLeftDuration() {
         return leftDuration;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStrCode(String strCode) {
+        this.strCode = strCode;
     }
 }

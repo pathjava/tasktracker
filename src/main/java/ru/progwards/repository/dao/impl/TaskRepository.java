@@ -42,6 +42,7 @@ public class TaskRepository implements Repository<Long, TaskEntity> {
 
     @Override
     public void update(TaskEntity taskEntity) {
+        delete(taskEntity.getId());
         create(taskEntity);
     }
 

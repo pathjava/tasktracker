@@ -5,7 +5,7 @@ import ru.progwards.repository.dao.impl.TaskRepository;
 import ru.progwards.repository.entity.TaskEntity;
 import ru.progwards.service.api.ChangeTaskService;
 import ru.progwards.service.converter.Converter;
-import ru.progwards.util.types.Priority;
+import ru.progwards.util.types.PriorityType;
 import ru.progwards.service.vo.Task;
 import ru.progwards.service.vo.User;
 
@@ -32,7 +32,7 @@ public abstract class SimpleTaskService implements ChangeTaskService {
 
     }
 
-    public void setPriority(Priority priority, Task task) {
+    public void setPriority(PriorityType priority, Task task) {
 
     }
 }

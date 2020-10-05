@@ -1,6 +1,6 @@
 package ru.progwards.repository.entity;
 
-import ru.progwards.util.types.Priority;
+import ru.progwards.util.types.PriorityType;
 import ru.progwards.util.types.TaskType;
 import ru.progwards.util.types.WorkflowStatus;
 
@@ -10,14 +10,14 @@ public class TaskEntity {
     private final String name;
     private final String description;
     private final TaskType type;
-    private final Priority priority;
+    private final PriorityType priority;
     private final Long authorUserId;
     private final Long executorUserId;
     private final Long created;
     private final Long updated;
     private final int storyPoint;
     private final Long projectId;
-    private final String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
+    private String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
     private final WorkflowStatus wfStatus;
     private final String version;
     private final Long planDuration;
@@ -25,7 +25,7 @@ public class TaskEntity {
     private final Long leftDuration;
 
     public TaskEntity(Long id, String name, String description,
-                      TaskType type, Priority priority,
+                      TaskType type, PriorityType priority,
                       Long authorUserId, Long executorUserId,
                       Long created, Long updated,
                       int storyPoint, Long projectId, String strCode,
@@ -66,7 +66,7 @@ public class TaskEntity {
         return type;
     }
 
-    public Priority getPriority() {
+    public PriorityType getPriority() {
         return priority;
     }
 
@@ -116,5 +116,9 @@ public class TaskEntity {
 
     public Long getLeftDuration() {
         return leftDuration;
+    }
+
+    public void setStrCode(String strCode) {
+        this.strCode = strCode;
     }
 }
