@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Component
-public class TaskRepository implements Repository<Long, TaskEntity> {
+public class TaskEntityRepository implements Repository<Long, TaskEntity> {
 
-    private JsonHandlerTask jsonHandler;
+    private JsonHandlerTaskEntity jsonHandler;
 
     @Autowired
-    public void setJsonHandler(JsonHandlerTask jsonHandler) {
+    public void setJsonHandler(JsonHandlerTaskEntity jsonHandler) {
         this.jsonHandler = jsonHandler;
     }
 

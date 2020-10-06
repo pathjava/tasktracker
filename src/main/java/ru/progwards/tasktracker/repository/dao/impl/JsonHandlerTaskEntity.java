@@ -20,11 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerTask implements JsonHandler {
+public class JsonHandlerTaskEntity implements JsonHandler {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
     private final static String TASKS_PATH
-            = "C:\\Intellij Idea\\programming\\tasktracker\\src\\main\\java\\ru\\progwards\\repository\\dao\\impl\\tasks.json";
+            = "C:\\Intellij Idea\\programming\\tasktracker\\src\\main\\java\\ru\\progwards\\tasktracker\\repository\\dao\\impl\\tasks.json";
 
     @Override
     public void write() {

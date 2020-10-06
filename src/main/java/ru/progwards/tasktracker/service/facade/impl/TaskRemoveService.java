@@ -2,17 +2,17 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.dao.impl.TaskRepository;
+import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepository;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 @Service
 public class TaskRemoveService implements RemoveService<Task> {
 
-    private TaskRepository taskRepository;
+    private TaskEntityRepository taskRepository;
 
     @Autowired
-    public void setTaskRepository(TaskRepository taskRepository) {
+    public void setTaskRepository(TaskEntityRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
