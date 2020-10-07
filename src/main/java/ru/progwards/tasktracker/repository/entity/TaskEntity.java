@@ -121,4 +121,5 @@ public class TaskEntity {
     public void setStrCode(String strCode) {
         this.strCode = strCode;
     }
+  
 }
