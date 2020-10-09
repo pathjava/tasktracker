@@ -1,12 +1,10 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
-import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.progwards.tasktracker.MainForTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.util.types.Priority;
@@ -15,17 +13,17 @@ import ru.progwards.tasktracker.util.types.WorkflowStatus;
 
 import java.time.ZonedDateTime;
 
-//@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
 @ContextConfiguration(classes = MainForTest.class)
-public class JsonHandlerTaskTest extends TestCase {
+public class JsonHandlerTaskEntityTest {
 
     @Autowired
-    private JsonHandlerTask jsonHandlerTask;
+    private JsonHandlerTaskEntity jsonHandlerTask;
 
-    @Before
-    public void clear(){
+    @BeforeEach
+    public void clear() {
         jsonHandlerTask.tasks.clear();
     }
 
