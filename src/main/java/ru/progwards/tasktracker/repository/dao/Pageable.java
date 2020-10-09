@@ -1,4 +1,10 @@
 package ru.progwards.tasktracker.repository.dao;
 
-public interface Pageable {
+import java.util.Collection;
+
+public interface Pageable<E> {
+
+
+
+
 }
