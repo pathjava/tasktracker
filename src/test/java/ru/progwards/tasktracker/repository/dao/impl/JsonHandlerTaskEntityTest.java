@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import ru.progwards.tasktracker.MainForTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.util.types.Priority;
 import ru.progwards.tasktracker.util.types.TaskType;
@@ -13,10 +11,9 @@ import ru.progwards.tasktracker.util.types.WorkflowStatus;
 
 import java.time.ZonedDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ContextConfiguration(classes = MainForTest.class)
 public class JsonHandlerTaskEntityTest {
 
     @Autowired

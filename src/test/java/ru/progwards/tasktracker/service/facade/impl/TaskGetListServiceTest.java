@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import ru.progwards.tasktracker.MainForTest;
 import ru.progwards.tasktracker.repository.dao.impl.JsonHandlerTaskEntity;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -19,7 +17,6 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@ContextConfiguration(classes = MainForTest.class)
 public class TaskGetListServiceTest {
 
     @Autowired
