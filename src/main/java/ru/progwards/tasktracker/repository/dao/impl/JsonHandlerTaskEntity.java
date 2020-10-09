@@ -26,6 +26,9 @@ public class JsonHandlerTaskEntity implements JsonHandler {
     private final static String TASKS_PATH
             = "C:\\Intellij Idea\\programming\\tasktracker\\src\\main\\java\\ru\\progwards\\tasktracker\\repository\\dao\\impl\\tasks.json";
 
+    /**
+     * записываем объекты в Json файл из Map
+     */
     @Override
     public void write() {
         synchronized (this) {
@@ -38,6 +41,9 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         }
     }
 
+    /**
+     * читаем объекты из Json файла в Map
+     */
     @Override
     public void read() {
         synchronized (this) {

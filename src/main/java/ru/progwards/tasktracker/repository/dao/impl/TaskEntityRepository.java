@@ -19,12 +19,19 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
         this.jsonHandler = jsonHandler;
     }
 
+    /**
+     * @return возвращаем коллекцию всех задач
+     */
     @Override
     public Collection<TaskEntity> get() {
         return jsonHandler.tasks.values().stream()
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    /**
+     * @param id идентификатор задачи, которую необходимо получить
+     * @return возвращаем задачу, полученную по идентификатору
+     */
     @Override
     public TaskEntity get(Long id) {
         TaskEntity temp = jsonHandler.tasks.get(id);
@@ -33,6 +40,9 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
         return temp;
     }
 
+    /**
+     * @param taskEntity создаем/записываем в репозиторий новую задачу
+     */
     @Override
     public void create(TaskEntity taskEntity) {
         TaskEntity temp = jsonHandler.tasks.put(taskEntity.getId(), taskEntity);
@@ -40,12 +50,18 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
             jsonHandler.write();
     }
 
+    /**
+     * @param taskEntity обновляем полученную задачу в репозитории
+     */
     @Override
     public void update(TaskEntity taskEntity) {
         delete(taskEntity.getId());
         create(taskEntity);
     }
 
+    /**
+     * @param id идентификатор по которому удаляем задачу
+     */
     @Override
     public void delete(Long id) {
         TaskEntity temp = jsonHandler.tasks.remove(id);

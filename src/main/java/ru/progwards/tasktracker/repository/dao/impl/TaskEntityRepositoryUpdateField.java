@@ -18,6 +18,9 @@ public class TaskEntityRepositoryUpdateField implements RepositoryUpdateField {
         this.taskRepository = taskRepository;
     }
 
+    /**
+     * @param oneValue объект, содержащий идентификатор и тип и значение обновляемого поля задачи
+     */
     @Override
     public void updateField(UpdateOneValue oneValue) {
         TaskEntity entity = taskRepository.get(oneValue.getId());
