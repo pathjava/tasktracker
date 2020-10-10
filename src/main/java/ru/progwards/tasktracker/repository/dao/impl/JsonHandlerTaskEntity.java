@@ -49,10 +49,6 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         }
     }
 
-    public static void main(String[] args) {
-        new JsonHandlerTaskEntity();
-    }
-
     /**
      * записываем объекты в Json файл из Map
      */
