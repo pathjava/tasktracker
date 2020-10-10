@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
 public class JsonHandlerTaskEntity implements JsonHandler {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
-    private final static String TASKS_PATH
-            = "C:\\Intellij Idea\\programming\\tasktracker\\src\\main\\java\\ru\\progwards\\tasktracker\\repository\\dao\\impl\\tasks.json";
+    private final static String TASKS_PATH = "data/tasks.json";
 
     public JsonHandlerTaskEntity() {
         try {
