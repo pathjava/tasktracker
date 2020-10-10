@@ -26,6 +26,7 @@ public class TaskRemoveServiceTest {
 
     @BeforeEach
     public void reader() {
+        jsonHandler.tasks.clear();
         jsonHandler.tasks.put(5L, new TaskEntity(5L, "task5", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L,
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
