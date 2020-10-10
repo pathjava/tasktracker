@@ -8,26 +8,10 @@ public interface Repository<T, E> {
 
     E get(T id);
 
-    /**
-     * Save new object to repository
-     *
-     * @param entity object
-     */
-    void save(E entity);
+    void create(E elem);
 
-    /**
-     * Update object fields in repository
-     * 'id' cannot be updated
-     *
-     * @param entity object
-     */
-    void modify(E entity);
+    void update(E elem);
 
-    /**
-     * Remove object from repository
-     *
-     * @param entity object
-     */
-    void delete(E entity);
+    void delete(T id);
 
 }

@@ -1,4 +1,4 @@
 package ru.progwards.tasktracker.util.types;
 
-public class UserRole {
+public enum UserRole {
 }
