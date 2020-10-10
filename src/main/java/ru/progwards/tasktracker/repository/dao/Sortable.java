@@ -1,8 +1,9 @@
 package ru.progwards.tasktracker.repository.dao;
 
-public interface Sortable {
+public interface Sortable<E> {
 
 
+  
 
 }
 

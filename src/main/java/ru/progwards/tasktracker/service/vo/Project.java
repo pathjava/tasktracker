@@ -1,10 +1,14 @@
 package ru.progwards.tasktracker.service.vo;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Project {
-    List<Task> taskModels;
-    private String id;
-    private LocalDateTime time;
+  
+    private List<Task> taskModels;
+  
+    private Long id;
+  
+    private ZonedDateTime created;
+
 }

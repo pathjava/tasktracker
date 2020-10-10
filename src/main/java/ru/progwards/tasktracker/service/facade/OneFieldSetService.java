@@ -1,7 +1,9 @@
 package ru.progwards.tasktracker.service.facade;
 
-public interface OneFieldSetService<M> {
+import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
-    void setOneField(M model, String fieldName);
+public interface OneFieldSetService {
+
+    void setOneField(UpdateOneValue oneValue);
 
 }
