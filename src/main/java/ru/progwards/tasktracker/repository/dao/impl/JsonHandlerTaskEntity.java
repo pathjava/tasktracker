@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -22,9 +23,13 @@ import java.util.stream.Collectors;
 @Component
 public class JsonHandlerTaskEntity implements JsonHandler {
 
+    public static void main(String[] args) {
+        new JsonHandlerTaskEntity();
+    }
+
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
-    private final static String TASKS_PATH
-            = "C:\\Intellij Idea\\programming\\tasktracker\\src\\main\\java\\ru\\progwards\\tasktracker\\repository\\dao\\impl\\tasks.json";
+    private final static File TASKS_PATH
+            = new File(JsonHandlerTaskEntity.class.getClassLoader().getResource("data/tasks.json").getFile());
 
     public JsonHandlerTaskEntity() {
         try {
@@ -61,7 +66,7 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         synchronized (this) {
             try {
                 tasks.clear();
-                String json = Files.readString(Path.of(TASKS_PATH));
+                String json = Files.readString(TASKS_PATH.toPath());
                 Type type = new TypeToken<List<TaskEntity>>() {
                 }.getType();
                 ArrayList<TaskEntity> list = new Gson().fromJson(json, type);

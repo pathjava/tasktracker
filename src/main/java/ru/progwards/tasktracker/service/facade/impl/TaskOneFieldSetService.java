@@ -12,7 +12,7 @@ public class TaskOneFieldSetService implements OneFieldSetService {
     private TaskEntityRepositoryUpdateField updateField;
 
     @Autowired
-    public void setUpdateField(TaskEntityRepositoryUpdateField updateField) {
+    public TaskOneFieldSetService(TaskEntityRepositoryUpdateField updateField){
         this.updateField = updateField;
     }
 

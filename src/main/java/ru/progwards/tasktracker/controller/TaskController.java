@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
+import ru.progwards.tasktracker.service.facade.impl.TaskRemoveService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 @RestController
@@ -14,12 +16,15 @@ public class TaskController {
 
     private TaskGetService taskGetService;
 
+    private TaskRemoveService removeTask;
+
     @Autowired
-    public void setTaskGetService(TaskGetService taskGetService) {
+    public void setTaskGetService(TaskGetService taskGetService, TaskRemoveService removeTask) {
         this.taskGetService = taskGetService;
+        this.removeTask = removeTask;
     }
 
-    @GetMapping("get/{id}")
+    @GetMapping("/rest/task/get/{id}")
     public ResponseEntity<Task> getTask(@PathVariable("id") Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -31,4 +36,13 @@ public class TaskController {
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
+
+    @GetMapping("/rest/task/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTask(@PathVariable("id") Long id){
+        Task task = taskGetService.get(id);
+        removeTask.remove(task);
+    }
+
+
 }
