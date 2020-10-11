@@ -77,6 +77,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping()
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Task> deleteTask(@PathVariable("id") Long id) {
