@@ -34,10 +34,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public TaskEntity get(Long id) {
-        TaskEntity temp = jsonHandler.tasks.get(id);
-        if (temp == null)
-            throw new IllegalArgumentException(); //TODO определить своё или более подходящее исключение
-        return temp;
+        return jsonHandler.tasks.get(id);
     }
 
     /**

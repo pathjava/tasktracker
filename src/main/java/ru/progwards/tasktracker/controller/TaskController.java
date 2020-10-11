@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
@@ -60,7 +61,7 @@ public class TaskController {
     @PostMapping("add")
     public ResponseEntity<Task> addTask(@RequestBody Task task){
         if (task == null)
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         taskCreateService.create(task);
 
@@ -70,7 +71,7 @@ public class TaskController {
     @PutMapping("update")
     public ResponseEntity<Task> updateTask(@RequestBody Task task){
         if (task == null)
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         taskRefreshService.refresh(task);
 
@@ -82,14 +83,14 @@ public class TaskController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Task> deleteTask(@PathVariable("id") Long id) {
         if (id == null)
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Task task = taskGetService.get(id);
 
         if (task != null)
             taskRemoveService.remove(task);
         else
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
