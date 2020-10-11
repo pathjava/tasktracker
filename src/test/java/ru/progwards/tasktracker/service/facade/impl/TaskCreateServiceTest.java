@@ -34,11 +34,13 @@ public class TaskCreateServiceTest {
 
     @Test
     public void testCreate() {
-        taskCreateService.create(new Task(5L, "task5", "description1", TaskType.BUG, Priority.MAJOR,
+        taskCreateService.create(
+                new Task(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L, ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                 100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                123456L, 123456L, 123456L));
+                123456L, 123456L, 123456L)
+        );
 
-        assertEquals("task5", taskRepository.get(5L).getName());
+        assertEquals("Testing_task1_test", taskRepository.get(1L).getName());
     }
 }

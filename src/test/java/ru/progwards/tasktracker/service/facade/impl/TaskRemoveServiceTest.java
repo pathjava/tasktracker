@@ -22,29 +22,32 @@ public class TaskRemoveServiceTest {
     private JsonHandlerTaskEntity jsonHandler;
 
     @Autowired
+    private TaskCreateService taskCreateService;
+
+    @Autowired
     private TaskRemoveService taskRemoveService;
 
     @BeforeEach
     public void reader() {
         jsonHandler.tasks.clear();
-        jsonHandler.tasks.put(5L, new TaskEntity(5L, "task5", "description1", TaskType.BUG, Priority.MAJOR,
-                001L, 003L,
-                ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                123456L, 123456L, 123456L));
-        jsonHandler.write();
-        jsonHandler.read();
+        taskCreateService.create(
+                new Task(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
+                        001L, 003L, ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
+                        123456L, 123456L, 123456L)
+        );
     }
 
     @Test
     public void testRemove() {
         int sizeOne = jsonHandler.tasks.size();
-        Task tempTask = new Task(5L, "task5", "description1", TaskType.BUG, Priority.MAJOR,
-                001L, 003L, ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                123456L, 123456L, 123456L);
 
-        taskRemoveService.remove(tempTask);
+        taskRemoveService.remove(
+                new Task(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
+                        001L, 003L, ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
+                        123456L, 123456L, 123456L)
+        );
 
         int sizeTwo = jsonHandler.tasks.size();
 

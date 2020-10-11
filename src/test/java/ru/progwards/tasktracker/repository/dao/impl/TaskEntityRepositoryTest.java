@@ -12,8 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -25,15 +24,15 @@ public class TaskEntityRepositoryTest {
     @Test
     public void testGetAllTaskEntity() {
         when(taskRepository.get()).thenReturn(Arrays.asList(
-                new TaskEntity(1L, "task1_test", "description1", TaskType.BUG, Priority.MAJOR,
+                new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                         001L, 003L,
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
                         123456L, 123456L, 123456L),
-                new TaskEntity(2L, "task2_test", "description2", TaskType.EPIC, Priority.CRITICAL,
-                        002L, 007L,
-                        ZonedDateTime.now().plusDays(1).toEpochSecond(), ZonedDateTime.now().plusDays(3).toEpochSecond(),
-                        101, 0006L, "STR_CODE_RRR", WorkflowStatus.IN_PROGRESS, "second_version",
+                new TaskEntity(2L, "Testing_task2_test", "description2", TaskType.EPIC, Priority.BLOCKER,
+                        003L, 004L,
+                        ZonedDateTime.now().plusDays(1).toEpochSecond(), ZonedDateTime.now().plusDays(2).toEpochSecond(),
+                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.REVIEW, "new_version",
                         123456L, 123456L, 123456L)
         ));
 
@@ -46,7 +45,7 @@ public class TaskEntityRepositoryTest {
     @Test
     public void testGetOneTaskEntity() {
         when(taskRepository.get(1L)).thenReturn(
-                new TaskEntity(1L, "task1_test", "description1", TaskType.BUG, Priority.MAJOR,
+                new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                         001L, 003L,
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
@@ -56,12 +55,12 @@ public class TaskEntityRepositoryTest {
         TaskEntity taskEntity = taskRepository.get(1L);
 
         assertNotNull(taskEntity);
-        assertEquals("task1_test", taskEntity.getName());
+        assertEquals("Testing_task1_test", taskEntity.getName());
     }
 
     @Test
     public void testCreateTaskEntity() {
-        TaskEntity task = new TaskEntity(1L, "task1_test", "description1", TaskType.BUG, Priority.MAJOR,
+        TaskEntity task = new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L,
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
@@ -74,14 +73,13 @@ public class TaskEntityRepositoryTest {
 
     @Test
     public void testUpdateTaskEntity() {
-        TaskEntity task = new TaskEntity(1L, "task1_test", "description1", TaskType.BUG, Priority.MAJOR,
+        TaskEntity task = new TaskEntity(1L, "Testing_task1_test_update", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L,
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
                 123456L, 123456L, 123456L);
 
         taskRepository.update(task);
-
         verify(taskRepository, times(1)).update(task);
     }
 
@@ -89,6 +87,7 @@ public class TaskEntityRepositoryTest {
     public void testDeleteTaskEntity() {
         taskRepository.delete(1L);
 
+        assertNull(taskRepository.get(1L));
         verify(taskRepository, times(1)).delete(1L);
     }
 }

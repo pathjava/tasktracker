@@ -28,21 +28,23 @@ public class TaskEntityRepositoryUpdateFieldTest {
 
     @BeforeEach
     public void reader() {
-        jsonHandler.tasks.put(5L, new TaskEntity(5L, "task5", "description1", TaskType.BUG, Priority.MAJOR,
+        jsonHandler.tasks.put(
+                1L, new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                 001L, 003L,
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                123456L, 123456L, 123456L));
+                123456L, 123456L, 123456L)
+        );
         jsonHandler.write();
         jsonHandler.read();
     }
 
     @Test
     public void testUpdateField() {
-        assertEquals("STR_CODE_TTT", taskRepository.get(5L).getStrCode());
+        assertEquals("STR_CODE_TTT", taskRepository.get(1L).getStrCode());
 
-        updateField.updateField(new UpdateOneValue(5L, "STR_CODE_TTT_New_Value", "strCode"));
+        updateField.updateField(new UpdateOneValue(1L, "STR_CODE_TTT_New_Value", "strCode"));
 
-        assertEquals("STR_CODE_TTT_New_Value", taskRepository.get(5L).getStrCode());
+        assertEquals("STR_CODE_TTT_New_Value", taskRepository.get(1L).getStrCode());
     }
 }
