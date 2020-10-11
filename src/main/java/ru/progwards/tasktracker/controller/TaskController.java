@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
+import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
+import ru.progwards.tasktracker.controller.exception.TaskByIdNotFoundException;
+import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
+import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
@@ -38,12 +41,12 @@ public class TaskController {
     @GetMapping("get/{id}")
     public ResponseEntity<Task> getTask(@PathVariable("id") Long id) {
         if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new IdBadRequestException(id);
 
         Task task = taskGetService.get(id);
 
         if (task == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new TaskByIdNotFoundException(id);
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -53,15 +56,15 @@ public class TaskController {
         Collection<Task> tasks = taskGetListService.getList();
 
         if (tasks == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new TasksNotFoundException();
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @PostMapping("add")
-    public ResponseEntity<Task> addTask(@RequestBody Task task){
+    public ResponseEntity<Task> addTask(@RequestBody Task task) {
         if (task == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new TaskNotExistException();
 
         taskCreateService.create(task);
 
@@ -69,28 +72,26 @@ public class TaskController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<Task> updateTask(@RequestBody Task task){
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
         if (task == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new TaskNotExistException();
 
         taskRefreshService.refresh(task);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping()
-
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Task> deleteTask(@PathVariable("id") Long id) {
         if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new IdBadRequestException(id);
 
         Task task = taskGetService.get(id);
 
         if (task != null)
             taskRemoveService.remove(task);
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new TaskByIdNotFoundException(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
