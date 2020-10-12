@@ -44,7 +44,7 @@ public class TaskEntityRepositoryTest {
 
     @Test
     public void testGetOneTaskEntity() {
-        when(taskRepository.get(1L)).thenReturn(
+        when(taskRepository.get(anyLong())).thenReturn(
                 new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                         001L, 003L,
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),

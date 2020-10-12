@@ -1,10 +1,8 @@
 package ru.progwards.tasktracker.service.facade.impl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.repository.dao.impl.JsonHandlerTaskEntity;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.util.types.Priority;
 import ru.progwards.tasktracker.util.types.TaskType;
@@ -12,35 +10,30 @@ import ru.progwards.tasktracker.util.types.WorkflowStatus;
 
 import java.time.ZonedDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class TaskGetServiceTest {
 
-    @Autowired
-    private JsonHandlerTaskEntity jsonHandler;
-
-    @Autowired
-    private TaskCreateService taskCreateService;
-
-    @Autowired
+    @Mock
     private TaskGetService taskGetService;
 
-    @BeforeEach
-    public void reader() {
-        jsonHandler.tasks.clear();
-        taskCreateService.create(
+    @Test
+    public void testGet() {
+        when(taskGetService.get(anyLong())).thenReturn(
                 new Task(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
                         001L, 003L, ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
                         123456L, 123456L, 123456L)
         );
-    }
 
-    @Test
-    public void testGet() {
         Task tempTask = taskGetService.get(1L);
 
-        assertEquals("Testing_task1_test", tempTask.getName());
+        assertThat(tempTask, is(notNullValue()));
+
+        assertThat(tempTask.getName(), equalTo("Testing_task1_test"));
     }
 }
