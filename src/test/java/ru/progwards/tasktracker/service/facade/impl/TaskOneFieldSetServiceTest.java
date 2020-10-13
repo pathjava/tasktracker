@@ -21,6 +21,6 @@ public class TaskOneFieldSetServiceTest {
                 new UpdateOneValue(1L, "STR_CODE_TTT_New_Value", "strCode")
         );
 
-        verify(taskOneFieldSetService, times(1)).setOneField(any());
+        verify(taskOneFieldSetService, times(1)).setOneField(any(UpdateOneValue.class));
     }
 }

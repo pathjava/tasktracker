@@ -30,6 +30,6 @@ public class TaskRefreshServiceTest {
                         123456L, 123456L, 123456L)
         );
 
-        verify(taskRefreshService, times(1)).refresh(any());
+        verify(taskRefreshService, times(1)).refresh(any(Task.class));
     }
 }

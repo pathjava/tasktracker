@@ -29,6 +29,6 @@ public class TaskRemoveServiceTest {
                         123456L, 123456L, 123456L)
         );
 
-        verify(taskRemoveService, times(1)).remove(any());
+        verify(taskRemoveService, times(1)).remove(any(Task.class));
     }
 }

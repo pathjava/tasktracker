@@ -29,6 +29,6 @@ public class TaskCreateServiceTest {
                         123456L, 123456L, 123456L)
         );
 
-        verify(taskCreateService, times(1)).create(any());
+        verify(taskCreateService, times(1)).create(any(Task.class));
     }
 }
