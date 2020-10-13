@@ -63,6 +63,7 @@ public class TaskController {
 
     @PostMapping("add")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
+        //TODO сделать проверку существования задачи по id
         if (task == null)
             throw new TaskNotExistException();
 
