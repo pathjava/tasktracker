@@ -1,7 +1,6 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
@@ -23,7 +22,9 @@ class ConverterTaskTest {
 
     @Test
     void toVo_return_Null() {
-        assertThat(converterTask.toVo(null), is(nullValue()));
+        Task tempTask = converterTask.toVo(null);
+
+        assertThat(tempTask, is(nullValue()));
     }
 
     @Test
@@ -41,7 +42,9 @@ class ConverterTaskTest {
 
     @Test
     void toEntity_return_Null() {
-        assertThat(converterTask.toEntity(null), is(nullValue()));
+        TaskEntity tempTaskEntity = converterTask.toEntity(null);
+
+        assertThat(tempTaskEntity, is(nullValue()));
     }
 
     @Test
