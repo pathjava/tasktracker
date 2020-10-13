@@ -38,15 +38,6 @@ class TaskControllerTest {
     @Autowired
     private TaskGetListService taskGetListService;
 
-    @Autowired
-    private TaskRemoveService taskRemoveService;
-
-    @Autowired
-    private TaskCreateService taskCreateService;
-
-    @Autowired
-    private TaskRefreshService taskRefreshService;
-
     @Test
     public void testController() {
         assertThat(taskController, is(notNullValue()));
