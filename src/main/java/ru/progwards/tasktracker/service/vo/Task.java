@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.progwards.tasktracker.util.types.Priority;
 import ru.progwards.tasktracker.util.types.TaskType;
 import ru.progwards.tasktracker.util.types.WorkflowStatus;
@@ -19,7 +20,7 @@ public class Task {
     private final ZonedDateTime updated;
     private final int storyPoint;
     private final Long projectId;
-    private String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
+    private String strCode;
     private final WorkflowStatus wfStatus;
     private final String version;
     private final Long planDuration;
