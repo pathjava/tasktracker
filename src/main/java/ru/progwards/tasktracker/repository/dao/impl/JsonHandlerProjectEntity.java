@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class JsonHandlerProjectEntity implements JsonHandler {
     private final static File PROJECT_PATH = new File(JsonHandlerProjectEntity.class.getClassLoader().
             getResource("data/projects.json").getFile());
-    private final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
+    public final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
 
     public JsonHandlerProjectEntity() {
         try {
