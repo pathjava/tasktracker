@@ -71,28 +71,28 @@ class TaskControllerTest {
     void addTask() throws Exception {
         mockMvc.perform(post("/rest/task/add/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\":8,\"name\":\"task8_test\",\"description\":\"description1\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"authorUserId\":1,\"executorUserId\":3,\"created\":\"2020-10-13T12:55:00+03:00\",\"updated\":\"2020-10-14T12:55:00+03:00\",\"storyPoint\":100,\"projectId\":5,\"strCode\":\"STR_CODE_TTT\",\"wfStatus\":\"NEW\",\"version\":\"new_version\",\"planDuration\":123456,\"spentDuration\":123456,\"leftDuration\":123456}"))
+                .content("{\"id\":8,\"code\":\"TT8-1\",\"name\":\"Test task 8\",\"description\":\"Description task 8\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"project\":{\"id\":1},\"author\":{\"id\":1},\"executor\":{\"id\":1},\"created\":\"2020-10-16T20:36:49+03:00\",\"updated\":\"2020-10-17T20:36:49+03:00\",\"status\":{\"id\":1},\"estimation\":\"PT72H\",\"timeSpent\":\"PT24H\",\"timeLeft\":\"PT48H\",\"relatedTasks\":[],\"attachments\":[],\"workLogs\":[]}"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
         mockMvc.perform(get("/rest/task/get/8"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(8)))
-                .andExpect(jsonPath("$.name", equalTo("task8_test")));
+                .andExpect(jsonPath("$.name", equalTo("Test task 8")));
     }
 
     @Test
     void updateTask() throws Exception {
         mockMvc.perform(put("/rest/task/update/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\":8,\"name\":\"task8_test_updated\",\"description\":\"description1\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"authorUserId\":1,\"executorUserId\":3,\"created\":\"2020-10-13T12:55:00+03:00\",\"updated\":\"2020-10-14T12:55:00+03:00\",\"storyPoint\":100,\"projectId\":5,\"strCode\":\"STR_CODE_TTT\",\"wfStatus\":\"NEW\",\"version\":\"new_version\",\"planDuration\":123456,\"spentDuration\":123456,\"leftDuration\":123456}"))
+                .content("{\"id\":8,\"code\":\"TT8-1\",\"name\":\"Test task 8 updated\",\"description\":\"Description task 8\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"project\":{\"id\":1},\"author\":{\"id\":1},\"executor\":{\"id\":1},\"created\":\"2020-10-16T20:36:49+03:00\",\"updated\":\"2020-10-17T20:36:49+03:00\",\"status\":{\"id\":1},\"estimation\":\"PT72H\",\"timeSpent\":\"PT24H\",\"timeLeft\":\"PT48H\",\"relatedTasks\":[],\"attachments\":[],\"workLogs\":[]}"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
         mockMvc.perform(get("/rest/task/get/8"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(8)))
-                .andExpect(jsonPath("$.name", equalTo("task8_test_updated")));
+                .andExpect(jsonPath("$.name", equalTo("Test task 8 updated")));
     }
 
     @Test

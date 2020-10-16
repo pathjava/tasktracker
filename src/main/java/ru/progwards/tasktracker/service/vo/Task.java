@@ -1,60 +1,67 @@
 package ru.progwards.tasktracker.service.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.progwards.tasktracker.util.types.Priority;
+import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkflowStatus;
+import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 public class Task {
 
     private final Long id;
-    private String name;
+    private final String code;
+    private final String name;
     private final String description;
     private final TaskType type;
-    private final Priority priority;
-    private final Long authorUserId;
-    private final Long executorUserId;
+    private final TaskPriority priority;
+    private final Project project;
+    private final User author;
+    private final User executor;
     private final ZonedDateTime created;
     private final ZonedDateTime updated;
-    private final int storyPoint;
-    private final Long projectId;
-    private String strCode;
-    private final WorkflowStatus wfStatus;
-    private final String version;
-    private final Long planDuration;
-    private final Long spentDuration;
-    private final Long leftDuration;
+    private final WorkFlowStatus status;
+    private final Duration estimation;
+    private final Duration timeSpent;
+    private final Duration timeLeft;
+    private final List<RelatedTask> relatedTasks;
+    private final List<TaskAttachment> attachments;
+    private final List<WorkLog> workLogs;
 
-    public Task(Long id, String name, String description,
-                TaskType type, Priority priority,
-                Long authorUserId, Long executorUserId,
+    public Task(Long id, String code, String name, String description,
+                TaskType type, TaskPriority priority, Project project,
+                User author, User executor,
                 ZonedDateTime created, ZonedDateTime updated,
-                int storyPoint, Long projectId, String strCode,
-                WorkflowStatus wfStatus, String version,
-                Long planDuration, Long spentDuration, Long leftDuration) {
+                WorkFlowStatus status,
+                Duration estimation, Duration timeSpent, Duration timeLeft,
+                List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs) {
         this.id = id;
+        this.code = code;
         this.name = name;
         this.description = description;
         this.type = type;
         this.priority = priority;
-        this.authorUserId = authorUserId;
-        this.executorUserId = executorUserId;
+        this.project = project;
+        this.author = author;
+        this.executor = executor;
         this.created = created;
         this.updated = updated;
-        this.storyPoint = storyPoint;
-        this.projectId = projectId;
-        this.strCode = strCode;
-        this.wfStatus = wfStatus;
-        this.version = version;
-        this.planDuration = planDuration;
-        this.spentDuration = spentDuration;
-        this.leftDuration = leftDuration;
+        this.status = status;
+        this.estimation = estimation;
+        this.timeSpent = timeSpent;
+        this.timeLeft = timeLeft;
+        this.relatedTasks = relatedTasks;
+        this.attachments = attachments;
+        this.workLogs = workLogs;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public String getName() {
@@ -69,16 +76,20 @@ public class Task {
         return type;
     }
 
-    public Priority getPriority() {
+    public TaskPriority getPriority() {
         return priority;
     }
 
-    public Long getAuthorUserId() {
-        return authorUserId;
+    public Project getProject() {
+        return project;
     }
 
-    public Long getExecutorUserId() {
-        return executorUserId;
+    public User getAuthor() {
+        return author;
+    }
+
+    public User getExecutor() {
+        return executor;
     }
 
     public ZonedDateTime getCreated() {
@@ -89,44 +100,31 @@ public class Task {
         return updated;
     }
 
-    public int getStoryPoint() {
-        return storyPoint;
+    public WorkFlowStatus getStatus() {
+        return status;
     }
 
-    public Long getProjectId() {
-        return projectId;
+    public Duration getEstimation() {
+        return estimation;
     }
 
-    public String getStrCode() {
-        return strCode;
+    public Duration getTimeSpent() {
+        return timeSpent;
     }
 
-    public WorkflowStatus getWfStatus() {
-        return wfStatus;
+    public Duration getTimeLeft() {
+        return timeLeft;
     }
 
-    public String getVersion() {
-        return version;
+    public List<RelatedTask> getRelatedTasks() {
+        return relatedTasks;
     }
 
-    public Long getPlanDuration() {
-        return planDuration;
+    public List<TaskAttachment> getAttachments() {
+        return attachments;
     }
 
-    public Long getSpentDuration() {
-        return spentDuration;
+    public List<WorkLog> getWorkLogs() {
+        return workLogs;
     }
-
-    public Long getLeftDuration() {
-        return leftDuration;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setStrCode(String strCode) {
-        this.strCode = strCode;
-    }
-  
 }

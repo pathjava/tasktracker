@@ -6,9 +6,11 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.util.types.Priority;
+import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkflowStatus;
+import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,6 +19,7 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,39 +35,44 @@ public class JsonHandlerTaskEntity implements JsonHandler {
     private void initializerMap() {
         Map<Long, TaskEntity> tempTasks = new HashMap<>();
         tempTasks.put(
-                1L, new TaskEntity(1L, "task1_test", "description1", TaskType.BUG, Priority.MAJOR,
-                        001L, 003L,
+                1L, new TaskEntity(1L, "TT1-1", "Test task 1", "Description task 1",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                        123456L, 123456L, 123456L)
+                        new WorkFlowStatus(1L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.put(
-                2L, new TaskEntity(2L, "task2_test", "description2", TaskType.EPIC, Priority.BLOCKER,
-                        003L, 004L,
+                2L, new TaskEntity(2L, "TT2-2", "Test task 2", "Description task 2",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(1).toEpochSecond(), ZonedDateTime.now().plusDays(2).toEpochSecond(),
-                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.REVIEW, "new_version",
-                        123456L, 123456L, 123456L)
+                        new WorkFlowStatus(1L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.put(
-                3L, new TaskEntity(3L, "task3_test", "description3", TaskType.TASK, Priority.CRITICAL,
-                        005L, 006L,
+                3L, new TaskEntity(3L, "TT3-3", "Test task 3", "Description task 3",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(2).toEpochSecond(), ZonedDateTime.now().plusDays(3).toEpochSecond(),
-                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.IN_PROGRESS, "new_version",
-                        123456L, 123456L, 123456L)
+                        new WorkFlowStatus(1L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.put(
-                4L, new TaskEntity(4L, "task4_test", "description4", TaskType.BUG, Priority.MINOR,
-                        007L, 002L,
+                4L, new TaskEntity(4L, "TT4-4", "Test task 4", "Description task 4",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(3).toEpochSecond(), ZonedDateTime.now().plusDays(4).toEpochSecond(),
-                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                        123456L, 123456L, 123456L)
+                        new WorkFlowStatus(1L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.put(
-                5L, new TaskEntity(5L, "task5_test", "description5", TaskType.EPIC, Priority.MAJOR,
-                        001L, 003L,
+                5L, new TaskEntity(5L, "TT5-5", "Test task 5", "Description task 5",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(4).toEpochSecond(), ZonedDateTime.now().plusDays(5).toEpochSecond(),
-                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.REVIEW, "new_version",
-                        123456L, 123456L, 123456L)
+                        new WorkFlowStatus(1L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.values().forEach(value -> tasks.put(value.getId(), value));
         write();

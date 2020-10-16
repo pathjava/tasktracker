@@ -18,7 +18,7 @@ public class TaskOneFieldSetServiceTest {
     @Test
     public void testSetOneField() {
         taskOneFieldSetService.setOneField(
-                new UpdateOneValue(1L, "STR_CODE_TTT_New_Value", "strCode")
+                new UpdateOneValue(1L, "TT1-1", "code")
         );
 
         verify(taskOneFieldSetService, times(1)).setOneField(any(UpdateOneValue.class));

@@ -5,14 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.util.types.Priority;
+import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkflowStatus;
+import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class JsonHandlerTaskEntityTest {
@@ -30,17 +35,20 @@ public class JsonHandlerTaskEntityTest {
         int sizeOne = jsonHandlerTask.tasks.size();
 
         jsonHandlerTask.tasks.put(
-                1L, new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
-                001L, 003L,
-                ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                123456L, 123456L, 123456L));
+                1L, new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
+                        new WorkFlowStatus(11L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         jsonHandlerTask.tasks.put(
-                2L, new TaskEntity(2L, "Testing_task2_test", "description2", TaskType.EPIC, Priority.BLOCKER,
-                003L, 004L,
-                ZonedDateTime.now().plusDays(1).toEpochSecond(), ZonedDateTime.now().plusDays(2).toEpochSecond(),
-                100, 0005L, "STR_CODE_TTT", WorkflowStatus.REVIEW, "new_version",
-                123456L, 123456L, 123456L));
+                2L, new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
+                        new WorkFlowStatus(11L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+        );
 
         jsonHandlerTask.write();
 

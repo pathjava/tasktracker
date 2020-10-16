@@ -4,14 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
+import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
-import ru.progwards.tasktracker.util.types.Priority;
+import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkflowStatus;
+import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class TaskEntityRepositoryUpdateFieldTest {
@@ -25,17 +30,18 @@ public class TaskEntityRepositoryUpdateFieldTest {
     @Test
     public void testUpdateField() {
         taskRepository.create(
-                new TaskEntity(1L, "Testing_task1_test", "description1", TaskType.BUG, Priority.MAJOR,
-                        001L, 003L,
+                new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
+                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                        100, 0005L, "STR_CODE_TTT", WorkflowStatus.NEW, "new_version",
-                        123456L, 123456L, 123456L)
+                        new WorkFlowStatus(11L),
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        assertEquals("STR_CODE_TTT", taskRepository.get(1L).getStrCode());
+        assertEquals("TT1-1", taskRepository.get(1L).getCode());
 
-        updateField.updateField(new UpdateOneValue(1L, "STR_CODE_TTT_New_Value", "strCode"));
+        updateField.updateField(new UpdateOneValue(1L, "TT1-1-1", "code"));
 
-        assertEquals("STR_CODE_TTT_New_Value", taskRepository.get(1L).getStrCode());
+        assertEquals("TT1-1-1", taskRepository.get(1L).getCode());
     }
 }

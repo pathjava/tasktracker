@@ -1,14 +1,15 @@
 package ru.progwards.tasktracker.service.vo;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-
 public class Project {
-  
-    private List<Task> taskModels;
-  
-    private Long id;
-  
-    private ZonedDateTime created;
+
+    private final Long id;
+
+    public Project(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
 }

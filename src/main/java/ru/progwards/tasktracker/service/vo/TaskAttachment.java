@@ -1,6 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
-public class Attachment {
+public class TaskAttachment {
 
 
     private long id;
