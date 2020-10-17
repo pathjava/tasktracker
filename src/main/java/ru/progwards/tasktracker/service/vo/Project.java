@@ -1,19 +1,60 @@
 package ru.progwards.tasktracker.service.vo;
 
-public class Project {
-    private final long id;
-    private final String name;
-    private final String description;
-    private final long managerUserId;
+import java.time.ZonedDateTime;
+import java.util.List;
 
-    public Project(long id, String name, String description, long managerUserId) {
+/**
+ * Класс Project - бизнес-модель сущности ProjectEntity
+ * @author Progwards
+ * @version 1.0
+ */
+public class Project  {
+    /**
+     * идентификатор проекта
+     */
+    private Long id;
+    /**
+     * имя проекта
+     */
+    private String name;
+    /**
+     * описание проекта
+     */
+    private String description;
+    /**
+     *
+     */
+    private String prefix;
+    /**
+     * владелец (создатель) проекта
+     */
+    private User owner;
+    /**
+     * время создания проекта
+     */
+    private ZonedDateTime created;
+    /**
+     *
+     */
+    private WorkFlow workFlow;
+    /**
+     * список задач, относящихся к данному проекту
+     */
+    List<Task> tasks;
+
+    public Project(Long id, String name, String description, String prefix, User owner,
+                   ZonedDateTime created, WorkFlow workFlow, List<Task> tasks) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.managerUserId = managerUserId;
+        this.prefix = prefix;
+        this.owner = owner;
+        this.created = created;
+        this.workFlow = workFlow;
+        this.tasks = tasks;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -25,7 +66,55 @@ public class Project {
         return description;
     }
 
-    public long getManagerUserId() {
-        return managerUserId;
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public ZonedDateTime getCreated() {
+        return created;
+    }
+
+    public WorkFlow getWorkFlow() {
+        return workFlow;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void setCreated(ZonedDateTime created) {
+        this.created = created;
+    }
+
+    public void setWorkFlow(WorkFlow workFlow) {
+        this.workFlow = workFlow;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

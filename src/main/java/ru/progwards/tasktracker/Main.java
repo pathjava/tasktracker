@@ -11,10 +11,10 @@ import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 public class Main {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
-        ProjectEntityRepository repository = context.getBean(ProjectEntityRepository.class);
 
-        for (long i = 0; i < 10; i++) {
-            repository.create(new ProjectEntity(i, "name"+i, "description"+i, i));
-        }
+//        ProjectEntityRepository repository = context.getBean(ProjectEntityRepository.class);
+//        for (long i = 0; i < 10; i++) {
+//            repository.create(new ProjectEntity(i, "name"+i, "description"+i, i));
+//        }
     }
 }

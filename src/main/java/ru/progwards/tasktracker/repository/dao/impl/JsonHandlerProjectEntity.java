@@ -44,6 +44,8 @@ public class JsonHandlerProjectEntity implements JsonHandler {
             List<ProjectEntity> list = map.values().stream().collect(Collectors.toUnmodifiableList());
             String json = new Gson().toJson(list);
             try {
+                if (!Files.exists(PROJECT_PATH.toPath()))
+                    Files.createFile(PROJECT_PATH.toPath());
                 Files.writeString(PROJECT_PATH.toPath(), json);
             } catch (IOException e) {
                 e.printStackTrace();

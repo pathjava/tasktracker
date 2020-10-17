@@ -6,6 +6,7 @@ import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Component
@@ -42,5 +43,7 @@ public class ProjectEntityRepository implements Repository<Long, ProjectEntity> 
         ProjectEntity entity = jsonHandlerProjectEntity.getMap().remove(id);
         if (entity != null)
             jsonHandlerProjectEntity.write();
+        else
+            throw new NoSuchElementException("Element with id=" + id + " not exist");
     }
 }
