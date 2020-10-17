@@ -45,8 +45,7 @@ class TaskControllerTest {
     void getTask() throws Exception {
         Task tempTask = taskGetService.get(1L);
         ObjectMapper mapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+                .registerModule(new JavaTimeModule());
         String jsonString = mapper.writeValueAsString(tempTask);
 
         mockMvc.perform(get("/rest/task/get/1"))
@@ -58,8 +57,7 @@ class TaskControllerTest {
     void getAllTasks() throws Exception {
         Collection<Task> tempTasks = taskGetListService.getList();
         ObjectMapper mapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+                .registerModule(new JavaTimeModule());
         String jsonString = mapper.writeValueAsString(tempTasks);
 
         mockMvc.perform(get("/rest/task/get/"))

@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
 import ru.progwards.tasktracker.util.types.WorkFlowStatus;
@@ -19,11 +20,16 @@ public class Task {
     private final Project project;
     private final User author;
     private final User executor;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private final ZonedDateTime created;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private final ZonedDateTime updated;
     private final WorkFlowStatus status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private final Duration estimation;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private final Duration timeSpent;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private final Duration timeLeft;
     private final List<RelatedTask> relatedTasks;
     private final List<TaskAttachment> attachments;
