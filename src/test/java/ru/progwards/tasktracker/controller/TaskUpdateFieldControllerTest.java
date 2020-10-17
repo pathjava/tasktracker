@@ -1,6 +1,6 @@
 package ru.progwards.tasktracker.controller;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,27 +17,59 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class TaskUpdateFieldControllerTest {
 
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Autowired
-//    private TaskUpdateFieldController updateFieldController;
-//
-//    @BeforeAll
-//    public void createTestObject() throws Exception{
-//        mockMvc.perform(post("/rest/task/add/")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"id\":28,\"name\":\"task8_test\",\"description\":\"description1\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"authorUserId\":1,\"executorUserId\":3,\"created\":\"2020-10-13T12:55:00+03:00\",\"updated\":\"2020-10-14T12:55:00+03:00\",\"storyPoint\":100,\"projectId\":5,\"strCode\":\"STR_CODE_TTT\",\"wfStatus\":\"NEW\",\"version\":\"new_version\",\"planDuration\":123456,\"spentDuration\":123456,\"leftDuration\":123456}"))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful());
-//    }
-//
-//    @Test
-//    void updateOneField() throws Exception {
-//        mockMvc.perform(put("/rest/task/update/")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"id\":5,\"name\":\"task5_test\",\"name\":\"task8_test_updated1\"}"))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful());
-//    }
+    @Autowired
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    public void createTestObject() throws Exception {
+        mockMvc.perform(post("/rest/task/add/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 10,\n" +
+                                "    \"code\": \"TT10-1\",\n" +
+                                "    \"name\": \"Test task 10\",\n" +
+                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"priority\": \"MAJOR\",\n" +
+                                "    \"project\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"author\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"executor\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": 1603360745,\n" +
+                                "    \"status\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"estimation\": 259200,\n" +
+                                "    \"timeSpent\": 86400,\n" +
+                                "    \"timeLeft\": 172800,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void updateOneField() throws Exception {
+        mockMvc.perform(put("/rest/task/field/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 10,\n" +
+                                "    \"newValue\": \"Test task 10-1\",\n" +
+                                "    \"fieldName\": \"name\"\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+    }
 }

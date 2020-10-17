@@ -16,7 +16,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class TaskEntityRepositoryUpdateFieldTest {
