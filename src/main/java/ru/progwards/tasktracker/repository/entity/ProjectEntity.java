@@ -8,13 +8,15 @@ public class ProjectEntity {private final long id;
     private final String description;
     private final String prefix;
     private final Long managerUserId;
+    private final Long created;
 
-    public ProjectEntity(long id, String name, String description, Long managerUserId) {
+    public ProjectEntity(long id, String name, String description, Long managerUserId, Long created) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.prefix = getPrefix(name);
         this.managerUserId = managerUserId;
+        this.created = created;
     }
 
     public long getId() {
@@ -35,6 +37,10 @@ public class ProjectEntity {private final long id;
 
     public long getManagerUserId() {
         return managerUserId;
+    }
+
+    public Long getCreated() {
+        return created;
     }
 
     public static String getPrefix(String name) {

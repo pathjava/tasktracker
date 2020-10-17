@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.repository.dao.impl.ProjectEntityRepository;
-import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.controller.exceptions.NotFoundProjectException;
+import ru.progwards.tasktracker.service.facade.impl.*;
+import ru.progwards.tasktracker.service.vo.Project;
 
 import java.util.Collection;
 
@@ -13,21 +14,46 @@ import java.util.Collection;
 public class ProjectController {
 
     @Autowired
-    private ProjectEntityRepository repository;
+    private ProjectGetListService projectGetListService;
+
+    @Autowired
+    private ProjectGetService projectGetService;
+
+    @Autowired
+    private ProjectCreateService projectCreateService;
+
+    @Autowired
+    private ProjectRefreshService projectRefreshService;
+
+    @Autowired
+    private ProjectOneFieldSetService projectOneFieldSetService;
+
+    @Autowired
+    private ProjectRemoveService projectRemoveService;
 
     @GetMapping("/rest/project/list")
-    public ResponseEntity<Collection<ProjectEntity>> getProjects() {
-        return new ResponseEntity<>(repository.get(), HttpStatus.OK);
+    public ResponseEntity<Collection<Project>> getProjects() {
+        return new ResponseEntity<>(projectGetListService.getList(), HttpStatus.OK);
     }
 
     @GetMapping("/rest/project/{id}")
-    public @ResponseBody ProjectEntity getTask(@PathVariable("id") Long id) {
-        return repository.get(id);
+    public Project getTask(@PathVariable("id") Long id) {
+        Project project = projectGetService.get(id);
+        if (project == null)
+            throw new NotFoundProjectException("Not found a project with id=" + id);
+
+        return project;
     }
 
-    @DeleteMapping("/rest/project/delete/{id}")
+    @PostMapping("/rest/project/{id}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") long id) {
-        repository.delete(id);
+        Project project = projectGetService.get(id);
+        if (project == null)
+            throw new NotFoundProjectException("Not found a project with id=" + id);
+
+        projectRemoveService.remove(project);
     }
+
+
 }

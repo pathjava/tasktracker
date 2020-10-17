@@ -5,7 +5,9 @@ import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.Project;
 
-@Component("converter")
+import java.time.ZonedDateTime;
+
+@Component
 public class ConverterProject implements Converter<ProjectEntity, Project> {
 
     @Override
@@ -23,6 +25,10 @@ public class ConverterProject implements Converter<ProjectEntity, Project> {
             return null;
 
         return new ProjectEntity(valueObject.getId(), valueObject.getName(), valueObject.getDescription(),
-                valueObject.getOwner().getId());
+                valueObject.getOwner().getId(), getLongCreated(valueObject.getCreated()));
+    }
+
+    private Long getLongCreated(ZonedDateTime created) {
+        return created.toEpochSecond() * 1000;
     }
 }
