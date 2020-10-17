@@ -8,10 +8,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.service.facade.impl.*;
+import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
+import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -69,28 +69,86 @@ class TaskControllerTest {
     void addTask() throws Exception {
         mockMvc.perform(post("/rest/task/add/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\":8,\"code\":\"TT8-1\",\"name\":\"Test task 8\",\"description\":\"Description task 8\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"project\":{\"id\":1},\"author\":{\"id\":1},\"executor\":{\"id\":1},\"created\":\"2020-10-16T20:36:49+03:00\",\"updated\":\"2020-10-17T20:36:49+03:00\",\"status\":{\"id\":1},\"estimation\":\"PT72H\",\"timeSpent\":\"PT24H\",\"timeLeft\":\"PT48H\",\"relatedTasks\":[],\"attachments\":[],\"workLogs\":[]}"))
+                .content(
+                        "{\n" +
+                                "    \"id\": 10,\n" +
+                                "    \"code\": \"TT10-1\",\n" +
+                                "    \"name\": \"Test task 10\",\n" +
+                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"priority\": \"MAJOR\",\n" +
+                                "    \"project\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"author\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"executor\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": 1603360745,\n" +
+                                "    \"status\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"estimation\": 259200,\n" +
+                                "    \"timeSpent\": 86400,\n" +
+                                "    \"timeLeft\": 172800,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(get("/rest/task/get/8"))
+        mockMvc.perform(get("/rest/task/get/10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(8)))
-                .andExpect(jsonPath("$.name", equalTo("Test task 8")));
+                .andExpect(jsonPath("$.id", equalTo(10)))
+                .andExpect(jsonPath("$.name", equalTo("Test task 10")));
     }
 
     @Test
     void updateTask() throws Exception {
         mockMvc.perform(put("/rest/task/update/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\":8,\"code\":\"TT8-1\",\"name\":\"Test task 8 updated\",\"description\":\"Description task 8\",\"type\":\"BUG\",\"priority\":\"MAJOR\",\"project\":{\"id\":1},\"author\":{\"id\":1},\"executor\":{\"id\":1},\"created\":\"2020-10-16T20:36:49+03:00\",\"updated\":\"2020-10-17T20:36:49+03:00\",\"status\":{\"id\":1},\"estimation\":\"PT72H\",\"timeSpent\":\"PT24H\",\"timeLeft\":\"PT48H\",\"relatedTasks\":[],\"attachments\":[],\"workLogs\":[]}"))
+                .content(
+                        "{\n" +
+                                "    \"id\": 11,\n" +
+                                "    \"code\": \"TT11-1\",\n" +
+                                "    \"name\": \"Test task 11 updated\",\n" +
+                                "    \"description\": \"Description task 11\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"priority\": \"MAJOR\",\n" +
+                                "    \"project\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"author\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"executor\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": 1603360745,\n" +
+                                "    \"status\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"estimation\": 259200,\n" +
+                                "    \"timeSpent\": 86400,\n" +
+                                "    \"timeLeft\": 172800,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(get("/rest/task/get/8"))
+        mockMvc.perform(get("/rest/task/get/11"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(8)))
-                .andExpect(jsonPath("$.name", equalTo("Test task 8 updated")));
+                .andExpect(jsonPath("$.id", equalTo(11)))
+                .andExpect(jsonPath("$.name", equalTo("Test task 11 updated")));
     }
 
     @Test

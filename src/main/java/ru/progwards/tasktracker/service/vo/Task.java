@@ -11,29 +11,29 @@ import java.util.List;
 
 public class Task {
 
-    private final Long id;
-    private final String code;
-    private final String name;
-    private final String description;
-    private final TaskType type;
-    private final TaskPriority priority;
-    private final Project project;
-    private final User author;
-    private final User executor;
+    private Long id;
+    private String code;
+    private String name;
+    private String description;
+    private TaskType type;
+    private TaskPriority priority;
+    private Project project;
+    private User author;
+    private User executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private final ZonedDateTime created;
+    private ZonedDateTime created;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private final ZonedDateTime updated;
-    private final WorkFlowStatus status;
+    private ZonedDateTime updated;
+    private WorkFlowStatus status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
-    private final Duration estimation;
+    private Duration estimation;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
-    private final Duration timeSpent;
+    private Duration timeSpent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
-    private final Duration timeLeft;
-    private final List<RelatedTask> relatedTasks;
-    private final List<TaskAttachment> attachments;
-    private final List<WorkLog> workLogs;
+    private Duration timeLeft;
+    private List<RelatedTask> relatedTasks;
+    private List<TaskAttachment> attachments;
+    private List<WorkLog> workLogs;
 
     public Task(Long id, String code, String name, String description,
                 TaskType type, TaskPriority priority, Project project,
@@ -62,75 +62,150 @@ public class Task {
         this.workLogs = workLogs;
     }
 
+    public Task() {
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public TaskType getType() {
         return type;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
     }
 
     public TaskPriority getPriority() {
         return priority;
     }
 
+    public void setPriority(TaskPriority priority) {
+        this.priority = priority;
+    }
+
     public Project getProject() {
         return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public User getAuthor() {
         return author;
     }
 
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public User getExecutor() {
         return executor;
+    }
+
+    public void setExecutor(User executor) {
+        this.executor = executor;
     }
 
     public ZonedDateTime getCreated() {
         return created;
     }
 
+    public void setCreated(ZonedDateTime created) {
+        this.created = created;
+    }
+
     public ZonedDateTime getUpdated() {
         return updated;
+    }
+
+    public void setUpdated(ZonedDateTime updated) {
+        this.updated = updated;
     }
 
     public WorkFlowStatus getStatus() {
         return status;
     }
 
+    public void setStatus(WorkFlowStatus status) {
+        this.status = status;
+    }
+
     public Duration getEstimation() {
         return estimation;
+    }
+
+    public void setEstimation(Duration estimation) {
+        this.estimation = estimation;
     }
 
     public Duration getTimeSpent() {
         return timeSpent;
     }
 
+    public void setTimeSpent(Duration timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
     public Duration getTimeLeft() {
         return timeLeft;
+    }
+
+    public void setTimeLeft(Duration timeLeft) {
+        this.timeLeft = timeLeft;
     }
 
     public List<RelatedTask> getRelatedTasks() {
         return relatedTasks;
     }
 
+    public void setRelatedTasks(List<RelatedTask> relatedTasks) {
+        this.relatedTasks = relatedTasks;
+    }
+
     public List<TaskAttachment> getAttachments() {
         return attachments;
     }
 
+    public void setAttachments(List<TaskAttachment> attachments) {
+        this.attachments = attachments;
+    }
+
     public List<WorkLog> getWorkLogs() {
         return workLogs;
+    }
+
+    public void setWorkLogs(List<WorkLog> workLogs) {
+        this.workLogs = workLogs;
     }
 }
