@@ -11,10 +11,13 @@ import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/rest/task/")
+@RequestMapping("/rest/project/{project_id}")
 public class TaskController {
 
     private TaskGetService taskGetService;
@@ -38,22 +41,42 @@ public class TaskController {
         this.taskRefreshService = taskRefreshService;
     }
 
-    @GetMapping("get/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable("id") Long id) {
-        if (id == null)
-            throw new IdBadRequestException(id);
+    @GetMapping("/tasks/{task_id}")
+    public ResponseEntity<Task> getTask(@PathVariable Long task_id) {
+        if (task_id == null)
+            throw new IdBadRequestException(task_id);
 
-        Task task = taskGetService.get(id);
+        Task task = taskGetService.get(task_id);
 
         if (task == null)
-            throw new TaskByIdNotFoundException(id);
+            throw new TaskByIdNotFoundException(task_id);
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @GetMapping("get")
-    public ResponseEntity<Collection<Task>> getAllTasks() {
-        Collection<Task> tasks = taskGetListService.getList();
+    @GetMapping("/tasks")
+    public ResponseEntity<Collection<Task>> getAllTasks(@PathVariable Long project_id) {
+        if (project_id == null)
+            throw new IdBadRequestException(project_id);
+
+//        Collection<Task> tasks = taskGetListService.getList().stream()
+//        .filter(task -> task.getProject().getId().equals(project_id)).collect(Collectors.toList());
+
+//        Collection<Task> tasks = taskGetListService.getList().stream()
+//                .filter(task -> Optional.of(task.getProject().getId().equals(project_id)).orElse(null))
+//                .collect(Collectors.toList());
+
+//        Collection<Task> tasks = Optional.of(
+//                taskGetListService.getList().stream()
+//                        .filter(task -> task.getProject().getId().equals(project_id))
+//                        .collect(Collectors.toList())
+//        ).orElse(null);
+
+        Collection<Task> tasks = Optional.ofNullable(taskGetListService.getList())
+                .map(task -> task.stream()
+                        .filter(t -> t.getProject().getId().equals(project_id))
+                        .collect(Collectors.toList()))
+                .orElse(null);
 
         if (tasks == null)
             throw new TasksNotFoundException();
