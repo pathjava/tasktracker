@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
@@ -59,24 +60,7 @@ public class TaskController {
         if (project_id == null)
             throw new IdBadRequestException(project_id);
 
-//        Collection<Task> tasks = taskGetListService.getList().stream()
-//        .filter(task -> task.getProject().getId().equals(project_id)).collect(Collectors.toList());
-
-//        Collection<Task> tasks = taskGetListService.getList().stream()
-//                .filter(task -> Optional.of(task.getProject().getId().equals(project_id)).orElse(null))
-//                .collect(Collectors.toList());
-
-//        Collection<Task> tasks = Optional.of(
-//                taskGetListService.getList().stream()
-//                        .filter(task -> task.getProject().getId().equals(project_id))
-//                        .collect(Collectors.toList())
-//        ).orElse(null);
-
-        Collection<Task> tasks = Optional.ofNullable(taskGetListService.getList())
-                .map(task -> task.stream()
-                        .filter(t -> t.getProject().getId().equals(project_id))
-                        .collect(Collectors.toList()))
-                .orElse(null);
+        Collection<Task> tasks = getAllTasksByProjectId(project_id);
 
         if (tasks == null)
             throw new TasksNotFoundException();
@@ -84,7 +68,15 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @PostMapping("add")
+    private Collection<Task> getAllTasksByProjectId(Long project_id) {
+        Collection<Task> tasks = taskGetListService.getList().stream()
+                .filter(task -> task.getProject().getId().equals(project_id))
+                .collect(Collectors.toList());
+
+        return tasks.size() == 0 ? null : tasks;
+    }
+
+    @PostMapping("tasks/create")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
@@ -95,7 +87,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("update")
+    @PutMapping("tasks/{task_id}/update")
     public ResponseEntity<Task> updateTask(@RequestBody Task task) {
         if (task == null)
             throw new TaskNotExistException();
@@ -105,17 +97,17 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<Task> deleteTask(@PathVariable("id") Long id) {
-        if (id == null)
-            throw new IdBadRequestException(id);
+    @DeleteMapping("tasks/{task_id}/delete")
+    public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
+        if (task_id == null)
+            throw new IdBadRequestException(task_id);
 
-        Task task = taskGetService.get(id);
+        Task task = taskGetService.get(task_id);
 
         if (task != null)
             taskRemoveService.remove(task);
         else
-            throw new TaskByIdNotFoundException(id);
+            throw new TaskByIdNotFoundException(task_id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

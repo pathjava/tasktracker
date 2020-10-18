@@ -12,7 +12,7 @@ import ru.progwards.tasktracker.service.facade.impl.TaskOneFieldSetService;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 @Controller
-@RequestMapping("/rest/task/")
+@RequestMapping("/rest/project/{project_id}")
 public class TaskUpdateFieldController {
 
     private TaskOneFieldSetService taskOneFieldSetService;
@@ -22,7 +22,7 @@ public class TaskUpdateFieldController {
         this.taskOneFieldSetService = taskOneFieldSetService;
     }
 
-    @PutMapping("field")
+    @PutMapping("tasks/{task_id}/field")
     public ResponseEntity<UpdateOneValue> updateOneField(@RequestBody UpdateOneValue oneValue) {
         if (oneValue == null)
             throw new UpdateFieldNotExistException();
