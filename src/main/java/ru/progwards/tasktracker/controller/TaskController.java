@@ -2,7 +2,6 @@ package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
@@ -12,9 +11,7 @@ import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,7 +40,8 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{task_id}")
-    public ResponseEntity<Task> getTask(@PathVariable Long task_id) {
+    public @ResponseBody
+    ResponseEntity<Task> getTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new IdBadRequestException(task_id);
 
@@ -56,7 +54,8 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public ResponseEntity<Collection<Task>> getAllTasks(@PathVariable Long project_id) {
+    public @ResponseBody
+    ResponseEntity<Collection<Task>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
             throw new IdBadRequestException(project_id);
 
@@ -77,7 +76,8 @@ public class TaskController {
     }
 
     @PostMapping("tasks/create")
-    public ResponseEntity<Task> addTask(@RequestBody Task task) {
+    public @ResponseBody
+    ResponseEntity<Task> addTask(@RequestBody Task task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
             throw new TaskNotExistException();
@@ -88,7 +88,8 @@ public class TaskController {
     }
 
     @PutMapping("tasks/{task_id}/update")
-    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
+    public @ResponseBody
+    ResponseEntity<Task> updateTask(@RequestBody Task task) {
         if (task == null)
             throw new TaskNotExistException();
 
@@ -98,7 +99,8 @@ public class TaskController {
     }
 
     @DeleteMapping("tasks/{task_id}/delete")
-    public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
+    public @ResponseBody
+    ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new IdBadRequestException(task_id);
 
