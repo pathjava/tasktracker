@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.exceptions.NotFoundProjectException;
+import ru.progwards.tasktracker.controller.exceptions.NullProjectException;
 import ru.progwards.tasktracker.service.facade.impl.*;
 import ru.progwards.tasktracker.service.vo.Project;
 
@@ -32,12 +33,12 @@ public class ProjectController {
     private ProjectRemoveService projectRemoveService;
 
     @GetMapping("/rest/project/list")
-    public ResponseEntity<Collection<Project>> getProjects() {
+    public ResponseEntity<Collection<Project>> get() {
         return new ResponseEntity<>(projectGetListService.getList(), HttpStatus.OK);
     }
 
     @GetMapping("/rest/project/{id}")
-    public Project getTask(@PathVariable("id") Long id) {
+    public Project get(@PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundProjectException("Not found a project with id=" + id);
@@ -46,7 +47,7 @@ public class ProjectController {
     }
 
     @PostMapping("/rest/project/{id}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") long id) {
         Project project = projectGetService.get(id);
         if (project == null)
@@ -55,5 +56,12 @@ public class ProjectController {
         projectRemoveService.remove(project);
     }
 
+    @PostMapping("/rest/project/create")
+    @ResponseStatus(HttpStatus.OK)
+    public void create(@RequestBody Project project) {
+        if (project == null)
+            throw new NullProjectException("Project is null");
 
+        projectCreateService.create(project);
+    }
 }

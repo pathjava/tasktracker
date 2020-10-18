@@ -11,4 +11,9 @@ public class ControllerException extends ResponseEntityExceptionHandler {
     public String notFoundProjectException(NotFoundProjectException ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(NullProjectException.class)
+    public String nullPointerException(NullProjectException ex) {
+        return ex.getMessage();
+    }
 }

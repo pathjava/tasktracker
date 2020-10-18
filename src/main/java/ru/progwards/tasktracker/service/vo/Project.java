@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
- * Класс Project - бизнес-модель сущности ProjectEntity
+ * Класс Project - бизнес-модель проекта
  * @author Progwards
  * @version 1.0
  */
@@ -22,7 +22,7 @@ public class Project  {
      */
     private String description;
     /**
-     *
+     * уникальная аббревиатура, созданная на основании имени проекта
      */
     private String prefix;
     /**
@@ -34,7 +34,7 @@ public class Project  {
      */
     private ZonedDateTime created;
     /**
-     *
+     * стадия разработки, в которой находится проект
      */
     private WorkFlow workFlow;
     /**

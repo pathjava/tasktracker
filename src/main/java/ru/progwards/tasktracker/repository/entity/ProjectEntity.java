@@ -1,25 +1,34 @@
 package ru.progwards.tasktracker.repository.entity;
 
 import java.util.Arrays;
-import java.util.Objects;
 
-public class ProjectEntity {private final long id;
+public class ProjectEntity {
+    private final Long id;
     private final String name;
     private final String description;
     private final String prefix;
-    private final Long managerUserId;
+    private final Long ownerId;
     private final Long created;
+    private final Long workFlowId;
 
-    public ProjectEntity(long id, String name, String description, Long managerUserId, Long created) {
+    public ProjectEntity(Long id, String name, String description, Long ownerId, Long created, Long workFlowId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.prefix = getPrefix(name);
-        this.managerUserId = managerUserId;
+        this.ownerId = ownerId;
         this.created = created;
+        this.workFlowId = workFlowId;
     }
 
-    public long getId() {
+    public static String getPrefix(String name) {
+        String[] items = name.split("\\s+");
+        StringBuilder stringBuilder = new StringBuilder();
+        Arrays.stream(items).forEach(e -> stringBuilder.append(e.substring(0, 1).toUpperCase()));
+        return stringBuilder.toString();
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -35,35 +44,15 @@ public class ProjectEntity {private final long id;
         return prefix;
     }
 
-    public long getManagerUserId() {
-        return managerUserId;
+    public Long getOwnerId() {
+        return ownerId;
     }
 
     public Long getCreated() {
         return created;
     }
 
-    public static String getPrefix(String name) {
-        String[] items = name.split("\\s+");
-        StringBuilder stringBuilder = new StringBuilder();
-        Arrays.stream(items).forEach(e -> stringBuilder.append(e.substring(0, 1).toUpperCase()));
-        return stringBuilder.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProjectEntity entity = (ProjectEntity) o;
-        return id == entity.id &&
-                Objects.equals(name, entity.name) &&
-                Objects.equals(description, entity.description) &&
-                Objects.equals(prefix, entity.prefix) &&
-                Objects.equals(managerUserId, entity.managerUserId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, prefix, managerUserId);
+    public Long getWorkFlowId() {
+        return workFlowId;
     }
 }
