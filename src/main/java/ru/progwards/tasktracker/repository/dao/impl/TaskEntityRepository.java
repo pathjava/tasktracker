@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     @Override
     public void update(TaskEntity taskEntity) {
         delete(taskEntity.getId());
+        taskEntity.setUpdated(ZonedDateTime.now().toEpochSecond());
         create(taskEntity);
     }
 

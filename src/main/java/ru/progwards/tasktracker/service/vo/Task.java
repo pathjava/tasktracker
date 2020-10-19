@@ -35,13 +35,15 @@ public class Task {
     private List<TaskAttachment> attachments;
     private List<WorkLog> workLogs;
 
-    public Task(Long id, String code, String name, String description,
-                TaskType type, TaskPriority priority, Project project,
-                User author, User executor,
-                ZonedDateTime created, ZonedDateTime updated,
-                WorkFlowStatus status,
-                Duration estimation, Duration timeSpent, Duration timeLeft,
-                List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs) {
+    public Task(
+            Long id, String code, String name, String description,
+            TaskType type, TaskPriority priority, Project project,
+            User author, User executor,
+            ZonedDateTime created, ZonedDateTime updated,
+            WorkFlowStatus status,
+            Duration estimation, Duration timeSpent, Duration timeLeft,
+            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs
+    ) {
         this.id = id;
         this.code = code;
         this.name = name;
