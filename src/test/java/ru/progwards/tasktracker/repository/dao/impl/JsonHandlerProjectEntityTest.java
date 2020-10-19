@@ -18,7 +18,7 @@ public class JsonHandlerProjectEntityTest {
         for (long i = 0; i < 10; i++) {
             ProjectEntity entity =
                     jsonHandlerProjectEntity.getMap().
-                            put(i,new ProjectEntity(i, "name"+i, "description"+i, i, 1000L));
+                            put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i));
         }
 
         int beforeSize = jsonHandlerProjectEntity.getMap().size();

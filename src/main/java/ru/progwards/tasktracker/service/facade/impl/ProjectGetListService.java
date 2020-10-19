@@ -13,11 +13,14 @@ import java.util.stream.Collectors;
 @Component
 public class ProjectGetListService implements GetListService<Project> {
 
-    @Autowired
-    private ProjectEntityRepository repository;
+    private final ProjectEntityRepository repository;
 
-    @Autowired
-    private ConverterProject converter;
+    private final ConverterProject converter;
+
+    public ProjectGetListService(ProjectEntityRepository repository, ConverterProject converter) {
+        this.repository = repository;
+        this.converter = converter;
+    }
 
     @Override
     public Collection<Project> getList() {

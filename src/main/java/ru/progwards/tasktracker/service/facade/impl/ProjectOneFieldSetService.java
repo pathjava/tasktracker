@@ -9,8 +9,11 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 @Component
 public class ProjectOneFieldSetService implements OneFieldSetService {
 
-    @Autowired
-    private ProjectEntityRepositoryUpdateField projectEntityRepositoryUpdateField;
+    private final ProjectEntityRepositoryUpdateField projectEntityRepositoryUpdateField;
+
+    public ProjectOneFieldSetService(ProjectEntityRepositoryUpdateField projectEntityRepositoryUpdateField) {
+        this.projectEntityRepositoryUpdateField = projectEntityRepositoryUpdateField;
+    }
 
     @Override
     public void setOneField(UpdateOneValue oneValue) {

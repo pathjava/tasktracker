@@ -10,11 +10,14 @@ import ru.progwards.tasktracker.service.vo.Project;
 @Component
 public class ProjectRemoveService implements RemoveService<Project> {
 
-    @Autowired
-    private ProjectEntityRepository repository;
+    private final ProjectEntityRepository repository;
 
-    @Autowired
-    private ConverterProject converter;
+    private final ConverterProject converter;
+
+    public ProjectRemoveService(ProjectEntityRepository repository, ConverterProject converter) {
+        this.repository = repository;
+        this.converter = converter;
+    }
 
     @Override
     public void remove(Project model) {

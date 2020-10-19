@@ -10,11 +10,14 @@ import ru.progwards.tasktracker.service.vo.Project;
 @Component
 public class ProjectRefreshService implements RefreshService<Project> {
 
-    @Autowired
-    private ProjectEntityRepository repository;
+    private final ProjectEntityRepository repository;
 
-    @Autowired
-    private ConverterProject converter;
+    private final ConverterProject converter;
+
+    public ProjectRefreshService(ProjectEntityRepository repository, ConverterProject converter) {
+        this.repository = repository;
+        this.converter = converter;
+    }
 
     @Override
     public void refresh(Project model) {

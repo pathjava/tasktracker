@@ -1,7 +1,5 @@
 package ru.progwards.tasktracker.repository.entity;
 
-import java.util.Arrays;
-
 public class ProjectEntity {
     private final Long id;
     private final String name;
@@ -11,21 +9,14 @@ public class ProjectEntity {
     private final Long created;
     private final Long workFlowId;
 
-    public ProjectEntity(Long id, String name, String description, Long ownerId, Long created, Long workFlowId) {
+    public ProjectEntity(Long id, String name, String description, String prefix, Long ownerId, Long created, Long workFlowId) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.prefix = getPrefix(name);
+        this.prefix = prefix;
         this.ownerId = ownerId;
         this.created = created;
         this.workFlowId = workFlowId;
-    }
-
-    public static String getPrefix(String name) {
-        String[] items = name.split("\\s+");
-        StringBuilder stringBuilder = new StringBuilder();
-        Arrays.stream(items).forEach(e -> stringBuilder.append(e.substring(0, 1).toUpperCase()));
-        return stringBuilder.toString();
     }
 
     public Long getId() {

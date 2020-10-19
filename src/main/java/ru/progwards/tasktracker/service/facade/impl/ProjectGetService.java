@@ -10,11 +10,14 @@ import ru.progwards.tasktracker.service.vo.Project;
 @Component
 public class ProjectGetService implements GetService<Long, Project> {
 
-    @Autowired
-    private ProjectEntityRepository repository;
+    private final ProjectEntityRepository repository;
 
-    @Autowired
-    private ConverterProject converter;
+    private final ConverterProject converter;
+
+    public ProjectGetService(ProjectEntityRepository repository, ConverterProject converter) {
+        this.repository = repository;
+        this.converter = converter;
+    }
 
     @Override
     public Project get(Long id) {

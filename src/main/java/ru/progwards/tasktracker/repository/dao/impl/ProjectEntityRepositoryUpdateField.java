@@ -11,8 +11,11 @@ import java.lang.reflect.Field;
 @Component
 public class ProjectEntityRepositoryUpdateField implements RepositoryUpdateField {
 
-    @Autowired
-    private ProjectEntityRepository repository;
+    private final ProjectEntityRepository repository;
+
+    public ProjectEntityRepositoryUpdateField(ProjectEntityRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void updateField(UpdateOneValue oneValue) {

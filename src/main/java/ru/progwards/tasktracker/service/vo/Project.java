@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.service.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,6 +35,7 @@ public class Project  {
     /**
      * время создания проекта
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private ZonedDateTime created;
     /**
      * стадия разработки, в которой находится проект
@@ -42,12 +46,12 @@ public class Project  {
      */
     List<Task> tasks;
 
-    public Project(Long id, String name, String description, String prefix, User owner,
+    public Project(Long id, String name, String description, User owner,
                    ZonedDateTime created, WorkFlow workFlow, List<Task> tasks) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.prefix = prefix;
+        this.prefix = getPrefix(name);
         this.owner = owner;
         this.created = created;
         this.workFlow = workFlow;
@@ -116,5 +120,12 @@ public class Project  {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public static String getPrefix(String name) {
+        String[] items = name.split("\\s+");
+        StringBuilder stringBuilder = new StringBuilder();
+        Arrays.stream(items).forEach(e -> stringBuilder.append(e.substring(0, 1).toUpperCase()));
+        return stringBuilder.toString();
     }
 }

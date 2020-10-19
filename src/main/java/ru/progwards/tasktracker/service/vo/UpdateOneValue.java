@@ -2,9 +2,9 @@ package ru.progwards.tasktracker.service.vo;
 
 public class UpdateOneValue {
 
-    private final Long id;
-    private final Object newValue;
-    private final String fieldName;
+    private Long id;
+    private Object newValue;
+    private String fieldName;
 
     public UpdateOneValue(Long id, Object newValue, String fieldName) {
         this.id = id;
@@ -22,5 +22,17 @@ public class UpdateOneValue {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNewValue(Object newValue) {
+        this.newValue = newValue;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 }
