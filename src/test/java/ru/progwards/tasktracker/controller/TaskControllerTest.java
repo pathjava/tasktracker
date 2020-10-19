@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.progwards.tasktracker.controller.converter.impl.TaskDtoConverter;
+import ru.progwards.tasktracker.controller.dto.TaskDto;
 import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskByIdNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
@@ -43,6 +45,9 @@ class TaskControllerTest {
     @Autowired
     private TaskGetListService taskGetListService;
 
+    @Autowired
+    private TaskDtoConverter dtoConverter;
+
     @Test
     public void testController() {
         assertThat(taskController, is(notNullValue()));
@@ -50,9 +55,10 @@ class TaskControllerTest {
 
     @Test
     void getTaskById() throws Exception {
-        Task tempTask = taskGetService.get(1L);
-        ObjectMapper mapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule());
+        TaskDto tempTask = dtoConverter.toDto(taskGetService.get(1L));
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
         String jsonString = mapper.writeValueAsString(tempTask);
 
         mockMvc.perform(get("/rest/project/2/tasks/1"))
@@ -62,28 +68,27 @@ class TaskControllerTest {
 
     @Test()
     void getTaskByID_IdBadRequestException() {
-        Exception exception = assertThrows(IdBadRequestException.class, () -> {
-            taskController.getTask(null);
-        });
+        Exception exception = assertThrows(IdBadRequestException.class,
+                () -> taskController.getTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void getTaskByID_TaskByIdNotFoundException() {
-        Exception exception = assertThrows(TaskByIdNotFoundException.class, () -> {
-            taskController.getTask(20L);
-        });
+        Exception exception = assertThrows(TaskByIdNotFoundException.class,
+                () -> taskController.getTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 
     @Test
     void getAllProjectTasks() throws Exception {
-        Collection<Task> tempTasks = taskGetListService.getList().stream()
+        Collection<TaskDto> tempTasks = taskGetListService.getList().stream()
                 .filter(task -> task.getProject().getId().equals(2L))
+                .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
-        ;
-        ObjectMapper mapper = new ObjectMapper()
-                .registerModule(new JavaTimeModule());
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
         String jsonString = mapper.writeValueAsString(tempTasks);
 
         mockMvc.perform(get("/rest/project/2/tasks"))
@@ -93,17 +98,15 @@ class TaskControllerTest {
 
     @Test()
     void getAllProjectTasks_IdBadRequestException() {
-        Exception exception = assertThrows(IdBadRequestException.class, () -> {
-            taskController.getAllTasks(null);
-        });
+        Exception exception = assertThrows(IdBadRequestException.class,
+                () -> taskController.getAllTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void getAllProjectTasks_TasksNotFoundException() {
-        Exception exception = assertThrows(TasksNotFoundException.class, () -> {
-            taskController.getAllTasks(20L);
-        });
+        Exception exception = assertThrows(TasksNotFoundException.class,
+                () -> taskController.getAllTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
     }
 
@@ -152,9 +155,8 @@ class TaskControllerTest {
 
     @Test()
     void addTask_TaskNotExistException() {
-        Exception exception = assertThrows(TaskNotExistException.class, () -> {
-            taskController.addTask(null);
-        });
+        Exception exception = assertThrows(TaskNotExistException.class,
+                () -> taskController.addTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
 
@@ -203,9 +205,8 @@ class TaskControllerTest {
 
     @Test()
     void updateTask_TaskNotExistException() {
-        Exception exception = assertThrows(TaskNotExistException.class, () -> {
-            taskController.updateTask(null);
-        });
+        Exception exception = assertThrows(TaskNotExistException.class,
+                () -> taskController.updateTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
 
@@ -222,17 +223,15 @@ class TaskControllerTest {
 
     @Test()
     void deleteTaskById_IdBadRequestException() {
-        Exception exception = assertThrows(IdBadRequestException.class, () -> {
-            taskController.deleteTask(null);
-        });
+        Exception exception = assertThrows(IdBadRequestException.class,
+                () -> taskController.deleteTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void deleteTaskById_TaskByIdNotFoundException() {
-        Exception exception = assertThrows(TaskByIdNotFoundException.class, () -> {
-            taskController.deleteTask(20L);
-        });
+        Exception exception = assertThrows(TaskByIdNotFoundException.class,
+                () -> taskController.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 }
