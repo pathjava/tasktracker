@@ -25,6 +25,6 @@ public class TaskGetService implements GetService<Long, Task> {
 
     @Override
     public Task get(Long id) {
-        return converterTask.toVo(taskRepository.get(id));
+        return id == null ? null : converterTask.toVo(taskRepository.get(id));
     }
 }
