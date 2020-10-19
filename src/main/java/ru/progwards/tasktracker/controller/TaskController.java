@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.progwards.tasktracker.controller.converter.impl.TaskDtoConverter;
+import ru.progwards.tasktracker.controller.dto.TaskDto;
 import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskByIdNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
@@ -23,6 +25,7 @@ public class TaskController {
     private TaskRemoveService taskRemoveService;
     private TaskCreateService taskCreateService;
     private TaskRefreshService taskRefreshService;
+    private TaskDtoConverter dtoConverter;
 
     @Autowired
     public void setTaskService(
@@ -30,22 +33,24 @@ public class TaskController {
             TaskGetListService taskGetListService,
             TaskRemoveService taskRemoveService,
             TaskCreateService taskCreateService,
-            TaskRefreshService taskRefreshService
+            TaskRefreshService taskRefreshService,
+            TaskDtoConverter dtoConverter
     ) {
         this.taskGetService = taskGetService;
         this.taskGetListService = taskGetListService;
         this.taskRemoveService = taskRemoveService;
         this.taskCreateService = taskCreateService;
         this.taskRefreshService = taskRefreshService;
+        this.dtoConverter = dtoConverter;
     }
 
     @GetMapping("/tasks/{task_id}")
     public @ResponseBody
-    ResponseEntity<Task> getTask(@PathVariable Long task_id) {
+    ResponseEntity<TaskDto> getTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new IdBadRequestException(task_id);
 
-        Task task = taskGetService.get(task_id);
+        TaskDto task = dtoConverter.toDto(taskGetService.get(task_id));
 
         if (task == null)
             throw new TaskByIdNotFoundException(task_id);
@@ -55,11 +60,11 @@ public class TaskController {
 
     @GetMapping("/tasks")
     public @ResponseBody
-    ResponseEntity<Collection<Task>> getAllTasks(@PathVariable Long project_id) {
+    ResponseEntity<Collection<TaskDto>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
             throw new IdBadRequestException(project_id);
 
-        Collection<Task> tasks = getAllTasksByProjectId(project_id);
+        Collection<TaskDto> tasks = getAllTasksByProjectId(project_id);
 
         if (tasks == null)
             throw new TasksNotFoundException();
@@ -67,9 +72,10 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    private Collection<Task> getAllTasksByProjectId(Long project_id) {
-        Collection<Task> tasks = taskGetListService.getList().stream()
+    private Collection<TaskDto> getAllTasksByProjectId(Long project_id) {
+        Collection<TaskDto> tasks = taskGetListService.getList().stream()
                 .filter(task -> task.getProject().getId().equals(project_id))
+                .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
 
         return tasks.size() == 0 ? null : tasks;
