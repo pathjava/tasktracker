@@ -37,17 +37,17 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         tempTasks.put(
                 1L, new TaskEntity(1L, "TT1-1", "Test task 1", "Description task 1",
                         TaskType.BUG, TaskPriority.MAJOR, new Project(2L), new User(1L), new User(1L),
-                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
+                        ZonedDateTime.now().toEpochSecond(), null,
                         new WorkFlowStatus(1L),
-                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        null, null, null,
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.put(
                 2L, new TaskEntity(2L, "TT2-2", "Test task 2", "Description task 2",
                         TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
-                        ZonedDateTime.now().plusDays(1).toEpochSecond(), ZonedDateTime.now().plusDays(2).toEpochSecond(),
+                        ZonedDateTime.now().plusDays(1).toEpochSecond(), null,
                         new WorkFlowStatus(1L),
-                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        Duration.ofDays(3).toSeconds(), null, null,
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
         tempTasks.put(
@@ -61,7 +61,7 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         tempTasks.put(
                 4L, new TaskEntity(4L, "TT4-4", "Test task 4", "Description task 4",
                         TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
-                        ZonedDateTime.now().plusDays(3).toEpochSecond(), ZonedDateTime.now().plusDays(4).toEpochSecond(),
+                        ZonedDateTime.now().plusDays(3).toEpochSecond(), null,
                         new WorkFlowStatus(1L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
