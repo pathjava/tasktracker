@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,32 +43,34 @@ class TaskControllerTest {
     }
 
     @Test
-    void getTask() throws Exception {
+    void getTaskById() throws Exception {
         Task tempTask = taskGetService.get(1L);
         ObjectMapper mapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule());
         String jsonString = mapper.writeValueAsString(tempTask);
 
-        mockMvc.perform(get("/rest/task/get/1"))
+        mockMvc.perform(get("/rest/project/2/tasks/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonString));
     }
 
     @Test
-    void getAllTasks() throws Exception {
-        Collection<Task> tempTasks = taskGetListService.getList();
+    void getAllProjectTasks() throws Exception {
+        Collection<Task> tempTasks = taskGetListService.getList().stream()
+                .filter(task -> task.getProject().getId().equals(2L))
+                .collect(Collectors.toList());;
         ObjectMapper mapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule());
         String jsonString = mapper.writeValueAsString(tempTasks);
 
-        mockMvc.perform(get("/rest/task/get/"))
+        mockMvc.perform(get("/rest/project/2/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonString));
     }
 
     @Test
     void addTask() throws Exception {
-        mockMvc.perform(post("/rest/task/add/")
+        mockMvc.perform(post("/rest/project/2/tasks/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -78,7 +81,7 @@ class TaskControllerTest {
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"priority\": \"MAJOR\",\n" +
                                 "    \"project\": {\n" +
-                                "      \"id\": 1\n" +
+                                "      \"id\": 2\n" +
                                 "    },\n" +
                                 "    \"author\": {\n" +
                                 "      \"id\": 1\n" +
@@ -87,13 +90,13 @@ class TaskControllerTest {
                                 "      \"id\": 1\n" +
                                 "    },\n" +
                                 "    \"created\": 1603274345,\n" +
-                                "    \"updated\": 1603360745,\n" +
+                                "    \"updated\": null,\n" +
                                 "    \"status\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
                                 "    \"estimation\": 259200,\n" +
-                                "    \"timeSpent\": 86400,\n" +
-                                "    \"timeLeft\": 172800,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
                                 "    \"attachments\": [],\n" +
                                 "    \"workLogs\": []\n" +
@@ -102,7 +105,7 @@ class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(get("/rest/task/get/10"))
+        mockMvc.perform(get("/rest/project/2/tasks/10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(10)))
                 .andExpect(jsonPath("$.name", equalTo("Test task 10")));
@@ -110,7 +113,7 @@ class TaskControllerTest {
 
     @Test
     void updateTask() throws Exception {
-        mockMvc.perform(put("/rest/task/update/")
+        mockMvc.perform(put("/rest/project/2/tasks/11/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -130,13 +133,13 @@ class TaskControllerTest {
                                 "      \"id\": 1\n" +
                                 "    },\n" +
                                 "    \"created\": 1603274345,\n" +
-                                "    \"updated\": 1603360745,\n" +
+                                "    \"updated\": null,\n" +
                                 "    \"status\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
                                 "    \"estimation\": 259200,\n" +
-                                "    \"timeSpent\": 86400,\n" +
-                                "    \"timeLeft\": 172800,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
                                 "    \"attachments\": [],\n" +
                                 "    \"workLogs\": []\n" +
@@ -145,20 +148,20 @@ class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(get("/rest/task/get/11"))
+        mockMvc.perform(get("/rest/project/2/tasks/11"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(11)))
                 .andExpect(jsonPath("$.name", equalTo("Test task 11 updated")));
     }
 
     @Test
-    void deleteTask() throws Exception {
-        mockMvc.perform(delete("/rest/task/delete/{id}", 1)
+    void deleteTaskById() throws Exception {
+        mockMvc.perform(delete("/rest/project/2/tasks/{id}/delete", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(get("/rest/task/get/1"))
+        mockMvc.perform(get("/rest/project/2/tasks/1"))
                 .andExpect(status().is4xxClientError());
     }
 }

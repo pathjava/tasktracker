@@ -22,7 +22,7 @@ class TaskUpdateFieldControllerTest {
 
     @BeforeEach
     public void createTestObject() throws Exception {
-        mockMvc.perform(post("/rest/task/add/")
+        mockMvc.perform(post("/rest/project/2/tasks/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -42,7 +42,7 @@ class TaskUpdateFieldControllerTest {
                                 "      \"id\": 1\n" +
                                 "    },\n" +
                                 "    \"created\": 1603274345,\n" +
-                                "    \"updated\": 1603360745,\n" +
+                                "    \"updated\": null,\n" +
                                 "    \"status\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
@@ -60,7 +60,7 @@ class TaskUpdateFieldControllerTest {
 
     @Test
     void updateOneField() throws Exception {
-        mockMvc.perform(put("/rest/task/field/")
+        mockMvc.perform(put("/rest/project/2/tasks/10/field")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
