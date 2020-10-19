@@ -29,15 +29,24 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     taskEntity.getAuthor(),
                     taskEntity.getExecutor(),
                     ZonedDateTime.ofInstant(Instant.ofEpochSecond(taskEntity.getCreated()), ZoneId.of("Europe/Moscow")),
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(taskEntity.getUpdated()), ZoneId.of("Europe/Moscow")),
+                    checkThatUpdatedTaskNotNull(taskEntity.getUpdated()),
                     taskEntity.getStatus(),
-                    Duration.ofSeconds(taskEntity.getEstimation()),
-                    Duration.ofSeconds(taskEntity.getTimeSpent()),
-                    Duration.ofSeconds(taskEntity.getTimeLeft()),
+                    checkThatDurationTaskNotNull(taskEntity.getEstimation()),
+                    checkThatDurationTaskNotNull(taskEntity.getTimeSpent()),
+                    checkThatDurationTaskNotNull(taskEntity.getTimeLeft()),
                     taskEntity.getRelatedTasks(),
                     taskEntity.getAttachments(),
                     taskEntity.getWorkLogs()
             );
+    }
+
+    private Duration checkThatDurationTaskNotNull(Long duration) {
+        return duration != null ? Duration.ofSeconds(duration) : null;
+    }
+
+    private ZonedDateTime checkThatUpdatedTaskNotNull(Long updated) {
+        return updated != null ?
+                ZonedDateTime.ofInstant(Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
 
     @Override
@@ -56,14 +65,22 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     task.getAuthor(),
                     task.getExecutor(),
                     task.getCreated().toEpochSecond(),
-                    task.getUpdated().toEpochSecond(),
+                    checkThatUpdatedTaskEntityNotNull(task.getUpdated()),
                     task.getStatus(),
-                    task.getEstimation().toSeconds(),
-                    task.getTimeSpent().toSeconds(),
-                    task.getTimeLeft().toSeconds(),
+                    checkThatDurationTaskEntityNotNull(task.getEstimation()),
+                    checkThatDurationTaskEntityNotNull(task.getTimeSpent()),
+                    checkThatDurationTaskEntityNotNull(task.getTimeLeft()),
                     task.getRelatedTasks(),
                     task.getAttachments(),
                     task.getWorkLogs()
             );
+    }
+
+    private Long checkThatDurationTaskEntityNotNull(Duration duration) {
+        return duration != null ? duration.toSeconds() : null;
+    }
+
+    private Long checkThatUpdatedTaskEntityNotNull(ZonedDateTime updated) {
+        return updated != null ? updated.toEpochSecond() : null;
     }
 }
