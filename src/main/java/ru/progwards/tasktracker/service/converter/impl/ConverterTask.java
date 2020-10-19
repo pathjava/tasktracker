@@ -45,8 +45,8 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
     }
 
     private ZonedDateTime checkThatUpdatedTaskNotNull(Long updated) {
-        return updated != null ?
-                ZonedDateTime.ofInstant(Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
+        return updated != null ? ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
 
     @Override
