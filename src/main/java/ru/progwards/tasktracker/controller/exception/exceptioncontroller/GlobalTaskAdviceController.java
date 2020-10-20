@@ -11,16 +11,16 @@ import ru.progwards.tasktracker.controller.exception.*;
 public class GlobalTaskAdviceController {
 
     @ResponseBody
-    @ExceptionHandler(IdBadRequestException.class)
+    @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String idBadRequestHandler(IdBadRequestException ex) {
+    public String idBadRequestHandler(BadRequestException ex) {
         return ex.getMessage();
     }
 
     @ResponseBody
-    @ExceptionHandler(TaskByIdNotFoundException.class)
+    @ExceptionHandler(TaskNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String taskByIdNotFoundHandler(TaskByIdNotFoundException ex) {
+    public String taskByIdNotFoundHandler(TaskNotFoundException ex) {
         return ex.getMessage();
     }
 
