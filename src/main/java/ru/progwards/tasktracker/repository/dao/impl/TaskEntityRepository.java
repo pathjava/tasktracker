@@ -68,5 +68,10 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
             jsonHandler.write();
     }
 
+    public TaskEntity getTaskEntityByCode(String code){
+        return jsonHandler.tasks.values().stream()
+                .filter(entity -> entity.getCode().equals(code))
+                .findFirst().orElse(null);
+    }
 }
 
