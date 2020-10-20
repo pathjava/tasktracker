@@ -45,8 +45,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{task_id}")
-    public @ResponseBody
-    ResponseEntity<TaskDto> getTask(@PathVariable Long task_id) {
+    public ResponseEntity<TaskDto> getTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new IdBadRequestException(task_id);
 
@@ -59,8 +58,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public @ResponseBody
-    ResponseEntity<Collection<TaskDto>> getAllTasks(@PathVariable Long project_id) {
+    public ResponseEntity<Collection<TaskDto>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
             throw new IdBadRequestException(project_id);
 
@@ -82,8 +80,7 @@ public class TaskController {
     }
 
     @PostMapping("tasks/create")
-    public @ResponseBody
-    ResponseEntity<Task> addTask(@RequestBody Task task) {
+    public ResponseEntity<Task> addTask(@RequestBody Task task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
             throw new TaskNotExistException();
@@ -94,8 +91,7 @@ public class TaskController {
     }
 
     @PutMapping("tasks/{task_id}/update")
-    public @ResponseBody
-    ResponseEntity<Task> updateTask(@RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
         if (task == null)
             throw new TaskNotExistException();
 
@@ -105,8 +101,7 @@ public class TaskController {
     }
 
     @DeleteMapping("tasks/{task_id}/delete")
-    public @ResponseBody
-    ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
+    public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new IdBadRequestException(task_id);
 
