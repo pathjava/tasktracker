@@ -10,8 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.controller.converter.impl.TaskDtoConverter;
 import ru.progwards.tasktracker.controller.dto.TaskDto;
-import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
-import ru.progwards.tasktracker.controller.exception.TaskByIdNotFoundException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
+import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
@@ -66,14 +66,14 @@ class TaskControllerTest {
 
     @Test()
     void getTaskByID_IdBadRequestException() {
-        Exception exception = assertThrows(IdBadRequestException.class,
+        Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.getTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void getTaskByID_TaskByIdNotFoundException() {
-        Exception exception = assertThrows(TaskByIdNotFoundException.class,
+        Exception exception = assertThrows(TaskNotFoundException.class,
                 () -> taskController.getTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
@@ -95,7 +95,7 @@ class TaskControllerTest {
 
     @Test()
     void getAllProjectTasks_IdBadRequestException() {
-        Exception exception = assertThrows(IdBadRequestException.class,
+        Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.getAllTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
@@ -142,7 +142,8 @@ class TaskControllerTest {
                                 "  }"
                 ))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful()
+                );
 
         mockMvc.perform(get("/rest/project/2/tasks/10"))
                 .andExpect(status().isOk())
@@ -192,7 +193,8 @@ class TaskControllerTest {
                                 "  }"
                 ))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful()
+                );
 
         mockMvc.perform(get("/rest/project/2/tasks/11"))
                 .andExpect(status().isOk())
@@ -220,14 +222,14 @@ class TaskControllerTest {
 
     @Test()
     void deleteTaskById_IdBadRequestException() {
-        Exception exception = assertThrows(IdBadRequestException.class,
+        Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.deleteTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void deleteTaskById_TaskByIdNotFoundException() {
-        Exception exception = assertThrows(TaskByIdNotFoundException.class,
+        Exception exception = assertThrows(TaskNotFoundException.class,
                 () -> taskController.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
