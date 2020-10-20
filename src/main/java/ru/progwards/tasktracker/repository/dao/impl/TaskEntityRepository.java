@@ -68,6 +68,10 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
             jsonHandler.write();
     }
 
+    /**
+     * @param code код задачи, генерируемый на основе префикса проекта и идентификатора
+     * @return возвращает сущность из БД
+     */
     public TaskEntity getTaskEntityByCode(String code){
         return jsonHandler.tasks.values().stream()
                 .filter(entity -> entity.getCode().equals(code))
