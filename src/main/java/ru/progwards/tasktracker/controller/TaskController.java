@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.impl.TaskDtoConverter;
 import ru.progwards.tasktracker.controller.dto.TaskDto;
-import ru.progwards.tasktracker.controller.exception.IdBadRequestException;
-import ru.progwards.tasktracker.controller.exception.TaskByIdNotFoundException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
+import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.*;
@@ -47,12 +47,12 @@ public class TaskController {
     @GetMapping("/tasks/{task_id}")
     public ResponseEntity<TaskDto> getTask(@PathVariable Long task_id) {
         if (task_id == null)
-            throw new IdBadRequestException(task_id);
+            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 
         TaskDto task = dtoConverter.toDto(taskGetService.get(task_id));
 
         if (task == null)
-            throw new TaskByIdNotFoundException(task_id);
+            throw new TaskNotFoundException("Задача с id: " + task_id + " не найдена!");
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class TaskController {
     @GetMapping("/tasks")
     public ResponseEntity<Collection<TaskDto>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
-            throw new IdBadRequestException(project_id);
+            throw new BadRequestException("Id: " + project_id + " не задан или задан неверно!");
 
         Collection<TaskDto> tasks = getAllTasksByProjectId(project_id);
 
@@ -79,7 +79,7 @@ public class TaskController {
         return tasks.size() == 0 ? null : tasks;
     }
 
-    @PostMapping("tasks/create")
+    @PostMapping("/tasks/create")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
@@ -90,7 +90,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("tasks/{task_id}/update")
+    @PutMapping("/tasks/{task_id}/update")
     public ResponseEntity<Task> updateTask(@RequestBody Task task) {
         if (task == null)
             throw new TaskNotExistException();
@@ -100,17 +100,17 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("tasks/{task_id}/delete")
+    @DeleteMapping("/tasks/{task_id}/delete")
     public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
         if (task_id == null)
-            throw new IdBadRequestException(task_id);
+            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 
         Task task = taskGetService.get(task_id);
 
         if (task != null)
             taskRemoveService.remove(task);
         else
-            throw new TaskByIdNotFoundException(task_id);
+            throw new TaskNotFoundException("Задача с id: " + task_id + " не найдена!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
