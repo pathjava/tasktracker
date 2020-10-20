@@ -56,9 +56,8 @@ class TaskControllerTest {
     void getTaskById() throws Exception {
         TaskDto tempTask = dtoConverter.toDto(taskGetService.get(1L));
 
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
-        String jsonString = mapper.writeValueAsString(tempTask);
+        String jsonString = new ObjectMapper()
+                .registerModule(new JavaTimeModule()).writeValueAsString(tempTask);
 
         mockMvc.perform(get("/rest/project/2/tasks/1"))
                 .andExpect(status().isOk())
@@ -86,9 +85,8 @@ class TaskControllerTest {
                 .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
 
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
-        String jsonString = mapper.writeValueAsString(tempTasks);
+        String jsonString = new ObjectMapper()
+                .registerModule(new JavaTimeModule()).writeValueAsString(tempTasks);
 
         mockMvc.perform(get("/rest/project/2/tasks"))
                 .andExpect(status().isOk())
