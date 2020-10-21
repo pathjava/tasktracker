@@ -66,11 +66,11 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public void delete(Long id) {
-        TaskEntity temp = get(id);
-        if (temp != null) {
+        TaskEntity task = get(id);
+        if (task != null) {
             jsonHandler.tasks.remove(id);
-            temp.setDeleted(true);
-            create(temp);
+            task.setDeleted(true);
+            create(task);
         }
     }
 
