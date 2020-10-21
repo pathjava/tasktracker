@@ -30,11 +30,11 @@ public class TaskGetServiceTest {
     public void testGet() {
         when(taskGetService.get(anyLong())).thenReturn(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
 
         Task tempTask = taskGetService.get(1L);

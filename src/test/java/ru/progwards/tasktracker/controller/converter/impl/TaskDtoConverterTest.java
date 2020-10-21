@@ -51,11 +51,11 @@ class TaskDtoConverterTest {
     void toDto_return_Not_Null() {
         TaskDto taskDto = dtoConverter.toDto(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
 
         assertThat(taskDto, is(notNullValue()));

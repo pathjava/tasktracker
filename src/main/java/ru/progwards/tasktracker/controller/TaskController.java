@@ -72,7 +72,7 @@ public class TaskController {
 
     private Collection<TaskDto> getAllTasksByProjectId(Long project_id) {
         Collection<TaskDto> tasks = taskGetListService.getList().stream()
-                .filter(task -> task.getProject().getId().equals(project_id))
+                .filter(task -> task.getProject_id().equals(project_id))
                 .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
 

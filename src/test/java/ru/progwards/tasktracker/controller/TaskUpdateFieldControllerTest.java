@@ -39,9 +39,7 @@ class TaskUpdateFieldControllerTest {
                                 "    \"description\": \"Description task 10\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"priority\": \"MAJOR\",\n" +
-                                "    \"project\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
+                                "    \"project_id\": 2,\n" +
                                 "    \"author\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
@@ -54,11 +52,12 @@ class TaskUpdateFieldControllerTest {
                                 "      \"id\": 1\n" +
                                 "    },\n" +
                                 "    \"estimation\": 259200,\n" +
-                                "    \"timeSpent\": 86400,\n" +
-                                "    \"timeLeft\": 172800,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
                                 "    \"attachments\": [],\n" +
-                                "    \"workLogs\": []\n" +
+                                "    \"workLogs\": [],\n" +
+                                "    \"isDeleted\": false\n" +
                                 "  }"
                 ))
                 .andDo(print())

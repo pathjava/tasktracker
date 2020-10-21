@@ -25,7 +25,7 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     taskEntity.getDescription(),
                     taskEntity.getType(),
                     taskEntity.getPriority(),
-                    taskEntity.getProject(),
+                    taskEntity.getProject_id(),
                     taskEntity.getAuthor(),
                     taskEntity.getExecutor(),
                     ZonedDateTime.ofInstant(Instant.ofEpochSecond(taskEntity.getCreated()), ZoneId.of("Europe/Moscow")),
@@ -36,7 +36,8 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     checkThatDurationTaskNotNull(taskEntity.getTimeLeft()),
                     taskEntity.getRelatedTasks(),
                     taskEntity.getAttachments(),
-                    taskEntity.getWorkLogs()
+                    taskEntity.getWorkLogs(),
+                    taskEntity.getDeleted()
             );
     }
 
@@ -61,7 +62,7 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     task.getDescription(),
                     task.getType(),
                     task.getPriority(),
-                    task.getProject(),
+                    task.getProject_id(),
                     task.getAuthor(),
                     task.getExecutor(),
                     task.getCreated().toEpochSecond(),
@@ -72,7 +73,8 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     checkThatDurationTaskEntityNotNull(task.getTimeLeft()),
                     task.getRelatedTasks(),
                     task.getAttachments(),
-                    task.getWorkLogs()
+                    task.getWorkLogs(),
+                    task.getDeleted()
             );
     }
 

@@ -29,17 +29,17 @@ public class TaskEntityRepositoryTest {
     public void testGetAllTaskEntity() {
         when(taskRepository.get()).thenReturn(Arrays.asList(
                 new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>()),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false),
                 new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         ));
 
         Collection<TaskEntity> tempList = taskRepository.get();
@@ -52,11 +52,11 @@ public class TaskEntityRepositoryTest {
     public void testGetOneTaskEntity() {
         when(taskRepository.get(anyLong())).thenReturn(
                 new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
 
         TaskEntity taskEntity = taskRepository.get(1L);
@@ -68,11 +68,11 @@ public class TaskEntityRepositoryTest {
     @Test
     public void testCreateTaskEntity() {
         TaskEntity task = new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 new WorkFlowStatus(11L),
                 Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false);
 
         taskRepository.create(task);
 
@@ -82,11 +82,11 @@ public class TaskEntityRepositoryTest {
     @Test
     public void testUpdateTaskEntity() {
         TaskEntity task = new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, TaskPriority.MAJOR, new Project(11L), new User(11L), new User(11L),
+                TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 new WorkFlowStatus(11L),
                 Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false);
 
         taskRepository.update(task);
         verify(taskRepository, times(1)).update(task);

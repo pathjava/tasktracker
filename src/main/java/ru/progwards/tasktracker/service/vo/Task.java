@@ -17,7 +17,7 @@ public class Task {
     private String description;
     private TaskType type;
     private TaskPriority priority;
-    private Project project;
+    private Long project_id;
     private User author;
     private User executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -34,15 +34,17 @@ public class Task {
     private List<RelatedTask> relatedTasks;
     private List<TaskAttachment> attachments;
     private List<WorkLog> workLogs;
+    private Boolean isDeleted;
 
     public Task(
             Long id, String code, String name, String description,
-            TaskType type, TaskPriority priority, Project project,
+            TaskType type, TaskPriority priority, Long project_id,
             User author, User executor,
             ZonedDateTime created, ZonedDateTime updated,
             WorkFlowStatus status,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs
+            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs,
+            Boolean isDeleted
     ) {
         this.id = id;
         this.code = code;
@@ -50,7 +52,7 @@ public class Task {
         this.description = description;
         this.type = type;
         this.priority = priority;
-        this.project = project;
+        this.project_id = project_id;
         this.author = author;
         this.executor = executor;
         this.created = created;
@@ -62,6 +64,7 @@ public class Task {
         this.relatedTasks = relatedTasks;
         this.attachments = attachments;
         this.workLogs = workLogs;
+        this.isDeleted = isDeleted;
     }
 
     public Task() {
@@ -115,12 +118,12 @@ public class Task {
         this.priority = priority;
     }
 
-    public Project getProject() {
-        return project;
+    public Long getProject_id() {
+        return project_id;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProject_id(Long project_id) {
+        this.project_id = project_id;
     }
 
     public User getAuthor() {
@@ -209,5 +212,13 @@ public class Task {
 
     public void setWorkLogs(List<WorkLog> workLogs) {
         this.workLogs = workLogs;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

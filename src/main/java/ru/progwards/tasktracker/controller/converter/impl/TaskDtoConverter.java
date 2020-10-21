@@ -30,7 +30,7 @@ public class TaskDtoConverter implements Converter<Task, TaskDto> {
                     tempTask.getDescription(),
                     tempTask.getType(),
                     tempTask.getPriority(),
-                    tempTask.getProject(),
+                    tempTask.getProject_id(),
                     tempTask.getAuthor(),
                     tempTask.getExecutor(),
                     tempTask.getCreated(),
@@ -41,7 +41,8 @@ public class TaskDtoConverter implements Converter<Task, TaskDto> {
                     tempTask.getTimeLeft(),
                     tempTask.getRelatedTasks(),
                     tempTask.getAttachments(),
-                    tempTask.getWorkLogs()
+                    tempTask.getWorkLogs(),
+                    tempTask.getDeleted()
             );
         }
     }

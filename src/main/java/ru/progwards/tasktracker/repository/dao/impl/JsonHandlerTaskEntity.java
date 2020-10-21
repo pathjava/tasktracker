@@ -36,43 +36,43 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         Map<Long, TaskEntity> tempTasks = new HashMap<>();
         tempTasks.put(
                 1L, new TaskEntity(1L, "TT1-1", "Test task 1", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(2L), new User(1L), new User(1L),
+                        TaskType.BUG, TaskPriority.MAJOR, 2L, new User(1L), new User(1L),
                         ZonedDateTime.now().toEpochSecond(), null,
                         new WorkFlowStatus(1L),
                         null, null, null,
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
         tempTasks.put(
                 2L, new TaskEntity(2L, "TT2-2", "Test task 2", "Description task 2",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
+                        TaskType.BUG, TaskPriority.MAJOR, 1L, new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(1).toEpochSecond(), null,
                         new WorkFlowStatus(1L),
                         Duration.ofDays(3).toSeconds(), null, null,
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
         tempTasks.put(
                 3L, new TaskEntity(3L, "TT3-3", "Test task 3", "Description task 3",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(2L), new User(1L), new User(1L),
+                        TaskType.BUG, TaskPriority.MAJOR, 2L, new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(2).toEpochSecond(), ZonedDateTime.now().plusDays(3).toEpochSecond(),
                         new WorkFlowStatus(1L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
         tempTasks.put(
                 4L, new TaskEntity(4L, "TT4-4", "Test task 4", "Description task 4",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
+                        TaskType.BUG, TaskPriority.MAJOR, 1L, new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(3).toEpochSecond(), null,
                         new WorkFlowStatus(1L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
         tempTasks.put(
                 5L, new TaskEntity(5L, "TT5-5", "Test task 5", "Description task 5",
-                        TaskType.BUG, TaskPriority.MAJOR, new Project(1L), new User(1L), new User(1L),
+                        TaskType.BUG, TaskPriority.MAJOR, 1L, new User(1L), new User(1L),
                         ZonedDateTime.now().plusDays(4).toEpochSecond(), ZonedDateTime.now().plusDays(5).toEpochSecond(),
                         new WorkFlowStatus(1L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
         tempTasks.values().forEach(value -> tasks.put(value.getId(), value));
         write();

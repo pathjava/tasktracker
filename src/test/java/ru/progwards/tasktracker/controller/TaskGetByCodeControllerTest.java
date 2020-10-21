@@ -54,9 +54,7 @@ class TaskGetByCodeControllerTest {
                                 "    \"description\": \"Description task 10\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"priority\": \"MAJOR\",\n" +
-                                "    \"project\": {\n" +
-                                "      \"id\": 2\n" +
-                                "    },\n" +
+                                "    \"project_id\": 2,\n" +
                                 "    \"author\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
@@ -73,7 +71,8 @@ class TaskGetByCodeControllerTest {
                                 "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
                                 "    \"attachments\": [],\n" +
-                                "    \"workLogs\": []\n" +
+                                "    \"workLogs\": [],\n" +
+                                "    \"isDeleted\": false\n" +
                                 "  }"
                 ))
                 .andDo(print())

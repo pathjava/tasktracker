@@ -81,7 +81,7 @@ class TaskControllerTest {
     @Test
     void getAllProjectTasks() throws Exception {
         Collection<TaskDto> tempTasks = taskGetListService.getList().stream()
-                .filter(task -> task.getProject().getId().equals(2L))
+                .filter(task -> task.getProject_id().equals(2L))
                 .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
 
@@ -119,9 +119,7 @@ class TaskControllerTest {
                                 "    \"description\": \"Description task 10\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"priority\": \"MAJOR\",\n" +
-                                "    \"project\": {\n" +
-                                "      \"id\": 2\n" +
-                                "    },\n" +
+                                "    \"project_id\": 2,\n" +
                                 "    \"author\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
@@ -138,7 +136,8 @@ class TaskControllerTest {
                                 "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
                                 "    \"attachments\": [],\n" +
-                                "    \"workLogs\": []\n" +
+                                "    \"workLogs\": [],\n" +
+                                "    \"isDeleted\": false\n" +
                                 "  }"
                 ))
                 .andDo(print())
@@ -170,9 +169,7 @@ class TaskControllerTest {
                                 "    \"description\": \"Description task 11\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"priority\": \"MAJOR\",\n" +
-                                "    \"project\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
+                                "    \"project_id\": 2,\n" +
                                 "    \"author\": {\n" +
                                 "      \"id\": 1\n" +
                                 "    },\n" +
@@ -189,7 +186,8 @@ class TaskControllerTest {
                                 "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
                                 "    \"attachments\": [],\n" +
-                                "    \"workLogs\": []\n" +
+                                "    \"workLogs\": [],\n" +
+                                "    \"isDeleted\": false\n" +
                                 "  }"
                 ))
                 .andDo(print())
