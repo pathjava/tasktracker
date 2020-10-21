@@ -25,8 +25,10 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public Collection<TaskEntity> get() {
-        return jsonHandler.tasks.values().stream()
-                .collect(Collectors.toUnmodifiableList());
+        Collection<TaskEntity> tasks = jsonHandler.tasks.values().stream()
+                .filter(value -> !value.getDeleted())
+                .collect(Collectors.toList());
+        return tasks.size() != 0 ? tasks : null;
     }
 
     /**
@@ -35,7 +37,8 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public TaskEntity get(Long id) {
-        return jsonHandler.tasks.get(id);
+        TaskEntity task = jsonHandler.tasks.get(id);
+        return task.getDeleted() ? null : task;
     }
 
     /**
@@ -63,16 +66,19 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public void delete(Long id) {
-        TaskEntity temp = jsonHandler.tasks.remove(id);
-        if (temp != null)
-            jsonHandler.write();
+        TaskEntity temp = get(id);
+        if (temp != null) {
+            jsonHandler.tasks.remove(id);
+            temp.setDeleted(true);
+            create(temp);
+        }
     }
 
     /**
      * @param code код задачи, генерируемый на основе префикса проекта и идентификатора
      * @return возвращает сущность из БД
      */
-    public TaskEntity getTaskEntityByCode(String code){
+    public TaskEntity getTaskEntityByCode(String code) {
         return jsonHandler.tasks.values().stream()
                 .filter(entity -> entity.getCode().equals(code))
                 .findFirst().orElse(null);
