@@ -35,11 +35,20 @@ public class ProjectController {
         this.projectRemoveService = projectRemoveService;
     }
 
+    /**
+     * по запросу получаем список проектов
+     * @return Collection<Project>
+     */
     @GetMapping("/rest/project/list")
     public ResponseEntity<Collection<Project>> get() {
         return new ResponseEntity<>(projectGetListService.getList(), HttpStatus.OK);
     }
 
+    /**
+     * по запросу получаем нужый проект; если такового нет, то бросаем исключение NotFoundProjectException
+     * @param id идентификатор проекта
+     * @return Project
+     */
     @GetMapping("/rest/project/{id}")
     public ResponseEntity<Project> get(@PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
@@ -49,6 +58,10 @@ public class ProjectController {
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
+    /**
+     * по запросу создаём проект
+     * @param project передаем наполненный объект типа Project
+     */
     @PostMapping("/rest/project/create")
     @ResponseStatus(HttpStatus.OK)
     public void create(@RequestBody Project project) {
@@ -69,6 +82,10 @@ public class ProjectController {
 //            throw new NotFoundProjectException("Not found a project with id=" + id);
     }
 
+    /**
+     * по запросу удаляем нужный проект; если такого проекта не существует, то бросаем исключение NotFoundProjectException
+     * @param id идентификатор удаляемого проекта
+     */
     @PostMapping("/rest/project/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
@@ -79,6 +96,12 @@ public class ProjectController {
         projectRemoveService.remove(project);
     }
 
+    /**
+     * по запросу обновляем значение поля проекта
+     * @param id идентификатор проекта, в котором нужно обновить поле
+     * @param updateOneValue объект, содержащий информацию о поле, которое необходимо изменить и нововое значение
+     *                       данного поля
+     */
     @PostMapping("/rest/project/{id}/update1field")
     @ResponseStatus(HttpStatus.OK)
     public void updateOneField(@PathVariable("id") Long id, @RequestBody UpdateOneValue updateOneValue) {
