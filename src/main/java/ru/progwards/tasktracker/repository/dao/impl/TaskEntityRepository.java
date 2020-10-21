@@ -46,8 +46,8 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public void create(TaskEntity taskEntity) {
-        TaskEntity temp = jsonHandler.tasks.put(taskEntity.getId(), taskEntity);
-        if (temp == null)
+        TaskEntity task = jsonHandler.tasks.put(taskEntity.getId(), taskEntity);
+        if (task == null)
             jsonHandler.write();
     }
 
