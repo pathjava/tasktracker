@@ -18,14 +18,7 @@ import ru.progwards.tasktracker.service.facade.impl.TaskByCodeGetService;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
 import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.TaskPriority;
-import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -33,8 +26,8 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -121,16 +114,50 @@ class TaskControllerTest {
 
     @Test
     void addTask() throws Exception {
-        boolean add = taskController.addTask(
-                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
-                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                        new WorkFlowStatus(11L),
-                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-        ).getStatusCode().is2xxSuccessful();
+//        boolean add = taskController.addTask(
+//                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
+//                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
+//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+//                        new WorkFlowStatus(11L),
+//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+//        ).getStatusCode().is2xxSuccessful();
+//
+//        assertTrue(add);
 
-        assertTrue(add);
+        mockMvc.perform(post("/rest/project/2/tasks/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 10,\n" +
+                                "    \"code\": \"TT10-1\",\n" +
+                                "    \"name\": \"Test task 10\",\n" +
+                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"priority\": \"MAJOR\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"executor\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"status\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"estimation\": 259200,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
 
         mockMvc.perform(get("/rest/project/2/tasks/10"))
                 .andExpect(status().isOk())
@@ -147,16 +174,50 @@ class TaskControllerTest {
 
     @Test
     void updateTask() throws Exception {
-        boolean add = taskController.addTask(
-                new Task(11L, "TT11-1", "Test task 11 updated", "Description task 11",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
-                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                        new WorkFlowStatus(11L),
-                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-        ).getStatusCode().is2xxSuccessful();
+//        boolean add = taskController.addTask(
+//                new Task(11L, "TT11-1", "Test task 11 updated", "Description task 11",
+//                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
+//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+//                        new WorkFlowStatus(11L),
+//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+//        ).getStatusCode().is2xxSuccessful();
+//
+//        assertTrue(add);
 
-        assertTrue(add);
+        mockMvc.perform(put("/rest/project/2/tasks/11/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 11,\n" +
+                                "    \"code\": \"TT11-1\",\n" +
+                                "    \"name\": \"Test task 11 updated\",\n" +
+                                "    \"description\": \"Description task 11\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"priority\": \"MAJOR\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"executor\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"status\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"estimation\": 259200,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
 
         mockMvc.perform(get("/rest/project/2/tasks/11"))
                 .andExpect(status().isOk())
@@ -198,16 +259,50 @@ class TaskControllerTest {
 
     @Test
     void getTaskByCode() throws Exception {
-        boolean add = taskController.addTask(
-                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
-                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                        new WorkFlowStatus(11L),
-                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-        ).getStatusCode().is2xxSuccessful();
+//        boolean add = taskController.addTask(
+//                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
+//                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
+//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+//                        new WorkFlowStatus(11L),
+//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+//        ).getStatusCode().is2xxSuccessful();
+//
+//        assertTrue(add);
 
-        assertTrue(add);
+        mockMvc.perform(post("/rest/project/2/tasks/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 10,\n" +
+                                "    \"code\": \"TT10-1\",\n" +
+                                "    \"name\": \"Test task 10\",\n" +
+                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"priority\": \"MAJOR\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"executor\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"status\": {\n" +
+                                "      \"id\": 1\n" +
+                                "    },\n" +
+                                "    \"estimation\": 259200,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
 
         Task task = byCodeGetService.get("TT10-1");
 
