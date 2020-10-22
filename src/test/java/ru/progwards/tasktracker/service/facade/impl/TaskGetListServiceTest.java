@@ -39,13 +39,13 @@ public class TaskGetListServiceTest {
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>()),
                 new Task(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
                         TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         ));
 
         Collection<Task> tempList = taskGetListService.getList();

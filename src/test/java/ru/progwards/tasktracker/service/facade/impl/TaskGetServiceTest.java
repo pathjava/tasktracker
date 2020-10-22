@@ -34,7 +34,7 @@ public class TaskGetServiceTest {
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
         Task tempTask = taskGetService.get(1L);

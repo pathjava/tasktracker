@@ -8,8 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.converter.impl.TaskDtoConverter;
-import ru.progwards.tasktracker.controller.dto.TaskDto;
+import ru.progwards.tasktracker.controller.converter.impl.TaskDtoPreviewConverter;
+import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
@@ -57,7 +57,7 @@ class TaskControllerTest {
     private TaskByCodeGetService byCodeGetService;
 
     @Autowired
-    private TaskDtoConverter dtoConverter;
+    private TaskDtoPreviewConverter dtoConverter;
 
     @Test
     public void testController() {
@@ -66,7 +66,7 @@ class TaskControllerTest {
 
     @Test
     void getTaskById() throws Exception {
-        TaskDto tempTask = dtoConverter.toDto(taskGetService.get(1L));
+        TaskDtoPreview tempTask = dtoConverter.toDto(taskGetService.get(1L));
 
         String jsonString = new ObjectMapper()
                 .registerModule(new JavaTimeModule()).writeValueAsString(tempTask);
@@ -92,7 +92,7 @@ class TaskControllerTest {
 
     @Test
     void getAllProjectTasks() throws Exception {
-        Collection<TaskDto> tempTasks = taskGetListService.getList().stream()
+        Collection<TaskDtoPreview> tempTasks = taskGetListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(2L))
                 .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
@@ -127,7 +127,7 @@ class TaskControllerTest {
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         ).getStatusCode().is2xxSuccessful();
 
         assertTrue(add);
@@ -153,7 +153,7 @@ class TaskControllerTest {
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         ).getStatusCode().is2xxSuccessful();
 
         assertTrue(add);
@@ -204,7 +204,7 @@ class TaskControllerTest {
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         ).getStatusCode().is2xxSuccessful();
 
         assertTrue(add);
