@@ -60,6 +60,9 @@ public class TaskEntity {
         this.isDeleted = isDeleted;
     }
 
+    public TaskEntity() {
+    }
+
     public Long getId() {
         return id;
     }

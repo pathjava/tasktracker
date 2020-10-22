@@ -34,7 +34,6 @@ public class Task {
     private List<RelatedTask> relatedTasks;
     private List<TaskAttachment> attachments;
     private List<WorkLog> workLogs;
-    private Boolean isDeleted;
 
     public Task(
             Long id, String code, String name, String description,
@@ -43,8 +42,7 @@ public class Task {
             ZonedDateTime created, ZonedDateTime updated,
             WorkFlowStatus status,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs,
-            Boolean isDeleted
+            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs
     ) {
         this.id = id;
         this.code = code;
@@ -64,7 +62,6 @@ public class Task {
         this.relatedTasks = relatedTasks;
         this.attachments = attachments;
         this.workLogs = workLogs;
-        this.isDeleted = isDeleted;
     }
 
     public Task() {
@@ -212,13 +209,5 @@ public class Task {
 
     public void setWorkLogs(List<WorkLog> workLogs) {
         this.workLogs = workLogs;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
     }
 }

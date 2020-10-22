@@ -36,8 +36,7 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
                     checkThatDurationTaskNotNull(taskEntity.getTimeLeft()),
                     taskEntity.getRelatedTasks(),
                     taskEntity.getAttachments(),
-                    taskEntity.getWorkLogs(),
-                    taskEntity.getDeleted()
+                    taskEntity.getWorkLogs()
             );
     }
 
@@ -54,28 +53,31 @@ public class ConverterTask implements Converter<TaskEntity, Task> {
     public TaskEntity toEntity(Task task) {
         if (task == null)
             return null;
-        else
-            return new TaskEntity(
-                    task.getId(),
-                    task.getCode(),
-                    task.getName(),
-                    task.getDescription(),
-                    task.getType(),
-                    task.getPriority(),
-                    task.getProject_id(),
-                    task.getAuthor(),
-                    task.getExecutor(),
-                    task.getCreated().toEpochSecond(),
-                    checkThatUpdatedTaskEntityNotNull(task.getUpdated()),
-                    task.getStatus(),
-                    checkThatDurationTaskEntityNotNull(task.getEstimation()),
-                    checkThatDurationTaskEntityNotNull(task.getTimeSpent()),
-                    checkThatDurationTaskEntityNotNull(task.getTimeLeft()),
-                    task.getRelatedTasks(),
-                    task.getAttachments(),
-                    task.getWorkLogs(),
-                    task.getDeleted()
-            );
+        else {
+            TaskEntity entity = new TaskEntity();
+
+            entity.setId(task.getId());
+            entity.setCode(task.getCode());
+            entity.setName(task.getName());
+            entity.setDescription(task.getDescription());
+            entity.setType(task.getType());
+            entity.setPriority(task.getPriority());
+            entity.setProject_id(task.getProject_id());
+            entity.setAuthor(task.getAuthor());
+            entity.setExecutor(task.getExecutor());
+            entity.setCreated(task.getCreated().toEpochSecond());
+            entity.setUpdated(checkThatUpdatedTaskEntityNotNull(task.getUpdated()));
+            entity.setStatus(task.getStatus());
+            entity.setEstimation(checkThatDurationTaskEntityNotNull(task.getEstimation()));
+            entity.setTimeSpent(checkThatDurationTaskEntityNotNull(task.getTimeSpent()));
+            entity.setTimeLeft(checkThatDurationTaskEntityNotNull(task.getTimeLeft()));
+            entity.setRelatedTasks(task.getRelatedTasks());
+            entity.setAttachments(task.getAttachments());
+            entity.setWorkLogs(task.getWorkLogs());
+            entity.setDeleted(false);
+
+            return entity;
+        }
     }
 
     private Long checkThatDurationTaskEntityNotNull(Duration duration) {
