@@ -44,10 +44,14 @@ public class Project  {
     /**
      * список задач, относящихся к данному проекту
      */
-    List<Task> tasks;
+    private List<Task> tasks;
+    /**
+     * хранит код последней добавленной задачи к данному проекту
+     */
+    private Long lastTaskCode;
 
     public Project(Long id, String name, String description, User owner,
-                   ZonedDateTime created, WorkFlow workFlow, List<Task> tasks) {
+                   ZonedDateTime created, WorkFlow workFlow, List<Task> tasks, Long lastTaskCode) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -56,6 +60,7 @@ public class Project  {
         this.created = created;
         this.workFlow = workFlow;
         this.tasks = tasks;
+        this.lastTaskCode = lastTaskCode;
     }
 
     public Long getId() {
@@ -120,6 +125,14 @@ public class Project  {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Long getLastTaskCode() {
+        return lastTaskCode;
+    }
+
+    public void setLastTaskCode(Long lastTaskCode) {
+        this.lastTaskCode = lastTaskCode;
     }
 
     public static String getPrefix(String name) {

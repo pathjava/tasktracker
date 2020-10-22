@@ -25,7 +25,7 @@ public class ProjectCreateServiceTest {
     @Test
     public void createService() {
         Project model = new Project(100L, "project100", "desc", new User(1L),
-                ZonedDateTime.now(), new WorkFlow(1L), new ArrayList<>());
+                ZonedDateTime.now(), new WorkFlow(1L), new ArrayList<>(), 0L);
 
         projectCreateService.create(model);
 

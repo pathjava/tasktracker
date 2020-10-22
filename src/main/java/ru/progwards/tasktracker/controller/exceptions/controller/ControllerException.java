@@ -3,7 +3,6 @@ package ru.progwards.tasktracker.controller.exceptions.controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.progwards.tasktracker.controller.exceptions.IdNullException;
 import ru.progwards.tasktracker.controller.exceptions.NotFoundProjectException;
 import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
 
@@ -17,11 +16,6 @@ public class ControllerException extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NullObjectException.class)
     public String getMessage(NullObjectException ex) {
-        return ex.getMessage();
-    }
-
-    @ExceptionHandler(IdNullException.class)
-    public String getMessage(IdNullException ex) {
         return ex.getMessage();
     }
 }

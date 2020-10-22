@@ -1,6 +1,5 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;

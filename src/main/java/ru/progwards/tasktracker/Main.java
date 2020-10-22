@@ -17,11 +17,11 @@ public class Main {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 
-//        ProjectCreateService createService = context.getBean(ProjectCreateService.class);
-//
+        ProjectCreateService createService = context.getBean(ProjectCreateService.class);
+
 //        for (long i = 0; i < 5; i++) {
 //            createService.create(new Project(i, "name"+i, "description"+i, new User(i),
-//                    ZonedDateTime.now(), new WorkFlow(i), new ArrayList<>()));
+//                    ZonedDateTime.now(), new WorkFlow(i), new ArrayList<>(), 0L));
 //        }
     }
 }

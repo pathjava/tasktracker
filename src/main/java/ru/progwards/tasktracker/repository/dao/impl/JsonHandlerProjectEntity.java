@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class JsonHandlerProjectEntity implements JsonHandler {
     private final static File PROJECT_PATH = new File(JsonHandlerProjectEntity.class.getClassLoader().
             getResource("data/projects.json").getFile());
-    public final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
+    private final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
 
     public JsonHandlerProjectEntity() {
         try {
@@ -37,6 +37,18 @@ public class JsonHandlerProjectEntity implements JsonHandler {
 
     public Map<Long, ProjectEntity> getMap() {
         return map;
+    }
+
+    public void addMap(Long id, ProjectEntity entity) {
+        map.put(id, entity);
+    }
+
+    public void clearRepository() {
+        try {
+            Files.writeString(PROJECT_PATH.toPath(), "");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

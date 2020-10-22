@@ -1,15 +1,17 @@
 package ru.progwards.tasktracker.repository.entity;
 
 public class ProjectEntity {
-    private final Long id;
-    private final String name;
-    private final String description;
-    private final String prefix;
-    private final Long ownerId;
-    private final Long created;
-    private final Long workFlowId;
+    private Long id;
+    private String name;
+    private String description;
+    private String prefix;
+    private Long ownerId;
+    private Long created;
+    private Long workFlowId;
+    private Long lastTaskCode;
 
-    public ProjectEntity(Long id, String name, String description, String prefix, Long ownerId, Long created, Long workFlowId) {
+    public ProjectEntity(Long id, String name, String description, String prefix, Long ownerId,
+                         Long created, Long workFlowId, Long lastTaskCode) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -17,6 +19,7 @@ public class ProjectEntity {
         this.ownerId = ownerId;
         this.created = created;
         this.workFlowId = workFlowId;
+        this.lastTaskCode = lastTaskCode;
     }
 
     public Long getId() {
@@ -45,5 +48,41 @@ public class ProjectEntity {
 
     public Long getWorkFlowId() {
         return workFlowId;
+    }
+
+    public Long getLastTaskCode() {
+        return lastTaskCode;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setCreated(Long created) {
+        this.created = created;
+    }
+
+    public void setWorkFlowId(Long workFlowId) {
+        this.workFlowId = workFlowId;
+    }
+
+    public void setLastTaskCode(Long lastTaskCode) {
+        this.lastTaskCode = lastTaskCode;
     }
 }

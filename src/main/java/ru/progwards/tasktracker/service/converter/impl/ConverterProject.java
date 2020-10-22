@@ -29,8 +29,9 @@ public class ConverterProject implements Converter<ProjectEntity, Project> {
         if (entity == null)
             return null;
 
-        return new Project(entity.getId(), entity.getName(), entity.getDescription(), new User(entity.getId()),
-                getZDTCreated(entity.getCreated()), new WorkFlow(entity.getWorkFlowId()), getListTasks(entity.getId()));
+        return new Project(entity.getId(), entity.getName(), entity.getDescription(),
+                new User(entity.getId()), getZDTCreated(entity.getCreated()), new WorkFlow(entity.getWorkFlowId()),
+                getListTasks(entity.getId()), entity.getLastTaskCode());
     }
 
     @Override
@@ -38,9 +39,9 @@ public class ConverterProject implements Converter<ProjectEntity, Project> {
         if (valueObject == null)
             return null;
 
-        return new ProjectEntity(valueObject.getId(), valueObject.getName(),
-                valueObject.getDescription(), valueObject.getPrefix(), valueObject.getOwner().getId(),
-                getLongCreated(valueObject.getCreated()), valueObject.getWorkFlow().getId());
+        return new ProjectEntity(valueObject.getId(), valueObject.getName(), valueObject.getDescription(),
+                valueObject.getPrefix(), valueObject.getOwner().getId(), getLongCreated(valueObject.getCreated()),
+                valueObject.getWorkFlow().getId(), valueObject.getLastTaskCode());
     }
 
     private Long getLongCreated(ZonedDateTime created) {
