@@ -1,12 +1,12 @@
 package ru.progwards.tasktracker.controller.dto;
 
-public class TaskDto {
+public class TaskDtoPreview {
 
     private Long id;
     private String code;
     private String name;
 
-    public TaskDto(Long id, String code, String name) {
+    public TaskDtoPreview(Long id, String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;
