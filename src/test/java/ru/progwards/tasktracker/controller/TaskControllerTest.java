@@ -14,6 +14,7 @@ import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
+import ru.progwards.tasktracker.service.facade.impl.TaskByCodeGetService;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -51,6 +52,9 @@ class TaskControllerTest {
 
     @Autowired
     private TaskGetListService taskGetListService;
+
+    @Autowired
+    private TaskByCodeGetService byCodeGetService;
 
     @Autowired
     private TaskDtoConverter dtoConverter;
@@ -189,6 +193,43 @@ class TaskControllerTest {
     void deleteTaskById_TaskNotFoundException() {
         Exception exception = assertThrows(TaskNotFoundException.class,
                 () -> taskController.deleteTask(20L));
+        assertTrue(exception.getMessage().contains(" не найдена!"));
+    }
+
+    @Test
+    void getTaskByCode() throws Exception {
+        boolean add = taskController.addTask(
+                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
+                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+                        new WorkFlowStatus(11L),
+                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+        ).getStatusCode().is2xxSuccessful();
+
+        assertTrue(add);
+
+        Task task = byCodeGetService.get("TT10-1");
+
+        String jsonString = new ObjectMapper()
+                .registerModule(new JavaTimeModule()).writeValueAsString(task);
+
+        mockMvc.perform(get("/tt/browse/TT10-1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonString));
+    }
+
+    @Test
+    void getTaskByCode_BadRequestException() {
+        Exception exception = assertThrows(BadRequestException.class,
+                () -> taskController.getTaskByCode(null));
+        assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
+    }
+
+    @Test
+    void getTaskByCode_TaskNotFoundException() {
+        Exception exception = assertThrows(TaskNotFoundException.class,
+                () -> taskController.getTaskByCode("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 }

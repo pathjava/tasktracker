@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/rest/project/{project_id}")
 public class TaskController {
 
     private TaskGetService taskGetService;
@@ -26,6 +25,7 @@ public class TaskController {
     private TaskCreateService taskCreateService;
     private TaskRefreshService taskRefreshService;
     private TaskDtoConverter dtoConverter;
+    private TaskByCodeGetService byCodeGetService;
 
     @Autowired
     public void setTaskService(
@@ -34,7 +34,8 @@ public class TaskController {
             TaskRemoveService taskRemoveService,
             TaskCreateService taskCreateService,
             TaskRefreshService taskRefreshService,
-            TaskDtoConverter dtoConverter
+            TaskDtoConverter dtoConverter,
+            TaskByCodeGetService byCodeGetService
     ) {
         this.taskGetService = taskGetService;
         this.taskGetListService = taskGetListService;
@@ -42,9 +43,10 @@ public class TaskController {
         this.taskCreateService = taskCreateService;
         this.taskRefreshService = taskRefreshService;
         this.dtoConverter = dtoConverter;
+        this.byCodeGetService = byCodeGetService;
     }
 
-    @GetMapping("/tasks/{task_id}")
+    @GetMapping("/rest/project/{project_id}/tasks/{task_id}")
     public ResponseEntity<TaskDto> getTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
@@ -57,7 +59,7 @@ public class TaskController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/rest/project/{project_id}/tasks")
     public ResponseEntity<Collection<TaskDto>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
             throw new BadRequestException("Id: " + project_id + " не задан или задан неверно!");
@@ -79,7 +81,7 @@ public class TaskController {
         return tasks.size() == 0 ? null : tasks;
     }
 
-    @PostMapping("/tasks/create")
+    @PostMapping("/rest/project/{project_id}/tasks/create")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
@@ -90,7 +92,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/tasks/{task_id}/update")
+    @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
     public ResponseEntity<Task> updateTask(@RequestBody Task task) {
         if (task == null)
             throw new TaskNotExistException();
@@ -100,7 +102,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/tasks/{task_id}/delete")
+    @DeleteMapping("/rest/project/{project_id}/tasks/{task_id}/delete")
     public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
@@ -113,5 +115,18 @@ public class TaskController {
             throw new TaskNotFoundException("Задача с id: " + task_id + " не найдена!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/tt/browse/{code}")
+    public ResponseEntity<Task> getTaskByCode(@PathVariable String code) {
+        if (code == null)
+            throw new BadRequestException("Code не задан или задан неверно!");
+
+        Task task = byCodeGetService.get(code);
+
+        if (task == null)
+            throw new TaskNotFoundException("Задача с code: " + code + " не найдена!");
+
+        return new ResponseEntity<>(task, HttpStatus.OK);
     }
 }
