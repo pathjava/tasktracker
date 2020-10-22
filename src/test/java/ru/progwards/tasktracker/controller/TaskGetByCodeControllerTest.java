@@ -6,12 +6,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.TaskByCodeGetService;
 import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.util.types.TaskPriority;
+import ru.progwards.tasktracker.util.types.TaskType;
+import ru.progwards.tasktracker.util.types.WorkFlowStatus;
+
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -19,8 +26,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,6 +42,9 @@ class TaskGetByCodeControllerTest {
     @Autowired
     private TaskByCodeGetService byCodeGetService;
 
+    @Autowired
+    private TaskController taskController;
+
     @Test
     void controllerIsNotNull() {
         assertThat(getByCodeController, is(notNullValue()));
@@ -44,40 +52,16 @@ class TaskGetByCodeControllerTest {
 
     @Test
     void getTaskByCode() throws Exception {
-        mockMvc.perform(post("/rest/project/2/tasks/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                        "{\n" +
-                                "    \"id\": 10,\n" +
-                                "    \"code\": \"TT10-1\",\n" +
-                                "    \"name\": \"Test task 10\",\n" +
-                                "    \"description\": \"Description task 10\",\n" +
-                                "    \"type\": \"BUG\",\n" +
-                                "    \"priority\": \"MAJOR\",\n" +
-                                "    \"project_id\": 2,\n" +
-                                "    \"author\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"executor\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"created\": 1603274345,\n" +
-                                "    \"updated\": null,\n" +
-                                "    \"status\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"estimation\": 259200,\n" +
-                                "    \"timeSpent\": null,\n" +
-                                "    \"timeLeft\": null,\n" +
-                                "    \"relatedTasks\": [],\n" +
-                                "    \"attachments\": [],\n" +
-                                "    \"workLogs\": [],\n" +
-                                "    \"isDeleted\": false\n" +
-                                "  }"
-                ))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful()
-                );
+        boolean add = taskController.addTask(
+                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
+                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
+                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+                        new WorkFlowStatus(11L),
+                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+        ).getStatusCode().is2xxSuccessful();
+
+        assertTrue(add);
 
         Task task = byCodeGetService.get("TT10-1");
 

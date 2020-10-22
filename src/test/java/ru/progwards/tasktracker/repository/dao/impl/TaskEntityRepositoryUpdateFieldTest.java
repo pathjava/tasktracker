@@ -40,7 +40,7 @@ public class TaskEntityRepositoryUpdateFieldTest {
         assertEquals("TT1-1", taskRepository.get(1L).getCode());
 
         updateField.updateField(new UpdateOneValue(1L, "TT1-1-1", "code"));
-
+        String str = taskRepository.get(1L).getCode();
         assertEquals("TT1-1-1", taskRepository.get(1L).getCode());
     }
 }
