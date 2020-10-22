@@ -38,7 +38,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     @Override
     public TaskEntity get(Long id) {
         TaskEntity task = jsonHandler.tasks.get(id);
-        return task.getDeleted() ? null : task;
+        return task == null || task.getDeleted() ? null : task;
     }
 
     /**
@@ -56,7 +56,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public void update(TaskEntity taskEntity) {
-        delete(taskEntity.getId());
+        jsonHandler.tasks.remove(taskEntity.getId());
         taskEntity.setUpdated(ZonedDateTime.now().toEpochSecond());
         create(taskEntity);
     }
