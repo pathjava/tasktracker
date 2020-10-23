@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 import ru.progwards.tasktracker.service.vo.User;
@@ -23,11 +24,16 @@ public class TaskDtoFull {
     private Long project_id;
     private User author;
     private User executor;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime created;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private ZonedDateTime updated;
     private WorkFlowStatus status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimation;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeSpent;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeLeft;
     private List<RelatedTask> relatedTasks;
     private List<TaskAttachment> attachments;

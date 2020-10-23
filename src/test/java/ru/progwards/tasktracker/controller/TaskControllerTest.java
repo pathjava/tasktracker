@@ -8,7 +8,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.progwards.tasktracker.controller.converter.impl.TaskDtoFullConverter;
 import ru.progwards.tasktracker.controller.converter.impl.TaskDtoPreviewConverter;
+import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
@@ -17,7 +19,6 @@ import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
 import ru.progwards.tasktracker.service.facade.impl.TaskByCodeGetService;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
 import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
-import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -51,6 +52,9 @@ class TaskControllerTest {
 
     @Autowired
     private TaskDtoPreviewConverter dtoConverter;
+
+    @Autowired
+    private TaskDtoFullConverter dtoFullConverter;
 
     @Test
     public void testController() {
@@ -304,7 +308,7 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        Task task = byCodeGetService.get("TT10-1");
+        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get("TT10-1"));
 
         String jsonString = new ObjectMapper()
                 .registerModule(new JavaTimeModule()).writeValueAsString(task);

@@ -100,22 +100,22 @@ public class TaskController {
     }
 
     @PostMapping("/rest/project/{project_id}/tasks/create")
-    public ResponseEntity<Task> addTask(@RequestBody Task task) {
+    public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
             throw new TaskNotExistException();
 
-        taskCreateService.create(task);
+        taskCreateService.create(dtoFullConverter.toModel(task));
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
-    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
+    public ResponseEntity<TaskDtoFull> updateTask(@RequestBody TaskDtoFull task) {
         if (task == null)
             throw new TaskNotExistException();
 
-        taskRefreshService.refresh(task);
+        taskRefreshService.refresh(dtoFullConverter.toModel(task));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -136,11 +136,11 @@ public class TaskController {
     }
 
     @GetMapping("/tt/browse/{code}")
-    public ResponseEntity<Task> getTaskByCode(@PathVariable String code) {
+    public ResponseEntity<TaskDtoFull> getTaskByCode(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");
 
-        Task task = byCodeGetService.get(code);
+        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code));
 
         if (task == null)
             throw new TaskNotFoundException("Задача с code: " + code + " не найдена!");
