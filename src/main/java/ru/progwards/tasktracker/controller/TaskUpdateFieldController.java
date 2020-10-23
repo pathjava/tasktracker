@@ -6,13 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.progwards.tasktracker.controller.exception.UpdateFieldNotExistException;
 import ru.progwards.tasktracker.service.facade.impl.TaskOneFieldSetService;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 @Controller
-@RequestMapping("/rest/project/{project_id}")
 public class TaskUpdateFieldController {
 
     private TaskOneFieldSetService taskOneFieldSetService;
@@ -22,7 +20,7 @@ public class TaskUpdateFieldController {
         this.taskOneFieldSetService = taskOneFieldSetService;
     }
 
-    @PutMapping("tasks/{task_id}/field")
+    @PutMapping("/rest/project/{project_id}/tasks/{task_id}/field")
     public ResponseEntity<UpdateOneValue> updateOneField(@RequestBody UpdateOneValue oneValue) {
         if (oneValue == null)
             throw new UpdateFieldNotExistException();
