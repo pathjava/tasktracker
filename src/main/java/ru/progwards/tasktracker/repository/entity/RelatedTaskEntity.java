@@ -1,13 +1,16 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.repository.entity;
 
-public class RelatedTask {
+import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.service.vo.Task;
+
+public class RelatedTaskEntity {
 
     private Long id;
     private RelationType relationType;
     private Long parentTaskId;
     private Task task;
 
-    public RelatedTask(Long id, RelationType relationType, Long parentTaskId, Task task) {
+    public RelatedTaskEntity(Long id, RelationType relationType, Long parentTaskId, Task task) {
         this.id = id;
         this.relationType = relationType;
         this.parentTaskId = parentTaskId;
