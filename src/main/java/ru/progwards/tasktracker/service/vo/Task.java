@@ -2,7 +2,6 @@ package ru.progwards.tasktracker.service.vo;
 
 import ru.progwards.tasktracker.util.types.Priority;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkflowStatus;
 
 import java.time.ZonedDateTime;
 
@@ -20,7 +19,6 @@ public class Task {
     private final int storyPoint;
     private final Long projectId;
     private String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
-    private final WorkflowStatus wfStatus;
     private final String version;
     private final Long planDuration;
     private final Long spentDuration;
@@ -30,8 +28,7 @@ public class Task {
                 TaskType type, Priority priority,
                 Long authorUserId, Long executorUserId,
                 ZonedDateTime created, ZonedDateTime updated,
-                int storyPoint, Long projectId, String strCode,
-                WorkflowStatus wfStatus, String version,
+                int storyPoint, Long projectId, String strCode, String version,
                 Long planDuration, Long spentDuration, Long leftDuration) {
         this.id = id;
         this.name = name;
@@ -45,7 +42,6 @@ public class Task {
         this.storyPoint = storyPoint;
         this.projectId = projectId;
         this.strCode = strCode;
-        this.wfStatus = wfStatus;
         this.version = version;
         this.planDuration = planDuration;
         this.spentDuration = spentDuration;
@@ -98,10 +94,6 @@ public class Task {
 
     public String getStrCode() {
         return strCode;
-    }
-
-    public WorkflowStatus getWfStatus() {
-        return wfStatus;
     }
 
     public String getVersion() {

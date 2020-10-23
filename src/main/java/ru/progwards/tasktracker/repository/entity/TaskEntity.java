@@ -2,7 +2,6 @@ package ru.progwards.tasktracker.repository.entity;
 
 import ru.progwards.tasktracker.util.types.Priority;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkflowStatus;
 
 public class TaskEntity {
 
@@ -18,7 +17,6 @@ public class TaskEntity {
     private final int storyPoint;
     private final Long projectId;
     private String strCode; /* изменил имя на верблюжью нотацию с strcode на strCode*/
-    private final WorkflowStatus wfStatus;
     private final String version;
     private final Long planDuration;
     private final Long spentDuration;
@@ -28,8 +26,7 @@ public class TaskEntity {
                       TaskType type, Priority priority,
                       Long authorUserId, Long executorUserId,
                       Long created, Long updated,
-                      int storyPoint, Long projectId, String strCode,
-                      WorkflowStatus wfStatus, String version,
+                      int storyPoint, Long projectId, String strCode, String version,
                       Long planDuration, Long spentDuration, Long leftDuration) {
         this.id = id;
         this.name = name;
@@ -43,7 +40,6 @@ public class TaskEntity {
         this.storyPoint = storyPoint;
         this.projectId = projectId;
         this.strCode = strCode;
-        this.wfStatus = wfStatus;
         this.version = version;
         this.planDuration = planDuration;
         this.spentDuration = spentDuration;
@@ -96,10 +92,6 @@ public class TaskEntity {
 
     public String getStrCode() {
         return strCode;
-    }
-
-    public WorkflowStatus getWfStatus() {
-        return wfStatus;
     }
 
     public String getVersion() {

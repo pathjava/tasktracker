@@ -1,10 +1,12 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
@@ -21,6 +23,11 @@ public class ProjectEntityRepositoryTest {
 
     @Autowired
     private ProjectEntityRepository repositoryAuto;
+
+    @BeforeEach
+    public void initMock() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void getEntitiesTest() {

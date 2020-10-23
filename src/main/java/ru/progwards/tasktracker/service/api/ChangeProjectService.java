@@ -2,7 +2,6 @@ package ru.progwards.tasktracker.service.api;
 
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.Rules;
 
 public interface ChangeProjectService {
   
