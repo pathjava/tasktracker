@@ -1,44 +1,119 @@
 package ru.progwards.tasktracker.repository.entity;
 
+/**
+ * Вложение задачи
+ * 
+ * Содержимое лежит отдельно, в AttachmentContent
+ *
+ * @author Gregory Lobkov
+ */
 public class TaskAttachmentEntity {
 
 
-    private long id;
+    private Long id;
 
     /**
      * Ссылка на задачу
      */
-    private long taskId;
+    private Long taskId;
 
     /**
-     * Ссылка на вложение
+     * Ссылка на содержимое вложения
      */
-    private long attachmentId;
+    private Long attachmentContentId;
+
+    /**
+     * Полное имя файла-вложения
+     */
+    private String name;
+
+    /**
+     * Расширение файла
+     */
+    private String extension;
+
+    /**
+     * Размер в байтах
+     */
+    private Long size;
+
+    /**
+     * Дата создания, секунд от 1970-01-01T00:00:00Z
+     */
+    private Long dateCreated;
 
 
+    /**
+     * Пустой конструктор - из за особенности работы имплементации репозитория
+     */
+    public TaskAttachmentEntity() {
+    }
+
+    public TaskAttachmentEntity(Long id, Long taskId, Long attachmentContentId, String name, String extension, Long size, Long dateCreated) {
+        this.id = id;
+        this.taskId = taskId;
+        this.attachmentContentId = attachmentContentId;
+        this.name = name;
+        this.extension = extension;
+        this.size = size;
+        this.dateCreated = dateCreated;
+    }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getTaskId() {
+    public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(long taskId) {
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
     }
 
-    public long getAttachmentId() {
-        return attachmentId;
+    public Long getAttachmentContentId() {
+        return attachmentContentId;
     }
 
-    public void setAttachmentId(long attachmentId) {
-        this.attachmentId = attachmentId;
+    public void setAttachmentContentId(Long attachmentContentId) {
+        this.attachmentContentId = attachmentContentId;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public Long getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
 }
