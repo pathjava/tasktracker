@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
@@ -19,10 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class JsonHandlerTaskEntityTest {
+public class TaskEntityJsonHandlerTest {
 
     @Autowired
-    private JsonHandlerTaskEntity jsonHandlerTask;
+    private TaskEntityJsonHandler jsonHandlerTask;
 
     @BeforeEach
     public void clear() {

@@ -12,7 +12,7 @@ import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
-import ru.progwards.tasktracker.service.facade.impl.*;
+import ru.progwards.tasktracker.service.facade.impl.task.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;

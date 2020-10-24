@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerTaskEntity implements JsonHandler {
+public class TaskEntityJsonHandler implements JsonHandler {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
     private static File TASKS_PATH = null;
@@ -88,7 +88,7 @@ public class JsonHandlerTaskEntity implements JsonHandler {
         }
     }
 
-    public JsonHandlerTaskEntity() {
+    public TaskEntityJsonHandler() {
         initializerMap(); /* for testing */
         try {
             read();

@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 import java.lang.reflect.Field;
 
 @Component
-public class TaskEntityRepositoryUpdateField implements RepositoryUpdateField {
+public class TaskEntityRepositoryUpdateField implements RepositoryUpdateField<TaskEntity> {
 
     private TaskEntityRepository taskRepository;
 

@@ -11,7 +11,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Component
-public class ConverterTask implements Converter<TaskEntity, Task> {
+public class TaskConverter implements Converter<TaskEntity, Task> {
 
     @Override
     public Task toVo(TaskEntity taskEntity) {

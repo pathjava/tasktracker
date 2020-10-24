@@ -16,9 +16,9 @@ import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
-import ru.progwards.tasktracker.service.facade.impl.TaskByCodeGetService;
-import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
-import ru.progwards.tasktracker.service.facade.impl.TaskGetService;
+import ru.progwards.tasktracker.service.facade.impl.task.TaskByCodeGetService;
+import ru.progwards.tasktracker.service.facade.impl.task.TaskGetListService;
+import ru.progwards.tasktracker.service.facade.impl.task.TaskGetService;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

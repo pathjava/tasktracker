@@ -1,9 +1,9 @@
-package ru.progwards.tasktracker.service.facade.impl;
+package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.facade.impl.task.TaskCreateService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -19,15 +19,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-public class TaskRefreshServiceTest {
+public class TaskCreateServiceTest {
 
     @Mock
-    private TaskRefreshService taskRefreshService;
-
+    private TaskCreateService taskCreateService;
 
     @Test
-    public void testRefresh() {
-        taskRefreshService.refresh(
+    public void testCreate() {
+        taskCreateService.create(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -36,6 +35,6 @@ public class TaskRefreshServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        verify(taskRefreshService, times(1)).refresh(any(Task.class));
+        verify(taskCreateService, times(1)).create(any(Task.class));
     }
 }

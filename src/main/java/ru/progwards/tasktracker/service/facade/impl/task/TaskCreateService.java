@@ -1,17 +1,17 @@
-package ru.progwards.tasktracker.service.facade.impl;
+package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepository;
-import ru.progwards.tasktracker.service.converter.impl.ConverterTask;
-import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
+import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 @Service
-public class TaskGetService implements GetService<Long, Task> {
+public class TaskCreateService implements CreateService<Task> {
 
     private TaskEntityRepository taskRepository;
-    private ConverterTask converterTask;
+    private TaskConverter converterTask;
 
     @Autowired
     public void setTaskRepository(TaskEntityRepository taskRepository) {
@@ -19,12 +19,12 @@ public class TaskGetService implements GetService<Long, Task> {
     }
 
     @Autowired
-    public void setConverterTask(ConverterTask converterTask) {
+    public void setConverterTask(TaskConverter converterTask) {
         this.converterTask = converterTask;
     }
 
     @Override
-    public Task get(Long id) {
-        return id == null ? null : converterTask.toVo(taskRepository.get(id));
+    public void create(Task model) {
+        taskRepository.create(converterTask.toEntity(model));
     }
 }

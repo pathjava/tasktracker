@@ -1,9 +1,9 @@
-package ru.progwards.tasktracker.service.facade.impl;
+package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.facade.impl.task.TaskGetService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -14,19 +14,21 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-public class TaskCreateServiceTest {
+public class TaskGetServiceTest {
 
     @Mock
-    private TaskCreateService taskCreateService;
+    private TaskGetService taskGetService;
 
     @Test
-    public void testCreate() {
-        taskCreateService.create(
+    public void testGet() {
+        when(taskGetService.get(anyLong())).thenReturn(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -35,6 +37,10 @@ public class TaskCreateServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        verify(taskCreateService, times(1)).create(any(Task.class));
+        Task tempTask = taskGetService.get(1L);
+
+        assertThat(tempTask, is(notNullValue()));
+
+        assertThat(tempTask.getName(), equalTo("Test task 1 TEST"));
     }
 }

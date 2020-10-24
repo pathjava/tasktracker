@@ -1,8 +1,9 @@
-package ru.progwards.tasktracker.service.facade.impl;
+package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.impl.task.TaskOneFieldSetService;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import static org.mockito.ArgumentMatchers.any;
