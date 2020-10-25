@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.repository.dao.impl;
+package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class TaskEntityJsonHandler implements JsonHandler {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
-    private static File TASKS_PATH = null;
+    private static File TASKS_PATH;
 
     /* for testing */
     private void initializerMap() {

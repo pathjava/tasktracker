@@ -1,14 +1,12 @@
 package ru.progwards.tasktracker.repository.entity;
 
-import ru.progwards.tasktracker.service.vo.RelationType;
-
 public class RelationTypeEntity {
 
     private Long id;
     private String name;
-    private RelationType counterRelation;
+    private RelationTypeEntity counterRelation;
 
-    public RelationTypeEntity(Long id, String name, RelationType counterRelation) {
+    public RelationTypeEntity(Long id, String name, RelationTypeEntity counterRelation) {
         this.id = id;
         this.name = name;
         this.counterRelation = counterRelation;
@@ -30,11 +28,11 @@ public class RelationTypeEntity {
         this.name = name;
     }
 
-    public RelationType getCounterRelation() {
+    public RelationTypeEntity getCounterRelation() {
         return counterRelation;
     }
 
-    public void setCounterRelation(RelationType counterRelation) {
+    public void setCounterRelation(RelationTypeEntity counterRelation) {
         this.counterRelation = counterRelation;
     }
 }

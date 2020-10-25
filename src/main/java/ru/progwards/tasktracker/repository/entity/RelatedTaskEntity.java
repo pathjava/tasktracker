@@ -1,18 +1,15 @@
 package ru.progwards.tasktracker.repository.entity;
 
-import ru.progwards.tasktracker.service.vo.RelationType;
-import ru.progwards.tasktracker.service.vo.Task;
-
 public class RelatedTaskEntity {
 
     private Long id;
-    private RelationType relationType;
+    private RelationTypeEntity relationTypeEntity;
     private Long parentTaskId;
-    private Task task;
+    private TaskEntity task;
 
-    public RelatedTaskEntity(Long id, RelationType relationType, Long parentTaskId, Task task) {
+    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long parentTaskId, TaskEntity task) {
         this.id = id;
-        this.relationType = relationType;
+        this.relationTypeEntity = relationTypeEntity;
         this.parentTaskId = parentTaskId;
         this.task = task;
     }
@@ -25,12 +22,12 @@ public class RelatedTaskEntity {
         this.id = id;
     }
 
-    public RelationType getRelationType() {
-        return relationType;
+    public RelationTypeEntity getRelationTypeEntity() {
+        return relationTypeEntity;
     }
 
-    public void setRelationType(RelationType relationType) {
-        this.relationType = relationType;
+    public void setRelationTypeEntity(RelationTypeEntity relationTypeEntity) {
+        this.relationTypeEntity = relationTypeEntity;
     }
 
     public Long getParentTaskId() {
@@ -41,11 +38,11 @@ public class RelatedTaskEntity {
         this.parentTaskId = parentTaskId;
     }
 
-    public Task getTask() {
+    public TaskEntity getTask() {
         return task;
     }
 
-    public void setTask(Task task) {
+    public void setTask(TaskEntity task) {
         this.task = task;
     }
 }

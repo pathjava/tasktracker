@@ -4,6 +4,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.TaskEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 
 import java.time.ZonedDateTime;

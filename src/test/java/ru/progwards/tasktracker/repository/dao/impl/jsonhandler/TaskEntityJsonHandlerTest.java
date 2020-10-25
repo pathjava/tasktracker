@@ -1,9 +1,10 @@
-package ru.progwards.tasktracker.repository.dao.impl;
+package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.TaskEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;

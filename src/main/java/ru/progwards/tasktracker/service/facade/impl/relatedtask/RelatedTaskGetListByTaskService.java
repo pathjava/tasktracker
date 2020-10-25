@@ -1,10 +1,12 @@
-package ru.progwards.tasktracker.service.facade.impl;
+package ru.progwards.tasktracker.service.facade.impl.relatedtask;
 
+import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
 import java.util.Collection;
 
+@Service
 public class RelatedTaskGetListByTaskService implements GetListByTaskService<Long, RelatedTask> {
 
     @Override
