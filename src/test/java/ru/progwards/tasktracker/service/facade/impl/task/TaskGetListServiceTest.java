@@ -3,7 +3,6 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskGetListService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -23,7 +22,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class TaskGetListServiceTest {
