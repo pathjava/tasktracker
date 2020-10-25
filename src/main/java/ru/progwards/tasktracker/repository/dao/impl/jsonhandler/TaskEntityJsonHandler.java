@@ -83,7 +83,7 @@ public class TaskEntityJsonHandler implements JsonHandler {
             TASKS_PATH = new File(Objects.requireNonNull(
                     Thread.currentThread().getContextClassLoader()
                             .getResource("data/tasks.json")).toURI());
-        } catch (URISyntaxException e) {
+        } catch (NullPointerException | URISyntaxException e) {
             e.printStackTrace();
         }
     }

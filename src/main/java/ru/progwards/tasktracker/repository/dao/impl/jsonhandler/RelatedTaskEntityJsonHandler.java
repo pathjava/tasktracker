@@ -57,7 +57,7 @@ public class RelatedTaskEntityJsonHandler implements JsonHandler {
             RELATED_TASKS_PATH = new File(Objects.requireNonNull(
                     Thread.currentThread().getContextClassLoader()
                             .getResource("data/related_task.json")).toURI());
-        } catch (URISyntaxException e) {
+        } catch (NullPointerException | URISyntaxException e) {
             e.printStackTrace();
         }
     }

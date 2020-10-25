@@ -47,7 +47,7 @@ public class RelationTypeEntityJsonHandler implements JsonHandler {
             RELATION_TYPE_PATH = new File(Objects.requireNonNull(
                     Thread.currentThread().getContextClassLoader()
                             .getResource("data/relation_type.json")).toURI());
-        } catch (URISyntaxException e) {
+        } catch (NullPointerException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
