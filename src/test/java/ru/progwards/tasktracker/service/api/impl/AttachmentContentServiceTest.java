@@ -71,7 +71,7 @@ public class AttachmentContentServiceTest {
         createService.create(content);
         AttachmentContent got = getService.get(content.getId());
         Assertions.assertNotNull(got, "Сохранено в репо, но прочесть не смогли");
-        Assertions.assertEquals(content.getId(), got.getId(), "Идентификатор созраненного объекта не совпал");
+        Assertions.assertEquals(content.getId(), got.getId(), "Идентификатор сохраненного объекта не совпал");
 
         String expectedData = Arrays.toString(content.getData().toByteArray());
         String gotData = Arrays.toString(content.getData().toByteArray());
