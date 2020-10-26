@@ -86,6 +86,7 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      * @param taskId идентификатор задачи
      * @return список вложений
      */
+    @Override
     public Collection<TaskAttachment> getListByTaskId(Long taskId) {
         // получили список сущностей
         Collection<TaskAttachmentEntity> taskAttachmentEntities = taskAttachmentEntityRepositoryByTaskId.getByTaskId(taskId);
