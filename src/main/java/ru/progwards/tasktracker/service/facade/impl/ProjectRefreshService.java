@@ -10,7 +10,6 @@ import ru.progwards.tasktracker.service.vo.Project;
 public class ProjectRefreshService implements RefreshService<Project> {
 
     private final ProjectEntityRepository repository;
-
     private final ConverterProject converter;
 
     public ProjectRefreshService(ProjectEntityRepository repository, ConverterProject converter) {

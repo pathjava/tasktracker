@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,12 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerProjectEntity implements JsonHandler {
+public class JsonHandlerTaskPriorityEntity implements JsonHandler {
     private final static File PROJECT_PATH = new File(JsonHandlerProjectEntity.class.getClassLoader().
-            getResource("data/projects.json").getFile());
-    private final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
+            getResource("data/taskpriority.json").getFile());
+    private final Map<Long, TaskPriorityEntity> map = new ConcurrentHashMap<>();
 
-    public JsonHandlerProjectEntity() {
+    public JsonHandlerTaskPriorityEntity() {
         try {
             read();
         } catch (Exception ex1) {
@@ -34,18 +34,18 @@ public class JsonHandlerProjectEntity implements JsonHandler {
         }
     }
 
-    public Map<Long, ProjectEntity> getMap() {
+    public Map<Long, TaskPriorityEntity> getMap() {
         return map;
     }
 
-    public void addMap(Long id, ProjectEntity entity) {
+    public void addMap(Long id, TaskPriorityEntity entity) {
         map.put(id, entity);
     }
 
     @Override
     public void write() {
         synchronized (this) {
-            List<ProjectEntity> list = map.values().stream().collect(Collectors.toUnmodifiableList());
+            List<TaskPriorityEntity> list = map.values().stream().collect(Collectors.toUnmodifiableList());
             String json = new Gson().toJson(list);
             try {
                 Files.writeString(PROJECT_PATH.toPath(), json);
@@ -61,8 +61,8 @@ public class JsonHandlerProjectEntity implements JsonHandler {
             try {
                 map.clear();
                 String json = Files.readString(PROJECT_PATH.toPath());
-                Type type = new TypeToken<ArrayList<ProjectEntity>>(){}.getType();
-                List<ProjectEntity> list = new Gson().fromJson(json, type);
+                Type type = new TypeToken<ArrayList<TaskPriorityEntity>>(){}.getType();
+                List<TaskPriorityEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> map.put(e.getId(), e));
             } catch (IOException ex) {
                 ex.printStackTrace();

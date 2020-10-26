@@ -3,9 +3,6 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,10 +13,10 @@ import java.util.Collection;
 
 @SpringBootTest
 public class ProjectEntityRepositoryTest {
-    @InjectMocks
-    private ProjectEntityRepository repository;
-    @Mock
-    private JsonHandlerProjectEntity jsonHandlerProjectEntity;
+//    @InjectMocks
+//    private ProjectEntityRepository repository;
+//    @Mock
+//    private JsonHandlerProjectEntity jsonHandlerProjectEntity;
 
     @Autowired
     private ProjectEntityRepository repositoryAuto;
@@ -56,10 +53,10 @@ public class ProjectEntityRepositoryTest {
 
     @Test
     public void createTest() {
-        for (long i = 0; i < 10; i++) {
-            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
-        }
-        Mockito.verify(jsonHandlerProjectEntity, Mockito.times(10)).write();
+//        for (long i = 0; i < 10; i++) {
+//            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+//        }
+//        Mockito.verify(jsonHandlerProjectEntity, Mockito.times(10)).write();
 
         ProjectEntity entity = new ProjectEntity(1L, "name1", "desc1","",1L, 1000L, 1L, 0L);
         repositoryAuto.create(entity);

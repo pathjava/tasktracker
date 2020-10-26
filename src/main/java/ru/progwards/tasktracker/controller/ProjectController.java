@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 import java.util.Collection;
 
 @RestController
+@RequestMapping("/rest/project/")
 public class ProjectController {
 
     private final ProjectEntityRepository repository;
@@ -27,7 +28,7 @@ public class ProjectController {
      * по запросу получаем список проектов
      * @return возвращается список проектов
      */
-    @GetMapping("/rest/project/list")
+    @GetMapping("list")
     public ResponseEntity<Collection<ProjectEntity>> get() {
         return new ResponseEntity<>(repository.get(), HttpStatus.OK);
     }
@@ -37,7 +38,7 @@ public class ProjectController {
      * @param id идентификатор проекта
      * @return Project
      */
-    @GetMapping("/rest/project/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ProjectEntity> get(@PathVariable("id") Long id) {
         ProjectEntity entity = repository.get(id);
         if (entity == null)
@@ -51,7 +52,7 @@ public class ProjectController {
      * @param entity передаем наполненный проект
      * @return возвращаем созданный проект
      */
-    @PostMapping("/rest/project/create")
+    @PostMapping("create")
     public ResponseEntity<ProjectEntity> create(@RequestBody ProjectEntity entity) {
         if (entity == null)
             throw new NullObjectException("Project is null");
@@ -66,7 +67,7 @@ public class ProjectController {
      * @param id идентификатор изменяемого проекта
      * @param entity измененный проект
      */
-    @PostMapping("/rest/project/{id}/update")
+    @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("id") Long id, @RequestBody ProjectEntity entity) {
         if (entity == null)
@@ -80,7 +81,7 @@ public class ProjectController {
      * по запросу удаляем нужный проект; если такого проекта не существует, то бросаем исключение NotFoundProjectException
      * @param id идентификатор удаляемого проекта
      */
-    @PostMapping("/rest/project/{id}/delete")
+    @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
         ProjectEntity entity = repository.get(id);
@@ -96,7 +97,7 @@ public class ProjectController {
      * @param updateOneValue объект, содержащий информацию о поле, которое необходимо изменить и нововое значение
      *                       данного поля
      */
-    @PostMapping("/rest/project/{id}/update1field")
+    @PostMapping("{id}/update1field")
     @ResponseStatus(HttpStatus.OK)
     public void updateOneField(@PathVariable("id") Long id, @RequestBody UpdateOneValue updateOneValue) {
         if (updateOneValue == null)

@@ -1,18 +1,14 @@
 package ru.progwards.tasktracker.service.vo;
 
-import java.util.List;
-
 public class WorkFlow {
     private Long id;
     private String name;
     private boolean pattern;
-    private List<WorkflowStatus> allowed;
 
-    public WorkFlow(Long id, String name, boolean pattern, List<WorkflowStatus> allowed) {
+    public WorkFlow(Long id, String name, boolean pattern) {
         this.id = id;
         this.name = name;
         this.pattern = pattern;
-        this.allowed = allowed;
     }
 
     public WorkFlow(Long id) {
@@ -29,9 +25,5 @@ public class WorkFlow {
 
     public boolean isPattern() {
         return pattern;
-    }
-
-    public List<WorkflowStatus> getAllowed() {
-        return allowed;
     }
 }
