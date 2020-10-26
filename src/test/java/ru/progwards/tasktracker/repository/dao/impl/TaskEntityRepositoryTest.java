@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
