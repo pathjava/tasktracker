@@ -5,13 +5,13 @@ public class RelatedTaskEntity {
     private Long id;
     private RelationTypeEntity relationTypeEntity;
     private Long parentTaskId;
-    private TaskEntity task;
+    private Long taskId;
 
-    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long parentTaskId, TaskEntity task) {
+    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long parentTaskId, Long taskId) {
         this.id = id;
         this.relationTypeEntity = relationTypeEntity;
         this.parentTaskId = parentTaskId;
-        this.task = task;
+        this.taskId = taskId;
     }
 
     public Long getId() {
@@ -38,11 +38,11 @@ public class RelatedTaskEntity {
         this.parentTaskId = parentTaskId;
     }
 
-    public TaskEntity getTask() {
-        return task;
+    public Long getTaskId() {
+        return taskId;
     }
 
-    public void setTask(TaskEntity task) {
-        this.task = task;
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 }

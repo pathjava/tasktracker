@@ -45,7 +45,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
         RelatedTaskEntity entity = jsonHandler.relatedTasks.get(id);
         if (entity != null) {
             for (RelatedTaskEntity value : jsonHandler.relatedTasks.values()) {
-                if (value.getParentTaskId().equals(entity.getId()) && value.getTask().getId().equals(id))
+                if (value.getParentTaskId().equals(entity.getId()) && value.getTaskId().equals(id))
                     jsonHandler.relatedTasks.remove(value.getId());
             }
             jsonHandler.relatedTasks.remove(id);

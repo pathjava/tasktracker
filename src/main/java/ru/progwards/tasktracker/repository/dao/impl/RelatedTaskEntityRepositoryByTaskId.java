@@ -25,7 +25,7 @@ public class RelatedTaskEntityRepositoryByTaskId implements RepositoryByTaskId<L
             return null;
 
         Collection<RelatedTaskEntity> collection = jsonHandler.relatedTasks.values().stream()
-                .filter(value -> value.getTask().getId().equals(taskId))
+                .filter(value -> value.getTaskId().equals(taskId))
                 .collect(Collectors.toList());
 
         return collection.size() == 0 ? null : collection;

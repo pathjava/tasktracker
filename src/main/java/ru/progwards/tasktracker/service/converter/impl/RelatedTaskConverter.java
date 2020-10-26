@@ -10,15 +10,10 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
 
     private RelationTypeConverter relationTypeConverter;
-    private TaskConverter taskConverter;
 
     @Autowired
-    public void setRelationTypeConverter(
-            RelationTypeConverter relationTypeConverter,
-            TaskConverter taskConverter
-    ) {
+    public void setRelationTypeConverter(RelationTypeConverter relationTypeConverter) {
         this.relationTypeConverter = relationTypeConverter;
-        this.taskConverter = taskConverter;
     }
 
     @Override
@@ -30,7 +25,7 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
                     entity.getId(),
                     relationTypeConverter.toVo(entity.getRelationTypeEntity()),
                     entity.getParentTaskId(),
-                    taskConverter.toVo(entity.getTask())
+                    entity.getTaskId()
             );
     }
 
@@ -43,7 +38,7 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
                     relatedTask.getId(),
                     relationTypeConverter.toEntity(relatedTask.getRelationType()),
                     relatedTask.getParentTaskId(),
-                    taskConverter.toEntity(relatedTask.getTask())
+                    relatedTask.getTaskId()
             );
     }
 }
