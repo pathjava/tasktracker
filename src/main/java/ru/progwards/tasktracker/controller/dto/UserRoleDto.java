@@ -1,19 +1,17 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.controller.dto;
 
+import ru.progwards.tasktracker.service.vo.AccessRule;
 import ru.progwards.tasktracker.util.types.SystemRole;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
-public class UserRole {
+public class UserRoleDto {
     private Long id;
     private String name;
     private SystemRole systemRole;
-    private Map<Long, AccessRule> accessRules;
+    private List<Long> accessRules;
 
-    public UserRole(Long id, String name, SystemRole systemRole, Map<Long, AccessRule> accessRules) {
+    public UserRoleDto(Long id, String name, SystemRole systemRole, List<Long> accessRules) {
         this.id = id;
         this.name = name;
         this.systemRole = systemRole;
@@ -40,20 +38,7 @@ public class UserRole {
         this.systemRole = systemRole;
     }
 
-    public Map<Long, AccessRule> getAccessRules() {
+    public List<Long> getAccessRules() {
         return accessRules;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserRole userRole = (UserRole) o;
-        return Objects.equals(id, userRole.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

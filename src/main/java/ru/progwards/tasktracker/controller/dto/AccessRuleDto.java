@@ -1,17 +1,15 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.controller.dto;
 
 import ru.progwards.tasktracker.util.types.AccessType;
 
-import java.util.Objects;
-
-public class AccessRule {
+public class AccessRuleDto {
     private Long id;
     private String objectName;
     private String propertyName; // null == all
     private Long objectId; // null == all
     private AccessType accessType;
 
-    public AccessRule(Long id, String objectName, String propertyName, Long objectId, AccessType accessType) {
+    public AccessRuleDto(Long id, String objectName, String propertyName, Long objectId, AccessType accessType) {
         this.id = id;
         this.objectName = objectName;
         this.propertyName = propertyName;
@@ -53,18 +51,5 @@ public class AccessRule {
 
     public void setAccessType(AccessType accessType) {
         this.accessType = accessType;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AccessRule that = (AccessRule) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }
