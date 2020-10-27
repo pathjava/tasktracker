@@ -32,22 +32,24 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
     /**
      * Создание нового WorkFlowAction
      *
-     * @param WorkFlowAction новый WorkFlowAction
+     * @param workFlowAction новый WorkFlowAction
      */
     @Override
-    public void create(WorkFlowAction WorkFlowAction) {
-        workFlowActionRepository.create(workFlowActionConverter.toEntity(WorkFlowAction));
+    public void create(WorkFlowAction workFlowAction) {
+        WorkFlowActionEntity entity = workFlowActionConverter.toEntity(workFlowAction);
+        workFlowActionRepository.create(entity);
+        workFlowAction.setId(entity.getId());
     }
 
 
     /**
      * Удаление WorkFlowAction
      *
-     * @param WorkFlowAction удаляемый WorkFlowAction
+     * @param workFlowAction удаляемый WorkFlowAction
      */
     @Override
-    public void remove(WorkFlowAction WorkFlowAction) {
-        workFlowActionRepository.delete(WorkFlowAction.getId());
+    public void remove(WorkFlowAction workFlowAction) {
+        workFlowActionRepository.delete(workFlowAction.getId());
     }
 
 
@@ -66,11 +68,11 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
     /**
      * Обновить поля WorkFlowAction
      *
-     * @param WorkFlowAction измененный WorkFlowAction
+     * @param workFlowAction измененный WorkFlowAction
      */
     @Override
-    public void refresh(WorkFlowAction WorkFlowAction) {
-        workFlowActionRepository.update(workFlowActionConverter.toEntity(WorkFlowAction));
+    public void refresh(WorkFlowAction workFlowAction) {
+        workFlowActionRepository.update(workFlowActionConverter.toEntity(workFlowAction));
     }
 
 

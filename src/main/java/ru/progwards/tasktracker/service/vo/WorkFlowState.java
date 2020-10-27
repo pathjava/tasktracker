@@ -2,6 +2,8 @@ package ru.progwards.tasktracker.service.vo;
 
 /**
  * Состояние воркфлоу
+ *
+ * @author Gregory Lobkov
  */
 public enum WorkFlowState {
 

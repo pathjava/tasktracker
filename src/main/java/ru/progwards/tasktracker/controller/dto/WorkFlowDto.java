@@ -1,11 +1,11 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.controller.dto;
 
 /**
  * Дерево движения задачи по статусам
  *
  * @author Gregory Lobkov
  */
-public class WorkFlow {
+public class WorkFlowDto {
 
     Long id;
 
@@ -28,18 +28,12 @@ public class WorkFlow {
      */
     Long start_status_id;
 
-    /**
-     * С какого статуса начинать движение задачи
-     */
-    WorkFlowStatus start;
 
-
-    public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus start) {
+    public WorkFlowDto(Long id, String name, boolean pattern, Long start_status_id) {
         this.id = id;
         this.name = name;
         this.pattern = pattern;
         this.start_status_id = start_status_id;
-        this.start = start;
     }
 
     public Long getId() {
@@ -72,14 +66,6 @@ public class WorkFlow {
 
     public void setStart_status_id(Long start_status_id) {
         this.start_status_id = start_status_id;
-    }
-
-    public WorkFlowStatus getStart() {
-        return start;
-    }
-
-    public void setStart(WorkFlowStatus start) {
-        this.start = start;
     }
 
 }

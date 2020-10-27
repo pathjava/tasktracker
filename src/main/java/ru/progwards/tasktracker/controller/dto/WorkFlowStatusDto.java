@@ -1,4 +1,6 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.controller.dto;
+
+import ru.progwards.tasktracker.service.vo.WorkFlowState;
 
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
-public class WorkFlowStatus {
+public class WorkFlowStatusDto {
 
     Long id;
 
@@ -27,22 +29,16 @@ public class WorkFlowStatus {
     WorkFlowState state;
 
     /**
-     * Действия, в которые могут быть применены к задаче с данным статусом
-     */
-    List<WorkFlowAction> actions;
-
-    /**
      * На данный статус задачу можно переводить из любого состояния
      */
     Boolean allowFromAnyStatus;
 
 
-    public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean allowFromAnyStatus) {
+    public WorkFlowStatusDto(Long id, Long workflow_id, String name, WorkFlowState state, Boolean allowFromAnyStatus) {
         this.id = id;
         this.workflow_id = workflow_id;
         this.name = name;
         this.state = state;
-        this.actions = actions;
         this.allowFromAnyStatus = allowFromAnyStatus;
     }
 
@@ -77,14 +73,6 @@ public class WorkFlowStatus {
 
     public void setState(WorkFlowState state) {
         this.state = state;
-    }
-
-    public List<WorkFlowAction> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<WorkFlowAction> actions) {
-        this.actions = actions;
     }
 
     public Boolean getAllowFromAnyStatus() {

@@ -53,7 +53,9 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
             }
             taskAttachment.setAttachmentContentId(content.getId());
         }
-        taskAttachmentRepository.create(taskAttachmentConverter.toEntity(taskAttachment));
+        TaskAttachmentEntity entity = taskAttachmentConverter.toEntity(taskAttachment);
+        taskAttachmentRepository.create(entity);
+        taskAttachment.setId(entity.getId());
     }
 
 

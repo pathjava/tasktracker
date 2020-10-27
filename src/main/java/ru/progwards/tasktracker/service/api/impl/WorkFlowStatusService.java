@@ -32,22 +32,24 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     /**
      * Создание нового WorkFlowStatus
      *
-     * @param WorkFlowStatus новый WorkFlowStatus
+     * @param workFlowStatus новый WorkFlowStatus
      */
     @Override
-    public void create(WorkFlowStatus WorkFlowStatus) {
-        workFlowStatusRepository.create(workFlowStatusConverter.toEntity(WorkFlowStatus));
+    public void create(WorkFlowStatus workFlowStatus) {
+        WorkFlowStatusEntity entity = workFlowStatusConverter.toEntity(workFlowStatus);
+        workFlowStatusRepository.create(entity);
+        workFlowStatus.setId(entity.getId());
     }
 
 
     /**
      * Удаление WorkFlowStatus
      *
-     * @param WorkFlowStatus удаляемый WorkFlowStatus
+     * @param workFlowStatus удаляемый WorkFlowStatus
      */
     @Override
-    public void remove(WorkFlowStatus WorkFlowStatus) {
-        workFlowStatusRepository.delete(WorkFlowStatus.getId());
+    public void remove(WorkFlowStatus workFlowStatus) {
+        workFlowStatusRepository.delete(workFlowStatus.getId());
     }
 
 
@@ -66,11 +68,11 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     /**
      * Обновить поля WorkFlowStatus
      *
-     * @param WorkFlowStatus измененный WorkFlowStatus
+     * @param workFlowStatus измененный WorkFlowStatus
      */
     @Override
-    public void refresh(WorkFlowStatus WorkFlowStatus) {
-        workFlowStatusRepository.update(workFlowStatusConverter.toEntity(WorkFlowStatus));
+    public void refresh(WorkFlowStatus workFlowStatus) {
+        workFlowStatusRepository.update(workFlowStatusConverter.toEntity(workFlowStatus));
     }
 
 
@@ -85,13 +87,13 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     @Override
     public Collection<WorkFlowStatus> getListByParentId(Long parentId) {
         // получили список сущностей
-        Collection<WorkFlowStatusEntity> WorkFlowStatusActionEntities = workFlowStatusEntityRepositoryByParentId.getByParentId(parentId);
-        List<WorkFlowStatus> WorkFlowStatusActions = new ArrayList<>(WorkFlowStatusActionEntities.size());
+        Collection<WorkFlowStatusEntity> workFlowStatusEntities = workFlowStatusEntityRepositoryByParentId.getByParentId(parentId);
+        List<WorkFlowStatus> workFlowStatusActions = new ArrayList<>(workFlowStatusEntities.size());
         // преобразуем к бизнес-объектам
-        for (WorkFlowStatusEntity entity:WorkFlowStatusActionEntities) {
-            WorkFlowStatusActions.add(workFlowStatusConverter.toVo(entity));
+        for (WorkFlowStatusEntity entity:workFlowStatusEntities) {
+            workFlowStatusActions.add(workFlowStatusConverter.toVo(entity));
         }
-        return WorkFlowStatusActions;
+        return workFlowStatusActions;
     }
 
 

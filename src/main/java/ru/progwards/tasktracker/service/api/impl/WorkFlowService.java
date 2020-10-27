@@ -8,13 +8,17 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Бизнес-логика работы с воркфлоу
  *
  * @author Gregory Lobkov
  */
 @Service
-public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<WorkFlow>, GetService<Long, WorkFlow>, RefreshService<WorkFlow> {
+public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<WorkFlow>, GetService<Long, WorkFlow>, RefreshService<WorkFlow>, GetListService<WorkFlow> {
 
     @Autowired
     private Repository<Long, WorkFlowEntity> workFlowRepository;
@@ -29,7 +33,9 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
      */
     @Override
     public void create(WorkFlow workFlow) {
-        workFlowRepository.create(workFlowConverter.toEntity(workFlow));
+        WorkFlowEntity entity = workFlowConverter.toEntity(workFlow);
+        workFlowRepository.create(entity);
+        workFlow.setId(entity.getId());
     }
 
 
@@ -64,6 +70,23 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
     @Override
     public void refresh(WorkFlow workFlow) {
         workFlowRepository.update(workFlowConverter.toEntity(workFlow));
+    }
+
+    /**
+     * Получить список всех Workflow
+     *
+     * @return список Workflow
+     */
+    @Override
+    public Collection<WorkFlow> getList() {
+        // получили список сущностей
+        Collection<WorkFlowEntity> WorkFlowEntities = workFlowRepository.get();
+        List<WorkFlow> WorkFlows = new ArrayList<>(WorkFlowEntities.size());
+        // преобразуем к бизнес-объектам
+        for (WorkFlowEntity entity : WorkFlowEntities) {
+            WorkFlows.add(workFlowConverter.toVo(entity));
+        }
+        return WorkFlows;
     }
 
 }

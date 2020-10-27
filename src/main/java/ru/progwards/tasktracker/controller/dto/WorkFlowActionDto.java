@@ -1,11 +1,11 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.controller.dto;
 
 /**
  * Действия над задачей, переводящие её из одного состояния WorkFlowStatus в другое
  *
  * @author Gregory Lobkov
  */
-public class WorkFlowAction {
+public class WorkFlowActionDto {
 
     Long id;
 
@@ -26,18 +26,12 @@ public class WorkFlowAction {
      */
     Long status_id;
 
-    /**
-     * Статус, в который переводится задача после применения действия
-     */
-    WorkFlowStatus status;
 
-
-    public WorkFlowAction(Long id, Long parentStatus_id, String name, Long status_id, WorkFlowStatus status) {
+    public WorkFlowActionDto(Long id, Long parentStatus_id, String name, Long status_id) {
         this.id = id;
         this.parentStatus_id = parentStatus_id;
         this.name = name;
         this.status_id = status_id;
-        this.status = status;
     }
 
 
@@ -71,14 +65,6 @@ public class WorkFlowAction {
 
     public void setStatus_id(Long status_id) {
         this.status_id = status_id;
-    }
-
-    public WorkFlowStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(WorkFlowStatus status) {
-        this.status = status;
     }
 
 }
