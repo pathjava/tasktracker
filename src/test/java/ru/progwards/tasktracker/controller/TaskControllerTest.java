@@ -75,6 +75,9 @@ class TaskControllerTest {
 
     @Test()
     void getTaskByID_BadRequestException() {
+//        BadRequestException bre = new BadRequestException("111");
+//        doThrow(bre).when(taskController).getTask(null); /* taskController - @Mock */
+
         Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.getTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
