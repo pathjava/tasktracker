@@ -32,6 +32,6 @@ public class TaskGetListService implements GetListService<Task> {
                 .map(entity -> converterTask.toVo(entity))
                 .collect(Collectors.toList());
 
-        return tasks.size() == 0 ? null : tasks;
+        return tasks.size() == 0 ? null : tasks; //TODO - подумать, надо ли возвращать null здесь и в других сервисах
     }
 }
