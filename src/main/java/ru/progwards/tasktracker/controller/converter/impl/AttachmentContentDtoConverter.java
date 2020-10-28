@@ -25,7 +25,7 @@ public class AttachmentContentDtoConverter implements Converter<AttachmentConten
      */
     @Override
     public AttachmentContent toModel(AttachmentContentDto dto) {
-        return null;//new AttachmentContent(dto.getId(), dto.getData()); //TODO
+        return new AttachmentContent(dto.getId(), dto.getData());
     }
 
 
@@ -37,7 +37,7 @@ public class AttachmentContentDtoConverter implements Converter<AttachmentConten
      */
     @Override
     public AttachmentContentDto toDto(AttachmentContent model) {
-        return null;//new AttachmentContentDto(model.getId(), model.getData()); //TODO
+        return new AttachmentContentDto(model.getId(), model.getData());
     }
 
 }

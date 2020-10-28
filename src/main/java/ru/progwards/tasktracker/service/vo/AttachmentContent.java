@@ -1,6 +1,7 @@
 package ru.progwards.tasktracker.service.vo;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /**
  * Файл-вложение, прикрепленный к задаче, или еще куда-нибудь в будущем
@@ -18,10 +19,10 @@ public class AttachmentContent {
     /**
      * Содержимое вложения
      */
-    private ByteArrayOutputStream data;
+    private InputStream data;
 
 
-    public AttachmentContent(Long id, ByteArrayOutputStream data) {
+    public AttachmentContent(Long id, InputStream data) {
         this.id = id;
         this.data = data;
     }
@@ -34,11 +35,11 @@ public class AttachmentContent {
         this.id = id;
     }
 
-    public ByteArrayOutputStream getData() {
+    public InputStream getData() {
         return data;
     }
 
-    public void setData(ByteArrayOutputStream data) {
+    public void setData(InputStream data) {
         this.data = data;
     }
 

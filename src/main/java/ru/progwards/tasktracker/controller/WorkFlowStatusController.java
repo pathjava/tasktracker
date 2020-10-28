@@ -5,52 +5,52 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.WorkFlowDto;
+import ru.progwards.tasktracker.controller.dto.WorkFlowStatusDto;
 import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
 import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.WorkFlow;
+import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Обработка запросов API по работе с workflow
+ * Обработка запросов API по работе со статусами workflow
  *
  * @author Gregory Lobkov
  */
 @RestController
-@RequestMapping("/rest/workflow")
-public class WorkFlowController {
+@RequestMapping("/rest/workflowstatus")
+public class WorkFlowStatusController {
 
     @Autowired
-    GetService<Long, WorkFlow> getService;
+    GetService<Long, WorkFlowStatus> getService;
     @Autowired
-    CreateService<WorkFlow> createService;
+    CreateService<WorkFlowStatus> createService;
     @Autowired
-    RemoveService<WorkFlow> removeService;
+    RemoveService<WorkFlowStatus> removeService;
     @Autowired
-    RefreshService<WorkFlow> refreshService;
+    RefreshService<WorkFlowStatus> refreshService;
     @Autowired
-    GetListService<WorkFlow> getListService;
+    GetListService<WorkFlowStatus> getListService;
     @Autowired
-    Converter<WorkFlow, WorkFlowDto> dtoConverter;
+    Converter<WorkFlowStatus, WorkFlowStatusDto> dtoConverter;
 
 
     /**
-     * Получить список всех workflow
-     * GET /rest/workflow/list
+     * Получить список всех статусов workflow
+     * GET /rest/workflowstatus/list
      *
      * @return список вложений
      */
     @GetMapping("/list")
-    public ResponseEntity<Collection<WorkFlowDto>> getList() {
+    public ResponseEntity<Collection<WorkFlowStatusDto>> getList() {
         // получили список бизнес-объектов
-        Collection<WorkFlow> list = getListService.getList();
-        List<WorkFlowDto> resultList = new ArrayList<>(list.size());
+        Collection<WorkFlowStatus> list = getListService.getList();
+        List<WorkFlowStatusDto> resultList = new ArrayList<>(list.size());
         // преобразуем к dto
-        for (WorkFlow entity:list) {
-            WorkFlowDto dto = dtoConverter.toDto(entity);
+        for (WorkFlowStatus entity:list) {
+            WorkFlowStatusDto dto = dtoConverter.toDto(entity);
             resultList.add(dto);
         }
         return new ResponseEntity<>(resultList, HttpStatus.OK);
@@ -58,71 +58,71 @@ public class WorkFlowController {
 
 
     /**
-     * Получить конкретный workflow
-     * GET /rest/workflow/{id}
+     * Получить конкретный статус workflow
+     * GET /rest/workflowstatus/{id}
      *
      * @param id идентификатор объекта
      * @return объект dto
      */
     @GetMapping("/{id}")
-    public ResponseEntity<WorkFlowDto> get(@PathVariable("id") Long id) {
+    public ResponseEntity<WorkFlowStatusDto> get(@PathVariable("id") Long id) {
         if (id == null)
             throw new NullObjectException("Id is not set");
 
-        WorkFlow vo = getService.get(id);
-        WorkFlowDto entity = dtoConverter.toDto(vo);
+        WorkFlowStatus vo = getService.get(id);
+        WorkFlowStatusDto entity = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 
 
     /**
-     * Создаём новый workflow
-     * POST /rest/workflow/create
+     * Создаём новый статус workflow
+     * POST /rest/workflowstatus/create
      *
      * @param entity объект для создания
      * @return объект после бизнес-логики
      */
     @PostMapping("/create")
-    public ResponseEntity<WorkFlowDto> create(@RequestBody WorkFlowDto entity) {
+    public ResponseEntity<WorkFlowStatusDto> create(@RequestBody WorkFlowStatusDto entity) {
         if (entity == null)
-            throw new NullObjectException("WorkFlow is null");
+            throw new NullObjectException("WorkFlowStatus is null");
 
-        WorkFlow vo = dtoConverter.toModel(entity);
+        WorkFlowStatus vo = dtoConverter.toModel(entity);
         createService.create(vo);
-        WorkFlowDto result = dtoConverter.toDto(vo);
+        WorkFlowStatusDto result = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
     /**
-     * Обновляем workflow
-     * POST /rest/workflow/{id}/update
+     * Обновляем статус workflow
+     * POST /rest/workflowstatus/{id}/update
      *
      * @param id идентификатор изменяемого объекта
      * @param entity измененный объект
      */
     @PostMapping("/{id}/update")
-    public ResponseEntity<WorkFlowDto> update(@PathVariable("id") Long id,
-                                              @RequestBody WorkFlowDto entity) {
+    public ResponseEntity<WorkFlowStatusDto> update(@PathVariable("id") Long id,
+                                              @RequestBody WorkFlowStatusDto entity) {
         if (id == null)
             throw new NullObjectException("Id is not set");
         if (entity == null)
-            throw new NullObjectException("WorkFlow Id is null");
+            throw new NullObjectException("WorkFlowStatus Id is null");
 
         entity.setId(id);
-        WorkFlow vo = dtoConverter.toModel(entity);
+        WorkFlowStatus vo = dtoConverter.toModel(entity);
         refreshService.refresh(vo);
-        WorkFlowDto result = dtoConverter.toDto(vo);
+        WorkFlowStatusDto result = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
     /**
-     * Удалить существующий workflow
-     * POST /rest/workflow/{id}/delete
+     * Удалить существующий статус workflow
+     * POST /rest/workflowstatus/{id}/delete
      *
      * @param id идентификатор удаляемого объекта
      */
@@ -132,7 +132,7 @@ public class WorkFlowController {
         if (id == null)
             throw new NullObjectException("Workflow Id is not set");
 
-        WorkFlow vo = getService.get(id);
+        WorkFlowStatus vo = getService.get(id);
         removeService.remove(vo);
     }
 

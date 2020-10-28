@@ -11,7 +11,9 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -34,9 +36,8 @@ public class AttachmentContentServiceTest {
     AttachmentContent content;
 
     {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(dataBytes.length);
-        baos.write(dataBytes, 0, dataBytes.length);
-        content = new AttachmentContent(-23123L, baos);
+        InputStream targetStream = new ByteArrayInputStream(dataBytes);
+        content = new AttachmentContent(-23123L, targetStream);
     }
 
     /**
@@ -73,9 +74,14 @@ public class AttachmentContentServiceTest {
         Assertions.assertNotNull(got, "Сохранено в репо, но прочесть не смогли");
         Assertions.assertEquals(content.getId(), got.getId(), "Идентификатор сохраненного объекта не совпал");
 
-        String expectedData = Arrays.toString(content.getData().toByteArray());
-        String gotData = Arrays.toString(content.getData().toByteArray());
-        Assertions.assertEquals(expectedData, gotData, "Данные файлов не совпадают");
+        String expectedData = null;
+        try {
+            expectedData = Arrays.toString(content.getData().readAllBytes());
+            String gotData = Arrays.toString(content.getData().readAllBytes());
+            Assertions.assertEquals(expectedData, gotData, "Данные файлов не совпадают");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         removeTestEntity();
     }
 

@@ -11,7 +11,8 @@ import ru.progwards.tasktracker.service.vo.AttachmentContent;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -57,9 +58,8 @@ public class TaskAttachmentServiceTest {
                 0, null, null,
                 null, null,
                 null, null, null);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(dataBytes.length);
-        baos.write(dataBytes, 0, dataBytes.length);
-        content = new AttachmentContent(-12341L, baos);
+        InputStream targetStream = new ByteArrayInputStream(dataBytes);
+        content = new AttachmentContent(-12341L, targetStream);
         attachment = new TaskAttachment(-23124L, task.getId(), task, null, content, "test1.txt", "txt", 3L, ZonedDateTime.now());
     }
 

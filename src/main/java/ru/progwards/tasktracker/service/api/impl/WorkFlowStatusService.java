@@ -19,7 +19,7 @@ import java.util.List;
  * @author Gregory Lobkov
  */
 @Service
-public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, RefreshService<WorkFlowStatus>, GetListByParentService<Long, WorkFlowStatus> {
+public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, GetListService<WorkFlowStatus>, RefreshService<WorkFlowStatus>, GetListByParentService<Long, WorkFlowStatus> {
 
     @Autowired
     private Repository<Long, WorkFlowStatusEntity> workFlowStatusRepository;
@@ -79,7 +79,7 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
 
 
     /**
-     * Получить список действий для определенного статуса
+     * Получить список статусов для определенного статуса
      *
      * @param parentId WorkFlowStatusStatus.id
      * @return список действий
@@ -97,4 +97,15 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     }
 
 
+    @Override
+    public Collection<WorkFlowStatus> getList() {
+        // получили список сущностей
+        Collection<WorkFlowStatusEntity> workFlowStatusEntities = workFlowStatusRepository.get();
+        List<WorkFlowStatus> workFlowStatusActions = new ArrayList<>(workFlowStatusEntities.size());
+        // преобразуем к бизнес-объектам
+        for (WorkFlowStatusEntity entity:workFlowStatusEntities) {
+            workFlowStatusActions.add(workFlowStatusConverter.toVo(entity));
+        }
+        return workFlowStatusActions;
+    }
 }

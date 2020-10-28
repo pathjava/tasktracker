@@ -19,7 +19,7 @@ import java.util.List;
  * @author Gregory Lobkov
  */
 @Service
-public class WorkFlowActionService implements CreateService<WorkFlowAction>, RemoveService<WorkFlowAction>, GetService<Long, WorkFlowAction>, RefreshService<WorkFlowAction>, GetListByParentService<Long, WorkFlowAction> {
+public class WorkFlowActionService implements CreateService<WorkFlowAction>, RemoveService<WorkFlowAction>, GetListService<WorkFlowAction>, GetService<Long, WorkFlowAction>, RefreshService<WorkFlowAction>, GetListByParentService<Long, WorkFlowAction> {
 
     @Autowired
     private Repository<Long, WorkFlowActionEntity> workFlowActionRepository;
@@ -86,6 +86,23 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
     public Collection<WorkFlowAction> getListByParentId(Long parentId) {
         // получили список сущностей
         Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionEntityRepositoryByParentId.getByParentId(parentId);
+        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
+        // преобразуем к бизнес-объектам
+        for (WorkFlowActionEntity entity:workFlowActionEntities) {
+            workFlowActions.add(workFlowActionConverter.toVo(entity));
+        }
+        return workFlowActions;
+    }
+
+    /**
+     * Получить список всех действий
+     *
+     * @return
+     */
+    @Override
+    public Collection<WorkFlowAction> getList() {
+        // получили список сущностей
+        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionRepository.get();
         List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
         // преобразуем к бизнес-объектам
         for (WorkFlowActionEntity entity:workFlowActionEntities) {
