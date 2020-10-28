@@ -5,7 +5,7 @@ import ru.progwards.tasktracker.service.api.ChangeTaskService;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.Priority;
+import ru.progwards.tasktracker.util.types.TaskPriority;
 
 public abstract class SimpleTaskService implements ChangeTaskService {
 
@@ -21,7 +21,7 @@ public abstract class SimpleTaskService implements ChangeTaskService {
         //
     }
 
-    public void setPriority(Priority priority, Task model) {
+    public void setPriority(TaskPriority priority, Task model) {
 
     }
 }

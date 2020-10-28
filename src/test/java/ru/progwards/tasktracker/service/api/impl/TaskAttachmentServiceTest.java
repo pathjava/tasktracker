@@ -46,17 +46,10 @@ public class TaskAttachmentServiceTest {
     TaskAttachment attachment;
 
     {
-        //task = null;
-//        task = new Task(-12343L, "TESTTASK-01", "Test task 1", "",
-//                null, null, null, null,null,
-//                ZonedDateTime.now().minusMinutes(2), ZonedDateTime.now(),
-//                null, null,
-//                null, null,
-//                null, null, null);
-        task = new Task(-12343L, "TESTTASK-01", "Test task 1", null,
-                null, null, null, null,null,
-                0, null, null,
-                null, null,
+        task = new Task(-12343L, "TESTTASK-01", "Test task 1", "",
+                null, null, null, null, null,
+                null, null, null,
+                null, null, null,
                 null, null, null);
         InputStream targetStream = new ByteArrayInputStream(dataBytes);
         content = new AttachmentContent(-12341L, targetStream);

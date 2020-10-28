@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.AttachmentContentDto;
 import ru.progwards.tasktracker.controller.dto.TaskAttachmentDto;
-import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
@@ -47,7 +47,7 @@ public class TaskAttachmentsController {
     @GetMapping("{id}/download/{name}")
     public void download(@PathVariable("id") Long id, HttpServletResponse response) {
         if(id == null)
-            throw new NullObjectException("TaskAttachment_id is not set");
+            throw new BadRequestException("TaskAttachment_id is not set");
 
         TaskAttachment vo = getService.get(id);
         TaskAttachmentDto entity = dtoConverter.toDto(vo);
@@ -75,9 +75,9 @@ public class TaskAttachmentsController {
     public ResponseEntity<AttachmentContentDto> upload(@PathVariable("id") Long task_id,
                                                        @RequestParam("file") MultipartFile file) {
         if (task_id == null)
-            throw new NullObjectException("TaskAttachment_id is not set");
+            throw new BadRequestException("TaskAttachment_id is not set");
         if (file == null && file.getOriginalFilename().isEmpty())
-            throw new NullObjectException("AttachmentContent 'file' is empty");
+            throw new BadRequestException("AttachmentContent 'file' is empty");
 
         AttachmentContentDto content = null;
 

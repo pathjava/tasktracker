@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.WorkFlowActionDto;
-import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkFlowAction;
 
@@ -67,7 +67,7 @@ public class WorkFlowActionController {
     @GetMapping("/{id}")
     public ResponseEntity<WorkFlowActionDto> get(@PathVariable("id") Long id) {
         if (id == null)
-            throw new NullObjectException("Id is not set");
+            throw new BadRequestException("Id is not set");
 
         WorkFlowAction vo = getService.get(id);
         WorkFlowActionDto entity = dtoConverter.toDto(vo);
@@ -86,7 +86,7 @@ public class WorkFlowActionController {
     @PostMapping("/create")
     public ResponseEntity<WorkFlowActionDto> create(@RequestBody WorkFlowActionDto entity) {
         if (entity == null)
-            throw new NullObjectException("WorkFlowAction is null");
+            throw new BadRequestException("WorkFlowAction is null");
 
         WorkFlowAction vo = dtoConverter.toModel(entity);
         createService.create(vo);
@@ -107,9 +107,9 @@ public class WorkFlowActionController {
     public ResponseEntity<WorkFlowActionDto> update(@PathVariable("id") Long id,
                                               @RequestBody WorkFlowActionDto entity) {
         if (id == null)
-            throw new NullObjectException("Id is not set");
+            throw new BadRequestException("Id is not set");
         if (entity == null)
-            throw new NullObjectException("WorkFlowAction Id is null");
+            throw new BadRequestException("WorkFlowAction Id is null");
 
         entity.setId(id);
         WorkFlowAction vo = dtoConverter.toModel(entity);
@@ -130,7 +130,7 @@ public class WorkFlowActionController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
         if (id == null)
-            throw new NullObjectException("Workflow Id is not set");
+            throw new BadRequestException("Workflow Id is not set");
 
         WorkFlowAction vo = getService.get(id);
         removeService.remove(vo);

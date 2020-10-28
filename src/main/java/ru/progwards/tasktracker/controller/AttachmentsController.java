@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskAttachmentDto;
-import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.facade.GetService;
@@ -47,7 +47,7 @@ public class AttachmentsController {
     @GetMapping("")
     public ResponseEntity<Collection<TaskAttachmentDto>> getList(@PathVariable("task_id") Long task_id) {
         if(task_id == null)
-            throw new NullObjectException("Task_id is not set");
+            throw new BadRequestException("Task_id is not set");
 
         // получили список бизнес-объектов
         Collection<TaskAttachment> listByTaskId = getListByTaskService.getListByTaskId(task_id);
@@ -72,11 +72,11 @@ public class AttachmentsController {
     public ResponseEntity<Collection<TaskAttachmentDto>> createList(@PathVariable("task_id") Long task_id,
                                                                     @RequestBody Collection<TaskAttachmentDto> newEntities) {
         if (task_id == null)
-            throw new NullObjectException("Task_id is not set");
+            throw new BadRequestException("Task_id is not set");
         if (newEntities == null)
-            throw new NullObjectException("TaskAttachment is null");
+            throw new BadRequestException("TaskAttachment is null");
         if (newEntities.size() == 0)
-            throw new NullObjectException("TaskAttachment is empty");
+            throw new BadRequestException("TaskAttachment is empty");
 
         List<TaskAttachmentDto> resultList = new ArrayList<>(newEntities.size());
         for(TaskAttachmentDto entity: newEntities) {
@@ -101,7 +101,7 @@ public class AttachmentsController {
     public void deleteList(@PathVariable("task_id") Long task_id,
                            @RequestBody Collection<Long> ids) {
         if (task_id == null)
-            throw new NullObjectException("Task_id is not set");
+            throw new BadRequestException("Task_id is not set");
 
         for (Long entity : ids) {
             TaskAttachment vo = getService.get(entity);

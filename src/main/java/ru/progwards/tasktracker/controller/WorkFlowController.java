@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.WorkFlowDto;
-import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 
@@ -67,7 +67,7 @@ public class WorkFlowController {
     @GetMapping("/{id}")
     public ResponseEntity<WorkFlowDto> get(@PathVariable("id") Long id) {
         if (id == null)
-            throw new NullObjectException("Id is not set");
+            throw new BadRequestException("Id is not set");
 
         WorkFlow vo = getService.get(id);
         WorkFlowDto entity = dtoConverter.toDto(vo);
@@ -86,7 +86,7 @@ public class WorkFlowController {
     @PostMapping("/create")
     public ResponseEntity<WorkFlowDto> create(@RequestBody WorkFlowDto entity) {
         if (entity == null)
-            throw new NullObjectException("WorkFlow is null");
+            throw new BadRequestException("WorkFlow is null");
 
         WorkFlow vo = dtoConverter.toModel(entity);
         createService.create(vo);
@@ -107,9 +107,9 @@ public class WorkFlowController {
     public ResponseEntity<WorkFlowDto> update(@PathVariable("id") Long id,
                                               @RequestBody WorkFlowDto entity) {
         if (id == null)
-            throw new NullObjectException("Id is not set");
+            throw new BadRequestException("Id is not set");
         if (entity == null)
-            throw new NullObjectException("WorkFlow Id is null");
+            throw new BadRequestException("WorkFlow Id is null");
 
         entity.setId(id);
         WorkFlow vo = dtoConverter.toModel(entity);
@@ -130,7 +130,7 @@ public class WorkFlowController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
         if (id == null)
-            throw new NullObjectException("Workflow Id is not set");
+            throw new BadRequestException("Workflow Id is not set");
 
         WorkFlow vo = getService.get(id);
         removeService.remove(vo);

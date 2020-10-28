@@ -4,11 +4,14 @@ import ru.progwards.tasktracker.util.types.UserRole;
 import java.util.List;
 
 public class User {
-    private final Long id;
+    private Long id;
     private String name;
-    private final String email;
-    private final String password;
-    private final List<UserRole> roles;
+    private String email;
+    private String password;
+    private List<UserRole> roles;
+
+    public User() {
+    }
 
     public User(Long id, String name, String email, String password, List<UserRole> roles) {
         this.id = id;
