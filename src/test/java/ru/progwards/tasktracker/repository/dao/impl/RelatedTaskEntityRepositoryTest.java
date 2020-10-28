@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
@@ -12,7 +13,7 @@ import static org.mockito.Mockito.*;
 class RelatedTaskEntityRepositoryTest {
 
     @Mock
-    private RelatedTaskEntityRepository entityRepository;
+    private Repository<Long, RelatedTaskEntity> entityRepository;
 
     @Test
     void create() {

@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.verify;
 public class TaskCreateServiceTest {
 
     @Mock
-    private TaskCreateService taskCreateService;
+    private CreateService<Task> taskCreateService;
 
     @Test
     public void testCreate() {

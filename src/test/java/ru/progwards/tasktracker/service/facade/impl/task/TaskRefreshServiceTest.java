@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskRefreshService;
+import ru.progwards.tasktracker.service.facade.RefreshService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 public class TaskRefreshServiceTest {
 
     @Mock
-    private TaskRefreshService taskRefreshService;
+    private RefreshService<Task> taskRefreshService;
 
 
     @Test

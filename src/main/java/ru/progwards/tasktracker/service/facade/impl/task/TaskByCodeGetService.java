@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.dao.RepositoryByTaskCode;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
@@ -11,11 +11,11 @@ import ru.progwards.tasktracker.service.vo.Task;
 @Service
 public class TaskByCodeGetService implements GetService<String, Task> {
 
-    private RepositoryByTaskCode<String, TaskEntity> taskRepository;
+    private Repository<String, TaskEntity> taskRepository;
     private Converter<TaskEntity, Task> converterTask;
 
     @Autowired
-    public void setTaskRepository(RepositoryByTaskCode<String, TaskEntity> taskRepository) {
+    public void setTaskRepository(Repository<String, TaskEntity> taskRepository) {
         this.taskRepository = taskRepository;
     }
 
@@ -26,6 +26,6 @@ public class TaskByCodeGetService implements GetService<String, Task> {
 
     @Override
     public Task get(String code) {
-        return code == null ? null : converterTask.toVo(taskRepository.getByCode(code));
+        return code == null ? null : converterTask.toVo(taskRepository.get(code));
     }
 }
