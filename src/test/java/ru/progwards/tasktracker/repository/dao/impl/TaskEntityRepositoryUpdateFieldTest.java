@@ -3,8 +3,9 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -21,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TaskEntityRepositoryUpdateFieldTest {
 
     @Autowired
-    private TaskEntityRepository taskRepository;
+    private Repository<Long, TaskEntity> taskRepository;
 
     @Autowired
-    private TaskEntityRepositoryUpdateField updateField;
+    private RepositoryUpdateField<TaskEntity> updateField;
 
     @Test
     public void testUpdateField() {

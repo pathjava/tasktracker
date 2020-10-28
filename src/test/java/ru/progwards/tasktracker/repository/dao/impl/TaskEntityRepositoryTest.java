@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class TaskEntityRepositoryTest {
 
     @Mock
-    private TaskEntityRepository taskRepository;
+    private Repository<Long, TaskEntity> taskRepository;
 
     @Test
     public void testGetAllTaskEntity() {

@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
@@ -21,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TaskDtoPreviewConverterTest {
 
     @Autowired
-    private TaskDtoPreviewConverter dtoPreviewConverter;
+    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
 
     @Test
     void toModel_return_Null() {

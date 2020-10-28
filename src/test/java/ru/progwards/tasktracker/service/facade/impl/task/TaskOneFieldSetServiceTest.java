@@ -3,7 +3,8 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskOneFieldSetService;
+import ru.progwards.tasktracker.service.facade.OneFieldSetService;
+import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.verify;
 public class TaskOneFieldSetServiceTest {
 
     @Mock
-    private TaskOneFieldSetService taskOneFieldSetService;
+    private OneFieldSetService<Task> taskOneFieldSetService;
 
     @Test
     public void testSetOneField() {

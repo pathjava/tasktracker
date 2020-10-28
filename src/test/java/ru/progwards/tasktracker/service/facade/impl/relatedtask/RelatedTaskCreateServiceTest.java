@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl.relatedtask;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.verify;
 class RelatedTaskCreateServiceTest {
 
     @Mock
-    private RelatedTaskCreateService createService;
+    private CreateService<RelatedTask> createService;
 
     @Test
     void testCreate() {
