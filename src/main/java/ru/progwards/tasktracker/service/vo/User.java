@@ -1,24 +1,20 @@
 package ru.progwards.tasktracker.service.vo;
 
-import ru.progwards.tasktracker.util.types.UserRole;
-import java.util.List;
 
 public class User {
     private Long id;
     private String name;
     private String email;
     private String password;
-    private List<UserRole> roles;
 
     public User() {
     }
 
-    public User(Long id, String name, String email, String password, List<UserRole> roles) {
+    public User(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
 
     public Long getId() {
@@ -35,10 +31,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public List<UserRole> getRoles() {
-        return roles;
     }
 
     public void setName(String name) {

@@ -1,13 +1,12 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.facade.impl.TaskGetListService;
+import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -18,11 +17,8 @@ import java.util.stream.Collectors;
 @Component
 public class ConverterProject implements Converter<ProjectEntity, Project> {
 
-    private final TaskGetListService taskGetListService;
-
-    public ConverterProject(TaskGetListService taskGetListService) {
-        this.taskGetListService = taskGetListService;
-    }
+    @Autowired
+    private GetListService<Task> taskGetListService;
 
     @Override
     public Project toVo(ProjectEntity entity) {
@@ -30,7 +26,7 @@ public class ConverterProject implements Converter<ProjectEntity, Project> {
             return null;
 
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
-                new User(entity.getId()), getZDTCreated(entity.getCreated()), new WorkFlow(entity.getWorkFlowId()),
+                null, getZDTCreated(entity.getCreated()), null,
                 getListTasks(entity.getId()), entity.getLastTaskCode());
     }
 
