@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ConverterProject implements Converter<ProjectEntity, Project> {
+public class ProjectConverter implements Converter<ProjectEntity, Project> {
 
     @Autowired
     private GetListService<Task> taskGetListService;
