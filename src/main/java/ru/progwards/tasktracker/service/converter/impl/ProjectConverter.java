@@ -26,7 +26,7 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
             return null;
 
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
-                null, getZDTCreated(entity.getCreated()), null,
+                entity.getPrefix(), null, getZDTCreated(entity.getCreated()), null,
                 getListTasks(entity.getId()), entity.getLastTaskCode());
     }
 

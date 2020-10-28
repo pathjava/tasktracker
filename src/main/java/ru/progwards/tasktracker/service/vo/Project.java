@@ -50,12 +50,12 @@ public class Project  {
      */
     private Long lastTaskCode;
 
-    public Project(Long id, String name, String description, User owner,
+    public Project(Long id, String name, String description, String prefix, User owner,
                    ZonedDateTime created, WorkFlow workFlow, List<Task> tasks, Long lastTaskCode) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.prefix = getPrefix(name);
+        this.prefix = prefix;
         this.owner = owner;
         this.created = created;
         this.workFlow = workFlow;
