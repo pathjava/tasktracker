@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
@@ -22,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TaskDtoFullConverterTest {
 
     @Autowired
-    private TaskDtoFullConverter dtoFullConverter;
+    private Converter<Task, TaskDtoFull> dtoFullConverter;
 
     @Test
     void toModel_return_Null() {

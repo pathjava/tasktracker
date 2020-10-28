@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
@@ -15,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class RelatedTaskConverterTest {
 
     @Autowired
-    private RelatedTaskConverter relatedTaskConverter;
+    private Converter<RelatedTaskEntity, RelatedTask> relatedTaskConverter;
 
     @Test
     void toVo_return_Null() {

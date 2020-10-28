@@ -24,9 +24,6 @@ class TaskUpdateFieldControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TaskController taskController;
-
-    @Autowired
     private TaskUpdateFieldController updateFieldController;
 
     @BeforeEach

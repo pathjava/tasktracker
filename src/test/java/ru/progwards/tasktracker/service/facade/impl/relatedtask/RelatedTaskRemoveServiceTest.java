@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl.relatedtask;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.verify;
 class RelatedTaskRemoveServiceTest {
 
     @Mock
-    private RelatedTaskRemoveService removeService;
+    private RemoveService<RelatedTask> removeService;
 
     @Test
     void testRemove() {
