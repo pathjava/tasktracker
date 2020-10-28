@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class RelationTypeEntityJsonHandler implements JsonHandler {
+public class RelationTypeEntityJsonHandler implements JsonHandler<Long, RelationTypeEntity> {
 
     public final Map<Long, RelationTypeEntity> relationType = new ConcurrentHashMap<>();
     private static File RELATION_TYPE_PATH;
@@ -63,6 +63,11 @@ public class RelationTypeEntityJsonHandler implements JsonHandler {
                 exception.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public Map<Long, RelationTypeEntity> getMap() {
+        return relationType;
     }
 
     /**

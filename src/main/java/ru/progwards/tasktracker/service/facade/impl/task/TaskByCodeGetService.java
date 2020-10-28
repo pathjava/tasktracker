@@ -2,29 +2,30 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepository;
-import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskCode;
+import ru.progwards.tasktracker.repository.entity.TaskEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 @Service
 public class TaskByCodeGetService implements GetService<String, Task> {
 
-    private TaskEntityRepository taskRepository;
-    private TaskConverter converterTask;
+    private RepositoryByTaskCode<String, TaskEntity> taskRepository;
+    private Converter<TaskEntity, Task> converterTask;
 
     @Autowired
-    public void setTaskRepository(TaskEntityRepository taskRepository) {
+    public void setTaskRepository(RepositoryByTaskCode<String, TaskEntity> taskRepository) {
         this.taskRepository = taskRepository;
     }
 
     @Autowired
-    public void setConverterTask(TaskConverter converterTask) {
+    public void setConverterTask(Converter<TaskEntity, Task> converterTask) {
         this.converterTask = converterTask;
     }
 
     @Override
     public Task get(String code) {
-        return code == null ? null : converterTask.toVo(taskRepository.getTaskEntityByCode(code));
+        return code == null ? null : converterTask.toVo(taskRepository.getByCode(code));
     }
 }

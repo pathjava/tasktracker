@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
@@ -26,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class TaskEntityJsonHandler implements JsonHandler {
+public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
     private static File TASKS_PATH;
@@ -99,6 +98,11 @@ public class TaskEntityJsonHandler implements JsonHandler {
                 exception.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public Map<Long, TaskEntity> getMap() {
+        return tasks;
     }
 
     /**

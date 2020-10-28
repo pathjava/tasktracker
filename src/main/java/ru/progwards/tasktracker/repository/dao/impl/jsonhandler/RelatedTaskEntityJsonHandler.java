@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class RelatedTaskEntityJsonHandler implements JsonHandler {
+public class RelatedTaskEntityJsonHandler implements JsonHandler<Long, RelatedTaskEntity> {
 
     public final Map<Long, RelatedTaskEntity> relatedTasks = new ConcurrentHashMap<>();
     private static File RELATED_TASKS_PATH;
@@ -91,6 +91,11 @@ public class RelatedTaskEntityJsonHandler implements JsonHandler {
                 exception.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public Map<Long, RelatedTaskEntity> getMap() {
+        return relatedTasks;
     }
 
     /**

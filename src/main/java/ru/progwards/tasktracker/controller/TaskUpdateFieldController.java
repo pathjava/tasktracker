@@ -7,16 +7,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.progwards.tasktracker.controller.exception.UpdateFieldNotExistException;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskOneFieldSetService;
+import ru.progwards.tasktracker.service.facade.OneFieldSetService;
+import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 @Controller
 public class TaskUpdateFieldController {
 
-    private TaskOneFieldSetService taskOneFieldSetService;
+    private OneFieldSetService<Task> taskOneFieldSetService;
 
     @Autowired
-    public void setTaskOneFieldSetService(TaskOneFieldSetService taskOneFieldSetService) {
+    public void setTaskOneFieldSetService(OneFieldSetService<Task> taskOneFieldSetService) {
         this.taskOneFieldSetService = taskOneFieldSetService;
     }
 

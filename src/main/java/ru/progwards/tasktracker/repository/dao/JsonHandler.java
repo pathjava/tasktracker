@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.repository.dao;
 
-public interface JsonHandler {
+import java.util.Map;
+
+public interface JsonHandler<T, E> {
+    Map<T, E> getMap();
     void write();
     void read();
 }

@@ -3,16 +3,18 @@ package ru.progwards.tasktracker.service.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
+import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
+import ru.progwards.tasktracker.service.vo.RelationType;
 
 @Component
 public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
 
-    private RelationTypeConverter relationTypeConverter;
+    private Converter<RelationTypeEntity, RelationType> relationTypeConverter;
 
     @Autowired
-    public void setRelationTypeConverter(RelationTypeConverter relationTypeConverter) {
+    public void setRelationTypeConverter(Converter<RelationTypeEntity, RelationType> relationTypeConverter) {
         this.relationTypeConverter = relationTypeConverter;
     }
 

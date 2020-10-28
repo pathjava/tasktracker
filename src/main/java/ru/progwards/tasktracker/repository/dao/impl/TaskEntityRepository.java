@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.TaskEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class TaskEntityRepository implements Repository<Long, TaskEntity> {
 
-    private TaskEntityJsonHandler jsonHandler;
+    private JsonHandler<Long, TaskEntity> jsonHandler;
 
     @Autowired
     public void setJsonHandler(TaskEntityJsonHandler jsonHandler) {
@@ -26,7 +27,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public Collection<TaskEntity> get() {
-        Collection<TaskEntity> tasks = jsonHandler.tasks.values().stream()
+        Collection<TaskEntity> tasks = jsonHandler.getMap().values().stream()
                 .filter(value -> !value.getDeleted())
                 .collect(Collectors.toList());
         return tasks.size() != 0 ? tasks : null;
@@ -38,7 +39,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public TaskEntity get(Long id) {
-        TaskEntity task = jsonHandler.tasks.get(id);
+        TaskEntity task = jsonHandler.getMap().get(id);
         return task == null || task.getDeleted() ? null : task;
     }
 
@@ -47,7 +48,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public void create(TaskEntity taskEntity) {
-        TaskEntity task = jsonHandler.tasks.put(taskEntity.getId(), taskEntity);
+        TaskEntity task = jsonHandler.getMap().put(taskEntity.getId(), taskEntity);
         if (task == null)
             jsonHandler.write();
     }
@@ -57,7 +58,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public void update(TaskEntity taskEntity) {
-        jsonHandler.tasks.remove(taskEntity.getId());
+        jsonHandler.getMap().remove(taskEntity.getId());
         taskEntity.setUpdated(ZonedDateTime.now().toEpochSecond());
         create(taskEntity);
     }
@@ -69,20 +70,10 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     public void delete(Long id) {
         TaskEntity task = get(id);
         if (task != null) {
-            jsonHandler.tasks.remove(id);
+            jsonHandler.getMap().remove(id);
             task.setDeleted(true);
             create(task);
         }
-    }
-
-    /**
-     * @param code код задачи, генерируемый на основе префикса проекта и идентификатора
-     * @return возвращает сущность из БД
-     */
-    public TaskEntity getTaskEntityByCode(String code) {
-        return jsonHandler.tasks.values().stream()
-                .filter(entity -> entity.getCode().equals(code))
-                .findFirst().orElse(null);
     }
 }
 

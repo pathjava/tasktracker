@@ -2,8 +2,9 @@ package ru.progwards.tasktracker.service.facade.impl.relatedtask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.dao.impl.RelatedTaskEntityRepositoryByTaskId;
-import ru.progwards.tasktracker.service.converter.impl.RelatedTaskConverter;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
+import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
@@ -13,16 +14,16 @@ import java.util.stream.Collectors;
 @Service
 public class RelatedTaskGetListByTaskService implements GetListByTaskService<Long, RelatedTask> {
 
-    private RelatedTaskEntityRepositoryByTaskId byTaskId;
-    private RelatedTaskConverter taskConverter;
+    private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
+    private Converter<RelatedTaskEntity, RelatedTask> taskConverter;
 
     @Autowired
-    public void setByTaskId(RelatedTaskEntityRepositoryByTaskId byTaskId) {
+    public void setByTaskId(RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId) {
         this.byTaskId = byTaskId;
     }
 
     @Autowired
-    public void setTaskConverter(RelatedTaskConverter taskConverter) {
+    public void setTaskConverter(Converter<RelatedTaskEntity, RelatedTask> taskConverter) {
         this.taskConverter = taskConverter;
     }
 

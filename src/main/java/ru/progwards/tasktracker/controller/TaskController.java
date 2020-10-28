@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.impl.TaskDtoFullConverter;
-import ru.progwards.tasktracker.controller.converter.impl.TaskDtoPreviewConverter;
+import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
+import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
-import ru.progwards.tasktracker.service.facade.impl.task.*;
+import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;
@@ -21,32 +20,32 @@ import java.util.stream.Collectors;
 @RestController
 public class TaskController {
 
-    private TaskGetService taskGetService;
-    private TaskGetListService taskGetListService;
-    private TaskRemoveService taskRemoveService;
-    private TaskCreateService taskCreateService;
-    private TaskRefreshService taskRefreshService;
-    private TaskDtoPreviewConverter dtoPreviewConverter;
-    private TaskDtoFullConverter dtoFullConverter;
-    private TaskByCodeGetService byCodeGetService;
+    private GetService<Long, Task> taskGetService;
+    private GetListService<Task> taskGetListService;
+    private RemoveService<Task> taskRemoveService;
+    private CreateService<Task> taskCreateService;
+    private RefreshService<Task> taskRefreshService;
+    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
+    private Converter<Task, TaskDtoFull> dtoFullConverter;
+    private GetService<String, Task> byCodeGetService;
 
     @Autowired
-    public void setTaskService(
-            TaskGetService taskGetService,
-            TaskGetListService taskGetListService,
-            TaskRemoveService taskRemoveService,
-            TaskCreateService taskCreateService,
-            TaskRefreshService taskRefreshService,
-            TaskDtoPreviewConverter dtoConverter,
-            TaskDtoFullConverter dtoFullConverter,
-            TaskByCodeGetService byCodeGetService
+    public void setTaskGetService(
+            GetService<Long, Task> taskGetService,
+            GetListService<Task> taskGetListService,
+            RemoveService<Task> taskRemoveService,
+            CreateService<Task> taskCreateService,
+            RefreshService<Task> taskRefreshService,
+            Converter<Task, TaskDtoPreview> dtoPreviewConverter,
+            Converter<Task, TaskDtoFull> dtoFullConverter,
+            GetService<String, Task> byCodeGetService
     ) {
         this.taskGetService = taskGetService;
         this.taskGetListService = taskGetListService;
         this.taskRemoveService = taskRemoveService;
         this.taskCreateService = taskCreateService;
         this.taskRefreshService = taskRefreshService;
-        this.dtoPreviewConverter = dtoConverter;
+        this.dtoPreviewConverter = dtoPreviewConverter;
         this.dtoFullConverter = dtoFullConverter;
         this.byCodeGetService = byCodeGetService;
     }

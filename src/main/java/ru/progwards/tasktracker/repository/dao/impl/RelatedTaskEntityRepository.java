@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.RelatedTaskEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
@@ -11,7 +12,7 @@ import java.util.Collection;
 @Component
 public class RelatedTaskEntityRepository implements Repository<Long, RelatedTaskEntity> {
 
-    private RelatedTaskEntityJsonHandler jsonHandler;
+    private JsonHandler<Long, RelatedTaskEntity> jsonHandler;
 
     @Autowired
     public void setJsonHandler(RelatedTaskEntityJsonHandler jsonHandler) {
@@ -30,7 +31,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
 
     @Override
     public void create(RelatedTaskEntity elem) {
-        RelatedTaskEntity entity = jsonHandler.relatedTasks.put(elem.getId(), elem);
+        RelatedTaskEntity entity = jsonHandler.getMap().put(elem.getId(), elem);
         if (entity == null)
             jsonHandler.write();
     }
@@ -42,13 +43,13 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
 
     @Override
     public void delete(Long id) {
-        RelatedTaskEntity entity = jsonHandler.relatedTasks.get(id);
+        RelatedTaskEntity entity = jsonHandler.getMap().get(id);
         if (entity != null) {
-            for (RelatedTaskEntity value : jsonHandler.relatedTasks.values()) {
+            for (RelatedTaskEntity value : jsonHandler.getMap().values()) {
                 if (value.getParentTaskId().equals(entity.getId()) && value.getTaskId().equals(id))
-                    jsonHandler.relatedTasks.remove(value.getId());
+                    jsonHandler.getMap().remove(value.getId());
             }
-            jsonHandler.relatedTasks.remove(id);
+            jsonHandler.getMap().remove(id);
             jsonHandler.write();
         }
     }
