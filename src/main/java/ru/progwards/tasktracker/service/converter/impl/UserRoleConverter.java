@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class UserRoleConverter implements Converter<UserRoleEntity, UserRole> {
 
     @Autowired
-    private AccessRuleConverter accessRuleConverter;
+    private Converter<AccessRuleEntity, AccessRule> accessRuleConverter;
 
     @Override
     public UserRole toVo(UserRoleEntity entity) {

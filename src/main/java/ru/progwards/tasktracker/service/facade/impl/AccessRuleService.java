@@ -1,17 +1,12 @@
-package ru.progwards.tasktracker.service.api.impl;
+package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.dao.impl.AccessRuleRepository;
-import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepository;
-import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.converter.impl.AccessRuleConverter;
-import ru.progwards.tasktracker.service.converter.impl.ConverterTask;
+import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.entity.AccessRuleEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.AccessRule;
-import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,9 +16,9 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
         RefreshService<AccessRule>, RemoveService<AccessRule> {
 
     @Autowired
-    private AccessRuleRepository accessRuleRepository;
+    private Repository<Long, AccessRuleEntity> accessRuleRepository;
     @Autowired
-    private AccessRuleConverter accessRuleConverter;
+    private Converter<AccessRuleEntity, AccessRule> accessRuleConverter;
 
 
     @Override

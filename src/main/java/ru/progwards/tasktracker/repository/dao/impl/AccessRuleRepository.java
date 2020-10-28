@@ -44,7 +44,8 @@ public class AccessRuleRepository implements Repository<Long, AccessRuleEntity>,
 
     @Override
     public void update(AccessRuleEntity rule) {
-        rules.put(rule.getId(), rule);
+        if (rules.containsKey(rule.getId()))
+            rules.put(rule.getId(), rule);
     }
 
     @Override

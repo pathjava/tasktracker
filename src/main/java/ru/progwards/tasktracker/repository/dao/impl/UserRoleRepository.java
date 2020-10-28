@@ -6,9 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.AccessRuleEntity;
 import ru.progwards.tasktracker.repository.entity.UserRoleEntity;
-import ru.progwards.tasktracker.repository.entity.UserRoleEntity;
-import ru.progwards.tasktracker.service.vo.AccessRule;
-import ru.progwards.tasktracker.util.types.AccessType;
 import ru.progwards.tasktracker.util.types.SystemRole;
 
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ public class UserRoleRepository implements Repository<Long, UserRoleEntity>, Ini
     private final Map<Long, UserRoleEntity> roles = new ConcurrentHashMap<>();
 
     @Autowired
-    private AccessRuleRepository accessRuleRepository;
+    private Repository<Long, AccessRuleEntity> accessRuleRepository;
 
     @Override
     public void afterPropertiesSet() {
