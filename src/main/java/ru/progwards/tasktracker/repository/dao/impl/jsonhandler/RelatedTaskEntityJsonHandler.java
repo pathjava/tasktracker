@@ -77,7 +77,7 @@ public class RelatedTaskEntityJsonHandler implements JsonHandler<Long, RelatedTa
                             .getResource("data/related_task.json")).toURI());
         } catch (NullPointerException | URISyntaxException e) {
             //e.printStackTrace();
-            RELATED_TASKS_PATH = new File("data/related_task.json");
+            RELATED_TASKS_PATH = new File("src/main/resources/data/related_task.json");
         }
     }
 

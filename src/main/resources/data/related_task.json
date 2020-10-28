@@ -1,1 +1,80 @@
-[]
+[
+  {
+    "id": 1,
+    "relationTypeEntity": {
+      "id": 1,
+      "name": "блокирующая",
+      "counterRelation": {
+        "id": 2,
+        "name": "блокируемая"
+      }
+    },
+    "parentTaskId": 1,
+    "taskId": 2
+  },
+  {
+    "id": 2,
+    "relationTypeEntity": {
+      "id": 1,
+      "name": "блокирующая",
+      "counterRelation": {
+        "id": 1,
+        "name": "блокируемая"
+      }
+    },
+    "parentTaskId": 2,
+    "taskId": 3
+  },
+  {
+    "id": 3,
+    "relationTypeEntity": {
+      "id": 1,
+      "name": "блокирующая",
+      "counterRelation": {
+        "id": 3,
+        "name": "блокируемая"
+      }
+    },
+    "parentTaskId": 2,
+    "taskId": 4
+  },
+  {
+    "id": 5,
+    "relationTypeEntity": {
+      "id": 2,
+      "name": "блокируемая",
+      "counterRelation": {
+        "id": 3,
+        "name": "блокирующая"
+      }
+    },
+    "parentTaskId": 2,
+    "taskId": 1
+  },
+  {
+    "id": 6,
+    "relationTypeEntity": {
+      "id": 2,
+      "name": "блокируемая",
+      "counterRelation": {
+        "id": 3,
+        "name": "блокирующая"
+      }
+    },
+    "parentTaskId": 3,
+    "taskId": 2
+  },
+  {
+    "id": 7,
+    "relationTypeEntity": {
+      "id": 2,
+      "name": "блокируемая",
+      "counterRelation": {
+        "id": 3,
+        "name": "блокирующая"
+      }
+    },
+    "parentTaskId": 4,
+    "taskId": 2
+  }
+]

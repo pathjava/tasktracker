@@ -49,7 +49,7 @@ public class RelationTypeEntityJsonHandler implements JsonHandler<Long, Relation
                             .getResource("data/relation_type.json")).toURI());
         } catch (NullPointerException | URISyntaxException e) {
             //e.printStackTrace();
-            RELATION_TYPE_PATH = new File("data/relation_type.json");
+            RELATION_TYPE_PATH = new File("src/main/resources/data/relation_type.json");
         }
     }
 

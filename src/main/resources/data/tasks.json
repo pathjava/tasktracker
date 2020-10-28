@@ -1,21 +1,109 @@
 [
   {
-    "id": 5,
-    "name": "task5",
-    "description": "description1",
+    "id": 1,
+    "code": "TT1-1",
+    "name": "Test task 1",
+    "description": "Description task 1",
     "type": "BUG",
     "priority": "MAJOR",
-    "authorUserId": 1,
-    "executorUserId": 3,
-    "created": 1602313972,
-    "updated": 1602400372,
-    "storyPoint": 100,
-    "projectId": 5,
-    "strCode": "STR_CODE_TTT",
-    "wfStatus": "NEW",
-    "version": "new_version",
-    "planDuration": 123456,
-    "spentDuration": 123456,
-    "leftDuration": 123456
+    "project_id": 2,
+    "author": {},
+    "executor": {},
+    "created": 1603902724,
+    "status": {
+      "id": 1
+    },
+    "relatedTasks": [],
+    "attachments": [],
+    "workLogs": [],
+    "isDeleted": false
+  },
+  {
+    "id": 2,
+    "code": "TT2-2",
+    "name": "Test task 2",
+    "description": "Description task 2",
+    "type": "BUG",
+    "priority": "MAJOR",
+    "project_id": 1,
+    "author": {},
+    "executor": {},
+    "created": 1603989124,
+    "status": {
+      "id": 1
+    },
+    "estimation": 259200,
+    "relatedTasks": [],
+    "attachments": [],
+    "workLogs": [],
+    "isDeleted": false
+  },
+  {
+    "id": 3,
+    "code": "TT3-3",
+    "name": "Test task 3",
+    "description": "Description task 3",
+    "type": "BUG",
+    "priority": "MAJOR",
+    "project_id": 2,
+    "author": {},
+    "executor": {},
+    "created": 1604075524,
+    "updated": 1604161924,
+    "status": {
+      "id": 1
+    },
+    "estimation": 259200,
+    "timeSpent": 86400,
+    "timeLeft": 172800,
+    "relatedTasks": [],
+    "attachments": [],
+    "workLogs": [],
+    "isDeleted": false
+  },
+  {
+    "id": 4,
+    "code": "TT4-4",
+    "name": "Test task 4",
+    "description": "Description task 4",
+    "type": "BUG",
+    "priority": "MAJOR",
+    "project_id": 1,
+    "author": {},
+    "executor": {},
+    "created": 1604161924,
+    "status": {
+      "id": 1
+    },
+    "estimation": 259200,
+    "timeSpent": 86400,
+    "timeLeft": 172800,
+    "relatedTasks": [],
+    "attachments": [],
+    "workLogs": [],
+    "isDeleted": false
+  },
+  {
+    "id": 5,
+    "code": "TT5-5",
+    "name": "Test task 5",
+    "description": "Description task 5",
+    "type": "BUG",
+    "priority": "MAJOR",
+    "project_id": 1,
+    "author": {},
+    "executor": {},
+    "created": 1604248324,
+    "updated": 1604334724,
+    "status": {
+      "id": 1
+    },
+    "estimation": 259200,
+    "timeSpent": 86400,
+    "timeLeft": 172800,
+    "relatedTasks": [],
+    "attachments": [],
+    "workLogs": [],
+    "isDeleted": false
   }
 ]

@@ -84,7 +84,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                             .getResource("data/tasks.json")).toURI());
         } catch (NullPointerException | URISyntaxException e) {
             //e.printStackTrace();
-            TASKS_PATH = new File("data/tasks.json");
+            TASKS_PATH = new File("src/main/resources/data/tasks.json");
         }
     }
 
