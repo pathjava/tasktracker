@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.GetListService;
 
 import java.util.Collection;
 
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class TaskTypeGetListServiceTest {
 
     @Autowired
-    private TaskTypeGetListService getListService;
+    private GetListService<String> getListService;
 
     @Test
     void getList() {

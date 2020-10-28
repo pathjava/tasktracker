@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -21,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TaskConverterTest {
 
     @Autowired
-    private TaskConverter converterTask;
+    private Converter<TaskEntity, Task> converterTask;
 
     @Test
     void toVo_return_Null() {

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.TaskEntityJsonHandler;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskPriority;
@@ -22,25 +22,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class TaskEntityJsonHandlerTest {
 
     @Autowired
-    private TaskEntityJsonHandler jsonHandlerTask;
+    private JsonHandler<Long, TaskEntity> jsonHandlerTask;
 
     @BeforeEach
     public void clear() {
-        jsonHandlerTask.tasks.clear();
+        jsonHandlerTask.getMap().clear();
     }
 
     @Test
     public void testWrite() {
-        int sizeOne = jsonHandlerTask.tasks.size();
+        int sizeOne = jsonHandlerTask.getMap().size();
 
-        jsonHandlerTask.tasks.put(
+        jsonHandlerTask.getMap().put(
                 1L, new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false));
-        jsonHandlerTask.tasks.put(
+        jsonHandlerTask.getMap().put(
                 2L, new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
                         TaskType.BUG, TaskPriority.MAJOR, 11L, new User(11L), new User(11L),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
@@ -51,7 +51,7 @@ public class TaskEntityJsonHandlerTest {
 
         jsonHandlerTask.write();
 
-        int sizeTwo = jsonHandlerTask.tasks.size();
+        int sizeTwo = jsonHandlerTask.getMap().size();
 
         assertEquals(0, sizeOne);
         assertEquals(2, sizeTwo);
@@ -59,11 +59,11 @@ public class TaskEntityJsonHandlerTest {
 
     @Test
     public void testRead() {
-        int sizeOne = jsonHandlerTask.tasks.size();
+        int sizeOne = jsonHandlerTask.getMap().size();
         jsonHandlerTask.read();
-        int sizeTwo = jsonHandlerTask.tasks.size();
+        int sizeTwo = jsonHandlerTask.getMap().size();
 
-        assertNotNull(jsonHandlerTask.tasks);
+        assertNotNull(jsonHandlerTask.getMap());
         assertEquals(0, sizeOne);
         assertEquals(2, sizeTwo);
     }

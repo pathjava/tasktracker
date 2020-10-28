@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl.relatedtask;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class RelatedTaskGetListByTaskServiceTest {
 
     @Autowired
-    private RelatedTaskGetListByTaskService listByTaskService;
+    private GetListByTaskService<Long, RelatedTask> listByTaskService;
 
     @Test
     void getListByTaskId() {

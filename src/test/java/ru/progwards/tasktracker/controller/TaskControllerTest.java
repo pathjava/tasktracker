@@ -8,17 +8,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.converter.impl.TaskDtoFullConverter;
-import ru.progwards.tasktracker.controller.converter.impl.TaskDtoPreviewConverter;
+import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
 import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
 import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskByCodeGetService;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskGetListService;
-import ru.progwards.tasktracker.service.facade.impl.task.TaskGetService;
+import ru.progwards.tasktracker.service.facade.GetListService;
+import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -42,19 +41,19 @@ class TaskControllerTest {
     private TaskController taskController;
 
     @Autowired
-    private TaskGetService taskGetService;
+    private GetService<Long, Task> taskGetService;
 
     @Autowired
-    private TaskGetListService taskGetListService;
+    private GetListService<Task> taskGetListService;
 
     @Autowired
-    private TaskByCodeGetService byCodeGetService;
+    private GetService<String, Task> byCodeGetService;
 
     @Autowired
-    private TaskDtoPreviewConverter dtoConverter;
+    private Converter<Task, TaskDtoPreview> dtoConverter;
 
     @Autowired
-    private TaskDtoFullConverter dtoFullConverter;
+    private Converter<Task, TaskDtoFull> dtoFullConverter;
 
     @Test
     public void testController() {

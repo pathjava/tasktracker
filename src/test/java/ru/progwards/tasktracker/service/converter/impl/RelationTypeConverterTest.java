@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -13,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class RelationTypeConverterTest {
 
     @Autowired
-    private RelationTypeConverter relationTypeConverter;
+    private Converter<RelationTypeEntity, RelationType> relationTypeConverter;
 
     @Test
     void toVo_return_Null() {
