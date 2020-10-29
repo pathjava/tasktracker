@@ -31,11 +31,4 @@ public class ExceptionControllerAdvice {
         return ex.getMessage();
     }
 
-    @ResponseBody
-    @ExceptionHandler(FieldNotExistException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String updateFieldNotExistHandler(FieldNotExistException ex) {
-        return ex.getMessage();
-    }
-
 }
