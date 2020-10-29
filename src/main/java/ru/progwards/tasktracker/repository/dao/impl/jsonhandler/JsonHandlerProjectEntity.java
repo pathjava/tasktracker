@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerProjectEntity implements JsonHandler {
+public class JsonHandlerProjectEntity implements JsonHandler<Long, ProjectEntity> {
     private static File PROJECT_PATH;
     private final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
 
