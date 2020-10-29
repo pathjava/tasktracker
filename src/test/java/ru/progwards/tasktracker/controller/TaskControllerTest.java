@@ -47,9 +47,6 @@ class TaskControllerTest {
     private TaskController taskController;
 
     @Autowired
-    private GetService<Long, Task> taskGetService;
-
-    @Autowired
     private GetListService<Task> taskGetListService;
 
     @Autowired
@@ -64,18 +61,6 @@ class TaskControllerTest {
     @Test
     public void testController() {
         assertThat(taskController, is(notNullValue()));
-    }
-
-    @Test
-    void getTaskById() throws Exception {
-        TaskDtoPreview tempTask = dtoConverter.toDto(taskGetService.get(1L));
-
-        String jsonString = new ObjectMapper()
-                .registerModule(new JavaTimeModule()).writeValueAsString(tempTask);
-
-        mockMvc.perform(get("/rest/project/2/tasks/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(jsonString));
     }
 
     @Test
@@ -120,7 +105,7 @@ class TaskControllerTest {
 //
 //        assertTrue(add);
 
-        mockMvc.perform(post("/rest/project/2/tasks/create")
+        mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -154,7 +139,7 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(get("/rest/project/2/tasks/10"))
+        mockMvc.perform(get("/rest/task/TT10-1/getbycode"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(10)))
                 .andExpect(jsonPath("$.name", equalTo("Test task 10")));
@@ -214,7 +199,7 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(get("/rest/project/2/tasks/11"))
+        mockMvc.perform(get("/rest/task/TT11-1/getbycode"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(11)))
                 .andExpect(jsonPath("$.name", equalTo("Test task 11 updated")));
@@ -279,7 +264,7 @@ class TaskControllerTest {
 //
 //        assertTrue(add);
 
-        mockMvc.perform(post("/rest/project/2/tasks/create")
+        mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -318,7 +303,7 @@ class TaskControllerTest {
         String jsonString = new ObjectMapper()
                 .registerModule(new JavaTimeModule()).writeValueAsString(task);
 
-        mockMvc.perform(get("/tt/browse/TT10-1"))
+        mockMvc.perform(get("/rest/task/TT10-1/getbycode"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonString));
     }
