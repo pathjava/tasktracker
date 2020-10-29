@@ -17,7 +17,14 @@ import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.util.types.TaskPriority;
+import ru.progwards.tasktracker.util.types.TaskType;
+import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -71,23 +78,6 @@ class TaskControllerTest {
                 .andExpect(content().json(jsonString));
     }
 
-    @Test()
-    void getTaskByID_BadRequestException() {
-//        BadRequestException bre = new BadRequestException("111");
-//        doThrow(bre).when(taskController).getTask(null); /* taskController - @Mock */
-
-        Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.getTask(null));
-        assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
-    }
-
-    @Test()
-    void getTaskByID_TaskNotFoundException() {
-        Exception exception = assertThrows(NotFoundException.class,
-                () -> taskController.getTask(20L));
-        assertTrue(exception.getMessage().contains(" не найдена!"));
-    }
-
     @Test
     void getAllProjectTasks() throws Exception {
         Collection<TaskDtoPreview> tempTasks = taskGetListService.getList().stream()
@@ -111,7 +101,7 @@ class TaskControllerTest {
     }
 
     @Test()
-    void getAllProjectTasks_TasksNotFoundException() {
+    void getAllProjectTasks_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.getAllTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
@@ -171,7 +161,7 @@ class TaskControllerTest {
     }
 
     @Test()
-    void addTask_TaskNotExistException() {
+    void addTask_NotExistException() {
         Exception exception = assertThrows(NotExistException.class,
                 () -> taskController.addTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
@@ -231,10 +221,24 @@ class TaskControllerTest {
     }
 
     @Test()
-    void updateTask_TaskNotExistException() {
+    void updateTask_NotExistException() {
         Exception exception = assertThrows(NotExistException.class,
-                () -> taskController.updateTask(null));
+                () -> taskController.updateTask(null,null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
+    }
+
+    @Test()
+    void updateTask_BadRequestException() {
+        TaskDtoFull task = new TaskDtoFull(1L, "TT1", "Test task 1 TEST", "Description task 1",
+                TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+                new WorkFlowStatus(11L),
+                Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+
+        Exception exception = assertThrows(BadRequestException.class,
+                () -> taskController.updateTask(2L, task));
+        assertTrue(exception.getMessage().contains("Данная операция недопустима!"));
     }
 
     @Test
@@ -256,7 +260,7 @@ class TaskControllerTest {
     }
 
     @Test()
-    void deleteTaskById_TaskNotFoundException() {
+    void deleteTaskById_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
@@ -327,7 +331,7 @@ class TaskControllerTest {
     }
 
     @Test
-    void getTaskByCode_TaskNotFoundException() {
+    void getTaskByCode_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.getTaskByCode("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));
