@@ -49,32 +49,6 @@ public class TaskController {
         this.byCodeGetService = byCodeGetService;
     }
 
-    @GetMapping("/rest/project/{project_id}/tasks/{task_id}")
-    public ResponseEntity<TaskDtoPreview> getTask(@PathVariable Long task_id) {
-        if (task_id == null)
-            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
-
-        TaskDtoPreview task = dtoPreviewConverter.toDto(taskGetService.get(task_id));
-
-        if (task == null)
-            throw new NotFoundException("Задача с id: " + task_id + " не найдена!");
-
-        return new ResponseEntity<>(task, HttpStatus.OK);
-    }
-
-    @GetMapping("/tt/browse/{code}/{id}")
-    public ResponseEntity<TaskDtoFull> getFullTask(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Code не задан или задан неверно!");
-
-        TaskDtoFull task = dtoFullConverter.toDto(taskGetService.get(id));
-
-        if (task == null)
-            throw new NotFoundException("Задача с code: " + id + " не найдена!");
-
-        return new ResponseEntity<>(task, HttpStatus.OK);
-    }
-
     @GetMapping("/rest/project/{project_id}/tasks")
     public ResponseEntity<Collection<TaskDtoPreview>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
@@ -83,7 +57,7 @@ public class TaskController {
         Collection<TaskDtoPreview> tasks = getAllTasksByProjectId(project_id);
 
         if (tasks == null)
-            throw new NotFoundException("Задача не найдена!");
+            throw new NotFoundException("Список задач пустой!");
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
@@ -97,7 +71,7 @@ public class TaskController {
         return tasks.size() == 0 ? null : tasks;
     }
 
-    @PostMapping("/rest/project/{project_id}/tasks/create")
+    @PostMapping("/rest/task/create")
     public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
@@ -109,9 +83,12 @@ public class TaskController {
     }
 
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
-    public ResponseEntity<TaskDtoFull> updateTask(@RequestBody TaskDtoFull task) {
+    public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull task) {
         if (task == null)
             throw new NotExistException("Задача не существует!");
+
+        if (!task_id.equals(task.getId()))
+            throw new BadRequestException("Данная операция недопустима!");
 
         taskRefreshService.refresh(dtoFullConverter.toModel(task));
 
