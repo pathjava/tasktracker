@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerUserEntity implements JsonHandler {
+public class JsonHandlerUserEntity implements JsonHandler<Long, UserEntity> {
     private final static File PROJECT_PATH = new File(JsonHandlerUserEntity.class.getClassLoader().
             getResource("data/users.json").getFile());
     private final Map<Long, UserEntity> map = new ConcurrentHashMap<>();
