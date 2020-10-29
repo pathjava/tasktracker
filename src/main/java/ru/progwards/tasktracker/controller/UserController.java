@@ -3,12 +3,13 @@ package ru.progwards.tasktracker.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.exceptions.NotFoundUserException;
-import ru.progwards.tasktracker.controller.exceptions.NullObjectException;
+import ru.progwards.tasktracker.controller.exception.NotExistException;
+import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.repository.dao.impl.UserEntityRepository;
 import ru.progwards.tasktracker.repository.dao.impl.UserEntityRepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.UserEntity;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
+
 import java.util.Collection;
 
 @RestController
@@ -40,7 +41,7 @@ public class UserController {
     public ResponseEntity<UserEntity> get(@PathVariable("id") Long id) {
         UserEntity entity = repository.get(id);
         if (entity == null)
-            throw new NotFoundUserException("Not found a user with id=" + id);
+            throw new NotFoundException("Not found a user with id=" + id);
 
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
@@ -53,7 +54,7 @@ public class UserController {
     @PostMapping("/rest/user/create")
     public ResponseEntity<UserEntity> create(@RequestBody UserEntity entity) {
         if (entity == null)
-            throw new NullObjectException("User is null");
+            throw new NotExistException("User is null");
 
         repository.create(entity);
 
@@ -69,7 +70,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("id") Long id, @RequestBody UserEntity entity) {
         if (entity == null)
-            throw new NullObjectException("User is null");
+            throw new NotExistException("User is null");
 
         entity.setId(id);
         repository.update(entity);
@@ -85,7 +86,7 @@ public class UserController {
     public void delete(@PathVariable("id") Long id) {
         UserEntity entity = repository.get(id);
         if (entity == null)
-            throw new NotFoundUserException("Not found a user with id=" + id);
+            throw new NotFoundException("Not found a user with id=" + id);
 
         repository.delete(id);
     }
@@ -100,7 +101,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void updateOneField(@PathVariable("id") Long id, @RequestBody UpdateOneValue updateOneValue) {
         if (updateOneValue == null)
-            throw new NullObjectException("UpdateOneValue is null");
+            throw new NotExistException("UpdateOneValue is null");
 
         updateOneValue.setId(id);
         userEntityRepositoryUpdateField.updateField(updateOneValue);

@@ -73,9 +73,11 @@ public class TaskController {
 
     @PostMapping("/rest/task/create")
     public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull task) {
-        //TODO сделать проверку существования задачи по id
         if (task == null)
             throw new NotExistException("Задача не существует!");
+
+        if (taskGetService.get(task.getId()) != null)
+            throw new BadRequestException("Такая задача уже существует!");
 
         taskCreateService.create(dtoFullConverter.toModel(task));
 

@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotExistException;
+import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -92,8 +94,18 @@ class TaskUpdateFieldControllerTest {
     @Test()
     void updateTask_NotExistException() {
         Exception exception = assertThrows(NotExistException.class, () -> {
-            updateFieldController.updateOneField(null);
+            updateFieldController.updateOneField(null, null);
         });
         assertTrue(exception.getMessage().contains("Значение обновляемого поля отсутствует!"));
+    }
+
+    @Test()
+    void updateTask_BadRequestException() {
+        UpdateOneValue value = new UpdateOneValue(11L, "Test task 10-1", "name");
+
+        Exception exception = assertThrows(BadRequestException.class, () -> {
+            updateFieldController.updateOneField(10L, value);
+        });
+        assertTrue(exception.getMessage().contains("Данная операция недопустима!"));
     }
 }
