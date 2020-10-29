@@ -12,9 +12,8 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
-import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
-import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
+import ru.progwards.tasktracker.controller.exception.NotExistException;
+import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -84,7 +83,7 @@ class TaskControllerTest {
 
     @Test()
     void getTaskByID_TaskNotFoundException() {
-        Exception exception = assertThrows(TaskNotFoundException.class,
+        Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.getTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
@@ -113,7 +112,7 @@ class TaskControllerTest {
 
     @Test()
     void getAllProjectTasks_TasksNotFoundException() {
-        Exception exception = assertThrows(TasksNotFoundException.class,
+        Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.getAllTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
     }
@@ -173,7 +172,7 @@ class TaskControllerTest {
 
     @Test()
     void addTask_TaskNotExistException() {
-        Exception exception = assertThrows(TaskNotExistException.class,
+        Exception exception = assertThrows(NotExistException.class,
                 () -> taskController.addTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
@@ -233,7 +232,7 @@ class TaskControllerTest {
 
     @Test()
     void updateTask_TaskNotExistException() {
-        Exception exception = assertThrows(TaskNotExistException.class,
+        Exception exception = assertThrows(NotExistException.class,
                 () -> taskController.updateTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
@@ -258,7 +257,7 @@ class TaskControllerTest {
 
     @Test()
     void deleteTaskById_TaskNotFoundException() {
-        Exception exception = assertThrows(TaskNotFoundException.class,
+        Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
@@ -329,7 +328,7 @@ class TaskControllerTest {
 
     @Test
     void getTaskByCode_TaskNotFoundException() {
-        Exception exception = assertThrows(TaskNotFoundException.class,
+        Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.getTaskByCode("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }

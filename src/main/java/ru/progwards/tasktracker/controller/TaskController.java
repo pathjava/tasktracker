@@ -8,9 +8,8 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.TaskNotExistException;
-import ru.progwards.tasktracker.controller.exception.TaskNotFoundException;
-import ru.progwards.tasktracker.controller.exception.TasksNotFoundException;
+import ru.progwards.tasktracker.controller.exception.NotExistException;
+import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
@@ -58,7 +57,7 @@ public class TaskController {
         TaskDtoPreview task = dtoPreviewConverter.toDto(taskGetService.get(task_id));
 
         if (task == null)
-            throw new TaskNotFoundException("Задача с id: " + task_id + " не найдена!");
+            throw new NotFoundException("Задача с id: " + task_id + " не найдена!");
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -71,7 +70,7 @@ public class TaskController {
         TaskDtoFull task = dtoFullConverter.toDto(taskGetService.get(id));
 
         if (task == null)
-            throw new TaskNotFoundException("Задача с code: " + id + " не найдена!");
+            throw new NotFoundException("Задача с code: " + id + " не найдена!");
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -84,7 +83,7 @@ public class TaskController {
         Collection<TaskDtoPreview> tasks = getAllTasksByProjectId(project_id);
 
         if (tasks == null)
-            throw new TasksNotFoundException();
+            throw new NotFoundException("Задача не найдена!");
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
@@ -102,7 +101,7 @@ public class TaskController {
     public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull task) {
         //TODO сделать проверку существования задачи по id
         if (task == null)
-            throw new TaskNotExistException();
+            throw new NotExistException("Задача не существует!");
 
         taskCreateService.create(dtoFullConverter.toModel(task));
 
@@ -112,7 +111,7 @@ public class TaskController {
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
     public ResponseEntity<TaskDtoFull> updateTask(@RequestBody TaskDtoFull task) {
         if (task == null)
-            throw new TaskNotExistException();
+            throw new NotExistException("Задача не существует!");
 
         taskRefreshService.refresh(dtoFullConverter.toModel(task));
 
@@ -129,7 +128,7 @@ public class TaskController {
         if (task != null)
             taskRemoveService.remove(task);
         else
-            throw new TaskNotFoundException("Задача с id: " + task_id + " не найдена!");
+            throw new NotFoundException("Задача с id: " + task_id + " не найдена!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -142,7 +141,7 @@ public class TaskController {
         TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code));
 
         if (task == null)
-            throw new TaskNotFoundException("Задача с code: " + code + " не найдена!");
+            throw new NotFoundException("Задача с code: " + code + " не найдена!");
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }

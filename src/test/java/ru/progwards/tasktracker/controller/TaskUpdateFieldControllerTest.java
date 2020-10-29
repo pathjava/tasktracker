@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.exception.UpdateFieldNotExistException;
+import ru.progwards.tasktracker.controller.exception.FieldNotExistException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -91,7 +91,7 @@ class TaskUpdateFieldControllerTest {
 
     @Test()
     void updateTask_UpdateFieldNotExistException() {
-        Exception exception = assertThrows(UpdateFieldNotExistException.class, () -> {
+        Exception exception = assertThrows(FieldNotExistException.class, () -> {
             updateFieldController.updateOneField(null);
         });
         assertTrue(exception.getMessage().contains("Значение обновляемого поля отсутствует!"));

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.progwards.tasktracker.controller.exception.*;
 
 @ControllerAdvice
-public class GlobalTaskAdviceController {
+public class ExceptionControllerAdvice {
 
     @ResponseBody
     @ExceptionHandler(BadRequestException.class)
@@ -18,30 +18,23 @@ public class GlobalTaskAdviceController {
     }
 
     @ResponseBody
-    @ExceptionHandler(TaskNotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String taskByIdNotFoundHandler(TaskNotFoundException ex) {
+    public String taskByIdNotFoundHandler(NotFoundException ex) {
         return ex.getMessage();
     }
 
     @ResponseBody
-    @ExceptionHandler(TaskNotExistException.class)
+    @ExceptionHandler(NotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String taskNotExistHandler(TaskNotExistException ex) {
+    public String taskNotExistHandler(NotExistException ex) {
         return ex.getMessage();
     }
 
     @ResponseBody
-    @ExceptionHandler(TasksNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String tasksNotFoundHandler(TasksNotFoundException ex) {
-        return ex.getMessage();
-    }
-
-    @ResponseBody
-    @ExceptionHandler(UpdateFieldNotExistException.class)
+    @ExceptionHandler(FieldNotExistException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String updateFieldNotExistHandler(UpdateFieldNotExistException ex) {
+    public String updateFieldNotExistHandler(FieldNotExistException ex) {
         return ex.getMessage();
     }
 
