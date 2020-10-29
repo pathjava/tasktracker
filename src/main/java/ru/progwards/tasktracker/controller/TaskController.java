@@ -110,7 +110,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/tt/browse/{code}")
+    @GetMapping("/rest/task/{code}/getbycode")
     public ResponseEntity<TaskDtoFull> getTaskByCode(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");

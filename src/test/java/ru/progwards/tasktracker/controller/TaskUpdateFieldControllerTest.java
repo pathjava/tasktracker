@@ -39,7 +39,7 @@ class TaskUpdateFieldControllerTest {
 //
 //        assertTrue(add);
 
-        mockMvc.perform(post("/rest/project/2/tasks/create")
+        mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -90,7 +90,7 @@ class TaskUpdateFieldControllerTest {
     }
 
     @Test()
-    void updateTask_UpdateFieldNotExistException() {
+    void updateTask_NotExistException() {
         Exception exception = assertThrows(NotExistException.class, () -> {
             updateFieldController.updateOneField(null);
         });
