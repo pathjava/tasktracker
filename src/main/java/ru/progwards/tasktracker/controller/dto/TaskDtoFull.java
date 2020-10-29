@@ -1,11 +1,7 @@
 package ru.progwards.tasktracker.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.progwards.tasktracker.service.vo.RelatedTask;
-import ru.progwards.tasktracker.service.vo.TaskAttachment;
-import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.service.vo.WorkLog;
-import ru.progwards.tasktracker.util.types.TaskPriority;
+import ru.progwards.tasktracker.service.vo.*;
 import ru.progwards.tasktracker.util.types.TaskType;
 import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 

@@ -12,7 +12,7 @@ import ru.progwards.tasktracker.service.facade.OneFieldSetService;
 @Service
 public class TaskOneFieldSetService implements OneFieldSetService<Task> {
 
-    private RepositoryUpdateField<TaskEntity> updateField;
+    private final RepositoryUpdateField<TaskEntity> updateField;
 
     @Autowired
     public TaskOneFieldSetService(TaskEntityRepositoryUpdateField updateField){

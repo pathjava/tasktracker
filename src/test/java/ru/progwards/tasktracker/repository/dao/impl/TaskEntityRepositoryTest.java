@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
 import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
@@ -29,13 +28,13 @@ public class TaskEntityRepositoryTest {
     public void testGetAllTaskEntity() {
         when(taskRepository.get()).thenReturn(Arrays.asList(
                 new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                        TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false),
                 new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                        TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
@@ -52,7 +51,7 @@ public class TaskEntityRepositoryTest {
     public void testGetOneTaskEntity() {
         when(taskRepository.get(anyLong())).thenReturn(
                 new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                        TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
@@ -68,7 +67,7 @@ public class TaskEntityRepositoryTest {
     @Test
     public void testCreateTaskEntity() {
         TaskEntity task = new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                TaskType.BUG, null, 11L, new User(), new User(),
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 new WorkFlowStatus(11L),
                 Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
@@ -82,7 +81,7 @@ public class TaskEntityRepositoryTest {
     @Test
     public void testUpdateTaskEntity() {
         TaskEntity task = new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                TaskType.BUG, null, 11L, new User(), new User(),
                 ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                 new WorkFlowStatus(11L),
                 Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),

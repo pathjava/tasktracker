@@ -17,23 +17,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class TaskTypeGetListServiceTest {
+class EstimateChangeGetListServiceTest {
 
-    @Qualifier("taskTypeGetListService")
+    @Qualifier("estimateChangeGetListService")
     @Mock
     private GetListService<String> getListService;
 
     @Test
     void getList() {
-        when(getListService.getList()).thenReturn(Arrays.asList(
-                "BUG", "TASK", "EPIC"
-        ));
+        when(getListService.getList()).thenReturn(
+                Arrays.asList("AUTO_REDUCE", "DONT_CHANGE", "SET_TO_VALUE")
+        );
 
         Collection<String> collection = getListService.getList();
 
         assertNotNull(collection);
 
-        assertThat(collection, containsInAnyOrder("BUG", "TASK", "EPIC"));
+        assertThat(collection, containsInAnyOrder("AUTO_REDUCE", "DONT_CHANGE", "SET_TO_VALUE"));
     }
 
     @Test
@@ -41,8 +41,6 @@ class TaskTypeGetListServiceTest {
         when(getListService.getList()).thenReturn(Collections.emptyList());
 
         Collection<String> collection = getListService.getList();
-
-        assertNotNull(collection);
 
         assertTrue(collection.isEmpty());
     }

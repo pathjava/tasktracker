@@ -30,17 +30,6 @@ class TaskUpdateFieldControllerTest {
 
     @BeforeEach
     public void createTestObject() throws Exception {
-//        boolean add = taskController.addTask(
-//                new Task(10L, "TT10-1", "Test task 10", "Description task 10",
-//                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
-//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-//                        new WorkFlowStatus(11L),
-//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-//        ).getStatusCode().is2xxSuccessful();
-//
-//        assertTrue(add);
-
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -50,7 +39,6 @@ class TaskUpdateFieldControllerTest {
                                 "    \"name\": \"Test task 10\",\n" +
                                 "    \"description\": \"Description task 10\",\n" +
                                 "    \"type\": \"BUG\",\n" +
-                                "    \"priority\": \"MAJOR\",\n" +
                                 "    \"project_id\": 2,\n" +
                                 "    \"author\": {\n" +
                                 "      \"id\": 1\n" +

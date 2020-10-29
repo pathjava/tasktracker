@@ -7,7 +7,6 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.TaskPriority;
 import ru.progwards.tasktracker.util.types.TaskType;
 import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
@@ -51,7 +50,7 @@ class TaskDtoPreviewConverterTest {
     void toDto_return_Not_Null() {
         TaskDtoPreview taskDto = dtoPreviewConverter.toDto(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, TaskPriority.MAJOR, 11L, new User(), new User(),
+                        TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         new WorkFlowStatus(11L),
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
