@@ -34,10 +34,10 @@ class TaskUpdateFieldControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 110,\n" +
-                                "    \"code\": \"TT110-1\",\n" +
-                                "    \"name\": \"Test task 10\",\n" +
-                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"id\": 112,\n" +
+                                "    \"code\": \"TT112-1\",\n" +
+                                "    \"name\": \"Test task 112\",\n" +
+                                "    \"description\": \"Description task 112\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"project_id\": 2,\n" +
                                 "    \"author\": {},\n" +
@@ -55,12 +55,12 @@ class TaskUpdateFieldControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(put("/rest/project/2/tasks/110/field")
+        mockMvc.perform(put("/rest/project/2/tasks/112/field")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 110,\n" +
-                                "    \"newValue\": \"Test task 110-1\",\n" +
+                                "    \"id\": 112,\n" +
+                                "    \"newValue\": \"Test task 112-1\",\n" +
                                 "    \"fieldName\": \"name\"\n" +
                                 "  }"
                 ))

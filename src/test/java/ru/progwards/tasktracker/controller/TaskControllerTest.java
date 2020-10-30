@@ -96,24 +96,16 @@ class TaskControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 10,\n" +
-                                "    \"code\": \"TT10-1\",\n" +
-                                "    \"name\": \"Test task 10\",\n" +
-                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"id\": 110,\n" +
+                                "    \"code\": \"TT110-1\",\n" +
+                                "    \"name\": \"Test task 110\",\n" +
+                                "    \"description\": \"Description task 110\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"project_id\": 2,\n" +
-                                "    \"author\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"executor\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
                                 "    \"created\": 1603274345,\n" +
                                 "    \"updated\": null,\n" +
-                                "    \"status\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"estimation\": 259200,\n" +
                                 "    \"timeSpent\": null,\n" +
                                 "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
@@ -125,10 +117,10 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(get("/rest/task/TT10-1/getbycode"))
+        mockMvc.perform(get("/rest/task/TT110-1/getbycode"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(10)))
-                .andExpect(jsonPath("$.name", equalTo("Test task 10")));
+                .andExpect(jsonPath("$.id", equalTo(110)))
+                .andExpect(jsonPath("$.name", equalTo("Test task 110")));
     }
 
     @Test()
@@ -163,28 +155,20 @@ class TaskControllerTest {
 
     @Test
     void updateTask() throws Exception {
-        this.mockMvc.perform(put("/rest/project/2/tasks/11/update")
+        this.mockMvc.perform(put("/rest/project/2/tasks/111/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 11,\n" +
-                                "    \"code\": \"TT11-1\",\n" +
-                                "    \"name\": \"Test task 11 updated\",\n" +
-                                "    \"description\": \"Description task 11\",\n" +
+                                "    \"id\": 111,\n" +
+                                "    \"code\": \"TT111-1\",\n" +
+                                "    \"name\": \"Test task 111 updated\",\n" +
+                                "    \"description\": \"Description task 111\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"project_id\": 2,\n" +
-                                "    \"author\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"executor\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
                                 "    \"created\": 1603274345,\n" +
                                 "    \"updated\": null,\n" +
-                                "    \"status\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"estimation\": 259200,\n" +
                                 "    \"timeSpent\": null,\n" +
                                 "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
@@ -196,10 +180,10 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        this.mockMvc.perform(get("/rest/task/TT11-1/getbycode"))
+        this.mockMvc.perform(get("/rest/task/TT111-1/getbycode"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(11)))
-                .andExpect(jsonPath("$.name", equalTo("Test task 11 updated")));
+                .andExpect(jsonPath("$.id", equalTo(111)))
+                .andExpect(jsonPath("$.name", equalTo("Test task 111 updated")));
     }
 
     @Test()
@@ -254,24 +238,16 @@ class TaskControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 10,\n" +
-                                "    \"code\": \"TT10-1\",\n" +
-                                "    \"name\": \"Test task 10\",\n" +
-                                "    \"description\": \"Description task 10\",\n" +
+                                "    \"id\": 110,\n" +
+                                "    \"code\": \"TT110-1\",\n" +
+                                "    \"name\": \"Test task 110\",\n" +
+                                "    \"description\": \"Description task 110\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"project_id\": 2,\n" +
-                                "    \"author\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"executor\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
                                 "    \"created\": 1603274345,\n" +
                                 "    \"updated\": null,\n" +
-                                "    \"status\": {\n" +
-                                "      \"id\": 1\n" +
-                                "    },\n" +
-                                "    \"estimation\": 259200,\n" +
                                 "    \"timeSpent\": null,\n" +
                                 "    \"timeLeft\": null,\n" +
                                 "    \"relatedTasks\": [],\n" +
@@ -280,12 +256,12 @@ class TaskControllerTest {
                                 "  }"
                 ));
 
-        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get("TT10-1"));
+        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get("TT110-1"));
 
         String jsonString = new ObjectMapper()
                 .registerModule(new JavaTimeModule()).writeValueAsString(task);
 
-        mockMvc.perform(get("/rest/task/TT10-1/getbycode"))
+        mockMvc.perform(get("/rest/task/TT110-1/getbycode"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonString));
     }
