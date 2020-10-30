@@ -12,7 +12,6 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotExistException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.facade.GetService;
@@ -62,7 +61,7 @@ class TaskControllerTest {
     }
 
     @Test
-    void getAllProjectTasks() throws Exception {
+    void getAllTasks_From_Project() throws Exception {
         Collection<TaskDtoPreview> tempTasks = taskGetListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(2L))
                 .map(task -> dtoConverter.toDto(task))
@@ -77,14 +76,14 @@ class TaskControllerTest {
     }
 
     @Test()
-    void getAllProjectTasks_BadRequestException() {
+    void getAllTasks_From_Project_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.getAllTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
-    void getAllProjectTasks_NotFoundException() {
+    void getAllTasks_From_Project_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> taskController.getAllTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
@@ -124,14 +123,14 @@ class TaskControllerTest {
     }
 
     @Test()
-    void addTask_NotExistException() {
-        Exception exception = assertThrows(NotExistException.class,
+    void addTask_BadRequestException_Null() {
+        Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.addTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
 
     @Test()
-    void addTask_BadRequestException() {
+    void addTask_BadRequestException_Task_Existed() {
         taskController.addTask(
                 new TaskDtoFull(100L, "TT100", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
@@ -187,14 +186,14 @@ class TaskControllerTest {
     }
 
     @Test()
-    void updateTask_NotExistException() {
-        Exception exception = assertThrows(NotExistException.class,
+    void updateTask_BadRequestException_Null() {
+        Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.updateTask(null, null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
 
     @Test()
-    void updateTask_BadRequestException() {
+    void updateTask_BadRequestException_Wrong() {
         TaskDtoFull task = new TaskDtoFull(1L, "TT1", "Test task 1 TEST", "Description task 1",
                 TaskType.BUG, null, 11L, new User(), new User(),
                 ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),

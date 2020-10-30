@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.exception.NotExistException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.repository.dao.impl.UserEntityRepository;
 import ru.progwards.tasktracker.repository.dao.impl.UserEntityRepositoryUpdateField;
@@ -54,7 +54,7 @@ public class UserController {
     @PostMapping("/rest/user/create")
     public ResponseEntity<UserEntity> create(@RequestBody UserEntity entity) {
         if (entity == null)
-            throw new NotExistException("User is null");
+            throw new BadRequestException("User is null");
 
         repository.create(entity);
 
@@ -70,7 +70,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("id") Long id, @RequestBody UserEntity entity) {
         if (entity == null)
-            throw new NotExistException("User is null");
+            throw new BadRequestException("User is null");
 
         entity.setId(id);
         repository.update(entity);
@@ -101,7 +101,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void updateOneField(@PathVariable("id") Long id, @RequestBody UpdateOneValue updateOneValue) {
         if (updateOneValue == null)
-            throw new NotExistException("UpdateOneValue is null");
+            throw new BadRequestException("UpdateOneValue is null");
 
         updateOneValue.setId(id);
         userEntityRepositoryUpdateField.updateField(updateOneValue);

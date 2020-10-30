@@ -1,7 +1,5 @@
 package ru.progwards.tasktracker.controller;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,12 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotExistException;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,15 +67,15 @@ class TaskUpdateFieldControllerTest {
     }
 
     @Test()
-    void updateTask_NotExistException() {
-        Exception exception = assertThrows(NotExistException.class, () -> {
+    void updateTask_BadRequestException_Null() {
+        Exception exception = assertThrows(BadRequestException.class, () -> {
             updateFieldController.updateOneField(null, null);
         });
         assertTrue(exception.getMessage().contains("Значение обновляемого поля отсутствует!"));
     }
 
     @Test()
-    void updateTask_BadRequestException() {
+    void updateTask_BadRequestException_Wrong() {
         UpdateOneValue value = new UpdateOneValue(11L, "Test task 10-1", "name");
 
         Exception exception = assertThrows(BadRequestException.class, () -> {

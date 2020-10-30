@@ -27,10 +27,9 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
      */
     @Override
     public Collection<TaskEntity> get() {
-        Collection<TaskEntity> tasks = jsonHandler.getMap().values().stream()
+        return jsonHandler.getMap().values().stream()
                 .filter(value -> !value.getDeleted())
                 .collect(Collectors.toList());
-        return tasks.size() != 0 ? tasks : null;
     }
 
     /**
@@ -73,7 +72,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
             jsonHandler.getMap().remove(id);
             task.setDeleted(true);
             create(task);
-        }
+        } //TODO написать BadRequestException при неудачном добавлении? Как это увязать с контроллером?
     }
 }
 

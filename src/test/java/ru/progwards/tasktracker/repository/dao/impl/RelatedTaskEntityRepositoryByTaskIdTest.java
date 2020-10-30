@@ -9,6 +9,7 @@ import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class RelatedTaskEntityRepositoryByTaskIdTest {
@@ -28,5 +29,12 @@ class RelatedTaskEntityRepositoryByTaskIdTest {
         Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(2L);
 
         assertEquals(collection.size(), 3);
+    }
+
+    @Test
+    public void getByTaskId_Return_Empty_collection(){
+        Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(100L);
+
+        assertTrue(collection.isEmpty());
     }
 }

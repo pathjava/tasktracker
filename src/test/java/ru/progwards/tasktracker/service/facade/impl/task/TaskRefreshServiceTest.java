@@ -22,7 +22,6 @@ public class TaskRefreshServiceTest {
     @Mock
     private RefreshService<Task> taskRefreshService;
 
-
     @Test
     public void testRefresh() {
         taskRefreshService.refresh(

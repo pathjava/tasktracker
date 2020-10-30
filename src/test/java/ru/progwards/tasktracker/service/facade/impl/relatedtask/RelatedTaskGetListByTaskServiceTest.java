@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class RelatedTaskGetListByTaskServiceTest {
@@ -31,5 +32,12 @@ class RelatedTaskGetListByTaskServiceTest {
                 .collect(Collectors.toList());
 
         assertThat(list, containsInAnyOrder("блокируемая", "блокируемая", "блокирующая"));
+    }
+
+    @Test
+    public void getListByTaskId_Return_Empty_Collection(){
+        Collection<RelatedTask> collection = listByTaskService.getListByTaskId(7L);
+
+        assertTrue(collection.isEmpty());
     }
 }

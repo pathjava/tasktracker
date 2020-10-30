@@ -24,14 +24,14 @@ class TaskDtoFullConverterTest {
     private Converter<Task, TaskDtoFull> dtoFullConverter;
 
     @Test
-    void toModel_return_Null() {
+    void toModel_Return_Null() {
         Task task = dtoFullConverter.toModel(null);
 
         assertNull(task);
     }
 
     @Test
-    void toModel_return_Not_Null() {
+    void toModel_Return_Not_Null() {
         Task task = dtoFullConverter.toModel(
                 new TaskDtoFull(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
@@ -45,14 +45,14 @@ class TaskDtoFullConverterTest {
     }
 
     @Test
-    void toDto_return_Null() {
+    void toDto_Return_Null() {
         TaskDtoFull task = dtoFullConverter.toDto(null);
 
         assertNull(task);
     }
 
     @Test
-    void toDto_return_Not_Null() {
+    void toDto_Return_Not_Null() {
         TaskDtoFull task = dtoFullConverter.toDto(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),

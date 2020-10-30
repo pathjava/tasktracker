@@ -31,10 +31,8 @@ public class TaskGetListService implements GetListService<Task> {
 
     @Override
     public Collection<Task> getList() {
-        Collection<Task> tasks = taskRepository.get().stream()
+        return taskRepository.get().stream()
                 .map(entity -> converterTask.toVo(entity))
                 .collect(Collectors.toList());
-
-        return tasks.size() == 0 ? null : tasks; //TODO - подумать, надо ли возвращать null здесь и в других сервисах
     }
 }

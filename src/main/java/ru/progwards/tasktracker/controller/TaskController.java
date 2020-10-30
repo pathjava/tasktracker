@@ -8,11 +8,11 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotExistException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -56,30 +56,27 @@ public class TaskController {
 
         Collection<TaskDtoPreview> tasks = getAllTasksByProjectId(project_id);
 
-        if (tasks == null)
+        if (tasks.isEmpty())
             throw new NotFoundException("Список задач пустой!");
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     private Collection<TaskDtoPreview> getAllTasksByProjectId(Long project_id) {
-        Collection<TaskDtoPreview> tasks = taskGetListService.getList().stream()
+        return taskGetListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(project_id))
                 .map(task -> dtoPreviewConverter.toDto(task))
                 .collect(Collectors.toList());
-
-        return tasks.size() == 0 ? null : tasks;
     }
 
     @PostMapping("/rest/task/create")
     public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull task) {
         if (task == null)
-            throw new NotExistException("Задача не существует!");
-
-        if (taskGetService.get(task.getId()) != null)
-            throw new BadRequestException("Такая задача уже существует!");
+            throw new BadRequestException("Задача не существует!");
 
         taskCreateService.create(dtoFullConverter.toModel(task));
+
+        //TODO - перед добавлением проверять, есть ли уже в БД такая задача
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -87,14 +84,16 @@ public class TaskController {
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
     public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull task) {
         if (task == null)
-            throw new NotExistException("Задача не существует!");
+            throw new BadRequestException("Задача не существует!");
 
         if (!task_id.equals(task.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
+        task.setUpdated(ZonedDateTime.now());
         taskRefreshService.refresh(dtoFullConverter.toModel(task));
+        TaskDtoFull updatedTask = dtoFullConverter.toDto(taskGetService.get(task.getId()));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
     @DeleteMapping("/rest/project/{project_id}/tasks/{task_id}/delete")

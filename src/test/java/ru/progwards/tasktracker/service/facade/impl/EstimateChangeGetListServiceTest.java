@@ -37,7 +37,7 @@ class EstimateChangeGetListServiceTest {
     }
 
     @Test
-    void getList_return_Null() {
+    void getList_Return_Null() {
         when(getListService.getList()).thenReturn(Collections.emptyList());
 
         Collection<String> collection = getListService.getList();

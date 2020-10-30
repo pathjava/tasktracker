@@ -23,14 +23,14 @@ class TaskDtoPreviewConverterTest {
     private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
 
     @Test
-    void toModel_return_Null() {
+    void toModel_Return_Null() {
         Task task = dtoPreviewConverter.toModel(null);
 
         assertThat(task, is(nullValue()));
     }
 
     @Test
-    void toModel_return_Not_Null() {
+    void toModel_Return_Not_Null() {
         Task task = dtoPreviewConverter.toModel(
                 new TaskDtoPreview(1L, "TT1", "Test task 1 TEST")
         );
@@ -39,14 +39,14 @@ class TaskDtoPreviewConverterTest {
     }
 
     @Test
-    void toDto_return_Null() {
+    void toDto_Return_Null() {
         TaskDtoPreview taskDto = dtoPreviewConverter.toDto(null);
 
         assertThat(taskDto, is(nullValue()));
     }
 
     @Test
-    void toDto_return_Not_Null() {
+    void toDto_Return_Not_Null() {
         TaskDtoPreview taskDto = dtoPreviewConverter.toDto(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),

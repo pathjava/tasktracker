@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Random;
 
 @Component
 public class TaskConverter implements Converter<TaskEntity, Task> {
@@ -53,38 +54,44 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     public TaskEntity toEntity(Task task) {
         if (task == null)
             return null;
-        else {
-            TaskEntity entity = new TaskEntity();
+        else
+            return new TaskEntity(
+                    generateId(task.getId()),
+                    task.getCode(),
+                    task.getName(),
+                    task.getDescription(),
+                    task.getType(),
+                    task.getPriority(),
+                    task.getProject_id(),
+                    task.getAuthor(),
+                    task.getExecutor(),
+                    setTimeTaskCreated(task.getCreated()),
+                    checkThatUpdatedTaskEntityNotNull(task.getUpdated()),
+                    task.getStatus(),
+                    checkThatDurationTaskEntityNotNull(task.getEstimation()),
+                    checkThatDurationTaskEntityNotNull(task.getTimeSpent()),
+                    checkThatDurationTaskEntityNotNull(task.getTimeLeft()),
+                    task.getRelatedTasks(),
+                    task.getAttachments(),
+                    task.getWorkLogs(),
+                    false
+            );
+    }
 
-            entity.setId(task.getId());
-            entity.setCode(task.getCode());
-            entity.setName(task.getName());
-            entity.setDescription(task.getDescription());
-            entity.setType(task.getType());
-            entity.setPriority(task.getPriority());
-            entity.setProject_id(task.getProject_id());
-            entity.setAuthor(task.getAuthor());
-            entity.setExecutor(task.getExecutor());
-            entity.setCreated(task.getCreated().toEpochSecond());
-            entity.setUpdated(checkThatUpdatedTaskEntityNotNull(task.getUpdated()));
-            entity.setStatus(task.getStatus());
-            entity.setEstimation(checkThatDurationTaskEntityNotNull(task.getEstimation()));
-            entity.setTimeSpent(checkThatDurationTaskEntityNotNull(task.getTimeSpent()));
-            entity.setTimeLeft(checkThatDurationTaskEntityNotNull(task.getTimeLeft()));
-            entity.setRelatedTasks(task.getRelatedTasks());
-            entity.setAttachments(task.getAttachments());
-            entity.setWorkLogs(task.getWorkLogs());
-            entity.setDeleted(false);
+    private Long setTimeTaskCreated(ZonedDateTime created){
+        return created == null ? ZonedDateTime.now().toEpochSecond() : created.toEpochSecond();
+    }
 
-            return entity;
-        }
+    //TODO - only for test generate Id
+    private Long generateId(Long id){
+        return id == null ? new Random().nextLong() : id;
     }
 
     private Long checkThatDurationTaskEntityNotNull(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
 
-    private Long checkThatUpdatedTaskEntityNotNull(ZonedDateTime updated) {
-        return updated != null ? updated.toEpochSecond() : null;
+    private Long checkThatUpdatedTaskEntityNotNull(ZonedDateTime time) {
+        return time != null ? time.toEpochSecond() : null;
     }
 }

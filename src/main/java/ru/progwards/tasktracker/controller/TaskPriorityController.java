@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.exception.NotExistException;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.repository.dao.impl.TaskPriorityEntityRepository;
 import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
@@ -37,7 +37,7 @@ public class TaskPriorityController {
     @PostMapping("create")
     public ResponseEntity<TaskPriorityEntity> create(@RequestBody TaskPriorityEntity entity) {
         if (entity == null)
-            throw new NotExistException("TaskPriority is null");
+            throw new BadRequestException("TaskPriority is null");
 
         repository.create(entity);
 
@@ -48,7 +48,7 @@ public class TaskPriorityController {
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityEntity entity) {
         if (entity == null)
-            throw new NotExistException("TaskPriority is null");
+            throw new BadRequestException("TaskPriority is null");
 
         entity.setId(id);
         repository.update(entity);

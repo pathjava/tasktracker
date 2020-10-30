@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -47,6 +48,15 @@ public class TaskEntityRepositoryTest {
     }
 
     @Test
+    public void testGetAllTaskEntity_Return_Empty_Collection(){
+        when(taskRepository.get()).thenReturn(Collections.emptyList());
+
+        Collection<TaskEntity> collection = taskRepository.get();
+
+        assertTrue(collection.isEmpty());
+    }
+
+    @Test
     public void testGetOneTaskEntity() {
         when(taskRepository.get(anyLong())).thenReturn(
                 new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
@@ -61,6 +71,15 @@ public class TaskEntityRepositoryTest {
 
         assertNotNull(taskEntity);
         assertEquals("Test task 1 TEST", taskEntity.getName());
+    }
+
+    @Test
+    public void testGetOneTaskEntity_Return_Null(){
+        when(taskRepository.get(anyLong())).thenReturn(null);
+
+        TaskEntity taskEntity = taskRepository.get(1L);
+
+        assertNull(taskEntity);
     }
 
     @Test

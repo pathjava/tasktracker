@@ -29,10 +29,8 @@ public class RelatedTaskGetListByTaskService implements GetListByTaskService<Lon
 
     @Override
     public Collection<RelatedTask> getListByTaskId(Long taskId) {
-        Collection<RelatedTask> collection = byTaskId.getByTaskId(taskId).stream()
+        return byTaskId.getByTaskId(taskId).stream()
                 .map(entity -> taskConverter.toVo(entity))
                 .collect(Collectors.toList());
-
-        return collection.size() == 0 ? null : collection;
     }
 }

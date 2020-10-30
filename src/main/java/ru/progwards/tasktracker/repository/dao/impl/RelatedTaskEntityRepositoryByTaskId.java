@@ -25,10 +25,8 @@ public class RelatedTaskEntityRepositoryByTaskId implements RepositoryByTaskId<L
         if (taskId == null)
             return null;
 
-        Collection<RelatedTaskEntity> collection = jsonHandler.getMap().values().stream()
+        return jsonHandler.getMap().values().stream()
                 .filter(value -> value.getTaskId().equals(taskId))
                 .collect(Collectors.toList());
-
-        return collection.size() == 0 ? null : collection;
     }
 }

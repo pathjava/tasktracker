@@ -10,16 +10,14 @@ import ru.progwards.tasktracker.util.types.TaskType;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -56,5 +54,14 @@ public class TaskGetListServiceTest {
                 .collect(Collectors.toUnmodifiableList());
 
         assertThat(actualTaskName, containsInAnyOrder("Test task 1 TEST", "Test task 2 TEST"));
+    }
+
+    @Test
+    public void testGetList_Return_Empty_Collection(){
+        when(taskGetListService.getList()).thenReturn(Collections.emptyList());
+
+        Collection<Task> collection = taskGetListService.getList();
+
+        assertTrue(collection.isEmpty());
     }
 }

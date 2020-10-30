@@ -31,7 +31,7 @@ public class TaskEntityByCodeRepository implements Repository<String, TaskEntity
     @Override
     public TaskEntity get(String code) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getCode().equals(code))
+                .filter(entity -> entity.getCode().equals(code) && !entity.getDeleted())
                 .findFirst().orElse(null);
     }
 
