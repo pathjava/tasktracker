@@ -2,7 +2,6 @@ package ru.progwards.tasktracker.repository.entity;
 
 import ru.progwards.tasktracker.service.vo.*;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
 import java.util.List;
 

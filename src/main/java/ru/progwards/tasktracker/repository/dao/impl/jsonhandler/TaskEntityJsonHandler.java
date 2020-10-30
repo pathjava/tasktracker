@@ -8,7 +8,6 @@ import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.TaskType;
-import ru.progwards.tasktracker.util.types.WorkFlowStatus;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,7 +35,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                 1L, new TaskEntity(1L, "TT1-1", "Test task 1", "Description task 1",
                         TaskType.BUG, null, 2L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), null,
-                        new WorkFlowStatus(1L),
+                        null,
                         null, null, null,
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
@@ -44,7 +43,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                 2L, new TaskEntity(2L, "TT2-2", "Test task 2", "Description task 2",
                         TaskType.BUG, null, 1L, new User(), new User(),
                         ZonedDateTime.now().plusDays(1).toEpochSecond(), null,
-                        new WorkFlowStatus(1L),
+                        null,
                         Duration.ofDays(3).toSeconds(), null, null,
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
@@ -52,7 +51,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                 3L, new TaskEntity(3L, "TT3-3", "Test task 3", "Description task 3",
                         TaskType.BUG, null, 2L, new User(), new User(),
                         ZonedDateTime.now().plusDays(2).toEpochSecond(), ZonedDateTime.now().plusDays(3).toEpochSecond(),
-                        new WorkFlowStatus(1L),
+                        null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
@@ -60,7 +59,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                 4L, new TaskEntity(4L, "TT4-4", "Test task 4", "Description task 4",
                         TaskType.BUG, null, 1L, new User(), new User(),
                         ZonedDateTime.now().plusDays(3).toEpochSecond(), null,
-                        new WorkFlowStatus(1L),
+                        null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
@@ -68,7 +67,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                 5L, new TaskEntity(5L, "TT5-5", "Test task 5", "Description task 5",
                         TaskType.BUG, null, 1L, new User(), new User(),
                         ZonedDateTime.now().plusDays(4).toEpochSecond(), ZonedDateTime.now().plusDays(5).toEpochSecond(),
-                        new WorkFlowStatus(1L),
+                        null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
