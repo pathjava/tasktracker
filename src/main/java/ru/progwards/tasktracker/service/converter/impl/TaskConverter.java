@@ -54,9 +54,14 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     public TaskEntity toEntity(Task task) {
         if (task == null)
             return null;
-        else
+        else {
+            if (task.getId() == null) //TODO - only for test generate Id
+                task.setId(new Random().nextLong());
+            if (task.getCreated() == null)
+                task.setCreated(ZonedDateTime.now());
+            
             return new TaskEntity(
-                    generateId(task.getId()),
+                    task.getId(),
                     task.getCode(),
                     task.getName(),
                     task.getDescription(),
@@ -65,7 +70,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     task.getProject_id(),
                     task.getAuthor(),
                     task.getExecutor(),
-                    setTimeTaskCreated(task.getCreated()),
+                    task.getCreated().toEpochSecond(),
                     checkThatUpdatedTaskEntityNotNull(task.getUpdated()),
                     task.getStatus(),
                     checkThatDurationTaskEntityNotNull(task.getEstimation()),
@@ -76,15 +81,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     task.getWorkLogs(),
                     false
             );
-    }
-
-    private Long setTimeTaskCreated(ZonedDateTime created){
-        return created == null ? ZonedDateTime.now().toEpochSecond() : created.toEpochSecond();
-    }
-
-    //TODO - only for test generate Id
-    private Long generateId(Long id){
-        return id == null ? new Random().nextLong() : id;
+        }
     }
 
     private Long checkThatDurationTaskEntityNotNull(Duration duration) {

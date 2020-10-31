@@ -16,6 +16,11 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * контроллер для работы с задачами
+ *
+ * @author Oleg Kiselev
+ */
 @RestController
 public class TaskController {
 
@@ -49,6 +54,12 @@ public class TaskController {
         this.byCodeGetService = byCodeGetService;
     }
 
+    /**
+     * выборка списка задач по идентификатору проекта
+     *
+     * @param project_id идентификатор проекта
+     * @return коллекция превью задач
+     */
     @GetMapping("/rest/project/{project_id}/tasks")
     public ResponseEntity<Collection<TaskDtoPreview>> getAllTasks(@PathVariable Long project_id) {
         if (project_id == null)
@@ -69,29 +80,43 @@ public class TaskController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * метод создания задачи
+     *
+     * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает созданную сущность
+     */
     @PostMapping("/rest/task/create")
-    public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull task) {
-        if (task == null)
+    public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull taskDtoFull) {
+        if (taskDtoFull == null)
             throw new BadRequestException("Задача не существует!");
 
-        taskCreateService.create(dtoFullConverter.toModel(task));
+        Task task = dtoFullConverter.toModel(taskDtoFull);
+        taskCreateService.create(task);
+        TaskDtoFull createdTask = dtoFullConverter.toDto(task);
 
         //TODO - перед добавлением проверять, есть ли уже в БД такая задача
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
+    /**
+     * @param task_id идентификатор задачи
+     * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает обновленную сущность
+     */
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
-    public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull task) {
-        if (task == null)
+    public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull taskDtoFull) {
+        if (taskDtoFull == null)
             throw new BadRequestException("Задача не существует!");
 
-        if (!task_id.equals(task.getId()))
+        if (!task_id.equals(taskDtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        task.setUpdated(ZonedDateTime.now());
-        taskRefreshService.refresh(dtoFullConverter.toModel(task));
-        TaskDtoFull updatedTask = dtoFullConverter.toDto(taskGetService.get(task.getId()));
+        taskDtoFull.setUpdated(ZonedDateTime.now());
+        Task task = dtoFullConverter.toModel(taskDtoFull);
+        taskRefreshService.refresh(task);
+        TaskDtoFull updatedTask = dtoFullConverter.toDto(task);
 
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
