@@ -27,7 +27,7 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "WorkFlowStatus.json";
+    private String fileName = "src/main/resources/data/WorkFlowStatus.json";
 
     public WorkFlowStatusRepository() throws IOException {
         file = new File(fileName);

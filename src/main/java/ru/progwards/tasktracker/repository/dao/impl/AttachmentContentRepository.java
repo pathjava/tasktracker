@@ -26,7 +26,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "attachmentContent.json";
+    private String fileName = "src/main/resources/data/attachmentContent.json";
 
     public AttachmentContentRepository() throws IOException {
         file = new File(fileName);
