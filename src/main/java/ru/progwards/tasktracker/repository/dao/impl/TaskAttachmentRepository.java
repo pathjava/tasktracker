@@ -27,7 +27,7 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "taskAttachment.json";
+    private String fileName = "src/main/resources/data/taskAttachment.json";
 
     public TaskAttachmentRepository() throws IOException {
         file = new File(fileName);
