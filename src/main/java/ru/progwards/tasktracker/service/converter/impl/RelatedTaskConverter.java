@@ -8,6 +8,11 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
+/**
+ * конвертер связанной задачи между value object и entity
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
 
@@ -18,6 +23,10 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
         this.relationTypeConverter = relationTypeConverter;
     }
 
+    /**
+     * @param entity сущность, полученная из БД
+     * @return value object - объект бизнес логики
+     */
     @Override
     public RelatedTask toVo(RelatedTaskEntity entity) {
         if (entity == null)
@@ -31,6 +40,10 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
             );
     }
 
+    /**
+     * @param relatedTask value object - объект бизнес логики
+     * @return сущность для БД
+     */
     @Override
     public RelatedTaskEntity toEntity(RelatedTask relatedTask) {
         if (relatedTask == null)

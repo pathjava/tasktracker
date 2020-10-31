@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 
+/**
+ * контроллер для обработки кастомных исключений
+ *
+ * @author Oleg Kiselev
+ */
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 

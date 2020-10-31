@@ -28,7 +28,7 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     }
 
     /**
-     * @return возвращаем коллекцию всех задач
+     * @return возвращаем коллекцию всех задач, не помеченных как удаленные
      */
     @Override
     public Collection<TaskEntity> get() {

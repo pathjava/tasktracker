@@ -10,6 +10,11 @@ import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
 import ru.progwards.tasktracker.service.facade.RefreshService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+/**
+ * обновление задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskRefreshService implements RefreshService<Task> {
 
@@ -26,6 +31,9 @@ public class TaskRefreshService implements RefreshService<Task> {
         this.converterTask = converterTask;
     }
 
+    /**
+     * @param model  value object - объект бизнес логики (задача), который необходимо обновить
+     */
     @Override
     public void refresh(Task model) {
         taskRepository.update(converterTask.toEntity(model));

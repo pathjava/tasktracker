@@ -9,6 +9,11 @@ import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 import ru.progwards.tasktracker.service.facade.OneFieldSetService;
 
+/**
+ * обновление одного поля
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskOneFieldSetService implements OneFieldSetService<Task> {
 
@@ -19,6 +24,11 @@ public class TaskOneFieldSetService implements OneFieldSetService<Task> {
         this.updateField = updateField;
     }
 
+    /**
+     * метод обновления поля задачи
+     *
+     * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
+     */
     @Override
     public void setOneField(UpdateOneValue oneValue) {
         updateField.updateField(oneValue);

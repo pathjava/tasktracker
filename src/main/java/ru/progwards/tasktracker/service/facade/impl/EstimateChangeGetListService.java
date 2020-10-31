@@ -8,8 +8,17 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * получение списка вариантов изменения значения продолжительности выполнения задачи
+ * при списании затраченного времени
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class EstimateChangeGetListService implements GetListService<String> {
+    /**
+     * @return коллекцию строковых значений
+     */
     @Override
     public Collection<String> getList() {
         return Stream.of(EstimateChange.values())

@@ -10,6 +10,11 @@ import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * получение списка связанных задач для определенной задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class RelatedTaskEntityRepositoryByTaskId implements RepositoryByTaskId<Long, RelatedTaskEntity> {
 
@@ -20,11 +25,16 @@ public class RelatedTaskEntityRepositoryByTaskId implements RepositoryByTaskId<L
         this.jsonHandler = jsonHandler;
     }
 
+    /**
+     * @param taskId идентификатор задачи для которой необходимо получить связанные задачи
+     * @return возвращается коллекция (может быть пустой) связанных задач
+     */
     @Override
     public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
         if (taskId == null)
             return null;
 
+        //TODO - проверить возможность попадания в связанные задачи задач, помеченных как удаленные
         return jsonHandler.getMap().values().stream()
                 .filter(value -> value.getTaskId().equals(taskId))
                 .collect(Collectors.toList());

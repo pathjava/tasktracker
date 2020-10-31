@@ -8,6 +8,11 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
+/**
+ * сервис создания связанной задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class RelatedTaskCreateService implements CreateService<RelatedTask> {
 
@@ -24,6 +29,11 @@ public class RelatedTaskCreateService implements CreateService<RelatedTask> {
         this.taskConverter = taskConverter;
     }
 
+    /**
+     * метод создания связанной задачи
+     *
+     * @param model value object - объект бизнес логики, который необходимо создать
+     */
     @Override
     public void create(RelatedTask model) {
         entityRepository.create(taskConverter.toEntity(model));

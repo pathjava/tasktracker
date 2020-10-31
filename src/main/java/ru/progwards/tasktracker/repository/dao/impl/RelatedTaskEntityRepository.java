@@ -9,6 +9,11 @@ import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 
 import java.util.Collection;
 
+/**
+ * методы для работы с БД для сущности связанной задачи RelatedTaskEntity
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class RelatedTaskEntityRepository implements Repository<Long, RelatedTaskEntity> {
 
@@ -29,6 +34,11 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
         return null;
     }
 
+    /**
+     * метод создания и записи в БД сущности RelatedTaskEntity
+     *
+     * @param elem сущность с данными связанной задачи
+     */
     @Override
     public void create(RelatedTaskEntity elem) {
         RelatedTaskEntity entity = jsonHandler.getMap().put(elem.getId(), elem);
@@ -41,6 +51,11 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
 
     }
 
+    /**
+     * метод удаления связанных задач по идентификатору из параметра метода
+     *
+     * @param id идентификатор удаляемой сущности
+     */
     @Override
     public void delete(Long id) {
         RelatedTaskEntity entity = jsonHandler.getMap().get(id);

@@ -10,6 +10,11 @@ import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+/**
+ * создание задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskCreateService implements CreateService<Task> {
 
@@ -26,6 +31,11 @@ public class TaskCreateService implements CreateService<Task> {
         this.converterTask = converterTask;
     }
 
+    /**
+     * метод конвертирует и создает задачу
+     *
+     * @param model value object
+     */
     @Override
     public void create(Task model) {
         taskRepository.create(converterTask.toEntity(model));

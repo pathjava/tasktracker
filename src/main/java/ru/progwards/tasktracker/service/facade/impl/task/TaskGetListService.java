@@ -13,6 +13,11 @@ import ru.progwards.tasktracker.service.vo.Task;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * получение списка задач
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskGetListService implements GetListService<Task> {
 
@@ -29,6 +34,11 @@ public class TaskGetListService implements GetListService<Task> {
         this.converterTask = converterTask;
     }
 
+    /**
+     * метод получения всех задач
+     *
+     * @return коллекцию задач (может иметь пустое значение)
+     */
     @Override
     public Collection<Task> getList() {
         return taskRepository.get().stream()

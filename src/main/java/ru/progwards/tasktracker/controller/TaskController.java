@@ -84,7 +84,7 @@ public class TaskController {
      * метод создания задачи
      *
      * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
-     * @return возвращает созданную сущность
+     * @return возвращает созданную задачу
      */
     @PostMapping("/rest/task/create")
     public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull taskDtoFull) {
@@ -101,9 +101,11 @@ public class TaskController {
     }
 
     /**
+     * метод обновления задачи
+     *
      * @param task_id идентификатор задачи
      * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
-     * @return возвращает обновленную сущность
+     * @return возвращает обновленную задачу
      */
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
     public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull taskDtoFull) {
@@ -121,6 +123,12 @@ public class TaskController {
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
+    /**
+     * метод для удаления задачи
+     *
+     * @param task_id идентификатор задачи
+     * @return возвращает статус ответа
+     */
     @DeleteMapping("/rest/project/{project_id}/tasks/{task_id}/delete")
     public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
         if (task_id == null)
@@ -136,6 +144,12 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * метод поиска задачи по текстовому коду
+     *
+     * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
+     * @return возвращает найденную задачу
+     */
     @GetMapping("/rest/task/{code}/getbycode")
     public ResponseEntity<TaskDtoFull> getTaskByCode(@PathVariable String code) {
         if (code == null)

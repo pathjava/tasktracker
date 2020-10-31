@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.service.vo;
 
+/**
+ * value object - объект бизнес логики (связанная задача)
+ *
+ * @author Oleg Kiselev
+ */
 public class RelatedTask {
 
     private Long id;

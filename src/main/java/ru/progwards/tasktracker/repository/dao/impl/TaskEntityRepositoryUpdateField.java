@@ -8,6 +8,11 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import java.lang.reflect.Field;
 
+/**
+ * обновление поля задачи в БД
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class TaskEntityRepositoryUpdateField implements RepositoryUpdateField<TaskEntity> {
 
@@ -19,6 +24,8 @@ public class TaskEntityRepositoryUpdateField implements RepositoryUpdateField<Ta
     }
 
     /**
+     * метод обновления определенного поля задачи новым значением
+     *
      * @param oneValue объект, содержащий идентификатор и тип и значение обновляемого поля задачи
      */
     @Override
