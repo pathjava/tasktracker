@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.progwards.tasktracker.controller.exception.*;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
+import ru.progwards.tasktracker.controller.exception.NotFoundException;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice {
@@ -21,13 +22,6 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String taskByIdNotFoundHandler(NotFoundException ex) {
-        return ex.getMessage();
-    }
-
-    @ResponseBody
-    @ExceptionHandler(NotExistException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String taskNotExistHandler(NotExistException ex) {
         return ex.getMessage();
     }
 
