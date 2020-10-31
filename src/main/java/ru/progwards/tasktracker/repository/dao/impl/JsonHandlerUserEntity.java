@@ -86,7 +86,11 @@ public class JsonHandlerUserEntity implements JsonHandler<Long, UserEntity> {
                 List<UserEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> map.put(e.getId(), e));
             } catch (IOException ex) {
-                ex.printStackTrace();
+                try {
+                    write();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         }
     }
