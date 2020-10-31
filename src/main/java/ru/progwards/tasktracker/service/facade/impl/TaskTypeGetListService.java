@@ -8,8 +8,16 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * получение списка типов задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskTypeGetListService implements GetListService<String> {
+    /**
+     * @return возвращает коллекцию строковых значений типов задачи
+     */
     @Override
     public Collection<String> getList() {
         return Stream.of(TaskType.values())

@@ -8,6 +8,11 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+/**
+ * сущность, содержащая данные, выводимые в пользовательском интерфейсе
+ *
+ * @author Oleg Kiselev
+ */
 public class TaskDtoFull {
 
     private Long id;

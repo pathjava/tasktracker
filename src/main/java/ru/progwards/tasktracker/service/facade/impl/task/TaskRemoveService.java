@@ -8,6 +8,11 @@ import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+/**
+ * удаление задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskRemoveService implements RemoveService<Task> {
 
@@ -18,6 +23,9 @@ public class TaskRemoveService implements RemoveService<Task> {
         this.taskRepository = taskRepository;
     }
 
+    /**
+     * @param model  value object - объект бизнес логики (задача), который необходимо удалить
+     */
     @Override
     public void remove(Task model) {
         taskRepository.delete(model.getId());

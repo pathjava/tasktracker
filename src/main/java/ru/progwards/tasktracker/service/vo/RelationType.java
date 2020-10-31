@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.service.vo;
 
+/**
+ * value object - объект бизнес логики (тип связи)
+ *
+ * @author Oleg Kiselev
+ */
 public class RelationType {
 
     private Long id;

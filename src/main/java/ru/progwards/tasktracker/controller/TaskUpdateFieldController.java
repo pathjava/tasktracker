@@ -12,6 +12,11 @@ import ru.progwards.tasktracker.service.facade.OneFieldSetService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
+/**
+ * контроллер для обработки запроса по обновлению одного поля задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Controller
 public class TaskUpdateFieldController {
 
@@ -22,6 +27,11 @@ public class TaskUpdateFieldController {
         this.taskOneFieldSetService = taskOneFieldSetService;
     }
 
+    /**
+     * @param task_id идентификатор задачи
+     * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
+     * @return
+     */
     @PutMapping("/rest/project/{project_id}/tasks/{task_id}/field")
     public ResponseEntity<UpdateOneValue> updateOneField(
             @PathVariable Long task_id, @RequestBody UpdateOneValue oneValue

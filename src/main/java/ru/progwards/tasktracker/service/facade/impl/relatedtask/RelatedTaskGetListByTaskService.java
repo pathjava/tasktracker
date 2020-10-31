@@ -11,6 +11,11 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * получение связанных задач
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class RelatedTaskGetListByTaskService implements GetListByTaskService<Long, RelatedTask> {
 
@@ -27,6 +32,10 @@ public class RelatedTaskGetListByTaskService implements GetListByTaskService<Lon
         this.taskConverter = taskConverter;
     }
 
+    /**
+     * @param taskId идентификатор задачи для которой необходимо получить связанные задачи
+     * @return коллекция связанных задач (может иметь пустое значение)
+     */
     @Override
     public Collection<RelatedTask> getListByTaskId(Long taskId) {
         return byTaskId.getByTaskId(taskId).stream()

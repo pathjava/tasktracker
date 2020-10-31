@@ -5,6 +5,11 @@ import ru.progwards.tasktracker.util.types.TaskType;
 
 import java.util.List;
 
+/**
+ * сущность для хранения задачи в БД
+ *
+ * @author Oleg Kiselev
+ */
 public class TaskEntity {
 
     private Long id;

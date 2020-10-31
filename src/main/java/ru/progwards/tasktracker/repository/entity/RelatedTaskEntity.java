@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.repository.entity;
 
+/**
+ * сущность для хранения связанной задачи в БД
+ *
+ * @author Oleg Kiselev
+ */
 public class RelatedTaskEntity {
 
     private Long id;

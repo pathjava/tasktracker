@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.controller.dto;
 
+/**
+ * сущность, содержащая красткое описание задачи для отображения в пользовательском интерфейсе
+ *
+ * @author Oleg Kiselev
+ */
 public class TaskDtoPreview {
 
     private Long id;

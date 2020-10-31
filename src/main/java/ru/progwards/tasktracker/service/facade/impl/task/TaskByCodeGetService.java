@@ -8,6 +8,11 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+/**
+ * получение задачи по коду
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskByCodeGetService implements GetService<String, Task> {
 
@@ -24,6 +29,10 @@ public class TaskByCodeGetService implements GetService<String, Task> {
         this.converterTask = converterTask;
     }
 
+    /**
+     * @param code строковое значение кода задачи, создаваемое на основе префикса проекта задачи
+     * @return найденную задачу или пусто
+     */
     @Override
     public Task get(String code) {
         return code == null ? null : converterTask.toVo(taskRepository.get(code));

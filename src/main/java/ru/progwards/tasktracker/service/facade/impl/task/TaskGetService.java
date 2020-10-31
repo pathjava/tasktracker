@@ -10,6 +10,11 @@ import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+/**
+ * получение задачи
+ *
+ * @author Oleg Kiselev
+ */
 @Service
 public class TaskGetService implements GetService<Long, Task> {
 
@@ -26,6 +31,10 @@ public class TaskGetService implements GetService<Long, Task> {
         this.converterTask = converterTask;
     }
 
+    /**
+     * @param id идентификатор по которому необходимо получить задачу
+     * @return найденную задачу или пусто
+     */
     @Override
     public Task get(Long id) {
         return id == null ? null : converterTask.toVo(taskRepository.get(id));

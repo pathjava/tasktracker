@@ -9,6 +9,11 @@ import ru.progwards.tasktracker.repository.entity.TaskEntity;
 
 import java.util.Collection;
 
+/**
+ * компонент поиска задачи по текстовому коду
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class TaskEntityByCodeRepository implements Repository<String, TaskEntity> {
 

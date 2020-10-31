@@ -11,9 +11,18 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Random;
 
+/**
+ * конвертер между value object и entity
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class TaskConverter implements Converter<TaskEntity, Task> {
 
+    /**
+     * @param taskEntity сущность, полученная из БД
+     * @return value object - объект бизнес логики
+     */
     @Override
     public Task toVo(TaskEntity taskEntity) {
         if (taskEntity == null)
@@ -41,15 +50,27 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
             );
     }
 
+    /**
+     * @param duration секунды, могут быть пустыми и значение
+     * @return продолжительность или пусто
+     */
     private Duration checkThatDurationTaskNotNull(Long duration) {
         return duration != null ? Duration.ofSeconds(duration) : null;
     }
 
+    /**
+     * @param updated секунды, могут быть пустыми и значение
+     * @return дату-время или пусто
+     */
     private ZonedDateTime checkThatUpdatedTaskNotNull(Long updated) {
         return updated != null ? ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
 
+    /**
+     * @param task value object - объект бизнес логики
+     * @return сущность для БД
+     */
     @Override
     public TaskEntity toEntity(Task task) {
         if (task == null)
@@ -84,10 +105,18 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
         }
     }
 
+    /**
+     * @param duration продолжительность
+     * @return продолжительность в секундах или пусто
+     */
     private Long checkThatDurationTaskEntityNotNull(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
 
+    /**
+     * @param time дата-время
+     * @return дата-время в секундах или пусто
+     */
     private Long checkThatUpdatedTaskEntityNotNull(ZonedDateTime time) {
         return time != null ? time.toEpochSecond() : null;
     }

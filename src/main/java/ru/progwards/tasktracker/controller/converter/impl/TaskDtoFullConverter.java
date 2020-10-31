@@ -16,7 +16,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 
     /**
      * @param dto сущность, приходящая из пользовательского интерфейса
-     * @return сущность, возвращаемая в бизнес логику
+     * @return value object - объект бизнес логики
      */
     @Override
     public Task toModel(TaskDtoFull dto) {
@@ -46,7 +46,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
     }
 
     /**
-     * @param task сущность, приходящая из бизнес логики
+     * @param task value object - объект бизнес логики
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override

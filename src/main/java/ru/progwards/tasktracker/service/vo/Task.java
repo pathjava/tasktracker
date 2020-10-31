@@ -7,6 +7,11 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+/**
+ * value object - объект бизнес логики (задача)
+ *
+ * @author Oleg Kiselev
+ */
 public class Task {
 
     private Long id;

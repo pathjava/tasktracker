@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.repository.entity;
 
+/**
+ * сущность для хранения связей в БД
+ *
+ * @author Oleg Kiselev
+ */
 public class RelationTypeEntity {
 
     private Long id;
