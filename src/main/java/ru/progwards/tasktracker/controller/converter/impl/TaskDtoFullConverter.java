@@ -5,9 +5,19 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.service.vo.Task;
 
+/**
+ * конвертеры
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 
+
+    /**
+     * @param dto сущность, приходящая из пользовательского интерфейса
+     * @return сущность, возвращаемая в бизнес логику
+     */
     @Override
     public Task toModel(TaskDtoFull dto) {
         if (dto == null)
@@ -35,6 +45,10 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             );
     }
 
+    /**
+     * @param task сущность, приходящая из бизнес логики
+     * @return сущность, возвращаемая в пользовательский интерфейс
+     */
     @Override
     public TaskDtoFull toDto(Task task) {
         if (task == null)

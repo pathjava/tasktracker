@@ -12,6 +12,11 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Методы работы сущности с базой данных
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class TaskEntityRepository implements Repository<Long, TaskEntity> {
 
