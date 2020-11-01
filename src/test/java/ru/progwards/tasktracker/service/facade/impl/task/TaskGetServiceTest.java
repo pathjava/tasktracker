@@ -17,6 +17,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+/**
+ * тестирование сервиса получения задачи по идентификатору
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 public class TaskGetServiceTest {
 

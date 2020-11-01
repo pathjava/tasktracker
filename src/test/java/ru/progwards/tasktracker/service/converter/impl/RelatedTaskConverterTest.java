@@ -12,6 +12,11 @@ import ru.progwards.tasktracker.service.vo.RelationType;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * тестирование конвертера связанной задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class RelatedTaskConverterTest {
 

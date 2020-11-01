@@ -11,6 +11,11 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * тестирование репозитория по получению связанных задач по идентификатору задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class RelatedTaskEntityRepositoryByTaskIdTest {
 

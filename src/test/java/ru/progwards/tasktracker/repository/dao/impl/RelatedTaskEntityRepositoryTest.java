@@ -9,6 +9,11 @@ import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * тестирование создания и удаления связанной задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class RelatedTaskEntityRepositoryTest {
 

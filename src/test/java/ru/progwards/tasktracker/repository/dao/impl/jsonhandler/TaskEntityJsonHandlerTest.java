@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * тестирование обработчика json задач
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 public class TaskEntityJsonHandlerTest {
 

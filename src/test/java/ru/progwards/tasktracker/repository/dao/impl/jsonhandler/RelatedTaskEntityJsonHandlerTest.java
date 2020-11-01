@@ -10,6 +10,11 @@ import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * тестирование обработчика json связанных задач
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class RelatedTaskEntityJsonHandlerTest {
 

@@ -16,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+/**
+ * тестирование сервиса получения списка типов задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class TaskTypeGetListServiceTest {
 

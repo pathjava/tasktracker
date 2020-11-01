@@ -16,6 +16,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+/**
+ * тестирование сервиса обновления задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 public class TaskRefreshServiceTest {
 

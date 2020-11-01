@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * тестирование конвертера между DTO и VO
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class TaskDtoPreviewConverterTest {
 

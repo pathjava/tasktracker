@@ -15,6 +15,11 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * тестирование сервиса получения коллекции связанных задач по идентификатору задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class RelatedTaskGetListByTaskServiceTest {
 
