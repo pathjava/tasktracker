@@ -32,10 +32,10 @@ public class RelatedTaskCreateService implements CreateService<RelatedTask> {
     /**
      * метод создания связанной задачи
      *
-     * @param model value object - объект бизнес логики, который необходимо создать
+     * @param relatedTask value object - объект бизнес логики, который необходимо создать
      */
     @Override
-    public void create(RelatedTask model) {
-        entityRepository.create(taskConverter.toEntity(model));
+    public void create(RelatedTask relatedTask) {
+        entityRepository.create(taskConverter.toEntity(relatedTask));
     }
 }

@@ -25,33 +25,33 @@ import java.util.stream.Collectors;
 public class TaskController {
 
     private GetService<Long, Task> taskGetService;
-    private GetListService<Task> taskGetListService;
     private RemoveService<Task> taskRemoveService;
     private CreateService<Task> taskCreateService;
     private RefreshService<Task> taskRefreshService;
     private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
     private Converter<Task, TaskDtoFull> dtoFullConverter;
     private GetService<String, Task> byCodeGetService;
+    private GetListByProjectService<Long, Task> listByProjectService;
 
     @Autowired
     public void setTaskGetService(
             GetService<Long, Task> taskGetService,
-            GetListService<Task> taskGetListService,
             RemoveService<Task> taskRemoveService,
             CreateService<Task> taskCreateService,
             RefreshService<Task> taskRefreshService,
             Converter<Task, TaskDtoPreview> dtoPreviewConverter,
             Converter<Task, TaskDtoFull> dtoFullConverter,
-            GetService<String, Task> byCodeGetService
+            GetService<String, Task> byCodeGetService,
+            GetListByProjectService<Long, Task> listByProjectService
     ) {
         this.taskGetService = taskGetService;
-        this.taskGetListService = taskGetListService;
         this.taskRemoveService = taskRemoveService;
         this.taskCreateService = taskCreateService;
         this.taskRefreshService = taskRefreshService;
         this.dtoPreviewConverter = dtoPreviewConverter;
         this.dtoFullConverter = dtoFullConverter;
         this.byCodeGetService = byCodeGetService;
+        this.listByProjectService = listByProjectService;
     }
 
     /**
@@ -65,19 +65,14 @@ public class TaskController {
         if (project_id == null)
             throw new BadRequestException("Id: " + project_id + " не задан или задан неверно!");
 
-        Collection<TaskDtoPreview> tasks = getAllTasksByProjectId(project_id);
+        Collection<TaskDtoPreview> tasks = listByProjectService.getListByProjectId(project_id).stream()
+                .map(task -> dtoPreviewConverter.toDto(task))
+                .collect(Collectors.toList());
 
-        if (tasks.isEmpty())
+        if (tasks.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список задач пустой!");
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
-    }
-
-    private Collection<TaskDtoPreview> getAllTasksByProjectId(Long project_id) {
-        return taskGetListService.getList().stream()
-                .filter(task -> task.getProject_id().equals(project_id))
-                .map(task -> dtoPreviewConverter.toDto(task))
-                .collect(Collectors.toList());
     }
 
     /**
@@ -95,7 +90,7 @@ public class TaskController {
         taskCreateService.create(task);
         TaskDtoFull createdTask = dtoFullConverter.toDto(task);
 
-        //TODO - перед добавлением проверять, есть ли уже в БД такая задача
+        //TODO - перед добавлением проверять, есть ли уже в БД такая задача, но id генерируется в entity - подумать
 
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
@@ -157,7 +152,7 @@ public class TaskController {
 
         TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code));
 
-        if (task == null)
+        if (task == null) //TODO - пустая задача или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Задача с code: " + code + " не найдена!");
 
         return new ResponseEntity<>(task, HttpStatus.OK);
