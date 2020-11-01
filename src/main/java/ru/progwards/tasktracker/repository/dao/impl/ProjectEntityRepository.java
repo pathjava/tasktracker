@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.JsonHandlerProjectEntity;
+import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.ProjectEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
 import java.util.Collection;
@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 @Component
 public class ProjectEntityRepository implements Repository<Long, ProjectEntity> {
 
-    private final JsonHandlerProjectEntity jsonHandlerProjectEntity;
+    private final ProjectEntityJsonHandler jsonHandlerProjectEntity;
 
-    public ProjectEntityRepository(JsonHandlerProjectEntity jsonHandlerProjectEntity) {
+    public ProjectEntityRepository(ProjectEntityJsonHandler jsonHandlerProjectEntity) {
         this.jsonHandlerProjectEntity = jsonHandlerProjectEntity;
     }
 

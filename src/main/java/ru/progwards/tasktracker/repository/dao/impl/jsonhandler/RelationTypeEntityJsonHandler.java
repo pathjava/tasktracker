@@ -18,29 +18,16 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * Методы работы сущности с JSON базой данных
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class RelationTypeEntityJsonHandler implements JsonHandler<Long, RelationTypeEntity> {
 
     public final Map<Long, RelationTypeEntity> relationType = new ConcurrentHashMap<>();
     private static File RELATION_TYPE_PATH;
-
-    /* for testing */
-    private void initializerMap() {
-        Map<Long, RelationTypeEntity> tempRelationType = new HashMap<>();
-
-        tempRelationType.put(
-                1L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null))
-        );
-        tempRelationType.put(
-                2L, new RelationTypeEntity(2L, "блокируемая", new RelationTypeEntity(1L, "блокирующая", null))
-        );
-        tempRelationType.put(
-                3L, new RelationTypeEntity(3L, "ссылается", new RelationTypeEntity(3L, "ссылается", null))
-        );
-
-        tempRelationType.values().forEach(value -> relationType.put(value.getId(), value));
-        write();
-    }
 
     static {
         try {
@@ -54,7 +41,6 @@ public class RelationTypeEntityJsonHandler implements JsonHandler<Long, Relation
     }
 
     public RelationTypeEntityJsonHandler() {
-        initializerMap(); /* for testing */
         try {
             read();
         } catch (Exception e) {

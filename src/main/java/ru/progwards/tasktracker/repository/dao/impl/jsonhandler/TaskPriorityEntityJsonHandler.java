@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.JsonHandlerProjectEntity;
 import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 
 import java.io.File;
@@ -20,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerTaskPriorityEntity implements JsonHandler<Long, TaskPriorityEntity> {
+public class TaskPriorityEntityJsonHandler implements JsonHandler<Long, TaskPriorityEntity> {
     private static File PROJECT_PATH;
     private final Map<Long, TaskPriorityEntity> map = new ConcurrentHashMap<>();
 
@@ -35,7 +34,7 @@ public class JsonHandlerTaskPriorityEntity implements JsonHandler<Long, TaskPrio
         }
     }
 
-    public JsonHandlerTaskPriorityEntity() {
+    public TaskPriorityEntityJsonHandler() {
         try {
             read();
         } catch (Exception ex1) {

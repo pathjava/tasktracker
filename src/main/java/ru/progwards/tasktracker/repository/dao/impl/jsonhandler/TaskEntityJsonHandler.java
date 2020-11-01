@@ -22,58 +22,16 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * Методы работы сущности с JSON базой данных
+ *
+ * @author Oleg Kiselev
+ */
 @Component
 public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();
     private static File TASKS_PATH;
-
-    /* for testing */
-    private void initializerMap() {
-        Map<Long, TaskEntity> tempTasks = new HashMap<>();
-        tempTasks.put(
-                1L, new TaskEntity(1L, "TT1-1", "Test task 1", "Description task 1",
-                        TaskType.BUG, null, 2L, new User(), new User(),
-                        ZonedDateTime.now().toEpochSecond(), null,
-                        null,
-                        null, null, null,
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-        );
-        tempTasks.put(
-                2L, new TaskEntity(2L, "TT2-2", "Test task 2", "Description task 2",
-                        TaskType.BUG, null, 1L, new User(), new User(),
-                        ZonedDateTime.now().plusDays(1).toEpochSecond(), null,
-                        null,
-                        Duration.ofDays(3).toSeconds(), null, null,
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-        );
-        tempTasks.put(
-                3L, new TaskEntity(3L, "TT3-3", "Test task 3", "Description task 3",
-                        TaskType.BUG, null, 2L, new User(), new User(),
-                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(3).toEpochSecond(),
-                        null,
-                        Duration.ofDays(3).plusHours(5).plusMinutes(25).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-        );
-        tempTasks.put(
-                4L, new TaskEntity(4L, "TT4-4", "Test task 4", "Description task 4",
-                        TaskType.BUG, null, 1L, new User(), new User(),
-                        ZonedDateTime.now().plusDays(3).toEpochSecond(), null,
-                        null,
-                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-        );
-        tempTasks.put(
-                5L, new TaskEntity(5L, "TT5-5", "Test task 5", "Description task 5",
-                        TaskType.BUG, null, 1L, new User(), new User(),
-                        ZonedDateTime.now().plusDays(4).toEpochSecond(), ZonedDateTime.now().plusDays(5).toEpochSecond(),
-                        null,
-                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-        );
-        tempTasks.values().forEach(value -> tasks.put(value.getId(), value));
-        write();
-    }
 
     static {
         try {
@@ -87,7 +45,6 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
     }
 
     public TaskEntityJsonHandler() {
-        initializerMap(); /* for testing */
         try {
             read();
         } catch (Exception e) {
