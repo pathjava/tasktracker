@@ -50,7 +50,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
         tempTasks.put(
                 3L, new TaskEntity(3L, "TT3-3", "Test task 3", "Description task 3",
                         TaskType.BUG, null, 2L, new User(), new User(),
-                        null, ZonedDateTime.now().plusDays(3).toEpochSecond(),
+                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(3).toEpochSecond(),
                         null,
                         Duration.ofDays(3).plusHours(5).plusMinutes(25).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)

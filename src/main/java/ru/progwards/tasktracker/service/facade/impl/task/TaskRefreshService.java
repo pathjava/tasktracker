@@ -32,10 +32,10 @@ public class TaskRefreshService implements RefreshService<Task> {
     }
 
     /**
-     * @param model  value object - объект бизнес логики (задача), который необходимо обновить
+     * @param task  value object - объект бизнес логики (задача), который необходимо обновить
      */
     @Override
-    public void refresh(Task model) {
-        taskRepository.update(converterTask.toEntity(model));
+    public void refresh(Task task) {
+        taskRepository.update(converterTask.toEntity(task));
     }
 }

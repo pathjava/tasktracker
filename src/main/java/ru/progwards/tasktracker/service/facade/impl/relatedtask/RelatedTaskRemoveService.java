@@ -25,10 +25,10 @@ public class RelatedTaskRemoveService implements RemoveService<RelatedTask> {
     /**
      * метод удаления связанной задачи
      *
-     * @param model value object - объект бизнес логики, который необходимо удалить
+     * @param relatedTask value object - объект бизнес логики, который необходимо удалить
      */
     @Override
-    public void remove(RelatedTask model) {
-        entityRepository.delete(model.getId());
+    public void remove(RelatedTask relatedTask) {
+        entityRepository.delete(relatedTask.getId());
     }
 }

@@ -24,10 +24,10 @@ public class TaskRemoveService implements RemoveService<Task> {
     }
 
     /**
-     * @param model  value object - объект бизнес логики (задача), который необходимо удалить
+     * @param task  value object - объект бизнес логики (задача), который необходимо удалить
      */
     @Override
-    public void remove(Task model) {
-        taskRepository.delete(model.getId());
+    public void remove(Task task) {
+        taskRepository.delete(task.getId());
     }
 }

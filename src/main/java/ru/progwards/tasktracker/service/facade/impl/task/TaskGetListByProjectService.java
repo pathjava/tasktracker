@@ -7,16 +7,19 @@ import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
-import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 /**
- * создание задачи
+ * получение задач по идентификатору проекта
  *
  * @author Oleg Kiselev
  */
 @Service
-public class TaskCreateService implements CreateService<Task> {
+public class TaskGetListByProjectService implements GetListByProjectService<Long, Task> {
 
     private Repository<Long, TaskEntity> taskRepository;
     private Converter<TaskEntity, Task> converterTask;
@@ -32,12 +35,14 @@ public class TaskCreateService implements CreateService<Task> {
     }
 
     /**
-     * метод конвертирует и создает задачу
-     *
-     * @param task value object
+     * @param projectId идентификатор проекта, для которого делается выборка задач (не помеченных как удаленные)
+     * @return коллекция задач (может иметь пустое значение)
      */
     @Override
-    public void create(Task task) {
-        taskRepository.create(converterTask.toEntity(task));
+    public Collection<Task> getListByProjectId(Long projectId) {
+        return taskRepository.get().stream()
+                .filter(taskEntity -> taskEntity.getProject_id().equals(projectId) && !taskEntity.getDeleted())
+                .map(taskEntity -> converterTask.toVo(taskEntity))
+                .collect(Collectors.toList());
     }
 }
