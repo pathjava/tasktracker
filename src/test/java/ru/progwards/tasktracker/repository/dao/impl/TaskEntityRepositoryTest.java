@@ -18,6 +18,11 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * тестирование методов работы с репозиторием
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 public class TaskEntityRepositoryTest {
 

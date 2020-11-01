@@ -17,6 +17,11 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * тестирование метода обновления поля задачи
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 public class TaskEntityRepositoryUpdateFieldTest {
 

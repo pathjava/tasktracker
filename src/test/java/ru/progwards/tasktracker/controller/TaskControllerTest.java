@@ -33,6 +33,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * тестирование методов контроллера задач
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 class TaskControllerTest {

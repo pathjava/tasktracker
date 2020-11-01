@@ -9,6 +9,11 @@ import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * тестирование обработчика json типов связей задач
+ *
+ * @author Oleg Kiselev
+ */
 @SpringBootTest
 class RelationTypeEntityJsonHandlerTest {
 
