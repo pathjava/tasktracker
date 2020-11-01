@@ -1,32 +1,34 @@
 package ru.progwards.tasktracker.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.dao.impl.ProjectEntityRepository;
-import ru.progwards.tasktracker.repository.dao.impl.ProjectEntityRepositoryUpdateField;
+import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import java.util.Collection;
 
+/**
+ * Контроллеры Project
+ * @author Pavel Khovaylo
+ */
 @RestController
 @RequestMapping("/rest/project/")
 public class ProjectController {
 
-    private final ProjectEntityRepository repository;
-    private final ProjectEntityRepositoryUpdateField projectEntityRepositoryUpdateField;
-
-    public ProjectController(ProjectEntityRepository repository, ProjectEntityRepositoryUpdateField projectEntityRepositoryUpdateField) {
-        this.repository = repository;
-        this.projectEntityRepositoryUpdateField = projectEntityRepositoryUpdateField;
-    }
+    @Autowired
+    private Repository<Long, ProjectEntity> repository; //TODO добавить service interfaces
+    @Autowired
+    private RepositoryUpdateField<ProjectEntity> projectEntityRepositoryUpdateField;
 
     /**
      * по запросу получаем список проектов
-     * @return возвращается список проектов
+     * @return список проектов
      */
     @GetMapping("list")
     public ResponseEntity<Collection<ProjectEntity>> get() {
@@ -50,7 +52,7 @@ public class ProjectController {
     /**
      * по запросу создаём проект
      * @param entity передаем наполненный проект
-     * @return возвращаем созданный проект
+     * @return созданный проект
      */
     @PostMapping("create")
     public ResponseEntity<ProjectEntity> create(@RequestBody ProjectEntity entity) {

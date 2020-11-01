@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.repository.entity;
 
+/**
+ * Класс ProjectEntity - сущность репозитория
+ * @author Pavel Khovaylo
+ */
 public class ProjectEntity {
     private Long id;
     private String name;

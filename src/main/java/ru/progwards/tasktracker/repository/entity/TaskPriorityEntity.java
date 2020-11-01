@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.repository.entity;
 
+/**
+ * Класс TaskPriorityEntity - сущность репозитория
+ * @author Pavel Khovaylo
+ */
 public class TaskPriorityEntity {
     private Long id;
     private String name;

@@ -1,21 +1,23 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.ProjectEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Репозиторий проектов
+ * @author Pavel Khovaylo
+ */
 @Component
 public class ProjectEntityRepository implements Repository<Long, ProjectEntity> {
 
-    private final ProjectEntityJsonHandler projectEntityJsonHandler;
-
-    public ProjectEntityRepository(ProjectEntityJsonHandler projectEntityJsonHandler) {
-        this.projectEntityJsonHandler = projectEntityJsonHandler;
-    }
+    @Autowired
+    private JsonHandler<Long, ProjectEntity> projectEntityJsonHandler;
 
     @Override
     public Collection<ProjectEntity> get() {
