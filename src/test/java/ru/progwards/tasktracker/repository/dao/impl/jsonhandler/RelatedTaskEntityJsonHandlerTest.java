@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,12 @@ class RelatedTaskEntityJsonHandlerTest {
     private JsonHandler<Long, RelatedTaskEntity> jsonHandler;
 
     @BeforeEach
-    public void clear() {
+    public void clearBefore() {
+        jsonHandler.getMap().clear();
+    }
+
+    @AfterEach
+    public void clearAfter() {
         jsonHandler.getMap().clear();
     }
 

@@ -72,10 +72,12 @@ class TaskControllerTest {
                 .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
 
-        mockMvc.perform(get("/rest/project/2/tasks")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+        String jsonString = new ObjectMapper()
+                .registerModule(new JavaTimeModule()).writeValueAsString(tempTasks);
+
+        mockMvc.perform(get("/rest/project/2/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonString));
     }
 
     @Test()
