@@ -7,6 +7,7 @@ import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -36,6 +37,23 @@ class RelatedTaskEntityRepositoryTest {
     void delete() {
         entityRepository.delete(1L);
 
+        assertNull(entityRepository.get(1L));
+
         verify(entityRepository, times(1)).delete(1L);
+    }
+
+    @Test
+    void get() {
+        when(entityRepository.get(anyLong())).thenReturn(
+                new RelatedTaskEntity(1L, new RelationTypeEntity(
+                        1L, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null)),
+                        1L, 2L)
+        );
+
+        RelatedTaskEntity taskEntity = entityRepository.get(1L);
+
+        assertNotNull(taskEntity);
+
+        assertEquals(1, taskEntity.getId());
     }
 }

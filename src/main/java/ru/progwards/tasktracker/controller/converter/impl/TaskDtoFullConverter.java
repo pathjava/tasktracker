@@ -12,8 +12,6 @@ import ru.progwards.tasktracker.service.vo.Task;
  */
 @Component
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
-
-
     /**
      * @param dto сущность, приходящая из пользовательского интерфейса
      * @return value object - объект бизнес логики

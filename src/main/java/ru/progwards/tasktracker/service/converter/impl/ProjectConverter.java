@@ -25,9 +25,16 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
         if (entity == null)
             return null;
 
-        return new Project(entity.getId(), entity.getName(), entity.getDescription(),
-                entity.getPrefix(), null, getZDTCreated(entity.getCreated()), null,
-                getListTasks(entity.getId()), entity.getLastTaskCode());
+        return new Project(entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getPrefix(),
+                null,
+                getZDTCreated(entity.getCreated()),
+                null,
+                getListTasks(entity.getId()),
+                entity.getLastTaskCode()
+        );
     }
 
     @Override
@@ -35,9 +42,16 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
         if (valueObject == null)
             return null;
 
-        return new ProjectEntity(valueObject.getId(), valueObject.getName(), valueObject.getDescription(),
-                valueObject.getPrefix(), valueObject.getOwner().getId(), getLongCreated(valueObject.getCreated()),
-                valueObject.getWorkFlow().getId(), valueObject.getLastTaskCode());
+        return new ProjectEntity(
+                valueObject.getId(),
+                valueObject.getName(),
+                valueObject.getDescription(),
+                valueObject.getPrefix(),
+                null,
+                getLongCreated(valueObject.getCreated()),
+                null,
+                valueObject.getLastTaskCode()
+        );
     }
 
     private Long getLongCreated(ZonedDateTime created) {
@@ -45,11 +59,10 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
     }
 
     private ZonedDateTime getZDTCreated(Long milli) {
-        ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(milli), ZoneId.of("Europe/Moscow"));
-        return zdt;
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(milli), ZoneId.of("Europe/Moscow"));
     }
 
     private List<Task> getListTasks(Long id) {
-        return taskGetListService.getList().stream().filter(e -> e.getId() == id).collect(Collectors.toList());
+        return taskGetListService.getList().stream().filter(e -> e.getId().equals(id)).collect(Collectors.toList());
     }
 }

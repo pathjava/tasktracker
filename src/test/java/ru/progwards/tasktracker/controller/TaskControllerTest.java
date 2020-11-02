@@ -72,12 +72,10 @@ class TaskControllerTest {
                 .map(task -> dtoConverter.toDto(task))
                 .collect(Collectors.toList());
 
-        String jsonString = new ObjectMapper()
-                .registerModule(new JavaTimeModule()).writeValueAsString(tempTasks);
-
-        mockMvc.perform(get("/rest/project/2/tasks"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(jsonString));
+        mockMvc.perform(get("/rest/project/2/tasks")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test()
@@ -132,29 +130,6 @@ class TaskControllerTest {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> taskController.addTask(null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
-    }
-
-    @Test()
-    void addTask_BadRequestException_Task_Existed() {
-        taskController.addTask(
-                new TaskDtoFull(100L, "TT100", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, null, 11L, new User(), new User(),
-                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                        null,
-                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-        );
-
-        TaskDtoFull task = new TaskDtoFull(100L, "TT100", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, null, 11L, new User(), new User(),
-                ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                null,
-                Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-
-        Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.addTask(task));
-        assertTrue(exception.getMessage().contains("Такая задача уже существует!"));
     }
 
     @Test

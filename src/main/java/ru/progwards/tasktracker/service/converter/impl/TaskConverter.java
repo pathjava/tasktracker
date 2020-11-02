@@ -1,15 +1,21 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.facade.RefreshService;
+import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.Task;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * конвертер между value object и entity
@@ -18,6 +24,18 @@ import java.util.Random;
  */
 @Component
 public class TaskConverter implements Converter<TaskEntity, Task> {
+
+    private GetService<Long, Project> projectGetService;
+    private RefreshService<Project> refreshService;
+
+    @Autowired
+    public void setProjectGetService(
+            GetService<Long, Project> projectGetService,
+            RefreshService<Project> refreshService
+    ) {
+        this.projectGetService = projectGetService;
+        this.refreshService = refreshService;
+    }
 
     /**
      * @param taskEntity сущность, полученная из БД
@@ -80,7 +98,9 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                 task.setId(new Random().nextLong());
             if (task.getCreated() == null)
                 task.setCreated(ZonedDateTime.now());
-            
+            if (task.getCode() == null)
+                task.setCode(generateTaskCode(task.getProject_id()));
+
             return new TaskEntity(
                     task.getId(),
                     task.getCode(),
@@ -103,6 +123,19 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     false
             );
         }
+    }
+
+    /**
+     * @param project_id идентификатор проекта, к которому принадлежит задача
+     * @return код задачи в формате "NGR-1"
+     */
+    private String generateTaskCode(Long project_id) {
+        Project project = projectGetService.get(project_id);
+        Long lastTaskCode = project.getLastTaskCode();
+        String taskCode = project.getPrefix() + "-" + lastTaskCode;
+        project.setLastTaskCode(lastTaskCode + 1);
+        refreshService.refresh(project);
+        return taskCode;
     }
 
     /**

@@ -44,6 +44,6 @@ public class TaskUpdateFieldController {
 
         taskOneFieldSetService.setOneField(oneValue);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK); //TODO - стоит ли тут что-то возвращать?
     }
 }

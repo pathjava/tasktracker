@@ -29,26 +29,31 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
         return null;
     }
 
+    /**
+     * метод получения связанной задачи по её идентификатору
+     *
+     * @param id идентификатор связанной задачи
+     * @return связанную задачу
+     */
     @Override
     public RelatedTaskEntity get(Long id) {
-        return null;
+        return jsonHandler.getMap().get(id);
     }
 
     /**
      * метод создания и записи в БД сущности RelatedTaskEntity
      *
-     * @param elem сущность с данными связанной задачи
+     * @param taskEntity сущность с данными связанной задачи
      */
     @Override
-    public void create(RelatedTaskEntity elem) {
-        RelatedTaskEntity entity = jsonHandler.getMap().put(elem.getId(), elem);
+    public void create(RelatedTaskEntity taskEntity) {
+        RelatedTaskEntity entity = jsonHandler.getMap().put(taskEntity.getId(), taskEntity);
         if (entity == null)
             jsonHandler.write();
     }
 
     @Override
-    public void update(RelatedTaskEntity elem) {
-
+    public void update(RelatedTaskEntity taskEntity) {
     }
 
     /**
