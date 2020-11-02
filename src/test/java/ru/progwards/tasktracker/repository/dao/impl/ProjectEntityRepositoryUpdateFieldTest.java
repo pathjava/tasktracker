@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
@@ -11,10 +13,10 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 public class ProjectEntityRepositoryUpdateFieldTest {
 
     @Autowired
-    private ProjectEntityRepositoryUpdateField projectEntityRepositoryUpdateField;
+    private RepositoryUpdateField<ProjectEntity> projectEntityRepositoryUpdateField;
 
     @Autowired
-    private ProjectEntityRepository repository;
+    private Repository<Long, ProjectEntity> repository;
 
     /**
      * сравниваем значение поля name у ProjectEntity до изменения со значением после изменения

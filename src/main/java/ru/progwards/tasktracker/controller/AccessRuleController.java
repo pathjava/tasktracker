@@ -5,10 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.converter.impl.AccessRuleDtoConverter;
 import ru.progwards.tasktracker.controller.dto.AccessRuleDto;
 import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.facade.impl.AccessRuleService;
 import ru.progwards.tasktracker.service.vo.AccessRule;
 
 import java.util.Collection;

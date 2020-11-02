@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class ProjectEntityRepositoryTest {
 //    private JsonHandlerProjectEntity jsonHandlerProjectEntity;
 
     @Autowired
-    private ProjectEntityRepository repositoryAuto;
+    private Repository<Long, ProjectEntity> repositoryAuto;
 
     @BeforeEach
     public void initMock() {
