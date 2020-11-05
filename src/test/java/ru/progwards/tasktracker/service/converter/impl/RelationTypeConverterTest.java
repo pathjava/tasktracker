@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * тестирование конвертера типа связи
+ * тестирование конвертера между valueObject <-> entity
  *
  * @author Oleg Kiselev
  */

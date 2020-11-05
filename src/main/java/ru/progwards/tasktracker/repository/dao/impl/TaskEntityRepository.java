@@ -48,23 +48,23 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     }
 
     /**
-     * @param taskEntity создаем/записываем в репозиторий новую задачу
+     * @param entity создаем/записываем в репозиторий новую задачу
      */
     @Override
-    public void create(TaskEntity taskEntity) {
-        TaskEntity task = jsonHandler.getMap().put(taskEntity.getId(), taskEntity);
+    public void create(TaskEntity entity) {
+        TaskEntity task = jsonHandler.getMap().put(entity.getId(), entity);
         if (task == null)
             jsonHandler.write();
     }
 
     /**
-     * @param taskEntity обновляем полученную задачу в репозитории
+     * @param entity обновляем полученную задачу в репозитории
      */
     @Override
-    public void update(TaskEntity taskEntity) {
-        jsonHandler.getMap().remove(taskEntity.getId());
-        taskEntity.setUpdated(ZonedDateTime.now().toEpochSecond());
-        create(taskEntity);
+    public void update(TaskEntity entity) {
+        jsonHandler.getMap().remove(entity.getId());
+        entity.setUpdated(ZonedDateTime.now().toEpochSecond());
+        create(entity);
     }
 
     /**

@@ -19,18 +19,18 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
     }
 
     /**
-     * @param task value object - объект бизнес логики
+     * @param model value object - объект бизнес логики
      * @return ceoyjcnm - превью задачи для отображения в пользовательском интерфейсе
      */
     @Override
-    public TaskDtoPreview toDto(Task task) {
-        if (task == null)
+    public TaskDtoPreview toDto(Task model) {
+        if (model == null)
             return null;
         else
             return new TaskDtoPreview(
-                    task.getId(),
-                    task.getCode(),
-                    task.getName()
+                    model.getId(),
+                    model.getCode(),
+                    model.getName()
             );
     }
 }

@@ -41,11 +41,11 @@ public class TaskEntityByCodeRepository implements Repository<String, TaskEntity
     }
 
     @Override
-    public void create(TaskEntity elem) {
+    public void create(TaskEntity entity) {
     }
 
     @Override
-    public void update(TaskEntity elem) {
+    public void update(TaskEntity entity) {
     }
 
     @Override

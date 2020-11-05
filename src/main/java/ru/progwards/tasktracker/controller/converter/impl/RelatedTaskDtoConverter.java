@@ -34,19 +34,19 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
     }
 
     /**
-     * @param task value object - объект бизнес логики
+     * @param model value object - объект бизнес логики
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override
-    public RelatedTaskDto toDto(RelatedTask task) {
-        if (task == null)
+    public RelatedTaskDto toDto(RelatedTask model) {
+        if (model == null)
             return null;
         else
             return new RelatedTaskDto(
-                    task.getId(),
-                    task.getRelationType(),
-                    task.getParentTaskId(),
-                    task.getTaskId()
+                    model.getId(),
+                    model.getRelationType(),
+                    model.getParentTaskId(),
+                    model.getTaskId()
             );
     }
 }

@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * тестирование конвертера между DTO и VO
+ * тестирование конвертера между valueObject <-> dto
  *
  * @author Oleg Kiselev
  */

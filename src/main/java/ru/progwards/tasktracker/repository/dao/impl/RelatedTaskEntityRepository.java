@@ -43,17 +43,17 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     /**
      * метод создания и записи в БД сущности RelatedTaskEntity
      *
-     * @param taskEntity сущность с данными связанной задачи
+     * @param entity сущность с данными связанной задачи
      */
     @Override
-    public void create(RelatedTaskEntity taskEntity) {
-        RelatedTaskEntity entity = jsonHandler.getMap().put(taskEntity.getId(), taskEntity);
-        if (entity == null)
+    public void create(RelatedTaskEntity entity) {
+        RelatedTaskEntity relatedTask = jsonHandler.getMap().put(entity.getId(), entity);
+        if (relatedTask == null)
             jsonHandler.write();
     }
 
     @Override
-    public void update(RelatedTaskEntity taskEntity) {
+    public void update(RelatedTaskEntity entity) {
     }
 
     /**

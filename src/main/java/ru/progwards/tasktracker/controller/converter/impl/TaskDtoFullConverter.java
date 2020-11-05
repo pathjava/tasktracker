@@ -48,33 +48,33 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
     }
 
     /**
-     * @param task value object - объект бизнес логики
+     * @param model value object - объект бизнес логики
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override
-    public TaskDtoFull toDto(Task task) {
-        if (task == null)
+    public TaskDtoFull toDto(Task model) {
+        if (model == null)
             return null;
         else
             return new TaskDtoFull(
-                    task.getId(),
-                    task.getCode(),
-                    task.getName(),
-                    task.getDescription(),
-                    task.getType(),
-                    task.getPriority(),
-                    task.getProject_id(),
-                    task.getAuthor(), //TODO - выводить только имя, а не объект пользователя
-                    task.getExecutor(), //TODO - выводить только имя, а не объект пользователя
-                    task.getCreated(),
-                    task.getUpdated(),
-                    task.getStatus(),
-                    task.getEstimation(),
-                    task.getTimeSpent(),
-                    task.getTimeLeft(),
-                    task.getRelatedTasks(),
-                    task.getAttachments(),
-                    task.getWorkLogs()
+                    model.getId(),
+                    model.getCode(),
+                    model.getName(),
+                    model.getDescription(),
+                    model.getType(),
+                    model.getPriority(),
+                    model.getProject_id(),
+                    model.getAuthor(), //TODO - выводить только имя, а не объект пользователя
+                    model.getExecutor(), //TODO - выводить только имя, а не объект пользователя
+                    model.getCreated(),
+                    model.getUpdated(),
+                    model.getStatus(),
+                    model.getEstimation(),
+                    model.getTimeSpent(),
+                    model.getTimeLeft(),
+                    model.getRelatedTasks(),
+                    model.getAttachments(),
+                    model.getWorkLogs()
             );
     }
 }
