@@ -31,9 +31,6 @@ public class RelatedTaskEntityRepositoryByTaskId implements RepositoryByTaskId<L
      */
     @Override
     public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
-        if (taskId == null)
-            return null;
-
         //TODO - проверить возможность попадания в связанные задачи задач, помеченных как удаленные
         return jsonHandler.getMap().values().stream()
                 .filter(value -> value.getTaskId().equals(taskId))

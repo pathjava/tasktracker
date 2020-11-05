@@ -22,7 +22,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             return null;
         else
             return new Task(
-                    dto.getId(),
+                    checkIdNotNull(dto),
                     dto.getCode(),
                     dto.getName(),
                     dto.getDescription(),
@@ -43,6 +43,10 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             );
     }
 
+    private Long checkIdNotNull(TaskDtoFull dto) {
+        return dto.getId() == null ? null : dto.getId();
+    }
+
     /**
      * @param task value object - объект бизнес логики
      * @return сущность, возвращаемая в пользовательский интерфейс
@@ -60,8 +64,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     task.getType(),
                     task.getPriority(),
                     task.getProject_id(),
-                    task.getAuthor(),
-                    task.getExecutor(),
+                    task.getAuthor(), //TODO - выводить только имя, а не объект пользователя
+                    task.getExecutor(), //TODO - выводить только имя, а не объект пользователя
                     task.getCreated(),
                     task.getUpdated(),
                     task.getStatus(),

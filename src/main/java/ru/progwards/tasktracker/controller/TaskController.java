@@ -131,7 +131,7 @@ public class TaskController {
 
         Task task = taskGetService.get(task_id);
 
-        if (task != null)
+        if (task != null)//TODO - при удалении задачи вызывать метод удаления связанных задач
             taskRemoveService.remove(task);
         else
             throw new NotFoundException("Задача с id: " + task_id + " не найдена!");

@@ -94,15 +94,13 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
         if (task == null)
             return null;
         else {
-            if (task.getId() == null) //TODO - only for test generate Id
-                task.setId(new Random().nextLong());
             if (task.getCreated() == null)
                 task.setCreated(ZonedDateTime.now());
             if (task.getCode() == null)
                 task.setCode(generateTaskCode(task.getProject_id()));
 
             return new TaskEntity(
-                    task.getId(),
+                    checkNotNull(task),
                     task.getCode(),
                     task.getName(),
                     task.getDescription(),
@@ -123,6 +121,10 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     false
             );
         }
+    }
+
+    private Long checkNotNull(Task task) {
+        return task.getId() == null ? null : task.getId();
     }
 
     /**
