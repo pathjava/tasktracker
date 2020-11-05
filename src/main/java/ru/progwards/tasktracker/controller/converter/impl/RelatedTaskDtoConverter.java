@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.controller.dto.RelatedTaskDto;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
 /**
- * конвертеры
+ * конвертеры valueObject <-> dto
  *
  * @author Oleg Kiselev
  */

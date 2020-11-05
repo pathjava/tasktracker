@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * получение задач по идентификатору проекта
+ * Бизнес-логика получения задач по идентификатору проекта
  *
  * @author Oleg Kiselev
  */

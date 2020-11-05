@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 /**
- * удаление задачи
+ * Бизнес-логика удаления задачи
  *
  * @author Oleg Kiselev
  */

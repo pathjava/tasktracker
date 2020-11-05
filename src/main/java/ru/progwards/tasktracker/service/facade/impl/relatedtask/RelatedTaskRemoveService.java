@@ -8,7 +8,7 @@ import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
 /**
- * удаление связанной задачи
+ * Бизнес-логика удаления связанной задачи
  *
  * @author Oleg Kiselev
  */

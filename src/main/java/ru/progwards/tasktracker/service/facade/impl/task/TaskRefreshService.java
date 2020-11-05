@@ -10,8 +10,10 @@ import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
 import ru.progwards.tasktracker.service.facade.RefreshService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.time.ZonedDateTime;
+
 /**
- * обновление задачи
+ * Бизнес-логика обновления задачи
  *
  * @author Oleg Kiselev
  */
@@ -36,6 +38,7 @@ public class TaskRefreshService implements RefreshService<Task> {
      */
     @Override
     public void refresh(Task task) {
+        task.setUpdated(ZonedDateTime.now());
         taskRepository.update(converterTask.toEntity(task));
     }
 }

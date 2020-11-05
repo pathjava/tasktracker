@@ -93,7 +93,6 @@ public class RelatedTaskController {
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 
         RelatedTask relatedTask = getService.get(task_id);
-
         if (relatedTask != null)
             removeService.remove(relatedTask);
         else

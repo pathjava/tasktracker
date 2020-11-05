@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 /**
- * конвертер типа связи между value object и entity
+ * конвертер valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -30,22 +30,22 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
     }
 
     /**
-     * @param relationType value object - объект бизнес логики
+     * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */
     @Override
-    public RelationTypeEntity toEntity(RelationType relationType) {
-        if (relationType == null)
+    public RelationTypeEntity toEntity(RelationType valueObject) {
+        if (valueObject == null)
             return null;
         else
             return new RelationTypeEntity(
-                    checkNotNull(relationType),
-                    relationType.getName(),
-                    toEntity(relationType.getCounterRelation())
+                    checkIdNotNull(valueObject),
+                    valueObject.getName(),
+                    toEntity(valueObject.getCounterRelation())
             );
     }
 
-    private Long checkNotNull(RelationType relationType) {
-        return relationType.getId() == null ? null : relationType.getId();
+    private Long checkIdNotNull(RelationType valueObject) {
+        return valueObject.getId() == null ? null : valueObject.getId();
     }
 }

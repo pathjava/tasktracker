@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
 /**
- * получение связанной задачи
+ * Бизнес-логика получения связанной задачи
  *
  * @author Oleg Kiselev
  */

@@ -11,7 +11,7 @@ import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 /**
- * создание задачи
+ * Бизнес-логика работы с задачей
  *
  * @author Oleg Kiselev
  */

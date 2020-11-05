@@ -110,7 +110,6 @@ public class TaskController {
         if (!task_id.equals(taskDtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        taskDtoFull.setUpdated(ZonedDateTime.now());
         Task task = dtoFullConverter.toModel(taskDtoFull);
         taskRefreshService.refresh(task);
         TaskDtoFull updatedTask = dtoFullConverter.toDto(task);
@@ -130,7 +129,6 @@ public class TaskController {
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 
         Task task = taskGetService.get(task_id);
-
         if (task != null)//TODO - при удалении задачи вызывать метод удаления связанных задач
             taskRemoveService.remove(task);
         else

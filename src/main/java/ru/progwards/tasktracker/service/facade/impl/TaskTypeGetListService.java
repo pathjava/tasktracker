@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * получение списка типов задачи
+ * Бизнес-логика получения списка типов задачи
  *
  * @author Oleg Kiselev
  */

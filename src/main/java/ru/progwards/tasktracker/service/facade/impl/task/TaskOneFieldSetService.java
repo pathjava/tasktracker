@@ -10,7 +10,7 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 import ru.progwards.tasktracker.service.facade.OneFieldSetService;
 
 /**
- * обновление одного поля
+ * Бизнес-логика обновления одного поля
  *
  * @author Oleg Kiselev
  */

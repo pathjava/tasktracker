@@ -13,12 +13,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
- * конвертер между value object и entity
+ * конвертер valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -38,33 +35,33 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     }
 
     /**
-     * @param taskEntity сущность, полученная из БД
+     * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
      */
     @Override
-    public Task toVo(TaskEntity taskEntity) {
-        if (taskEntity == null)
+    public Task toVo(TaskEntity entity) {
+        if (entity == null)
             return null;
         else
             return new Task(
-                    taskEntity.getId(),
-                    taskEntity.getCode(),
-                    taskEntity.getName(),
-                    taskEntity.getDescription(),
-                    taskEntity.getType(),
-                    taskEntity.getPriority(),
-                    taskEntity.getProject_id(),
-                    taskEntity.getAuthor(),
-                    taskEntity.getExecutor(),
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(taskEntity.getCreated()), ZoneId.of("Europe/Moscow")),
-                    checkThatUpdatedTaskNotNull(taskEntity.getUpdated()),
-                    taskEntity.getStatus(),
-                    checkThatDurationTaskNotNull(taskEntity.getEstimation()),
-                    checkThatDurationTaskNotNull(taskEntity.getTimeSpent()),
-                    checkThatDurationTaskNotNull(taskEntity.getTimeLeft()),
-                    taskEntity.getRelatedTasks(),
-                    taskEntity.getAttachments(),
-                    taskEntity.getWorkLogs()
+                    entity.getId(),
+                    entity.getCode(),
+                    entity.getName(),
+                    entity.getDescription(),
+                    entity.getType(),
+                    entity.getPriority(),
+                    entity.getProject_id(),
+                    entity.getAuthor(),
+                    entity.getExecutor(),
+                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), ZoneId.of("Europe/Moscow")),
+                    checkUpdatedTaskNotNull(entity.getUpdated()),
+                    entity.getStatus(),
+                    checkDurationTaskNotNull(entity.getEstimation()),
+                    checkDurationTaskNotNull(entity.getTimeSpent()),
+                    checkDurationTaskNotNull(entity.getTimeLeft()),
+                    entity.getRelatedTasks(),
+                    entity.getAttachments(),
+                    entity.getWorkLogs()
             );
     }
 
@@ -72,7 +69,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param duration секунды, могут быть пустыми и значение
      * @return продолжительность или пусто
      */
-    private Duration checkThatDurationTaskNotNull(Long duration) {
+    private Duration checkDurationTaskNotNull(Long duration) {
         return duration != null ? Duration.ofSeconds(duration) : null;
     }
 
@@ -80,51 +77,51 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param updated секунды, могут быть пустыми и значение
      * @return дату-время или пусто
      */
-    private ZonedDateTime checkThatUpdatedTaskNotNull(Long updated) {
+    private ZonedDateTime checkUpdatedTaskNotNull(Long updated) {
         return updated != null ? ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
 
     /**
-     * @param task value object - объект бизнес логики
+     * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */
     @Override
-    public TaskEntity toEntity(Task task) {
-        if (task == null)
+    public TaskEntity toEntity(Task valueObject) {
+        if (valueObject == null)
             return null;
         else {
-            if (task.getCreated() == null)
-                task.setCreated(ZonedDateTime.now());
-            if (task.getCode() == null)
-                task.setCode(generateTaskCode(task.getProject_id()));
+            if (valueObject.getCreated() == null)
+                valueObject.setCreated(ZonedDateTime.now());
+            if (valueObject.getCode() == null)
+                valueObject.setCode(generateTaskCode(valueObject.getProject_id()));
 
             return new TaskEntity(
-                    checkNotNull(task),
-                    task.getCode(),
-                    task.getName(),
-                    task.getDescription(),
-                    task.getType(),
-                    task.getPriority(),
-                    task.getProject_id(),
-                    task.getAuthor(),
-                    task.getExecutor(),
-                    task.getCreated().toEpochSecond(),
-                    checkThatUpdatedTaskEntityNotNull(task.getUpdated()),
-                    task.getStatus(),
-                    checkThatDurationTaskEntityNotNull(task.getEstimation()),
-                    checkThatDurationTaskEntityNotNull(task.getTimeSpent()),
-                    checkThatDurationTaskEntityNotNull(task.getTimeLeft()),
-                    task.getRelatedTasks(),
-                    task.getAttachments(),
-                    task.getWorkLogs(),
+                    checkIdNotNull(valueObject),
+                    valueObject.getCode(),
+                    valueObject.getName(),
+                    valueObject.getDescription(),
+                    valueObject.getType(),
+                    valueObject.getPriority(),
+                    valueObject.getProject_id(),
+                    valueObject.getAuthor(),
+                    valueObject.getExecutor(),
+                    valueObject.getCreated().toEpochSecond(),
+                    checkUpdatedEntityNotNull(valueObject.getUpdated()),
+                    valueObject.getStatus(),
+                    checkDurationEntityNotNull(valueObject.getEstimation()),
+                    checkDurationEntityNotNull(valueObject.getTimeSpent()),
+                    checkDurationEntityNotNull(valueObject.getTimeLeft()),
+                    valueObject.getRelatedTasks(),
+                    valueObject.getAttachments(),
+                    valueObject.getWorkLogs(),
                     false
             );
         }
     }
 
-    private Long checkNotNull(Task task) {
-        return task.getId() == null ? null : task.getId();
+    private Long checkIdNotNull(Task valueObject) {
+        return valueObject.getId() == null ? null : valueObject.getId();
     }
 
     /**
@@ -144,7 +141,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param duration продолжительность
      * @return продолжительность в секундах или пусто
      */
-    private Long checkThatDurationTaskEntityNotNull(Duration duration) {
+    private Long checkDurationEntityNotNull(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
 
@@ -152,7 +149,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param time дата-время
      * @return дата-время в секундах или пусто
      */
-    private Long checkThatUpdatedTaskEntityNotNull(ZonedDateTime time) {
+    private Long checkUpdatedEntityNotNull(ZonedDateTime time) {
         return time != null ? time.toEpochSecond() : null;
     }
 }

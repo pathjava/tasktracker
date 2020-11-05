@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.service.vo.Task;
 
 /**
- * конвертеры
+ * конвертеры valueObject <-> dto
  *
  * @author Oleg Kiselev
  */
@@ -20,7 +20,7 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
 
     /**
      * @param task value object - объект бизнес логики
-     * @return превью задачи для отображения в пользовательском интерфейсе
+     * @return ceoyjcnm - превью задачи для отображения в пользовательском интерфейсе
      */
     @Override
     public TaskDtoPreview toDto(Task task) {

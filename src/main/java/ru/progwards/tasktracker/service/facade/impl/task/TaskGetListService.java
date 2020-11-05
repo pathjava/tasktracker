@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * получение списка задач
+ * Бизнес-логика получения списка задач
  *
  * @author Oleg Kiselev
  */

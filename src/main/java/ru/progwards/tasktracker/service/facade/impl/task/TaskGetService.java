@@ -11,7 +11,7 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 /**
- * получение задачи
+ * Бизнес-логика получения задачи
  *
  * @author Oleg Kiselev
  */

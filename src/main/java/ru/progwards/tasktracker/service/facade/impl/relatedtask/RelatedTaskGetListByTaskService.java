@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * получение связанных задач
+ * Бизнес-логика получения связанных задач
  *
  * @author Oleg Kiselev
  */

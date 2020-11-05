@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 /**
- * конвертер связанной задачи между value object и entity
+ * конвертер valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -41,23 +41,23 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
     }
 
     /**
-     * @param relatedTask value object - объект бизнес логики
+     * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */
     @Override
-    public RelatedTaskEntity toEntity(RelatedTask relatedTask) {
-        if (relatedTask == null)
+    public RelatedTaskEntity toEntity(RelatedTask valueObject) {
+        if (valueObject == null)
             return null;
         else
             return new RelatedTaskEntity(
-                    checkNotNull(relatedTask),
-                    relationTypeConverter.toEntity(relatedTask.getRelationType()),
-                    relatedTask.getParentTaskId(),
-                    relatedTask.getTaskId()
+                    checkIdNotNull(valueObject),
+                    relationTypeConverter.toEntity(valueObject.getRelationType()),
+                    valueObject.getParentTaskId(),
+                    valueObject.getTaskId()
             );
     }
 
-    private Long checkNotNull(RelatedTask relatedTask) {
-        return relatedTask.getId() == null ? null : relatedTask.getId();
+    private Long checkIdNotNull(RelatedTask valueObject) {
+        return valueObject.getId() == null ? null : valueObject.getId();
     }
 }
