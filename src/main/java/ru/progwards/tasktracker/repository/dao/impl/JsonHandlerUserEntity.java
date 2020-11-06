@@ -9,31 +9,18 @@ import ru.progwards.tasktracker.repository.entity.UserEntity;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
 public class JsonHandlerUserEntity implements JsonHandler<Long, UserEntity> {
-
-    private static File PROJECT_PATH;
+    private final static File PROJECT_PATH = new File(JsonHandlerUserEntity.class.getClassLoader().
+            getResource("data/users.json").getFile());
     private final Map<Long, UserEntity> map = new ConcurrentHashMap<>();
-
-    static {
-        try {
-            PROJECT_PATH = new File(Objects.requireNonNull(
-                    Thread.currentThread().getContextClassLoader()
-                            .getResource("data/users.json")).toURI());
-        } catch (NullPointerException | URISyntaxException e) {
-            //e.printStackTrace();
-            PROJECT_PATH = new File("src/main/resources/data/users.json");
-        }
-    }
 
     public JsonHandlerUserEntity() {
         try {
@@ -86,11 +73,7 @@ public class JsonHandlerUserEntity implements JsonHandler<Long, UserEntity> {
                 List<UserEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> map.put(e.getId(), e));
             } catch (IOException ex) {
-                try {
-                    write();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+                ex.printStackTrace();
             }
         }
     }
