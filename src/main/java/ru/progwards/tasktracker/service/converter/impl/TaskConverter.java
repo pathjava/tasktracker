@@ -22,18 +22,6 @@ import java.time.ZonedDateTime;
 @Component
 public class TaskConverter implements Converter<TaskEntity, Task> {
 
-    private GetService<Long, Project> projectGetService;
-    private RefreshService<Project> refreshService;
-
-    @Autowired
-    public void setProjectGetService(
-            GetService<Long, Project> projectGetService,
-            RefreshService<Project> refreshService
-    ) {
-        this.projectGetService = projectGetService;
-        this.refreshService = refreshService;
-    }
-
     /**
      * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
@@ -93,11 +81,9 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
         else {
             if (valueObject.getCreated() == null)
                 valueObject.setCreated(ZonedDateTime.now());
-            if (valueObject.getCode() == null)
-                valueObject.setCode(generateTaskCode(valueObject.getProject_id()));
 
             return new TaskEntity(
-                    checkIdNotNull(valueObject),
+                    valueObject.getId(),
                     valueObject.getCode(),
                     valueObject.getName(),
                     valueObject.getDescription(),
@@ -118,23 +104,6 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     false
             );
         }
-    }
-
-    private Long checkIdNotNull(Task valueObject) {
-        return valueObject.getId() == null ? null : valueObject.getId();
-    }
-
-    /**
-     * @param project_id идентификатор проекта, к которому принадлежит задача
-     * @return код задачи в формате "NGR-1"
-     */
-    private String generateTaskCode(Long project_id) {
-        Project project = projectGetService.get(project_id);
-        Long lastTaskCode = project.getLastTaskCode();
-        String taskCode = project.getPrefix() + "-" + lastTaskCode;
-        project.setLastTaskCode(lastTaskCode + 1);
-        refreshService.refresh(project);
-        return taskCode;
     }
 
     /**

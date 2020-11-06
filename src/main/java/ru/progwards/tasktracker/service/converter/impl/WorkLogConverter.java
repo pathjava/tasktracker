@@ -43,7 +43,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
             return null;
         else
             return new WorkLogEntity(
-                    checkIdNotNull(valueObject),
+                    valueObject.getId(),
                     valueObject.getTaskId(),
                     valueObject.getSpent(),
                     valueObject.getWorker(),
@@ -52,15 +52,5 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
                     valueObject.getEstimateChange(),
                     valueObject.getEstimateValue()
             );
-    }
-
-    /**
-     * метод проверки, существует ли идентификатор лога
-     *
-     * @param valueObject бизнес-объект, переданный в качестве параметра в метод
-     * @return возвращает идентификатор или пусто
-     */
-    private Long checkIdNotNull(WorkLog valueObject) {
-        return valueObject.getId() == null ? null : valueObject.getId();
     }
 }

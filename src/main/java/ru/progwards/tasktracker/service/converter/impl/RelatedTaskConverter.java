@@ -50,14 +50,10 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
             return null;
         else
             return new RelatedTaskEntity(
-                    checkIdNotNull(valueObject),
+                    valueObject.getId(),
                     relationTypeConverter.toEntity(valueObject.getRelationType()),
                     valueObject.getParentTaskId(),
                     valueObject.getTaskId()
             );
-    }
-
-    private Long checkIdNotNull(RelatedTask valueObject) {
-        return valueObject.getId() == null ? null : valueObject.getId();
     }
 }

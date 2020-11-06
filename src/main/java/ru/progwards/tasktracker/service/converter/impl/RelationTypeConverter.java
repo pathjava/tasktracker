@@ -39,13 +39,9 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
             return null;
         else
             return new RelationTypeEntity(
-                    checkIdNotNull(valueObject),
+                    valueObject.getId(),
                     valueObject.getName(),
                     toEntity(valueObject.getCounterRelation())
             );
-    }
-
-    private Long checkIdNotNull(RelationType valueObject) {
-        return valueObject.getId() == null ? null : valueObject.getId();
     }
 }

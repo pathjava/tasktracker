@@ -22,15 +22,11 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
             return null;
         else
             return new RelatedTask(
-                    checkIdNotNull(dto),
+                    dto.getId(),
                     dto.getRelationType(),
                     dto.getParentTaskId(),
                     dto.getTaskId()
             );
-    }
-
-    private Long checkIdNotNull(RelatedTaskDto dto) {
-        return dto.getId() == null ? null : dto.getId();
     }
 
     /**

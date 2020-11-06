@@ -22,7 +22,7 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
             return null;
         else
             return new WorkLog(
-                    checkIdNotNull(dto),
+                    dto.getId(),
                     dto.getTaskId(),
                     dto.getSpent(),
                     dto.getWorker(),
@@ -31,16 +31,6 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
                     dto.getEstimateChange(),
                     dto.getEstimateValue()
             );
-    }
-
-    /**
-     * метод проверки, существует ли идентификатор лога
-     *
-     * @param dto сущность, переданная в качестве параметра в метод
-     * @return возвращает идентификатор или пусто
-     */
-    private Long checkIdNotNull(WorkLogDto dto) {
-        return dto.getId() == null ? null : dto.getId();
     }
 
     /**

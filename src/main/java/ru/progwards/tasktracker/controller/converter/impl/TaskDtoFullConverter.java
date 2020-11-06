@@ -22,7 +22,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             return null;
         else
             return new Task(
-                    checkIdNotNull(dto),
+                    dto.getId(),
                     dto.getCode(),
                     dto.getName(),
                     dto.getDescription(),
@@ -41,10 +41,6 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     dto.getAttachments(),
                     dto.getWorkLogs()
             );
-    }
-
-    private Long checkIdNotNull(TaskDtoFull dto) {
-        return dto.getId() == null ? null : dto.getId();
     }
 
     /**
