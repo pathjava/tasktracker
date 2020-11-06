@@ -3,16 +3,15 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.converter.impl.TaskConverter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RefreshService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.time.ZonedDateTime;
 import java.util.Random;
 
 /**
@@ -42,7 +41,7 @@ public class TaskCreateService implements CreateService<Task> {
     }
 
     /**
-     * метод конвертирует и создает задачу
+     * метод создает задачу
      *
      * @param task value object
      */
@@ -52,6 +51,9 @@ public class TaskCreateService implements CreateService<Task> {
             task.setId(new Random().nextLong());
         if (task.getCode() == null)
             task.setCode(generateTaskCode(task.getProject_id()));
+        if (task.getCreated() == null)
+            task.setCreated(ZonedDateTime.now());
+
         taskRepository.create(converterTask.toEntity(task));
     }
 

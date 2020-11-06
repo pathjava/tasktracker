@@ -1,12 +1,8 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.facade.RefreshService;
-import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.Task;
 
 import java.time.Duration;
@@ -42,11 +38,11 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     entity.getAuthor(),
                     entity.getExecutor(),
                     ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), ZoneId.of("Europe/Moscow")),
-                    checkUpdatedTaskNotNull(entity.getUpdated()),
+                    checkUpdatedEntityNotNull(entity.getUpdated()),
                     entity.getStatus(),
-                    checkDurationTaskNotNull(entity.getEstimation()),
-                    checkDurationTaskNotNull(entity.getTimeSpent()),
-                    checkDurationTaskNotNull(entity.getTimeLeft()),
+                    checkDurationEntityNotNull(entity.getEstimation()),
+                    checkDurationEntityNotNull(entity.getTimeSpent()),
+                    checkDurationEntityNotNull(entity.getTimeLeft()),
                     entity.getRelatedTasks(),
                     entity.getAttachments(),
                     entity.getWorkLogs()
@@ -57,7 +53,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param duration секунды, могут быть пустыми и значение
      * @return продолжительность или пусто
      */
-    private Duration checkDurationTaskNotNull(Long duration) {
+    private Duration checkDurationEntityNotNull(Long duration) {
         return duration != null ? Duration.ofSeconds(duration) : null;
     }
 
@@ -65,7 +61,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param updated секунды, могут быть пустыми и значение
      * @return дату-время или пусто
      */
-    private ZonedDateTime checkUpdatedTaskNotNull(Long updated) {
+    private ZonedDateTime checkUpdatedEntityNotNull(Long updated) {
         return updated != null ? ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
@@ -78,10 +74,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     public TaskEntity toEntity(Task valueObject) {
         if (valueObject == null)
             return null;
-        else {
-            if (valueObject.getCreated() == null)
-                valueObject.setCreated(ZonedDateTime.now());
-
+        else
             return new TaskEntity(
                     valueObject.getId(),
                     valueObject.getCode(),
@@ -92,25 +85,24 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     valueObject.getProject_id(),
                     valueObject.getAuthor(),
                     valueObject.getExecutor(),
-                    valueObject.getCreated().toEpochSecond(),
-                    checkUpdatedEntityNotNull(valueObject.getUpdated()),
+                    checkZonedDateTimeTaskNotNull(valueObject.getCreated()),
+                    checkZonedDateTimeTaskNotNull(valueObject.getUpdated()),
                     valueObject.getStatus(),
-                    checkDurationEntityNotNull(valueObject.getEstimation()),
-                    checkDurationEntityNotNull(valueObject.getTimeSpent()),
-                    checkDurationEntityNotNull(valueObject.getTimeLeft()),
+                    checkDurationTaskNotNull(valueObject.getEstimation()),
+                    checkDurationTaskNotNull(valueObject.getTimeSpent()),
+                    checkDurationTaskNotNull(valueObject.getTimeLeft()),
                     valueObject.getRelatedTasks(),
                     valueObject.getAttachments(),
                     valueObject.getWorkLogs(),
                     false
             );
-        }
     }
 
     /**
      * @param duration продолжительность
      * @return продолжительность в секундах или пусто
      */
-    private Long checkDurationEntityNotNull(Duration duration) {
+    private Long checkDurationTaskNotNull(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
 
@@ -118,7 +110,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param time дата-время
      * @return дата-время в секундах или пусто
      */
-    private Long checkUpdatedEntityNotNull(ZonedDateTime time) {
+    private Long checkZonedDateTimeTaskNotNull(ZonedDateTime time) {
         return time != null ? time.toEpochSecond() : null;
     }
 }
