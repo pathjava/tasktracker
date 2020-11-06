@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.repository.dao.impl;
+package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

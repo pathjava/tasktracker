@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.JsonHandlerUserEntity;
 import ru.progwards.tasktracker.repository.entity.UserEntity;
 
 import java.util.Collection;
