@@ -5,6 +5,11 @@ import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 /**
  * конвертеры valueObject <-> entity
  *
@@ -24,13 +29,30 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
             return new WorkLog(
                     entity.getId(),
                     entity.getTaskId(),
-                    entity.getSpent(),
+                    checkDurationEntityNotNull(entity.getSpent()),
                     entity.getWorker(),
-                    entity.getWhen(),
+                    checkUpdatedEntityNotNull(entity.getWhen()),
                     entity.getDescription(),
                     entity.getEstimateChange(),
-                    entity.getEstimateValue()
+                    checkDurationEntityNotNull(entity.getEstimateValue())
             );
+    }
+
+    /**
+     * @param duration секунды, могут быть пустыми и значение
+     * @return продолжительность или пусто
+     */
+    private Duration checkDurationEntityNotNull(Long duration) {
+        return duration != null ? Duration.ofSeconds(duration) : null;
+    }
+
+    /**
+     * @param updated секунды, могут быть пустыми и значение
+     * @return дату-время или пусто
+     */
+    private ZonedDateTime checkUpdatedEntityNotNull(Long updated) {
+        return updated != null ? ZonedDateTime.ofInstant(
+                Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
 
     /**
@@ -45,12 +67,28 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
             return new WorkLogEntity(
                     valueObject.getId(),
                     valueObject.getTaskId(),
-                    valueObject.getSpent(),
+                    checkDurationValueObjectNotNull(valueObject.getSpent()),
                     valueObject.getWorker(),
-                    valueObject.getWhen(),
+                    checkZonedDateTimeValueObjectNotNull(valueObject.getWhen()),
                     valueObject.getDescription(),
                     valueObject.getEstimateChange(),
-                    valueObject.getEstimateValue()
+                    checkDurationValueObjectNotNull(valueObject.getEstimateValue())
             );
+    }
+
+    /**
+     * @param duration продолжительность
+     * @return продолжительность в секундах или пусто
+     */
+    private Long checkDurationValueObjectNotNull(Duration duration) {
+        return duration != null ? duration.toSeconds() : null;
+    }
+
+    /**
+     * @param time дата-время
+     * @return дата-время в секундах или пусто
+     */
+    private Long checkZonedDateTimeValueObjectNotNull(ZonedDateTime time) {
+        return time != null ? time.toEpochSecond() : null;
     }
 }

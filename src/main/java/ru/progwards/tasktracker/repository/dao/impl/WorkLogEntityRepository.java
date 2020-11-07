@@ -14,7 +14,7 @@ import java.util.Collection;
  * @author Oleg Kiselev
  */
 @Component
-public class WorkLogRepository implements Repository<Long, WorkLogEntity> {
+public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> {
 
     private JsonHandler<Long, WorkLogEntity> jsonHandler;
 

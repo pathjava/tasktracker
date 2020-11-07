@@ -15,18 +15,16 @@ public class WorkLogEntity {
 
     private Long id;
     private Long taskId;
-    private Duration spent;
+    private Long spent;
     private User worker;
-    private ZonedDateTime when;
+    private Long when;
     private String description;
     private EstimateChange estimateChange;
-    private Duration estimateValue;
+    private Long estimateValue;
 
-    public WorkLogEntity(
-            Long id, Long taskId, Duration spent,
-            User worker, ZonedDateTime when, String description,
-            EstimateChange estimateChange, Duration estimateValue
-    ) {
+    public WorkLogEntity(Long id, Long taskId, Long spent,
+                         User worker, Long when, String description,
+                         EstimateChange estimateChange, Long estimateValue) {
         this.id = id;
         this.taskId = taskId;
         this.spent = spent;
@@ -53,11 +51,11 @@ public class WorkLogEntity {
         this.taskId = taskId;
     }
 
-    public Duration getSpent() {
+    public Long getSpent() {
         return spent;
     }
 
-    public void setSpent(Duration spent) {
+    public void setSpent(Long spent) {
         this.spent = spent;
     }
 
@@ -69,11 +67,11 @@ public class WorkLogEntity {
         this.worker = worker;
     }
 
-    public ZonedDateTime getWhen() {
+    public Long getWhen() {
         return when;
     }
 
-    public void setWhen(ZonedDateTime when) {
+    public void setWhen(Long when) {
         this.when = when;
     }
 
@@ -93,11 +91,11 @@ public class WorkLogEntity {
         this.estimateChange = estimateChange;
     }
 
-    public Duration getEstimateValue() {
+    public Long getEstimateValue() {
         return estimateValue;
     }
 
-    public void setEstimateValue(Duration estimateValue) {
+    public void setEstimateValue(Long estimateValue) {
         this.estimateValue = estimateValue;
     }
 }

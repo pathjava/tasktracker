@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Component
-public class WorkLogRepositoryByTaskId implements RepositoryByTaskId<Long, WorkLogEntity> {
+public class WorkLogEntityRepositoryByTaskId implements RepositoryByTaskId<Long, WorkLogEntity> {
 
     private JsonHandler<Long, WorkLogEntity> jsonHandler;
 

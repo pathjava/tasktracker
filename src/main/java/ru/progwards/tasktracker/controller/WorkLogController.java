@@ -50,7 +50,7 @@ public class WorkLogController {
      * @param task_id идентификатор задачи, для которой необходимо вывести логи
      * @return коллекция логов задачи
      */
-    @GetMapping("rest/{task_id}/list_log")
+    @GetMapping("/rest/log/{task_id}/listlog")
     public ResponseEntity<Collection<WorkLogDto>> getAllWorkLog(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
@@ -69,10 +69,10 @@ public class WorkLogController {
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PostMapping("rest/task_id/create")
+    @PostMapping("/rest/log/create")
     public ResponseEntity<WorkLogDto> addWorkLog(@RequestBody WorkLogDto workLogDto) {
         if (workLogDto == null)
-            throw new BadRequestException("Лог не существует!");
+            throw new BadRequestException("Пустой объект!");
 
         WorkLog workLog = converter.toModel(workLogDto);
         createService.create(workLog);
@@ -87,7 +87,7 @@ public class WorkLogController {
      * @param log_id идентификатор удаляемого лога
      * @return статус ответа
      */
-    @DeleteMapping("rest/{log_id}/delete")
+    @DeleteMapping("/rest/log/{log_id}/delete")
     public ResponseEntity<WorkLogDto> deleteWorkLog(@PathVariable Long log_id) {
         if (log_id == null)
             throw new BadRequestException("Id: " + log_id + " не задан или задан неверно!");
@@ -96,7 +96,7 @@ public class WorkLogController {
         if (workLog != null)
             removeService.remove(workLog);
         else
-            throw new NotFoundException("Задача с id: " + log_id + " не найдена!");
+            throw new NotFoundException("Лог с id: " + log_id + " не найден!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

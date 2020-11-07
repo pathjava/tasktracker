@@ -84,7 +84,7 @@ public class TaskController {
     @PostMapping("/rest/task/create")
     public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
-            throw new BadRequestException("Задача не существует!");
+            throw new BadRequestException("Пустой объект!");
 
         Task task = dtoFullConverter.toModel(taskDtoFull);
         taskCreateService.create(task);

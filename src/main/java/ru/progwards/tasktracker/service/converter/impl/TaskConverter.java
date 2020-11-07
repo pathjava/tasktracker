@@ -85,12 +85,12 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     valueObject.getProject_id(),
                     valueObject.getAuthor(),
                     valueObject.getExecutor(),
-                    checkZonedDateTimeTaskNotNull(valueObject.getCreated()),
-                    checkZonedDateTimeTaskNotNull(valueObject.getUpdated()),
+                    checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),
+                    checkZonedDateTimeValueObjectNotNull(valueObject.getUpdated()),
                     valueObject.getStatus(),
-                    checkDurationTaskNotNull(valueObject.getEstimation()),
-                    checkDurationTaskNotNull(valueObject.getTimeSpent()),
-                    checkDurationTaskNotNull(valueObject.getTimeLeft()),
+                    checkDurationValueObjectNotNull(valueObject.getEstimation()),
+                    checkDurationValueObjectNotNull(valueObject.getTimeSpent()),
+                    checkDurationValueObjectNotNull(valueObject.getTimeLeft()),
                     valueObject.getRelatedTasks(),
                     valueObject.getAttachments(),
                     valueObject.getWorkLogs(),
@@ -102,7 +102,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param duration продолжительность
      * @return продолжительность в секундах или пусто
      */
-    private Long checkDurationTaskNotNull(Duration duration) {
+    private Long checkDurationValueObjectNotNull(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
 
@@ -110,7 +110,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      * @param time дата-время
      * @return дата-время в секундах или пусто
      */
-    private Long checkZonedDateTimeTaskNotNull(ZonedDateTime time) {
+    private Long checkZonedDateTimeValueObjectNotNull(ZonedDateTime time) {
         return time != null ? time.toEpochSecond() : null;
     }
 }
