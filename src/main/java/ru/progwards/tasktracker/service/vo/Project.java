@@ -3,13 +3,11 @@ package ru.progwards.tasktracker.service.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Класс Project - бизнес-модель проекта
- * @author Progwards
- * @version 1.0
+ * @author Pavel Khovaylo
  */
 public class Project  {
     /**
@@ -33,6 +31,10 @@ public class Project  {
      */
     private User owner;
     /**
+     * идентификатор владельца (создателя)
+     */
+    private Long ownerId;
+    /**
      * время создания проекта
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
@@ -41,6 +43,10 @@ public class Project  {
      * стадия разработки, в которой находится проект
      */
     private WorkFlow workFlow;
+    /**
+     * идентификатор WorkFlow
+     */
+    private Long workFlowId;
     /**
      * список задач, относящихся к данному проекту
      */
@@ -57,8 +63,10 @@ public class Project  {
         this.description = description;
         this.prefix = prefix;
         this.owner = owner;
+        this.ownerId = owner.getId();
         this.created = created;
         this.workFlow = workFlow;
+        this.workFlowId = workFlow.getId();
         this.tasks = tasks;
         this.lastTaskCode = lastTaskCode;
     }
@@ -67,60 +75,76 @@ public class Project  {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public ZonedDateTime getCreated() {
-        return created;
-    }
-
-    public WorkFlow getWorkFlow() {
-        return workFlow;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
+    public User getOwner() {
+        return owner;
+    }
+
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public ZonedDateTime getCreated() {
+        return created;
     }
 
     public void setCreated(ZonedDateTime created) {
         this.created = created;
     }
 
+    public WorkFlow getWorkFlow() {
+        return workFlow;
+    }
+
     public void setWorkFlow(WorkFlow workFlow) {
         this.workFlow = workFlow;
+    }
+
+    public Long getWorkFlowId() {
+        return workFlowId;
+    }
+
+    public void setWorkFlowId(Long workFlowId) {
+        this.workFlowId = workFlowId;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
     }
 
     public void setTasks(List<Task> tasks) {
@@ -133,12 +157,5 @@ public class Project  {
 
     public void setLastTaskCode(Long lastTaskCode) {
         this.lastTaskCode = lastTaskCode;
-    }
-
-    public static String getPrefix(String name) {
-        String[] items = name.split("\\s+");
-        StringBuilder stringBuilder = new StringBuilder();
-        Arrays.stream(items).forEach(e -> stringBuilder.append(e.substring(0, 1).toUpperCase()));
-        return stringBuilder.toString();
     }
 }

@@ -1,38 +1,40 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.ProjectEntityJsonHandler;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Репозиторий проектов
+ * @author Pavel Khovaylo
+ */
 @Component
 public class ProjectEntityRepository implements Repository<Long, ProjectEntity> {
 
-    private final ProjectEntityJsonHandler jsonHandlerProjectEntity;
-
-    public ProjectEntityRepository(ProjectEntityJsonHandler jsonHandlerProjectEntity) {
-        this.jsonHandlerProjectEntity = jsonHandlerProjectEntity;
-    }
+    @Autowired
+    private JsonHandler<Long, ProjectEntity> projectEntityJsonHandler;
 
     @Override
     public Collection<ProjectEntity> get() {
-        return jsonHandlerProjectEntity.getMap().values().stream().collect(Collectors.toUnmodifiableList());
+        return projectEntityJsonHandler.getMap().values().stream().collect(Collectors.toUnmodifiableList());
     }
 
     @Override
     public ProjectEntity get(Long id) {
-        return id == null ? null : jsonHandlerProjectEntity.getMap().get(id);
+        return id == null ? null : projectEntityJsonHandler.getMap().get(id);
     }
 
     @Override
     public void create(ProjectEntity entity) {
         if (entity != null) {
-            ProjectEntity newEntity = jsonHandlerProjectEntity.getMap().put(entity.getId(), entity);
+            ProjectEntity newEntity = projectEntityJsonHandler.getMap().put(entity.getId(), entity);
             if (newEntity == null)
-                jsonHandlerProjectEntity.write();
+                projectEntityJsonHandler.write();
         }
     }
 
@@ -47,9 +49,9 @@ public class ProjectEntityRepository implements Repository<Long, ProjectEntity> 
     @Override
     public void delete(Long id) {
         if (id != null) {
-            ProjectEntity entity = jsonHandlerProjectEntity.getMap().remove(id);
+            ProjectEntity entity = projectEntityJsonHandler.getMap().remove(id);
             if (entity != null)
-                jsonHandlerProjectEntity.write();
+                projectEntityJsonHandler.write();
         }
     }
 }

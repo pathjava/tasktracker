@@ -1,21 +1,31 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import java.lang.reflect.Field;
 
+/**
+ * Класс, позволяющий обновить поле у проекта
+ * @author Pavel Khovaylo
+ */
 @Component
-public class ProjectEntityRepositoryUpdateField implements RepositoryUpdateField {
+public class ProjectEntityRepositoryUpdateField implements RepositoryUpdateField<ProjectEntity> {
 
-    private final ProjectEntityRepository repository;
+    /**
+     * репозиторий с проектами
+     */
+    @Autowired
+    private Repository<Long, ProjectEntity> repository;
 
-    public ProjectEntityRepositoryUpdateField(ProjectEntityRepository repository) {
-        this.repository = repository;
-    }
-
+    /**
+     * метод позволяет обновить значение любого поля проекта
+     * @param oneValue объект с данными по текущему обновлению
+     */
     @Override
     public void updateField(UpdateOneValue oneValue) {
         ProjectEntity entity = repository.get(oneValue.getId());

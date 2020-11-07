@@ -1,8 +1,21 @@
 package ru.progwards.tasktracker.service.vo;
 
+/**
+ * Класс TaskPriority - бизнес-модель
+ * @author Pavel Khovaylo
+ */
 public class TaskPriority {
+    /**
+     * идентификатор
+     */
     private Long id;
+    /**
+     * имя
+     */
     private String name;
+    /**
+     * числовой приоритет
+     */
     private Integer value;
 
     public TaskPriority(Long id, String name, Integer value) {
