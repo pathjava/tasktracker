@@ -77,11 +77,8 @@ public class TaskPriorityEntityJsonHandler implements JsonHandler<Long, TaskPrio
                 List<TaskPriorityEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> map.put(e.getId(), e));
             } catch (IOException ex) {
-                try {
-                    write();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+                ex.printStackTrace();
+                throw new RuntimeException(ex.getMessage());
             }
         }
     }

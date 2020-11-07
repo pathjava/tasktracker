@@ -14,6 +14,7 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -88,8 +89,9 @@ public class WorkLogJsonHandler implements JsonHandler<Long, WorkLogEntity> {
                 }.getType();
                 ArrayList<WorkLogEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> logs.put(e.getId(), e));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
             }
         }
     }

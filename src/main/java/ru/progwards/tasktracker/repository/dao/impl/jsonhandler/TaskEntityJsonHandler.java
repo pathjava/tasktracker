@@ -91,6 +91,7 @@ public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
                 list.forEach(e -> tasks.put(e.getId(), e));
             } catch (IOException e) {
                 e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
             }
         }
     }

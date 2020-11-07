@@ -88,6 +88,7 @@ public class RelatedTaskEntityJsonHandler implements JsonHandler<Long, RelatedTa
                 list.forEach(e -> relatedTasks.put(e.getId(), e));
             } catch (IOException e) {
                 e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
             }
         }
     }

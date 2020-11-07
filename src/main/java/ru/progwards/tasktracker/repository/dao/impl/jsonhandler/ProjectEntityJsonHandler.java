@@ -76,11 +76,8 @@ public class ProjectEntityJsonHandler implements JsonHandler<Long, ProjectEntity
                 List<ProjectEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> map.put(e.getId(), e));
             } catch (IOException ex) {
-                try {
-                    write();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+                ex.printStackTrace();
+                throw new RuntimeException(ex.getMessage());
             }
         }
     }

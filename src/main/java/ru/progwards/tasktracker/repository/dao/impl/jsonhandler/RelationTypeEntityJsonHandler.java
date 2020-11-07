@@ -87,6 +87,7 @@ public class RelationTypeEntityJsonHandler implements JsonHandler<Long, Relation
                 list.forEach(e -> relationType.put(e.getId(), e));
             } catch (IOException e) {
                 e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
             }
         }
     }
