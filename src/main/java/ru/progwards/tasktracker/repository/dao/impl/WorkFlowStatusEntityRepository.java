@@ -22,14 +22,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Gregory Lobkov
  */
 @org.springframework.stereotype.Repository
-public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatusEntity>, RepositoryByParentId<Long, WorkFlowStatusEntity> {
+public class WorkFlowStatusEntityRepository implements Repository<Long, WorkFlowStatusEntity>, RepositoryByParentId<Long, WorkFlowStatusEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
     private String fileName = "src/main/resources/data/WorkFlowStatus.json";
 
-    public WorkFlowStatusRepository() throws IOException {
+    public WorkFlowStatusEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();

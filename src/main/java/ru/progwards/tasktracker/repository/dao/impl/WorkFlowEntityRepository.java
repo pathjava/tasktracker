@@ -3,7 +3,8 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.entity.AttachmentContentEntity;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
+import ru.progwards.tasktracker.repository.entity.WorkFlowEntity;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,14 +22,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Gregory Lobkov
  */
 @org.springframework.stereotype.Repository
-public class AttachmentContentRepository implements Repository<Long, AttachmentContentEntity> {
+public class WorkFlowEntityRepository implements Repository<Long, WorkFlowEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "src/main/resources/data/attachmentContent.json";
+    private String fileName = "src/main/resources/data/WorkFlow.json";
 
-    public AttachmentContentRepository() throws IOException {
+    public WorkFlowEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();
@@ -62,7 +63,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      * @param entity добавляемый объект
      */
     @Override
-    public void create(AttachmentContentEntity entity) {
+    public void create(WorkFlowEntity entity) {
         String newLine = json.toJson(entity);
 
         lockWrite.lock();
@@ -91,7 +92,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      * @throws NoSuchElementException если не смог найти объект в хранилище
      */
     @Override
-    public void update(AttachmentContentEntity entity) {
+    public void update(WorkFlowEntity entity) {
         update(entity, false, true);
     }
 
@@ -106,10 +107,10 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      *                                    - метод не добавит объект даже если {@code addIfNotFound = true}
      * @throws NoSuchElementException если не смог найти объект в хранилище (когда {@code throwIfNotFound = true})
      */
-    private void update(AttachmentContentEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
+    private void update(WorkFlowEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            AttachmentContentEntity instance = new AttachmentContentEntity();
+            WorkFlowEntity instance = new WorkFlowEntity();
             Long id = entity.getId();
             String newLine = json.toJson(entity);
             boolean found = false;
@@ -124,7 +125,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
                 String line = bufferedReader.readLine();
                 while (line != null) {
                     if (!found) {
-                        instance = json.fromJson(line, AttachmentContentEntity.class);
+                        instance = json.fromJson(line, WorkFlowEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             line = newLine;
                             found = true;
@@ -153,7 +154,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
 
             // лочим чтение и подменяем на обновленный файл
             replaceFile(file, file2);
-
+            
         } finally {
             lockWrite.unlock();
         }
@@ -182,7 +183,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
     public void delete(Long id, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            AttachmentContentEntity instance = new AttachmentContentEntity();
+            WorkFlowEntity instance = new WorkFlowEntity();
             boolean found = false;
             // предпологается создать клон основного файла, а только потом лочить чтение, чтобы переименовать файлы
             File file2 = new File(fileName + "_tmp");
@@ -196,7 +197,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
                     if (found) {
                         printWriter.println(line);
                     } else {
-                        instance = json.fromJson(line, AttachmentContentEntity.class);
+                        instance = json.fromJson(line, WorkFlowEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             found = true;
                         } else {
@@ -250,16 +251,16 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      *
      * @return список всех POJO-объектов из хранилища
      */
-    public Collection<AttachmentContentEntity> get() {
-        List<AttachmentContentEntity> result = new ArrayList<>();
+    public Collection<WorkFlowEntity> get() {
+        List<WorkFlowEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    AttachmentContentEntity instance = new AttachmentContentEntity();
-                    instance = json.fromJson(line, AttachmentContentEntity.class);
+                    WorkFlowEntity instance = new WorkFlowEntity();
+                    instance = json.fromJson(line, WorkFlowEntity.class);
                     result.add(instance);
                     line = bufferedReader.readLine();
                 }
@@ -279,15 +280,15 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      * @return POJO-объект
      */
     @Override
-    public AttachmentContentEntity get(Long id) {
+    public WorkFlowEntity get(Long id) {
         lockRead.readLock().lock();
         try {
-            AttachmentContentEntity instance = new AttachmentContentEntity();
+            WorkFlowEntity instance = new WorkFlowEntity();
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    instance = json.fromJson(line, AttachmentContentEntity.class);
+                    instance = json.fromJson(line, WorkFlowEntity.class);
                     if (id.compareTo(instance.getId())==0) return instance;
                     line = bufferedReader.readLine();
                 }

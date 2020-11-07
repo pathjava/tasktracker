@@ -22,14 +22,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Gregory Lobkov
  */
 @org.springframework.stereotype.Repository
-public class TaskAttachmentRepository implements Repository<Long, TaskAttachmentEntity>, RepositoryByTaskId<Long, TaskAttachmentEntity> {
+public class TaskAttachmentEntityRepository implements Repository<Long, TaskAttachmentEntity>, RepositoryByTaskId<Long, TaskAttachmentEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
     private String fileName = "src/main/resources/data/taskAttachment.json";
 
-    public TaskAttachmentRepository() throws IOException {
+    public TaskAttachmentEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();

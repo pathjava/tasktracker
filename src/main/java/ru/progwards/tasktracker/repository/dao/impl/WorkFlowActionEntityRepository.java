@@ -3,8 +3,8 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
-import ru.progwards.tasktracker.repository.entity.WorkFlowEntity;
+import ru.progwards.tasktracker.repository.dao.RepositoryByParentId;
+import ru.progwards.tasktracker.repository.entity.WorkFlowActionEntity;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,14 +22,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Gregory Lobkov
  */
 @org.springframework.stereotype.Repository
-public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
+public class WorkFlowActionEntityRepository implements Repository<Long, WorkFlowActionEntity>, RepositoryByParentId<Long, WorkFlowActionEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "src/main/resources/data/WorkFlow.json";
+    private String fileName = "src/main/resources/data/WorkFlowAction.json";
 
-    public WorkFlowRepository() throws IOException {
+    public WorkFlowActionEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();
@@ -63,7 +63,7 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
      * @param entity добавляемый объект
      */
     @Override
-    public void create(WorkFlowEntity entity) {
+    public void create(WorkFlowActionEntity entity) {
         String newLine = json.toJson(entity);
 
         lockWrite.lock();
@@ -92,7 +92,7 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
      * @throws NoSuchElementException если не смог найти объект в хранилище
      */
     @Override
-    public void update(WorkFlowEntity entity) {
+    public void update(WorkFlowActionEntity entity) {
         update(entity, false, true);
     }
 
@@ -107,10 +107,10 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
      *                                    - метод не добавит объект даже если {@code addIfNotFound = true}
      * @throws NoSuchElementException если не смог найти объект в хранилище (когда {@code throwIfNotFound = true})
      */
-    private void update(WorkFlowEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
+    private void update(WorkFlowActionEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            WorkFlowEntity instance = new WorkFlowEntity();
+            WorkFlowActionEntity instance = new WorkFlowActionEntity();
             Long id = entity.getId();
             String newLine = json.toJson(entity);
             boolean found = false;
@@ -125,7 +125,7 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
                 String line = bufferedReader.readLine();
                 while (line != null) {
                     if (!found) {
-                        instance = json.fromJson(line, WorkFlowEntity.class);
+                        instance = json.fromJson(line, WorkFlowActionEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             line = newLine;
                             found = true;
@@ -183,7 +183,7 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
     public void delete(Long id, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            WorkFlowEntity instance = new WorkFlowEntity();
+            WorkFlowActionEntity instance = new WorkFlowActionEntity();
             boolean found = false;
             // предпологается создать клон основного файла, а только потом лочить чтение, чтобы переименовать файлы
             File file2 = new File(fileName + "_tmp");
@@ -197,7 +197,7 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
                     if (found) {
                         printWriter.println(line);
                     } else {
-                        instance = json.fromJson(line, WorkFlowEntity.class);
+                        instance = json.fromJson(line, WorkFlowActionEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             found = true;
                         } else {
@@ -251,16 +251,16 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
      *
      * @return список всех POJO-объектов из хранилища
      */
-    public Collection<WorkFlowEntity> get() {
-        List<WorkFlowEntity> result = new ArrayList<>();
+    public Collection<WorkFlowActionEntity> get() {
+        List<WorkFlowActionEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    WorkFlowEntity instance = new WorkFlowEntity();
-                    instance = json.fromJson(line, WorkFlowEntity.class);
+                    WorkFlowActionEntity instance = new WorkFlowActionEntity();
+                    instance = json.fromJson(line, WorkFlowActionEntity.class);
                     result.add(instance);
                     line = bufferedReader.readLine();
                 }
@@ -280,15 +280,15 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
      * @return POJO-объект
      */
     @Override
-    public WorkFlowEntity get(Long id) {
+    public WorkFlowActionEntity get(Long id) {
         lockRead.readLock().lock();
         try {
-            WorkFlowEntity instance = new WorkFlowEntity();
+            WorkFlowActionEntity instance = new WorkFlowActionEntity();
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    instance = json.fromJson(line, WorkFlowEntity.class);
+                    instance = json.fromJson(line, WorkFlowActionEntity.class);
                     if (id.compareTo(instance.getId())==0) return instance;
                     line = bufferedReader.readLine();
                 }
@@ -299,6 +299,37 @@ public class WorkFlowRepository implements Repository<Long, WorkFlowEntity> {
             lockRead.readLock().unlock();
         }
         throw new NoSuchElementException("Cannot find id='" + id + "'");
+    }
+
+    /**
+     * Получить список сущностей по идентификатору родителя
+     *
+     * @param parentId идентификатор родителя
+     * @return спиок сущностей
+     */
+    @Override
+    public Collection<WorkFlowActionEntity> getByParentId(Long parentId) {
+        List<WorkFlowActionEntity> result = new ArrayList<>();
+        lockRead.readLock().lock();
+        try {
+            try (FileReader fileReader = new FileReader(file);
+                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    WorkFlowActionEntity instance = new WorkFlowActionEntity();
+                    instance = json.fromJson(line, WorkFlowActionEntity.class);
+                    if(instance.getParentStatus_id().equals(parentId)) {
+                        result.add(instance);
+                    }
+                    line = bufferedReader.readLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            lockRead.readLock().unlock();
+        }
+        return result;
     }
 
 }
