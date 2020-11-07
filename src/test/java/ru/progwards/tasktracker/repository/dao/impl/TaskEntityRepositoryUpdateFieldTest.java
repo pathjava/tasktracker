@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TaskEntityRepositoryUpdateFieldTest {
 
     @Autowired
-    private Repository<Long, TaskEntity> taskRepository;
+    private Repository<Long, TaskEntity> repository;
 
     @Qualifier("taskEntityRepositoryUpdateField")
     @Autowired
@@ -34,7 +34,7 @@ public class TaskEntityRepositoryUpdateFieldTest {
 
     @Test
     public void testUpdateField() {
-        taskRepository.create(
+        repository.create(
                 new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
@@ -43,10 +43,10 @@ public class TaskEntityRepositoryUpdateFieldTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
 
-        assertEquals("TT1-1", taskRepository.get(1L).getCode());
+        assertEquals("TT1-1", repository.get(1L).getCode());
 
         updateField.updateField(new UpdateOneValue(1L, "TT1-1-1", "code"));
-        String str = taskRepository.get(1L).getCode();
-        assertEquals("TT1-1-1", taskRepository.get(1L).getCode());
+        String str = repository.get(1L).getCode();
+        assertEquals("TT1-1-1", repository.get(1L).getCode());
     }
 }

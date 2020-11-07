@@ -73,7 +73,7 @@ class RelatedTaskControllerTest {
 
     @Test
     void getAllRelatedTasks() throws Exception {
-        mockMvc.perform(get("/rest/relatedtask/2/list")
+        mockMvc.perform(get("/rest/relatedtask/{task_id}/list", 2)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful()

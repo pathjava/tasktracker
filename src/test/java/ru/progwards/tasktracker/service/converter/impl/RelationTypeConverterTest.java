@@ -19,18 +19,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class RelationTypeConverterTest {
 
     @Autowired
-    private Converter<RelationTypeEntity, RelationType> relationTypeConverter;
+    private Converter<RelationTypeEntity, RelationType> converter;
 
     @Test
     void toVo_return_Null() {
-        RelationType type = relationTypeConverter.toVo(null);
+        RelationType type = converter.toVo(null);
 
         assertThat(type, is(nullValue()));
     }
 
     @Test
     void toVo_return_NotNull() {
-        RelationType type = relationTypeConverter.toVo(
+        RelationType type = converter.toVo(
                 new RelationTypeEntity(
                         1L, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null
                 ))
@@ -41,14 +41,14 @@ class RelationTypeConverterTest {
 
     @Test
     void toEntity_returnNull() {
-        RelationTypeEntity typeEntity = relationTypeConverter.toEntity(null);
+        RelationTypeEntity typeEntity = converter.toEntity(null);
 
         assertThat(typeEntity, is(nullValue()));
     }
 
     @Test
     void toEntity_return_Not_Null() {
-        RelationTypeEntity typeEntity = relationTypeConverter.toEntity(
+        RelationTypeEntity typeEntity = converter.toEntity(
                 new RelationType(
                         1L, "блокирующая", new RelationType(2L, "блокируемая", null
                 ))

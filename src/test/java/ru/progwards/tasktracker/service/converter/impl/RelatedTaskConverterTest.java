@@ -21,18 +21,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class RelatedTaskConverterTest {
 
     @Autowired
-    private Converter<RelatedTaskEntity, RelatedTask> relatedTaskConverter;
+    private Converter<RelatedTaskEntity, RelatedTask> converter;
 
     @Test
     void toVo_return_Null() {
-        RelatedTask task = relatedTaskConverter.toVo(null);
+        RelatedTask task = converter.toVo(null);
 
         assertThat(task, is(nullValue()));
     }
 
     @Test
     void toVo_return_Not_Null() {
-        RelatedTask task = relatedTaskConverter.toVo(
+        RelatedTask task = converter.toVo(
                 new RelatedTaskEntity(
                         1L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(
                         2L, "блокируемая", null)),
@@ -44,14 +44,14 @@ class RelatedTaskConverterTest {
 
     @Test
     void toEntity_return_Null() {
-        RelatedTaskEntity taskEntity = relatedTaskConverter.toEntity(null);
+        RelatedTaskEntity taskEntity = converter.toEntity(null);
 
         assertThat(taskEntity, is(nullValue()));
     }
 
     @Test
     void toEntity_return_Not_Null() {
-        RelatedTaskEntity taskEntity = relatedTaskConverter.toEntity(
+        RelatedTaskEntity taskEntity = converter.toEntity(
                 new RelatedTask(
                         1L, new RelationType(1L, "блокирующая", new RelationType(
                         2L, "блокируемая", null)),

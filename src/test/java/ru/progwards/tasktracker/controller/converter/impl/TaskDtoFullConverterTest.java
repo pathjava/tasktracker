@@ -26,18 +26,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TaskDtoFullConverterTest {
 
     @Autowired
-    private Converter<Task, TaskDtoFull> dtoFullConverter;
+    private Converter<Task, TaskDtoFull> converter;
 
     @Test
     void toModel_Return_Null() {
-        Task task = dtoFullConverter.toModel(null);
+        Task task = converter.toModel(null);
 
         assertNull(task);
     }
 
     @Test
     void toModel_Return_Not_Null() {
-        Task task = dtoFullConverter.toModel(
+        Task task = converter.toModel(
                 new TaskDtoFull(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -51,14 +51,14 @@ class TaskDtoFullConverterTest {
 
     @Test
     void toDto_Return_Null() {
-        TaskDtoFull task = dtoFullConverter.toDto(null);
+        TaskDtoFull task = converter.toDto(null);
 
         assertNull(task);
     }
 
     @Test
     void toDto_Return_Not_Null() {
-        TaskDtoFull task = dtoFullConverter.toDto(
+        TaskDtoFull task = converter.toDto(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),

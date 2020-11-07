@@ -25,11 +25,11 @@ import static org.mockito.Mockito.verify;
 public class TaskRefreshServiceTest {
 
     @Mock
-    private RefreshService<Task> taskRefreshService;
+    private RefreshService<Task> service;
 
     @Test
     public void testRefresh() {
-        taskRefreshService.refresh(
+        service.refresh(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -38,6 +38,6 @@ public class TaskRefreshServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        verify(taskRefreshService, times(1)).refresh(any(Task.class));
+        verify(service, times(1)).refresh(any(Task.class));
     }
 }

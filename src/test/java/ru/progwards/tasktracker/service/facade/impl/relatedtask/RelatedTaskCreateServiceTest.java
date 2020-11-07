@@ -20,17 +20,17 @@ import static org.mockito.Mockito.verify;
 class RelatedTaskCreateServiceTest {
 
     @Mock
-    private CreateService<RelatedTask> createService;
+    private CreateService<RelatedTask> service;
 
     @Test
     void testCreate() {
-        createService.create(
+        service.create(
                 new RelatedTask(
                         1L, new RelationType(1L, "блокирующая", new RelationType(
                         2L, "блокируемая", null)),
                         1L, 2L)
         );
 
-        verify(createService, times(1)).create(any(RelatedTask.class));
+        verify(service, times(1)).create(any(RelatedTask.class));
     }
 }

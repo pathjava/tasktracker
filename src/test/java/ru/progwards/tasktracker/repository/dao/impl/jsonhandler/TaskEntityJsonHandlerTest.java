@@ -25,25 +25,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class TaskEntityJsonHandlerTest {
 
     @Autowired
-    private JsonHandler<Long, TaskEntity> jsonHandlerTask;
+    private JsonHandler<Long, TaskEntity> jsonHandler;
 
     @BeforeEach
     public void clear() {
-        jsonHandlerTask.getMap().clear();
+        jsonHandler.getMap().clear();
     }
 
     @Test
     public void testWrite() {
-        int sizeOne = jsonHandlerTask.getMap().size();
+        int sizeOne = jsonHandler.getMap().size();
 
-        jsonHandlerTask.getMap().put(
+        jsonHandler.getMap().put(
                 1L, new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false));
-        jsonHandlerTask.getMap().put(
+        jsonHandler.getMap().put(
                 2L, new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
@@ -52,9 +52,9 @@ public class TaskEntityJsonHandlerTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
 
-        jsonHandlerTask.write();
+        jsonHandler.write();
 
-        int sizeTwo = jsonHandlerTask.getMap().size();
+        int sizeTwo = jsonHandler.getMap().size();
 
         assertEquals(0, sizeOne);
         assertEquals(2, sizeTwo);
@@ -62,11 +62,11 @@ public class TaskEntityJsonHandlerTest {
 
     @Test
     public void testRead() {
-        int sizeOne = jsonHandlerTask.getMap().size();
-        jsonHandlerTask.read();
-        int sizeTwo = jsonHandlerTask.getMap().size();
+        int sizeOne = jsonHandler.getMap().size();
+        jsonHandler.read();
+        int sizeTwo = jsonHandler.getMap().size();
 
-        assertNotNull(jsonHandlerTask.getMap());
+        assertNotNull(jsonHandler.getMap());
         assertEquals(0, sizeOne);
         assertEquals(2, sizeTwo);
     }

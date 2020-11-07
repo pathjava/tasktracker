@@ -25,18 +25,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TaskDtoPreviewConverterTest {
 
     @Autowired
-    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
+    private Converter<Task, TaskDtoPreview> converter;
 
     @Test
     void toModel_Return_Null() {
-        Task task = dtoPreviewConverter.toModel(null);
+        Task task = converter.toModel(null);
 
         assertThat(task, is(nullValue()));
     }
 
     @Test
     void toModel_Return_Not_Null() {
-        Task task = dtoPreviewConverter.toModel(
+        Task task = converter.toModel(
                 new TaskDtoPreview(1L, "TT1", "Test task 1 TEST")
         );
 
@@ -45,14 +45,14 @@ class TaskDtoPreviewConverterTest {
 
     @Test
     void toDto_Return_Null() {
-        TaskDtoPreview taskDto = dtoPreviewConverter.toDto(null);
+        TaskDtoPreview taskDto = converter.toDto(null);
 
         assertThat(taskDto, is(nullValue()));
     }
 
     @Test
     void toDto_Return_Not_Null() {
-        TaskDtoPreview taskDto = dtoPreviewConverter.toDto(
+        TaskDtoPreview taskDto = converter.toDto(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),

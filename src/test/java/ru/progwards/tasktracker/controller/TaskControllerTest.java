@@ -46,30 +46,30 @@ class TaskControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TaskController taskController;
+    private TaskController controller;
 
     @Autowired
-    private GetListService<Task> taskGetListService;
+    private GetListService<Task> getListService;
 
     @Autowired
     private GetService<String, Task> byCodeGetService;
 
     @Autowired
-    private Converter<Task, TaskDtoPreview> dtoConverter;
+    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
 
     @Autowired
     private Converter<Task, TaskDtoFull> dtoFullConverter;
 
     @Test
     public void testController() {
-        assertThat(taskController, is(notNullValue()));
+        assertThat(controller, is(notNullValue()));
     }
 
     @Test
     void getAllTasks_From_Project() throws Exception {
-        Collection<TaskDtoPreview> tempTasks = taskGetListService.getList().stream()
+        Collection<TaskDtoPreview> tempTasks = getListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(2L))
-                .map(task -> dtoConverter.toDto(task))
+                .map(task -> dtoPreviewConverter.toDto(task))
                 .collect(Collectors.toList());
 
         String jsonString = new ObjectMapper()
@@ -83,14 +83,14 @@ class TaskControllerTest {
     @Test()
     void getAllTasks_From_Project_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.getAllTasks(null));
+                () -> controller.getAllTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void getAllTasks_From_Project_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> taskController.getAllTasks(20L));
+                () -> controller.getAllTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
     }
 
@@ -130,8 +130,8 @@ class TaskControllerTest {
     @Test()
     void addTask_BadRequestException_Null() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.addTask(null));
-        assertTrue(exception.getMessage().contains("Задача не существует!"));
+                () -> controller.addTask(null));
+        assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
     @Test
@@ -170,7 +170,7 @@ class TaskControllerTest {
     @Test()
     void updateTask_BadRequestException_Null() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.updateTask(null, null));
+                () -> controller.updateTask(null, null));
         assertTrue(exception.getMessage().contains("Задача не существует!"));
     }
 
@@ -184,32 +184,57 @@ class TaskControllerTest {
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.updateTask(2L, task));
+                () -> controller.updateTask(2L, task));
         assertTrue(exception.getMessage().contains("Данная операция недопустима!"));
     }
 
     @Test
     void deleteTaskById() throws Exception {
-        mockMvc.perform(delete("/rest/project/2/tasks/{id}/delete", 1)
+        mockMvc.perform(post("/rest/task/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 210,\n" +
+                                "    \"code\": \"TT210-1\",\n" +
+                                "    \"name\": \"Test task 210\",\n" +
+                                "    \"description\": \"Description task 210\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
+
+        mockMvc.perform(delete("/rest/project/2/tasks/{id}/delete", 210)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
 
-        mockMvc.perform(get("/rest/project/2/tasks/1"))
+        mockMvc.perform(get("/rest/project/2/tasks/210"))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test()
     void deleteTaskById_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.deleteTask(null));
+                () -> controller.deleteTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void deleteTaskById_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> taskController.deleteTask(20L));
+                () -> controller.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 
@@ -250,14 +275,14 @@ class TaskControllerTest {
     @Test
     void getTaskByCode_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> taskController.getTaskByCode(null));
+                () -> controller.getTaskByCode(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
     void getTaskByCode_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> taskController.getTaskByCode("TT10-11"));
+                () -> controller.getTaskByCode("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 }

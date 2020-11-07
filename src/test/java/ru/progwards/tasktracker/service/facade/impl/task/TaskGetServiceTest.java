@@ -26,11 +26,11 @@ import static org.mockito.Mockito.when;
 public class TaskGetServiceTest {
 
     @Mock
-    private GetService<Long, Task> taskGetService;
+    private GetService<Long, Task> service;
 
     @Test
     public void testGet() {
-        when(taskGetService.get(anyLong())).thenReturn(
+        when(service.get(anyLong())).thenReturn(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -39,7 +39,7 @@ public class TaskGetServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        Task tempTask = taskGetService.get(1L);
+        Task tempTask = service.get(1L);
 
         assertThat(tempTask, is(notNullValue()));
 

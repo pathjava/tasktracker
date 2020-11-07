@@ -26,15 +26,15 @@ class EstimateChangeGetListServiceTest {
 
     @Qualifier("estimateChangeGetListService")
     @Mock
-    private GetListService<String> getListService;
+    private GetListService<String> service;
 
     @Test
     void getList() {
-        when(getListService.getList()).thenReturn(
+        when(service.getList()).thenReturn(
                 Arrays.asList("AUTO_REDUCE", "DONT_CHANGE", "SET_TO_VALUE")
         );
 
-        Collection<String> collection = getListService.getList();
+        Collection<String> collection = service.getList();
 
         assertNotNull(collection);
 
@@ -43,9 +43,9 @@ class EstimateChangeGetListServiceTest {
 
     @Test
     void getList_Return_Null() {
-        when(getListService.getList()).thenReturn(Collections.emptyList());
+        when(service.getList()).thenReturn(Collections.emptyList());
 
-        Collection<String> collection = getListService.getList();
+        Collection<String> collection = service.getList();
 
         assertTrue(collection.isEmpty());
     }

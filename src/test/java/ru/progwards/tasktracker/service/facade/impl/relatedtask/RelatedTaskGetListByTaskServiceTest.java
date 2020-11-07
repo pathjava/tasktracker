@@ -24,11 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RelatedTaskGetListByTaskServiceTest {
 
     @Autowired
-    private GetListByTaskService<Long, RelatedTask> listByTaskService;
+    private GetListByTaskService<Long, RelatedTask> service;
 
     @Test
     void getListByTaskId() {
-        Collection<RelatedTask> collection = listByTaskService.getListByTaskId(2L);
+        Collection<RelatedTask> collection = service.getListByTaskId(2L);
 
         assertNotNull(collection);
 
@@ -41,7 +41,7 @@ class RelatedTaskGetListByTaskServiceTest {
 
     @Test
     public void getListByTaskId_Return_Empty_Collection(){
-        Collection<RelatedTask> collection = listByTaskService.getListByTaskId(7L);
+        Collection<RelatedTask> collection = service.getListByTaskId(7L);
 
         assertTrue(collection.isEmpty());
     }

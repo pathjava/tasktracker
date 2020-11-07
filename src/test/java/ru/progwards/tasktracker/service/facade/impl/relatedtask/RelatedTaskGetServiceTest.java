@@ -21,17 +21,17 @@ import static org.mockito.Mockito.when;
 class RelatedTaskGetServiceTest {
 
     @Mock
-    private GetService<Long, RelatedTask> getService;
+    private GetService<Long, RelatedTask> service;
 
     @Test
     void get() {
-        when(getService.get(anyLong())).thenReturn(
+        when(service.get(anyLong())).thenReturn(
                 new RelatedTask(1L, new RelationType(
                         1L, "блокирующая", new RelationType(2L, "блокируемая", null)),
                         1L, 2L)
         );
 
-        RelatedTask relatedTask = getService.get(1L);
+        RelatedTask relatedTask = service.get(1L);
 
         assertNotNull(relatedTask);
 

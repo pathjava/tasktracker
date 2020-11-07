@@ -20,14 +20,14 @@ import static org.mockito.Mockito.verify;
 public class TaskOneFieldSetServiceTest {
 
     @Mock
-    private OneFieldSetService<Task> taskOneFieldSetService;
+    private OneFieldSetService<Task> service;
 
     @Test
     public void testSetOneField() {
-        taskOneFieldSetService.setOneField(
+        service.setOneField(
                 new UpdateOneValue(1L, "TT1-1", "code")
         );
 
-        verify(taskOneFieldSetService, times(1)).setOneField(any(UpdateOneValue.class));
+        verify(service, times(1)).setOneField(any(UpdateOneValue.class));
     }
 }

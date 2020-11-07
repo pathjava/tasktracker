@@ -25,11 +25,11 @@ import static org.mockito.Mockito.verify;
 public class TaskRemoveServiceTest {
 
     @Mock
-    private RemoveService<Task> taskRemoveService;
+    private RemoveService<Task> service;
 
     @Test
     public void testRemove() {
-        taskRemoveService.remove(
+        service.remove(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -38,6 +38,6 @@ public class TaskRemoveServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        verify(taskRemoveService, times(1)).remove(any(Task.class));
+        verify(service, times(1)).remove(any(Task.class));
     }
 }

@@ -25,18 +25,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TaskConverterTest {
 
     @Autowired
-    private Converter<TaskEntity, Task> converterTask;
+    private Converter<TaskEntity, Task> converter;
 
     @Test
     void toVo_return_Null() {
-        Task tempTask = converterTask.toVo(null);
+        Task tempTask = converter.toVo(null);
 
         assertThat(tempTask, is(nullValue()));
     }
 
     @Test
     void toVo_return_Not_Null() {
-        Task tempTask = converterTask.toVo(
+        Task tempTask = converter.toVo(
                 new TaskEntity(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
@@ -50,14 +50,14 @@ class TaskConverterTest {
 
     @Test
     void toEntity_return_Null() {
-        TaskEntity tempTaskEntity = converterTask.toEntity(null);
+        TaskEntity tempTaskEntity = converter.toEntity(null);
 
         assertThat(tempTaskEntity, is(nullValue()));
     }
 
     @Test
     void toEntity_return_Not_Null() {
-        TaskEntity tempTaskEntity = converterTask.toEntity(
+        TaskEntity tempTaskEntity = converter.toEntity(
                 new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),

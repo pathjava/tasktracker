@@ -26,15 +26,15 @@ class TaskTypeGetListServiceTest {
 
     @Qualifier("taskTypeGetListService")
     @Mock
-    private GetListService<String> getListService;
+    private GetListService<String> service;
 
     @Test
     void getList() {
-        when(getListService.getList()).thenReturn(Arrays.asList(
+        when(service.getList()).thenReturn(Arrays.asList(
                 "BUG", "TASK", "EPIC"
         ));
 
-        Collection<String> collection = getListService.getList();
+        Collection<String> collection = service.getList();
 
         assertNotNull(collection);
 
@@ -43,9 +43,9 @@ class TaskTypeGetListServiceTest {
 
     @Test
     void getList_Return_Null() {
-        when(getListService.getList()).thenReturn(Collections.emptyList());
+        when(service.getList()).thenReturn(Collections.emptyList());
 
-        Collection<String> collection = getListService.getList();
+        Collection<String> collection = service.getList();
 
         assertNotNull(collection);
 

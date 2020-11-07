@@ -19,38 +19,38 @@ import static org.mockito.Mockito.*;
 class RelatedTaskEntityRepositoryTest {
 
     @Mock
-    private Repository<Long, RelatedTaskEntity> entityRepository;
+    private Repository<Long, RelatedTaskEntity> repository;
 
     @Test
     void create() {
-        entityRepository.create(
+        repository.create(
                 new RelatedTaskEntity(
                         1L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(
                         2L, "блокируемая", null)),
                         1L, 2L)
         );
 
-        verify(entityRepository, times(1)).create(any(RelatedTaskEntity.class));
+        verify(repository, times(1)).create(any(RelatedTaskEntity.class));
     }
 
     @Test
     void delete() {
-        entityRepository.delete(1L);
+        repository.delete(1L);
 
-        assertNull(entityRepository.get(1L));
+        assertNull(repository.get(1L));
 
-        verify(entityRepository, times(1)).delete(1L);
+        verify(repository, times(1)).delete(1L);
     }
 
     @Test
     void get() {
-        when(entityRepository.get(anyLong())).thenReturn(
+        when(repository.get(anyLong())).thenReturn(
                 new RelatedTaskEntity(1L, new RelationTypeEntity(
                         1L, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null)),
                         1L, 2L)
         );
 
-        RelatedTaskEntity taskEntity = entityRepository.get(1L);
+        RelatedTaskEntity taskEntity = repository.get(1L);
 
         assertNotNull(taskEntity);
 

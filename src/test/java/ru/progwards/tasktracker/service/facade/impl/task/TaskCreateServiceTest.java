@@ -25,11 +25,11 @@ import static org.mockito.Mockito.verify;
 public class TaskCreateServiceTest {
 
     @Mock
-    private CreateService<Task> taskCreateService;
+    private CreateService<Task> service;
 
     @Test
     public void testCreate() {
-        taskCreateService.create(
+        service.create(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -38,6 +38,6 @@ public class TaskCreateServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
 
-        verify(taskCreateService, times(1)).create(any(Task.class));
+        verify(service, times(1)).create(any(Task.class));
     }
 }

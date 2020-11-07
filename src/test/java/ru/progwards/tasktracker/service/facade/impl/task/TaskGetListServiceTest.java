@@ -29,11 +29,11 @@ import static org.mockito.Mockito.when;
 public class TaskGetListServiceTest {
 
     @Mock
-    private GetListService<Task> taskGetListService;
+    private GetListService<Task> service;
 
     @Test
     public void testGetList() {
-        when(taskGetListService.getList()).thenReturn(Arrays.asList(
+        when(service.getList()).thenReturn(Arrays.asList(
                 new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
@@ -48,7 +48,7 @@ public class TaskGetListServiceTest {
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         ));
 
-        Collection<Task> tempList = taskGetListService.getList();
+        Collection<Task> tempList = service.getList();
 
         assertNotNull(tempList);
 
@@ -63,9 +63,9 @@ public class TaskGetListServiceTest {
 
     @Test
     public void testGetList_Return_Empty_Collection(){
-        when(taskGetListService.getList()).thenReturn(Collections.emptyList());
+        when(service.getList()).thenReturn(Collections.emptyList());
 
-        Collection<Task> collection = taskGetListService.getList();
+        Collection<Task> collection = service.getList();
 
         assertTrue(collection.isEmpty());
     }

@@ -20,25 +20,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RelatedTaskEntityRepositoryByTaskIdTest {
 
     @Autowired
-    private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
+    private RepositoryByTaskId<Long, RelatedTaskEntity> repository;
 
     @Test
     void getByTaskId_Return_One_RelatedTask() {
-        Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(1L);
+        Collection<RelatedTaskEntity> collection = repository.getByTaskId(1L);
 
         assertEquals(collection.size(), 1);
     }
 
     @Test
     void getByTaskId_Return_Three_RelatedTask() {
-        Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(2L);
+        Collection<RelatedTaskEntity> collection = repository.getByTaskId(2L);
 
         assertEquals(collection.size(), 3);
     }
 
     @Test
-    public void getByTaskId_Return_Empty_collection(){
-        Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(100L);
+    public void getByTaskId_Return_Empty_Collection(){
+        Collection<RelatedTaskEntity> collection = repository.getByTaskId(100L);
 
         assertTrue(collection.isEmpty());
     }

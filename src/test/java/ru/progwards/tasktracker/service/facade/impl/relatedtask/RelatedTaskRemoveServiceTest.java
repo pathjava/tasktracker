@@ -20,17 +20,17 @@ import static org.mockito.Mockito.verify;
 class RelatedTaskRemoveServiceTest {
 
     @Mock
-    private RemoveService<RelatedTask> removeService;
+    private RemoveService<RelatedTask> service;
 
     @Test
     void testRemove() {
-        removeService.remove(
+        service.remove(
                 new RelatedTask(
                         1L, new RelationType(1L, "блокирующая", new RelationType(
                         2L, "блокируемая", null)),
                         1L, 2L)
         );
 
-        verify(removeService, times(1)).remove(any(RelatedTask.class));
+        verify(service, times(1)).remove(any(RelatedTask.class));
     }
 }
