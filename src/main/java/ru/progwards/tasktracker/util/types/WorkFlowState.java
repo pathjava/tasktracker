@@ -1,9 +1,25 @@
 package ru.progwards.tasktracker.util.types;
 
 /**
- * Состояния рабочего процесса
- * @author Pavel Khovaylo
+ * Состояние воркфлоу
+ *
+ * @author Gregory Lobkov
  */
 public enum WorkFlowState {
-    TO_DO, IN_PROGRESS, DONE
+
+    /**
+     * Задача ожидает выполнения
+     */
+    TO_DO,
+
+    /**
+     * Задача в работе
+     */
+    IN_PROGRESS,
+
+    /**
+     * Работы над задачей завершены
+     */
+    DONE
+
 }

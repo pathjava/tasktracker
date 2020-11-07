@@ -1,8 +1,6 @@
 package ru.progwards.tasktracker.controller.dto;
 
-import ru.progwards.tasktracker.service.vo.WorkFlowState;
-
-import java.util.List;
+import ru.progwards.tasktracker.util.types.WorkFlowState;
 
 /**
  * Статус, в который может быть переведена задача по ходу WorkFlowEntity

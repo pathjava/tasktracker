@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.repository.entity.WorkFlowStatusEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetListByParentService;
 import ru.progwards.tasktracker.service.vo.WorkFlowAction;
-import ru.progwards.tasktracker.service.vo.WorkFlowState;
+import ru.progwards.tasktracker.util.types.WorkFlowState;
 import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
 
 import java.util.List;

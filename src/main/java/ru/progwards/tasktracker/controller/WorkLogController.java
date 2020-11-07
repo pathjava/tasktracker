@@ -50,7 +50,7 @@ public class WorkLogController {
      * @param task_id идентификатор задачи, для которой необходимо вывести логи
      * @return коллекция логов задачи
      */
-    @GetMapping("/rest/log/{task_id}/listlog")
+    @GetMapping("/rest/task/{task_id}/worklogs")
     public ResponseEntity<Collection<WorkLogDto>> getAllWorkLog(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
@@ -69,8 +69,8 @@ public class WorkLogController {
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PostMapping("/rest/log/create")
-    public ResponseEntity<WorkLogDto> addWorkLog(@RequestBody WorkLogDto workLogDto) {
+    @PostMapping("/rest/worklog/create")
+    public ResponseEntity<WorkLogDto> createWorkLog(@RequestBody WorkLogDto workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("Пустой объект!");
 
@@ -84,10 +84,28 @@ public class WorkLogController {
     }
 
     /**
+     * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает созданный лог
+     */
+//    @PostMapping("/rest/worklog/{log_id}/update")
+//    public ResponseEntity<WorkLogDto> updateWorkLog(@RequestBody WorkLogDto workLogDto) {
+//        if (workLogDto == null)
+//            throw new BadRequestException("Пустой объект!");
+//
+//        WorkLog workLog = converter.toModel(workLogDto);
+//        createService.update(workLog);
+//        WorkLogDto createWorkLog = converter.toDto(workLog);
+//
+//        //TODO - перед добавлением проверять, есть ли уже в БД такой лог, но id генерируется в entity - подумать
+//
+//        return new ResponseEntity<>(createWorkLog, HttpStatus.CREATED);
+//    }
+
+    /**
      * @param log_id идентификатор удаляемого лога
      * @return статус ответа
      */
-    @DeleteMapping("/rest/log/{log_id}/delete")
+    @DeleteMapping("/rest/worklog/{log_id}/delete")
     public ResponseEntity<WorkLogDto> deleteWorkLog(@PathVariable Long log_id) {
         if (log_id == null)
             throw new BadRequestException("Id: " + log_id + " не задан или задан неверно!");

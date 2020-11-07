@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.service.vo;
 
+import ru.progwards.tasktracker.util.types.WorkFlowState;
+
 import java.util.List;
 
 /**

@@ -87,7 +87,7 @@ class WorkLogControllerTest {
     @Test
     void addWorkLog_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.addWorkLog(null));
+                () -> controller.createWorkLog(null));
         assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
