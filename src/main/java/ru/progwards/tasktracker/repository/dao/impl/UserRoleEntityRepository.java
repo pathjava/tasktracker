@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class UserRoleRepository implements Repository<Long, UserRoleEntity>, InitializingBean {
+public class UserRoleEntityRepository implements Repository<Long, UserRoleEntity>, InitializingBean {
 
     private final Map<Long, UserRoleEntity> roles = new ConcurrentHashMap<>();
 

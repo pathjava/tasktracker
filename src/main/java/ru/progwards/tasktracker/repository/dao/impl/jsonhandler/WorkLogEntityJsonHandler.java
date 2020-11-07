@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Component
-public class WorkLogJsonHandler implements JsonHandler<Long, WorkLogEntity> {
+public class WorkLogEntityJsonHandler implements JsonHandler<Long, WorkLogEntity> {
 
     public final Map<Long, WorkLogEntity> logs = new ConcurrentHashMap<>();
     private static File LOGS_PATH;
@@ -44,7 +44,7 @@ public class WorkLogJsonHandler implements JsonHandler<Long, WorkLogEntity> {
         }
     }
 
-    public WorkLogJsonHandler() {
+    public WorkLogEntityJsonHandler() {
         try {
             read();
         } catch (Exception e) {

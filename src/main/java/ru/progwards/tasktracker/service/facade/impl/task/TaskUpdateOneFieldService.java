@@ -7,7 +7,7 @@ import ru.progwards.tasktracker.repository.dao.impl.TaskEntityRepositoryUpdateFi
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
-import ru.progwards.tasktracker.service.facade.OneFieldSetService;
+import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 
 /**
  * Бизнес-логика обновления одного поля
@@ -15,12 +15,12 @@ import ru.progwards.tasktracker.service.facade.OneFieldSetService;
  * @author Oleg Kiselev
  */
 @Service
-public class TaskOneFieldSetService implements OneFieldSetService<Task> {
+public class TaskUpdateOneFieldService implements UpdateOneFieldService<Task> {
 
     private final RepositoryUpdateField<TaskEntity> updateField;
 
     @Autowired
-    public TaskOneFieldSetService(TaskEntityRepositoryUpdateField updateField){
+    public TaskUpdateOneFieldService(TaskEntityRepositoryUpdateField updateField){
         this.updateField = updateField;
     }
 
@@ -30,7 +30,7 @@ public class TaskOneFieldSetService implements OneFieldSetService<Task> {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      */
     @Override
-    public void setOneField(UpdateOneValue oneValue) {
+    public void updateOneField(UpdateOneValue oneValue) {
         updateField.updateField(oneValue);
     }
 }

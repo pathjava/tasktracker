@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-class WorkLogJsonHandlerTest {
+class WorkLogEntityJsonHandlerTest {
 
     @Autowired
     private JsonHandler<Long, WorkLogEntity> jsonHandler;

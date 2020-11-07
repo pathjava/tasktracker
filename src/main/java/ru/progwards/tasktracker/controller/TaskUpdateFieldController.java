@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.service.facade.OneFieldSetService;
+import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
@@ -20,11 +20,11 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 @Controller
 public class TaskUpdateFieldController {
 
-    private OneFieldSetService<Task> taskOneFieldSetService;
+    private UpdateOneFieldService<Task> taskUpdateOneFieldService;
 
     @Autowired
-    public void setTaskOneFieldSetService(OneFieldSetService<Task> taskOneFieldSetService) {
-        this.taskOneFieldSetService = taskOneFieldSetService;
+    public void setTaskUpdateOneFieldService(UpdateOneFieldService<Task> taskUpdateOneFieldService) {
+        this.taskUpdateOneFieldService = taskUpdateOneFieldService;
     }
 
     /**
@@ -42,7 +42,7 @@ public class TaskUpdateFieldController {
         if (!task_id.equals(oneValue.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        taskOneFieldSetService.setOneField(oneValue);
+        taskUpdateOneFieldService.updateOneField(oneValue);
 
         return new ResponseEntity<>(HttpStatus.OK); //TODO - стоит ли тут что-то возвращать?
     }

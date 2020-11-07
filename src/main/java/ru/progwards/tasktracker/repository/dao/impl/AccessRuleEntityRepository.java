@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class AccessRuleRepository implements Repository<Long, AccessRuleEntity>, InitializingBean {
+public class AccessRuleEntityRepository implements Repository<Long, AccessRuleEntity>, InitializingBean {
 
     private final Map<Long, AccessRuleEntity> rules = new ConcurrentHashMap<>();
 

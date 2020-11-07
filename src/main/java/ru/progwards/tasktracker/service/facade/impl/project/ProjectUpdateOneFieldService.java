@@ -1,11 +1,10 @@
 package ru.progwards.tasktracker.service.facade.impl.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
-import ru.progwards.tasktracker.service.facade.OneFieldSetService;
+import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 /**
@@ -13,7 +12,7 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
  * @author Pavel Khovaylo
  */
 @Service
-public class ProjectOneFieldSetService implements OneFieldSetService {
+public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
 
     /**
      * класс, по обновлению поля у сущности ProjectEntity
@@ -26,7 +25,7 @@ public class ProjectOneFieldSetService implements OneFieldSetService {
      * @param oneValue объект с данными по текущему обновлению
      */
     @Override
-    public void setOneField(UpdateOneValue oneValue) {
+    public void updateOneField(UpdateOneValue oneValue) {
         projectEntityRepositoryUpdateField.updateField(oneValue);
     }
 }
