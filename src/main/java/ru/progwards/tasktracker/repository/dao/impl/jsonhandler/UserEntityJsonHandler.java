@@ -17,12 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class JsonHandlerUserEntity implements JsonHandler<Long, UserEntity> {
-    private final static File PROJECT_PATH = new File(JsonHandlerUserEntity.class.getClassLoader().
+public class UserEntityJsonHandler implements JsonHandler<Long, UserEntity> {
+    private final static File PROJECT_PATH = new File(UserEntityJsonHandler.class.getClassLoader().
             getResource("data/users.json").getFile());
     private final Map<Long, UserEntity> map = new ConcurrentHashMap<>();
 
-    public JsonHandlerUserEntity() {
+    public UserEntityJsonHandler() {
         try {
             read();
         } catch (Exception ex1) {
