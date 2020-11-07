@@ -9,19 +9,30 @@ import ru.progwards.tasktracker.repository.entity.UserEntity;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component
 public class UserEntityJsonHandler implements JsonHandler<Long, UserEntity> {
-    private final static File PROJECT_PATH = new File(UserEntityJsonHandler.class.getClassLoader().
-            getResource("data/users.json").getFile());
+    private static File PROJECT_PATH;
     private final Map<Long, UserEntity> map = new ConcurrentHashMap<>();
 
+    static {
+        try {
+            PROJECT_PATH = new File(Objects.requireNonNull(
+                    Thread.currentThread().getContextClassLoader()
+                            .getResource("data/users.json")).toURI());
+        } catch (NullPointerException | URISyntaxException e) {
+            //e.printStackTrace();
+            PROJECT_PATH = new File("src/main/resources/data/users.json");
+        }
+    }
     public UserEntityJsonHandler() {
         try {
             read();
@@ -72,8 +83,9 @@ public class UserEntityJsonHandler implements JsonHandler<Long, UserEntity> {
                 Type type = new TypeToken<ArrayList<UserEntity>>(){}.getType();
                 List<UserEntity> list = new Gson().fromJson(json, type);
                 list.forEach(e -> map.put(e.getId(), e));
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
             }
         }
     }
