@@ -1,109 +1,137 @@
 package ru.progwards.tasktracker.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.progwards.tasktracker.controller.converter.Converter;
+import ru.progwards.tasktracker.controller.dto.UserDto;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.dao.impl.UserEntityRepository;
-import ru.progwards.tasktracker.repository.dao.impl.UserEntityRepositoryUpdateField;
-import ru.progwards.tasktracker.repository.entity.UserEntity;
-import ru.progwards.tasktracker.service.vo.UpdateOneValue;
+import ru.progwards.tasktracker.service.facade.*;
+import ru.progwards.tasktracker.service.vo.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+/**
+ * Обработка запросов API по работе с пользователями
+ *
+ * @author Aleksandr Sidelnikov
+ */
 @RestController
+@RequestMapping("/rest/user")
 public class UserController {
 
-    private final UserEntityRepository repository;
-    private final UserEntityRepositoryUpdateField userEntityRepositoryUpdateField;
+    @Autowired
+    GetService<Long, User> getService;
+    @Autowired
+    CreateService<User> createService;
+    @Autowired
+    RemoveService<User> removeService;
+    @Autowired
+    RefreshService<User> refreshService;
+    @Autowired
+    GetListService<User> getListService;
+    @Autowired
+    Converter<User, UserDto> dtoConverter;
 
-    public UserController(UserEntityRepository repository, UserEntityRepositoryUpdateField userEntityRepositoryUpdateField) {
-        this.repository = repository;
-        this.userEntityRepositoryUpdateField = userEntityRepositoryUpdateField;
+    /**
+     * Получить список всех пользователей
+     * GET /rest/user/list
+     *
+     * @return список пользователей
+     */
+    @GetMapping("/list")
+    public ResponseEntity<Collection<UserDto>> getList() {
+        // получили список бизнес-объектов
+        Collection<User> list = getListService.getList();
+        List<UserDto> resultList = new ArrayList<>(list.size());
+        // преобразуем к dto
+        for (User entity:list) {
+            UserDto dto = dtoConverter.toDto(entity);
+            resultList.add(dto);
+        }
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 
     /**
-     * по запросу получаем список пользователей
-     * @return возвращается список пользователей
+     * Получить пользователя по id
+     * GET /rest/user/{id}
+     *
+     * @param id идентификатор объекта
+     * @return объект dto
      */
-    @GetMapping("/rest/user/list")
-    public ResponseEntity<Collection<UserEntity>> get() {
-        return new ResponseEntity<>(repository.get(), HttpStatus.OK);
-    }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
+        if (id == null)
+            throw new BadRequestException("Id is not set");
 
-    /**
-     * по запросу получаем нужного пользователя; если такового нет, то бросаем исключение NotFoundUserException
-     * @param id идентификатор пользователя
-     * @return User
-     */
-    @GetMapping("/rest/user/{id}")
-    public ResponseEntity<UserEntity> get(@PathVariable("id") Long id) {
-        UserEntity entity = repository.get(id);
-        if (entity == null)
-            throw new NotFoundException("Not found a user with id=" + id);
+        User vo = getService.get(id);
+        UserDto entity = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 
     /**
-     * по запросу создаём пользователя
-     * @param entity передаем заполненного пользователя
-     * @return возвращаем созданного пользователя
+     * Создаём нового пользователя
+     * POST /rest/user/create
+     *
+     * @param entity объект для создания
+     * @return объект после бизнес-логики
      */
-    @PostMapping("/rest/user/create")
-    public ResponseEntity<UserEntity> create(@RequestBody UserEntity entity) {
+    @PostMapping("/create")
+    public ResponseEntity<UserDto> create(@RequestBody UserDto entity) {
         if (entity == null)
             throw new BadRequestException("User is null");
 
-        repository.create(entity);
+        User vo = dtoConverter.toModel(entity);
+        createService.create(vo);
+        UserDto result = dtoConverter.toDto(vo);
 
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
-     * по запросу обновляем существующего пользователя
-     * @param id идентификатор изменяемого пользователя
-     * @param entity измененный пользователь
+     * Обновляем спользователей
+     * PUT /rest/user/{id}/update
+     *
+     * @param id идентификатор изменяемого объекта
+     * @param entity измененный объект
      */
-    @PutMapping("/rest/user/{id}/update")
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody UserEntity entity) {
+//    @PostMapping("/{id}/update")
+    @PutMapping("/{id}/update")
+    //  TODO            entity.setId(id); //    id в entity другой
+    public ResponseEntity<UserDto> update(@PathVariable("id") Long id,
+                                              @RequestBody UserDto entity) {
+        if (id == null)
+            throw new BadRequestException("Id is not set");
         if (entity == null)
-            throw new BadRequestException("User is null");
+            throw new BadRequestException("User Id is null");
 
         entity.setId(id);
-        repository.update(entity);
+        User vo = dtoConverter.toModel(entity);
+        refreshService.refresh(vo);
+        UserDto result = dtoConverter.toDto(vo);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
-     * по запросу удаляем нужного пользователя; если такого пользователя не существует,
-     * то бросаем исключение NotFoundUserException
-     * @param id идентификатор удаляемого пользователя
+     * Удалить существующего пользователя
+     * DELETE /rest/user/{id}/delete
+     *
+     * @param id идентификатор удаляемого объекта
      */
-    @DeleteMapping("/rest/user/{id}/delete")
+//    @PostMapping("/delete")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
-        UserEntity entity = repository.get(id);
-        if (entity == null)
-            throw new NotFoundException("Not found a user with id=" + id);
+        if (id == null)
+            throw new BadRequestException("Workflow Id is not set");
 
-        repository.delete(id);
+        User vo = getService.get(id);
+        removeService.remove(vo);
     }
 
-    /**
-     * по запросу обновляем значение поля пользователя
-     * @param id идентификатор пользователя, в котором нужно обновить поле
-     * @param updateOneValue объект, содержащий информацию о поле,
-     * которое необходимо изменить и нововое значение данного поля
-     */
-    @PutMapping("/rest/user/{id}/update1field")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateOneField(@PathVariable("id") Long id, @RequestBody UpdateOneValue updateOneValue) {
-        if (updateOneValue == null)
-            throw new BadRequestException("UpdateOneValue is null");
-
-        updateOneValue.setId(id);
-        userEntityRepositoryUpdateField.updateField(updateOneValue);
-    }
 }

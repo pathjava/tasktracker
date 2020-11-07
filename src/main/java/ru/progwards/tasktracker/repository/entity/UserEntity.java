@@ -1,27 +1,19 @@
 package ru.progwards.tasktracker.repository.entity;
 
 import ru.progwards.tasktracker.service.vo.UserRole;
-
 import java.util.List;
-
+/**
+ * @author Aleksandr Sidelnikov
+ */
 public class UserEntity {
     private Long id;
     private String name;
-
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
-    }
-
     private String email;
     private String password;
     private List<UserRole> roles;
+
+    public UserEntity() {
+    }
 
     public UserEntity(Long id, String name, String email, String password, List<UserRole> roles) {
         this.id = id;
