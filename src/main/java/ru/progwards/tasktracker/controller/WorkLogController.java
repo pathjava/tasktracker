@@ -51,7 +51,7 @@ public class WorkLogController {
      * @return коллекция логов задачи
      */
     @GetMapping("/rest/task/{task_id}/worklogs")
-    public ResponseEntity<Collection<WorkLogDto>> getAllWorkLog(@PathVariable Long task_id) {
+    public ResponseEntity<Collection<WorkLogDto>> getListWorkLogs(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 

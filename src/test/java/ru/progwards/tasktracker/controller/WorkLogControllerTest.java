@@ -53,14 +53,14 @@ class WorkLogControllerTest {
     @Test
     void getAllWorkLog_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.getAllWorkLog(null));
+                () -> controller.getListWorkLogs(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
     void getAllWorkLog_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> controller.getAllWorkLog(120L));
+                () -> controller.getListWorkLogs(120L));
         assertTrue(exception.getMessage().contains("Список логов пустой!"));
     }
 

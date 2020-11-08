@@ -83,14 +83,14 @@ class TaskControllerTest {
     @Test()
     void getAllTasks_From_Project_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.getAllTasks(null));
+                () -> controller.getListTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
     void getAllTasks_From_Project_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> controller.getAllTasks(20L));
+                () -> controller.getListTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
     }
 
@@ -130,7 +130,7 @@ class TaskControllerTest {
     @Test()
     void addTask_BadRequestException_Null() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.addTask(null));
+                () -> controller.createTask(null));
         assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
@@ -275,14 +275,14 @@ class TaskControllerTest {
     @Test
     void getTaskByCode_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.getTaskByCode(null));
+                () -> controller.getByCodeTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
     void getTaskByCode_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> controller.getTaskByCode("TT10-11"));
+                () -> controller.getByCodeTask("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 }

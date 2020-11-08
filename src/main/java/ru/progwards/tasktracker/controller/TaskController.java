@@ -61,7 +61,7 @@ public class TaskController {
      * @return коллекция превью задач
      */
     @GetMapping("/rest/project/{project_id}/tasks")
-    public ResponseEntity<Collection<TaskDtoPreview>> getAllTasks(@PathVariable Long project_id) {
+    public ResponseEntity<Collection<TaskDtoPreview>> getListTasks(@PathVariable Long project_id) {
         if (project_id == null)
             throw new BadRequestException("Id: " + project_id + " не задан или задан неверно!");
 
@@ -82,7 +82,7 @@ public class TaskController {
      * @return возвращает созданную задачу
      */
     @PostMapping("/rest/task/create")
-    public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull taskDtoFull) {
+    public ResponseEntity<TaskDtoFull> createTask(@RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
@@ -144,7 +144,7 @@ public class TaskController {
      * @return возвращает найденную задачу
      */
     @GetMapping("/rest/task/{code}/getbycode")
-    public ResponseEntity<TaskDtoFull> getTaskByCode(@PathVariable String code) {
+    public ResponseEntity<TaskDtoFull> getByCodeTask(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");
 
