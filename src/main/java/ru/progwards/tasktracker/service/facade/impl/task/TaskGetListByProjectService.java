@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 @Service
 public class TaskGetListByProjectService implements GetListByProjectService<Long, Task> {
 
-    private Repository<Long, TaskEntity> taskRepository;
-    private Converter<TaskEntity, Task> converterTask;
+    private Repository<Long, TaskEntity> repository;
+    private Converter<TaskEntity, Task> converter;
 
     @Autowired
-    public void setTaskRepository(TaskEntityRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public void setRepository(TaskEntityRepository repository) {
+        this.repository = repository;
     }
 
     @Autowired
-    public void setConverterTask(TaskConverter converterTask) {
-        this.converterTask = converterTask;
+    public void setConverter(TaskConverter converter) {
+        this.converter = converter;
     }
 
     /**
@@ -40,9 +40,9 @@ public class TaskGetListByProjectService implements GetListByProjectService<Long
      */
     @Override
     public Collection<Task> getListByProjectId(Long projectId) {
-        return taskRepository.get().stream()
+        return repository.get().stream()
                 .filter(taskEntity -> taskEntity.getProject_id().equals(projectId) && !taskEntity.getDeleted())
-                .map(taskEntity -> converterTask.toVo(taskEntity))
+                .map(taskEntity -> converter.toVo(taskEntity))
                 .collect(Collectors.toList());
     }
 }

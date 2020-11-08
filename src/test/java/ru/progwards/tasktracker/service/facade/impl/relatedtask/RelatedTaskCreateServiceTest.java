@@ -1,15 +1,18 @@
 package ru.progwards.tasktracker.service.facade.impl.relatedtask;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.GetListByTaskService;
+import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * тестирование сервиса создания связанной задачи
@@ -19,18 +22,38 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 class RelatedTaskCreateServiceTest {
 
-    @Mock
-    private CreateService<RelatedTask> service;
+    @Autowired
+    private CreateService<RelatedTask> createService;
+
+    @Autowired
+    private GetService<Long, RelatedTask> getService;
+
+    @Autowired
+    private RemoveService<RelatedTask> removeService;
+
+    @Autowired
+    private GetListByTaskService<Long, RelatedTask> listByTaskService;
 
     @Test
     void testCreate() {
-        service.create(
+        createService.create(
                 new RelatedTask(
-                        1L, new RelationType(1L, "блокирующая", new RelationType(
+                        null, new RelationType(1L, "блокирующая CreateService", new RelationType(
                         2L, "блокируемая", null)),
                         1L, 2L)
         );
 
-        verify(service, times(1)).create(any(RelatedTask.class));
+        Long id = listByTaskService.getListByTaskId(2L).stream()
+                .filter(e -> e.getRelationType().getName().equals("блокирующая CreateService")).findFirst()
+                .map(RelatedTask::getId)
+                .orElse(null);
+
+        RelatedTask task = getService.get(id);
+
+        assertNotNull(task);
+
+        assertThat(task.getRelationType().getName(), equalTo("блокирующая CreateService"));
+
+        removeService.remove(task);
     }
 }

@@ -6,6 +6,7 @@ import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 /**
@@ -47,8 +48,13 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> 
             jsonHandler.write();
     }
 
+    /**
+     * @param entity обновленная сущность
+     */
     @Override
     public void update(WorkLogEntity entity) {
+        jsonHandler.getMap().remove(entity.getId());
+        create(entity);
     }
 
     /**
@@ -57,7 +63,9 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> 
     @Override
     public void delete(Long id) {
         WorkLogEntity logEntity = get(id);
-        if (logEntity != null)
+        if (logEntity != null) {
             jsonHandler.getMap().remove(id);
+            jsonHandler.write();
+        }
     }
 }

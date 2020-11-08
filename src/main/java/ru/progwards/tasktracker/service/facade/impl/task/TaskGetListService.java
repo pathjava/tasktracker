@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 @Service
 public class TaskGetListService implements GetListService<Task> {
 
-    private Repository<Long, TaskEntity> taskRepository;
-    private Converter<TaskEntity, Task> converterTask;
+    private Repository<Long, TaskEntity> repository;
+    private Converter<TaskEntity, Task> converter;
 
     @Autowired
-    public void setTaskRepository(TaskEntityRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public void setRepository(TaskEntityRepository repository) {
+        this.repository = repository;
     }
 
     @Autowired
-    public void setConverterTask(TaskConverter converterTask) {
-        this.converterTask = converterTask;
+    public void setConverter(TaskConverter converter) {
+        this.converter = converter;
     }
 
     /**
@@ -41,8 +41,8 @@ public class TaskGetListService implements GetListService<Task> {
      */
     @Override
     public Collection<Task> getList() {
-        return taskRepository.get().stream()
-                .map(entity -> converterTask.toVo(entity))
+        return repository.get().stream()
+                .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());
     }
 }

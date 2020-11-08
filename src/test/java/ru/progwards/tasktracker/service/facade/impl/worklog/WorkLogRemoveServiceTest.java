@@ -1,16 +1,18 @@
 package ru.progwards.tasktracker.service.facade.impl.worklog;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.GetListByTaskService;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
 import java.time.ZonedDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * тестирование сервиса удаления лога
@@ -20,18 +22,44 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 class WorkLogRemoveServiceTest {
 
-    @Mock
-    private RemoveService<WorkLog> service;
+    @Autowired
+    private RemoveService<WorkLog> removeService;
+
+    @Autowired
+    private CreateService<WorkLog> createService;
+
+    @Autowired
+    private GetListByTaskService<Long, WorkLog> byTaskService;
+
+    @Autowired
+    private GetService<Long, WorkLog> getService;
+
+    @BeforeEach
+    void before() {
+        createService.create(
+                new WorkLog(
+                        null, 2L, null, null, ZonedDateTime.now(),
+                        "Description Log RemoveService", null, null
+                )
+        );
+    }
 
     @Test
     void remove() {
-        service.remove(
+        Long id = byTaskService.getListByTaskId(2L).stream()
+                .filter(e -> e.getDescription().equals("Description Log RemoveService")).findFirst()
+                .map(WorkLog::getId)
+                .orElse(null);
+
+        removeService.remove(
                 new WorkLog(
-                        1L, 2L, null, null, ZonedDateTime.now(),
-                        "Description Log 1", null, null
+                        id, 2L, null, null, ZonedDateTime.now(),
+                        "Description Log RemoveService", null, null
                 )
         );
 
-        verify(service, times(1)).remove(any(WorkLog.class));
+        WorkLog workLog = getService.get(id);
+
+        assertNull(workLog);
     }
 }

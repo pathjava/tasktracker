@@ -29,6 +29,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -136,7 +137,7 @@ class TaskControllerTest {
 
     @Test
     void updateTask() throws Exception {
-        this.mockMvc.perform(put("/rest/project/2/tasks/111/update")
+        mockMvc.perform(put("/rest/task/{task_id}/update", 111)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -161,17 +162,16 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        this.mockMvc.perform(get("/rest/task/TT111-1/getbycode"))
+        mockMvc.perform(get("/rest/task/TT111-1/getbycode"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(111)))
                 .andExpect(jsonPath("$.name", equalTo("Test task 111 updated")));
     }
-
     @Test()
-    void updateTask_BadRequestException_Null() {
+    void updateTask_BadRequestException_Null_Object() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.updateTask(null, null));
-        assertTrue(exception.getMessage().contains("Задача не существует!"));
+                () -> controller.updateTask(anyLong(), null));
+        assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
     @Test()
@@ -215,7 +215,7 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(delete("/rest/project/2/tasks/{id}/delete", 210)
+        mockMvc.perform(delete("/rest/task/{task_id}/delete", 210)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());

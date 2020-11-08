@@ -1,8 +1,12 @@
 package ru.progwards.tasktracker.service.facade.impl.task;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.GetListService;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
@@ -12,9 +16,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * тестирование сервиса удаления задачи
@@ -24,20 +26,50 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 public class TaskRemoveServiceTest {
 
-    @Mock
-    private RemoveService<Task> service;
+    @Autowired
+    private RemoveService<Task> removeService;
 
-    @Test
-    public void testRemove() {
-        service.remove(
-                new Task(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
+    @Autowired
+    private CreateService<Task> createService;
+
+    @Autowired
+    private GetService<Long, Task> getService;
+
+    @Autowired
+    private GetListService<Task> getListService;
+
+    @BeforeEach
+    void before() {
+        createService.create(
+                new Task(null, "TT1-1", "Test task 1 RemoveService", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         null,
                         Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
         );
+    }
 
-        verify(service, times(1)).remove(any(Task.class));
+    @Test
+    public void testRemove() {
+        Long id = getListService.getList().stream()
+                .filter(e -> e.getDescription().equals("Test task 1 RemoveService")).findFirst()
+                .map(Task::getId)
+                .orElse(null);
+
+        if (id != null) {
+            removeService.remove(
+                    new Task(id, "TT1-1", "Test task 1 TEST", "Test task 1 RemoveService",
+                            TaskType.BUG, null, 11L, new User(), new User(),
+                            ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+                            null,
+                            Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+                            new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+            );
+        }
+
+        Task task = getService.get(id);
+
+        assertNull(task);
     }
 }

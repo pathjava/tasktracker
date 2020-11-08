@@ -23,10 +23,10 @@ public class WorkLogRemoveService implements RemoveService<WorkLog> {
     }
 
     /**
-     * @param workLog объект, который необходимо удалить
+     * @param model объект, который необходимо удалить
      */
     @Override
-    public void remove(WorkLog workLog) {
-        repository.delete(workLog.getId());
+    public void remove(WorkLog model) {
+        repository.delete(model.getId());
     }
 }

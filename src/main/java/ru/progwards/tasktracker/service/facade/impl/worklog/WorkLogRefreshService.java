@@ -5,18 +5,16 @@ import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.RefreshService;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
-import java.util.Random;
-
 /**
- * Бизнес-логика создания лога
+ * Бизнес-логика обновления лога
  *
  * @author Oleg Kiselev
  */
 @Service
-public class WorkLogCreateService implements CreateService<WorkLog> {
+public class WorkLogRefreshService implements RefreshService<WorkLog> {
 
     private Repository<Long, WorkLogEntity> repository;
     private Converter<WorkLogEntity, WorkLog> converter;
@@ -32,12 +30,12 @@ public class WorkLogCreateService implements CreateService<WorkLog> {
     }
 
     /**
-     * @param model объект бизнес-логики
+     * метод обновления лога
+     *
+     * @param model value object - объект бизнес логики (задача), который необходимо обновить
      */
     @Override
-    public void create(WorkLog model) {
-        if (model.getId() == null) //TODO - for testing generate id
-            model.setId(new Random().nextLong());
-        repository.create(converter.toEntity(model));
+    public void refresh(WorkLog model) {
+        repository.update(converter.toEntity(model));
     }
 }
