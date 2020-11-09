@@ -68,17 +68,68 @@ class TaskControllerTest {
 
     @Test
     void getListTasks_From_Project() throws Exception {
-        Collection<TaskDtoPreview> tempTasks = getListService.getList().stream()
+        createDtoForGetListTasks();
+
+        Collection<TaskDtoPreview> collection = getListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(2L))
                 .map(task -> dtoPreviewConverter.toDto(task))
                 .collect(Collectors.toList());
 
         String jsonString = new ObjectMapper()
-                .registerModule(new JavaTimeModule()).writeValueAsString(tempTasks);
+                .registerModule(new JavaTimeModule()).writeValueAsString(collection);
 
         mockMvc.perform(get("/rest/project/2/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonString));
+    }
+
+    private void createDtoForGetListTasks() throws Exception {
+        mockMvc.perform(post("/rest/task/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"code\": \"TT110-1\",\n" +
+                                "    \"name\": \"Test task 110\",\n" +
+                                "    \"description\": \"Description task 110\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
+        mockMvc.perform(post("/rest/task/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"code\": \"TT110-2\",\n" +
+                                "    \"name\": \"Test task 110\",\n" +
+                                "    \"description\": \"Description task 110\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
     }
 
     @Test()
@@ -101,10 +152,9 @@ class TaskControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 110,\n" +
-                                "    \"code\": \"TT110-1\",\n" +
-                                "    \"name\": \"Test task 110\",\n" +
-                                "    \"description\": \"Description task 110\",\n" +
+                                "    \"code\": \"TT1110-1\",\n" +
+                                "    \"name\": \"Test task 1110\",\n" +
+                                "    \"description\": \"Description task 1110\",\n" +
                                 "    \"type\": \"BUG\",\n" +
                                 "    \"project_id\": 2,\n" +
                                 "    \"author\": {},\n" +
@@ -122,10 +172,9 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(get("/rest/task/TT110-1/getbycode"))
+        mockMvc.perform(get("/rest/task/TT1110-1/getbycode"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(110)))
-                .andExpect(jsonPath("$.name", equalTo("Test task 110")));
+                .andExpect(jsonPath("$.name", equalTo("Test task 1110")));
     }
 
     @Test()
