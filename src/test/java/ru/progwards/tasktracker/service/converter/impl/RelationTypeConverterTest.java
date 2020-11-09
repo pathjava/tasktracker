@@ -32,7 +32,7 @@ class RelationTypeConverterTest {
     void toVo_return_NotNull() {
         RelationType type = converter.toVo(
                 new RelationTypeEntity(
-                        1L, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null
+                        null, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null
                 ))
         );
 
@@ -50,8 +50,10 @@ class RelationTypeConverterTest {
     void toEntity_return_Not_Null() {
         RelationTypeEntity typeEntity = converter.toEntity(
                 new RelationType(
-                        1L, "блокирующая", new RelationType(2L, "блокируемая", null
+                        null, "блокирующая", new RelationType(2L, "блокируемая", null
                 ))
         );
+
+        assertThat(typeEntity, is(notNullValue()));
     }
 }

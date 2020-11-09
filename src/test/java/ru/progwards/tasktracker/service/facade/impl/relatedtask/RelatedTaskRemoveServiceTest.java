@@ -12,6 +12,7 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса удаления связанной задачи
@@ -50,15 +51,18 @@ class RelatedTaskRemoveServiceTest {
                 .map(RelatedTask::getId)
                 .orElse(null);
 
-        removeService.remove(
-                new RelatedTask(
-                        id, new RelationType(1L, "блокирующая", new RelationType(
-                        2L, "блокируемая", null)),
-                        1L, 2L)
-        );
+        if (id != null) {
+            removeService.remove(
+                    new RelatedTask(
+                            id, new RelationType(1L, "блокирующая", new RelationType(
+                            2L, "блокируемая", null)),
+                            1L, 2L)
+            );
 
-        RelatedTask task = getService.get(id);
+            RelatedTask task = getService.get(id);
 
-        assertNull(task);
+            assertNull(task);
+        } else
+            fail();
     }
 }

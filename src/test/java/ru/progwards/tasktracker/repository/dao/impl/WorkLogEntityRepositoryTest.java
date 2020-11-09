@@ -1,17 +1,16 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 
 import java.time.ZonedDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 
 /**
  * тестирование методов репозитория логов
@@ -21,48 +20,82 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class WorkLogEntityRepositoryTest {
 
-    @Mock
+    @Autowired
     private Repository<Long, WorkLogEntity> repository;
 
+    @Autowired
+    private RepositoryByTaskId<Long, WorkLogEntity> byTaskId;
+
     @Test
-    void getOneEntity() {
-        when(repository.get(anyLong())).thenReturn(
-                new WorkLogEntity(1L, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description Log 1", null, null)
-        );
+    void get() {
+        createEntityForTest();
 
-        WorkLogEntity entity = repository.get(1L);
+        Long id = getIdCreatedEntity();
 
-        assertNotNull(entity);
+        if (id != null) {
+            WorkLogEntity entity = repository.get(id);
 
-        assertEquals("Description Log 1", entity.getDescription());
+            assertNotNull(entity);
+
+            assertEquals("Description Log Repository", entity.getDescription());
+
+            repository.delete(id);
+        } else
+            fail();
     }
 
     @Test
-    void getOneEntity_Return_Null() {
-        when(repository.get(anyLong())).thenReturn(null);
-
-        WorkLogEntity entity = repository.get(1L);
+    void get_Return_Null() {
+        WorkLogEntity entity = repository.get(anyLong());
 
         assertNull(entity);
     }
 
     @Test
     void create() {
-        WorkLogEntity entity = new WorkLogEntity(1L, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                "Description Log 1", null, null);
+        createEntityForTest();
 
-        repository.create(entity);
+        Long id = getIdCreatedEntity();
 
-        verify(repository, times(1)).create(entity);
+        if (id != null) {
+            WorkLogEntity entity = repository.get(id);
+
+            assertNotNull(entity);
+
+            assertEquals("Description Log Repository", entity.getDescription());
+
+            repository.delete(id);
+        } else
+            fail();
     }
 
     @Test
     void delete() {
-        repository.delete(1L);
+        createEntityForTest();
 
-        assertNull(repository.get(1L));
+        Long id = getIdCreatedEntity();
 
-        verify(repository, times(1)).delete(1L);
+        if (id != null) {
+            repository.delete(id);
+
+            WorkLogEntity entity = repository.get(id);
+
+            assertNull(entity);
+        } else
+            fail();
+    }
+
+    private void createEntityForTest() {
+        repository.create(
+                new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
+                        "Description Log Repository", null, null)
+        );
+    }
+
+    private Long getIdCreatedEntity() {
+        return byTaskId.getByTaskId(2L).stream()
+                .filter(e -> e.getDescription().equals("Description Log Repository")).findFirst()
+                .map(WorkLogEntity::getId)
+                .orElse(null);
     }
 }

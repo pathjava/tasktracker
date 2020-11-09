@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.vo.RelationType;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса создания связанной задачи
@@ -48,12 +49,15 @@ class RelatedTaskCreateServiceTest {
                 .map(RelatedTask::getId)
                 .orElse(null);
 
-        RelatedTask task = getService.get(id);
+        if (id != null) {
+            RelatedTask task = getService.get(id);
 
-        assertNotNull(task);
+            assertNotNull(task);
 
-        assertThat(task.getRelationType().getName(), equalTo("блокирующая CreateService"));
+            assertThat(task.getRelationType().getName(), equalTo("блокирующая CreateService"));
 
-        removeService.remove(task);
+            removeService.remove(task);
+        } else
+            fail();
     }
 }

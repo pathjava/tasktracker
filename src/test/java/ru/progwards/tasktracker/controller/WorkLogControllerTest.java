@@ -96,7 +96,25 @@ class WorkLogControllerTest {
 
     @Test
     void deleteWorkLog() throws Exception {
-        mockMvc.perform(delete("/rest/worklog/{log_id}/delete", 1)
+        mockMvc.perform(post("/rest/worklog/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"id\": 222,\n" +
+                                "    \"taskId\": 2,\n" +
+                                "    \"spent\": null,\n" +
+                                "    \"worker\": {},\n" +
+                                "    \"when\": null,\n" +
+                                "    \"description\": \"Description Log 20\",\n" +
+                                "    \"estimateChange\": null,\n" +
+                                "    \"estimateValue\": null\n" +
+                                "}"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
+
+        mockMvc.perform(delete("/rest/worklog/{log_id}/delete", 222)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());

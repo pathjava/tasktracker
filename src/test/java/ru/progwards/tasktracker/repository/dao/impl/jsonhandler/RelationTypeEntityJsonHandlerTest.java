@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * тестирование обработчика json типов связей задач
@@ -21,31 +22,49 @@ class RelationTypeEntityJsonHandlerTest {
     private JsonHandler<Long, RelationTypeEntity> jsonHandler;
 
     @BeforeEach
-    public void clear() {
+    public void clearBefore() {
+        jsonHandler.getMap().clear();
+    }
+
+    @AfterEach
+    public void clearAfter() {
         jsonHandler.getMap().clear();
     }
 
     @Test
     void write() {
-        assertEquals(jsonHandler.getMap().size(), 0);
+        assertEquals(0, jsonHandler.getMap().size());
 
-        jsonHandler.getMap().put(
-                1L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null))
-        );
-        jsonHandler.getMap().put(
-                2L, new RelationTypeEntity(2L, "блокируемая", new RelationTypeEntity(1L, "блокирующая", null))
-        );
-        jsonHandler.getMap().put(
-                3L, new RelationTypeEntity(3L, "ссылается", new RelationTypeEntity(3L, "ссылается", null))
-        );
+        createEntitiesForTest();
 
-        assertEquals(jsonHandler.getMap().size(), 3);
+        jsonHandler.write();
+
+        assertEquals(3, jsonHandler.getMap().size());
     }
 
     @Test
     void read() {
-        assertEquals(jsonHandler.getMap().size(), 0);
+        assertEquals(0, jsonHandler.getMap().size());
+        createEntitiesForTest();
         jsonHandler.read();
-        assertEquals(jsonHandler.getMap().size(), 3);
+        assertEquals(3, jsonHandler.getMap().size());
+    }
+
+    private void createEntitiesForTest() {
+        jsonHandler.getMap().put(
+                1L, new RelationTypeEntity(
+                        null, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null)
+                )
+        );
+        jsonHandler.getMap().put(
+                2L, new RelationTypeEntity(
+                        null, "блокируемая", new RelationTypeEntity(1L, "блокирующая", null)
+                )
+        );
+        jsonHandler.getMap().put(
+                3L, new RelationTypeEntity(
+                        null, "ссылается", new RelationTypeEntity(3L, "ссылается", null)
+                )
+        );
     }
 }

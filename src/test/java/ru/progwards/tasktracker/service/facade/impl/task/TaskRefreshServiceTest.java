@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса обновления задачи
@@ -67,12 +68,12 @@ public class TaskRefreshServiceTest {
                             Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
                             new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
             );
-        }
+            Task task = getService.get(id);
 
-        Task task = getService.get(id);
+            assertThat(task.getName(), equalTo("Test RefreshService Updated"));
 
-        assertThat(task.getName(), equalTo("Test RefreshService Updated"));
-
-        removeService.remove(task);
+            removeService.remove(task);
+        } else
+            fail();
     }
 }

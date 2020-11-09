@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса обновления поля задачи
@@ -65,12 +66,13 @@ public class TaskUpdateOneFieldServiceTest {
             oneFieldService.updateOneField(
                     new UpdateOneValue(id, "Test task 1 UpdateOneFieldService updated", "name")
             );
-        }
+            Task task = getService.get(id);
 
-        Task task = getService.get(id);
+            assertThat(task.getName(), equalTo("Test task 1 UpdateOneFieldService updated"));
 
-        assertThat(task.getName(), equalTo("Test task 1 UpdateOneFieldService updated"));
+            removeService.remove(task);
+        } else
+            fail();
 
-        removeService.remove(task);
     }
 }

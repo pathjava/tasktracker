@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса удаления задачи
@@ -41,7 +42,7 @@ public class TaskRemoveServiceTest {
     @BeforeEach
     void before() {
         createService.create(
-                new Task(null, "TT1-1", "Test task 1 RemoveService", "Description task 1",
+                new Task(null, "TT1-1", "Test task", "Description RemoveService",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         null,
@@ -53,23 +54,23 @@ public class TaskRemoveServiceTest {
     @Test
     public void testRemove() {
         Long id = getListService.getList().stream()
-                .filter(e -> e.getDescription().equals("Test task 1 RemoveService")).findFirst()
+                .filter(e -> e.getDescription().equals("Description RemoveService")).findFirst()
                 .map(Task::getId)
                 .orElse(null);
 
         if (id != null) {
             removeService.remove(
-                    new Task(id, "TT1-1", "Test task 1 TEST", "Test task 1 RemoveService",
+                    new Task(id, "TT1-1", "Test task", "Description RemoveService",
                             TaskType.BUG, null, 11L, new User(), new User(),
                             ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                             null,
                             Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
                             new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
             );
-        }
+            Task task = getService.get(id);
 
-        Task task = getService.get(id);
-
-        assertNull(task);
+            assertNull(task);
+        } else
+            fail();
     }
 }

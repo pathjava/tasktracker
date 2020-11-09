@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование обновления лога
@@ -59,12 +60,12 @@ class WorkLogRefreshServiceTest {
                             "Description Log RefreshService Updated", null, null
                     )
             );
-        }
+            WorkLog workLog = getService.get(id);
 
-        WorkLog workLog = getService.get(id);
+            assertThat(workLog.getDescription(), equalTo("Description Log RefreshService Updated"));
 
-        assertThat(workLog.getDescription(), equalTo("Description Log RefreshService Updated"));
-
-        removeService.remove(workLog);
+            removeService.remove(workLog);
+        } else
+            fail();
     }
 }

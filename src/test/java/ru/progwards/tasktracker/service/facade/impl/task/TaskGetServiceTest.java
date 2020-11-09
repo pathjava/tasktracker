@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 /**
@@ -60,13 +61,16 @@ public class TaskGetServiceTest {
                 .map(Task::getId)
                 .orElse(null);
 
-        Task task = getService.get(id);
+        if (id != null) {
+            Task task = getService.get(id);
 
-        assertThat(task, is(notNullValue()));
+            assertThat(task, is(notNullValue()));
 
-        assertThat(task.getName(), equalTo("Test task 1 GetService"));
+            assertThat(task.getName(), equalTo("Test task 1 GetService"));
 
-        removeService.remove(task);
+            removeService.remove(task);
+        } else
+            fail();
     }
 
     @Test

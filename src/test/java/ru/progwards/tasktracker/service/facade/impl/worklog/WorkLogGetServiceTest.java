@@ -14,8 +14,7 @@ import java.time.ZonedDateTime;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 /**
@@ -55,13 +54,16 @@ class WorkLogGetServiceTest {
                 .map(WorkLog::getId)
                 .orElse(null);
 
-        WorkLog workLog = getService.get(id);
+        if (id != null) {
+            WorkLog workLog = getService.get(id);
 
-        assertNotNull(workLog);
+            assertNotNull(workLog);
 
-        assertThat(workLog.getDescription(), equalTo("Description Log GetService"));
+            assertThat(workLog.getDescription(), equalTo("Description Log GetService"));
 
-        removeService.remove(workLog);
+            removeService.remove(workLog);
+        } else
+            fail();
     }
 
     @Test

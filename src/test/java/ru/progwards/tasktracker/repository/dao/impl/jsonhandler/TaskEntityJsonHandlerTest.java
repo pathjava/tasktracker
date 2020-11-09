@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * тестирование обработчика json задач
@@ -28,46 +28,49 @@ public class TaskEntityJsonHandlerTest {
     private JsonHandler<Long, TaskEntity> jsonHandler;
 
     @BeforeEach
-    public void clear() {
+    public void clearBefore() {
+        jsonHandler.getMap().clear();
+    }
+
+    @AfterEach
+    public void clearAfter() {
         jsonHandler.getMap().clear();
     }
 
     @Test
     public void testWrite() {
-        int sizeOne = jsonHandler.getMap().size();
+        assertEquals(0, jsonHandler.getMap().size());
 
+        createEntitiesForTest();
+
+        jsonHandler.write();
+
+        assertEquals(2, jsonHandler.getMap().size());
+    }
+
+    @Test
+    public void testRead() {
+        assertEquals(0, jsonHandler.getMap().size());
+        createEntitiesForTest();
+        jsonHandler.read();
+        assertEquals(2, jsonHandler.getMap().size());
+    }
+
+    private void createEntitiesForTest() {
         jsonHandler.getMap().put(
-                1L, new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
+                1L, new TaskEntity(null, "TT1-1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false));
         jsonHandler.getMap().put(
-                2L, new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
+                2L, new TaskEntity(null, "TT2-2", "Test task 2 TEST", "Description task 2",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
                         new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
         );
-
-        jsonHandler.write();
-
-        int sizeTwo = jsonHandler.getMap().size();
-
-        assertEquals(0, sizeOne);
-        assertEquals(2, sizeTwo);
-    }
-
-    @Test
-    public void testRead() {
-        int sizeOne = jsonHandler.getMap().size();
-        jsonHandler.read();
-        int sizeTwo = jsonHandler.getMap().size();
-
-        assertNotNull(jsonHandler.getMap());
-        assertEquals(0, sizeOne);
-        assertEquals(2, sizeTwo);
     }
 }

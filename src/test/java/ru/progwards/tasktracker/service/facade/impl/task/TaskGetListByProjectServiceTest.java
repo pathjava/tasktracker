@@ -67,13 +67,13 @@ class TaskGetListByProjectServiceTest {
 
     @Test
     void getListByProjectId() {
-        Collection<Task> tempList = listByProjectService.getListByProjectId(11L);
+        Collection<Task> collection = listByProjectService.getListByProjectId(11L);
 
-        assertNotNull(tempList);
+        assertNotNull(collection);
 
-        assertThat(tempList.size(), is(2));
+        assertThat(collection.size(), is(2));
 
-        List<String> actualTaskName = tempList.stream()
+        List<String> actualTaskName = collection.stream()
                 .map(Task::getName)
                 .collect(Collectors.toUnmodifiableList());
 

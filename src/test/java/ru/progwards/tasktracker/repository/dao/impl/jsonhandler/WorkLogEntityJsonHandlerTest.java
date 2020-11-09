@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import java.time.ZonedDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * тестирование обработчика Json логов
@@ -24,39 +24,42 @@ class WorkLogEntityJsonHandlerTest {
     private JsonHandler<Long, WorkLogEntity> jsonHandler;
 
     @BeforeEach
-    public void clear() {
+    public void clearBefore() {
+        jsonHandler.getMap().clear();
+    }
+
+    @AfterEach
+    public void clearAfter() {
         jsonHandler.getMap().clear();
     }
 
     @Test
     public void testWrite() {
-        int sizeOne = jsonHandler.getMap().size();
+        assertEquals(0, jsonHandler.getMap().size());
 
-        jsonHandler.getMap().put(
-                1L, new WorkLogEntity(1L, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description Log 1", null, null)
-        );
-        jsonHandler.getMap().put(
-                2L, new WorkLogEntity(2L, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description Log 2", null, null)
-        );
+        createEntitiesForTest();
 
         jsonHandler.write();
 
-        int sizeTwo = jsonHandler.getMap().size();
-
-        assertEquals(0, sizeOne);
-        assertEquals(2, sizeTwo);
+        assertEquals(2, jsonHandler.getMap().size());
     }
 
     @Test
     public void testRead() {
-        int sizeOne = jsonHandler.getMap().size();
+        assertEquals(0, jsonHandler.getMap().size());
+        createEntitiesForTest();
         jsonHandler.read();
-        int sizeTwo = jsonHandler.getMap().size();
+        assertEquals(2, jsonHandler.getMap().size());
+    }
 
-        assertNotNull(jsonHandler.getMap());
-        assertEquals(0, sizeOne);
-        assertEquals(2, sizeTwo);
+    private void createEntitiesForTest() {
+        jsonHandler.getMap().put(
+                1L, new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
+                        "Description Log 1", null, null)
+        );
+        jsonHandler.getMap().put(
+                2L, new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
+                        "Description Log 2", null, null)
+        );
     }
 }

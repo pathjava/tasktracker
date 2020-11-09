@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
 import java.time.ZonedDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса удаления лога
@@ -51,15 +52,17 @@ class WorkLogRemoveServiceTest {
                 .map(WorkLog::getId)
                 .orElse(null);
 
-        removeService.remove(
-                new WorkLog(
-                        id, 2L, null, null, ZonedDateTime.now(),
-                        "Description Log RemoveService", null, null
-                )
-        );
+        if (id != null) {
+            removeService.remove(
+                    new WorkLog(
+                            id, 2L, null, null, ZonedDateTime.now(),
+                            "Description Log RemoveService", null, null
+                    )
+            );
+            WorkLog workLog = getService.get(id);
 
-        WorkLog workLog = getService.get(id);
-
-        assertNull(workLog);
+            assertNull(workLog);
+        } else
+            fail();
     }
 }

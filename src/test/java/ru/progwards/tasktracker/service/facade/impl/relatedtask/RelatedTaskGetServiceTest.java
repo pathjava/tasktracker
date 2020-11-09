@@ -11,10 +11,9 @@ import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 /**
@@ -54,13 +53,16 @@ class RelatedTaskGetServiceTest {
                 .map(RelatedTask::getId)
                 .orElse(null);
 
-        RelatedTask task = getService.get(id);
+        if (id != null) {
+            RelatedTask task = getService.get(id);
 
-        assertNotNull(task);
+            assertNotNull(task);
 
-        assertThat(task.getRelationType().getName(), equalTo("блокирующая GetService"));
+            assertThat(task.getRelationType().getName(), equalTo("блокирующая GetService"));
 
-        removeService.remove(task);
+            removeService.remove(task);
+        } else
+            fail();
     }
 
     @Test

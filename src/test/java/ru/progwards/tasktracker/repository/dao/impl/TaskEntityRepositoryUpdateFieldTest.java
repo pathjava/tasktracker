@@ -35,18 +35,29 @@ public class TaskEntityRepositoryUpdateFieldTest {
     @Test
     public void testUpdateField() {
         repository.create(
-                new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
+                new TaskEntity(
+                        null, "TT1-1", "Test task", "Description RepositoryUpdateField",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false
+                )
         );
 
-        assertEquals("TT1-1", repository.get(1L).getCode());
+        Long id = repository.get().stream()
+                .filter(e -> e.getDescription().equals("Description RepositoryUpdateField")).findFirst()
+                .map(TaskEntity::getId)
+                .orElse(null);
 
-        updateField.updateField(new UpdateOneValue(1L, "TT1-1-1", "code"));
-        String str = repository.get(1L).getCode();
-        assertEquals("TT1-1-1", repository.get(1L).getCode());
+        assertEquals("Description RepositoryUpdateField", repository.get(id).getDescription());
+
+        updateField.updateField(new UpdateOneValue(
+                id, "Description RepositoryUpdateField Updated", "description"
+        ));
+
+        assertEquals("Description RepositoryUpdateField Updated", repository.get(id).getDescription());
+
+        repository.delete(id);
     }
 }

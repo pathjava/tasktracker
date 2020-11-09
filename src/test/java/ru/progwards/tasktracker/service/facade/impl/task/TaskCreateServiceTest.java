@@ -1,7 +1,6 @@
 package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.CreateService;
@@ -18,9 +17,7 @@ import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * тестирование сервиса создания задачи
@@ -58,10 +55,13 @@ public class TaskCreateServiceTest {
                 .map(Task::getId)
                 .orElse(null);
 
-        Task task = getService.get(id);
+        if (id != null) {
+            Task task = getService.get(id);
 
-        assertThat(task.getName(), equalTo("Test CreateService"));
+            assertThat(task.getName(), equalTo("Test CreateService"));
 
-        removeService.remove(task);
+            removeService.remove(task);
+        } else
+            fail();
     }
 }

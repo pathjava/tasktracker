@@ -1,8 +1,9 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.vo.User;
@@ -11,12 +12,14 @@ import ru.progwards.tasktracker.util.types.TaskType;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
 
 /**
  * тестирование методов работы с репозиторием
@@ -26,35 +29,35 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class TaskEntityRepositoryTest {
 
-    @Mock
+    @Autowired
     private Repository<Long, TaskEntity> repository;
 
+    @Autowired
+    private JsonHandler<Long, TaskEntity> jsonHandler;
+
     @Test
-    public void testGetAllTaskEntity() {
-        when(repository.get()).thenReturn(Arrays.asList(
-                new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                        TaskType.BUG, null, 11L, new User(), new User(),
-                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                        null,
-                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false),
-                new TaskEntity(2L, "TT2-2", "Test task 2 TEST", "Description task 2",
-                        TaskType.BUG, null, 11L, new User(), new User(),
-                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                        null,
-                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-        ));
+    public void getAll() {
+        creatingEntitiesForGetAllTest();
 
-        Collection<TaskEntity> tempList = repository.get();
+        Collection<TaskEntity> collection = repository.get();
 
-        assertEquals(2, tempList.size());
-        assertNotNull(tempList);
+        assertEquals(2, collection.size());
+
+        assertNotNull(collection);
+
+        List<String> list = collection.stream()
+                .map(TaskEntity::getDescription)
+                .collect(Collectors.toUnmodifiableList());
+
+        assertThat(list, containsInAnyOrder("Description Repository 1",
+                "Description Repository 2"));
+
+        jsonHandler.getMap().clear();
     }
 
     @Test
-    public void testGetAllTaskEntity_Return_Empty_Collection(){
-        when(repository.get()).thenReturn(Collections.emptyList());
+    public void getAll_Return_Empty_Collection() {
+        jsonHandler.getMap().clear();
 
         Collection<TaskEntity> collection = repository.get();
 
@@ -62,63 +65,136 @@ public class TaskEntityRepositoryTest {
     }
 
     @Test
-    public void testGetOneTaskEntity() {
-        when(repository.get(anyLong())).thenReturn(
-                new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
+    public void getOne() {
+        TaskEntity entity = createEntityForTest();
+
+        repository.create(entity);
+
+        Long id = getIdCreatedEntity();
+
+        if (id != null) {
+            entity = repository.get(id);
+
+            assertNotNull(entity);
+            assertEquals("Description Repository", entity.getDescription());
+
+            repository.delete(id);
+        } else
+            fail();
+    }
+
+    @Test
+    public void getOne_Return_Null() {
+        TaskEntity entity = repository.get(anyLong());
+
+        assertNull(entity);
+    }
+
+    @Test
+    public void create() {
+        TaskEntity entity = createEntityForTest();
+
+        repository.create(entity);
+
+        Long id = getIdCreatedEntity();
+
+        if (id != null) {
+            entity = repository.get(id);
+
+            assertNotNull(entity);
+            assertEquals("Description Repository", entity.getDescription());
+
+            repository.delete(id);
+        } else
+            fail();
+    }
+
+    @Test
+    public void update() {
+        TaskEntity entity = createEntityForTest();
+
+        repository.create(entity);
+
+        Long id = getIdCreatedEntity();
+
+        if (id != null) {
+            entity = new TaskEntity(
+                    id, "TT1-1", "Test task", "Description Repository Updated",
+                    TaskType.BUG, null, 11L, new User(), new User(),
+                    ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
+                    null,
+                    Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                    new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false
+            );
+
+            repository.update(entity);
+
+            entity = repository.get(id);
+
+            assertNotNull(entity);
+
+            assertEquals("Description Repository Updated", entity.getDescription());
+
+            repository.delete(id);
+        } else
+            fail();
+    }
+
+    @Test
+    public void delete() {
+        TaskEntity entity = createEntityForTest();
+
+        repository.create(entity);
+
+        Long id = getIdCreatedEntity();
+
+        if (id != null) {
+            repository.delete(id);
+
+            assertNull(repository.get(id));
+        } else
+            fail();
+    }
+
+    private TaskEntity createEntityForTest() {
+        return new TaskEntity(
+                null, "TT1-1", "Test task", "Description Repository",
+                TaskType.BUG, null, 11L, new User(), new User(),
+                ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
+                null,
+                Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false
+        );
+    }
+
+    private void creatingEntitiesForGetAllTest() {
+        jsonHandler.getMap().clear();
+        repository.create(
+                new TaskEntity(
+                        null, "TT1-1", "Test task", "Description Repository 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         null,
                         Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false
+                )
         );
-
-        TaskEntity taskEntity = repository.get(1L);
-
-        assertNotNull(taskEntity);
-        assertEquals("Test task 1 TEST", taskEntity.getName());
+        repository.create(
+                new TaskEntity(
+                        null, "TT1-2", "Test task", "Description Repository 2",
+                        TaskType.BUG, null, 11L, new User(), new User(),
+                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
+                        null,
+                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false
+                )
+        );
     }
 
-    @Test
-    public void testGetOneTaskEntity_Return_Null(){
-        when(repository.get(anyLong())).thenReturn(null);
-
-        TaskEntity taskEntity = repository.get(1L);
-
-        assertNull(taskEntity);
-    }
-
-    @Test
-    public void testCreateTaskEntity() {
-        TaskEntity task = new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, null, 11L, new User(), new User(),
-                ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                null,
-                Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false);
-
-        repository.create(task);
-
-        verify(repository, times(1)).create(task);
-    }
-
-    @Test
-    public void testUpdateTaskEntity() {
-        TaskEntity task = new TaskEntity(1L, "TT1-1", "Test task 1 TEST", "Description task 1",
-                TaskType.BUG, null, 11L, new User(), new User(),
-                ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-                null,
-                Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false);
-
-        repository.update(task);
-        verify(repository, times(1)).update(task);
-    }
-
-    @Test
-    public void testDeleteTaskEntity() {
-        repository.delete(1L);
-
-        assertNull(repository.get(1L));
-        verify(repository, times(1)).delete(1L);
+    private Long getIdCreatedEntity() {
+        return repository.get().stream()
+                .filter(e -> e.getDescription().equals("Description Repository")).findFirst()
+                .map(TaskEntity::getId)
+                .orElse(null);
     }
 }
