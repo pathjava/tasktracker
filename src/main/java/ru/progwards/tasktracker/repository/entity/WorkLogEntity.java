@@ -3,8 +3,7 @@ package ru.progwards.tasktracker.repository.entity;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.EstimateChange;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
+import java.util.Random;
 
 /**
  * сущность для хранения лога в БД
@@ -22,9 +21,16 @@ public class WorkLogEntity {
     private EstimateChange estimateChange;
     private Long estimateValue;
 
-    public WorkLogEntity(Long id, Long taskId, Long spent,
-                         User worker, Long when, String description,
-                         EstimateChange estimateChange, Long estimateValue) {
+    public WorkLogEntity() {
+    }
+
+    public WorkLogEntity(
+            Long id, Long taskId, Long spent,
+            User worker, Long when, String description,
+            EstimateChange estimateChange, Long estimateValue
+    ) {
+        if (id == null) //TODO - for testing generate id
+            id = new Random().nextLong();
         this.id = id;
         this.taskId = taskId;
         this.spent = spent;
@@ -37,10 +43,6 @@ public class WorkLogEntity {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getTaskId() {

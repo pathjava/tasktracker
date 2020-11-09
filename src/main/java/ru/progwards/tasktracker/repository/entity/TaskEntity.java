@@ -4,6 +4,7 @@ import ru.progwards.tasktracker.service.vo.*;
 import ru.progwards.tasktracker.util.types.TaskType;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * сущность для хранения задачи в БД
@@ -32,6 +33,9 @@ public class TaskEntity {
     private List<WorkLog> workLogs;
     private Boolean isDeleted;
 
+    public TaskEntity() {
+    }
+
     public TaskEntity(
             Long id, String code, String name, String description,
             TaskType type, TaskPriority priority, Long project_id,
@@ -42,6 +46,8 @@ public class TaskEntity {
             List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs,
             Boolean isDeleted
     ) {
+        if (id == null) //TODO - for testing generate id
+            id = new Random().nextLong();
         this.id = id;
         this.code = code;
         this.name = name;
@@ -63,15 +69,8 @@ public class TaskEntity {
         this.isDeleted = isDeleted;
     }
 
-    public TaskEntity() {
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCode() {

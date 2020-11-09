@@ -8,8 +8,6 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
-import java.util.Random;
-
 /**
  * Бизнес-логика создания лога
  *
@@ -36,8 +34,6 @@ public class WorkLogCreateService implements CreateService<WorkLog> {
      */
     @Override
     public void create(WorkLog model) {
-        if (model.getId() == null) //TODO - for testing generate id
-            model.setId(new Random().nextLong());
         repository.create(converter.toEntity(model));
     }
 }

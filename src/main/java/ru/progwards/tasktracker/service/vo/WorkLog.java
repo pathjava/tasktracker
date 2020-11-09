@@ -6,13 +6,13 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
- *
+ * value object - объект бизнес логики (лог)
  *
  * @author Oleg Kiselev
  */
 public class WorkLog {
 
-    private Long id;
+    private final Long id;
     private Long taskId;
     private Duration spent;
     private User worker;
@@ -38,10 +38,6 @@ public class WorkLog {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getTaskId() {

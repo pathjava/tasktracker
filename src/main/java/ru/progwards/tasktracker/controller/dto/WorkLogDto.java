@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
  */
 public class WorkLogDto {
 
-    private Long id;
+    private final Long id;
     private Long taskId;
     private Duration spent;
     private User worker;
@@ -39,10 +39,6 @@ public class WorkLogDto {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getTaskId() {

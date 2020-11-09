@@ -12,7 +12,6 @@ import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.Task;
 
 import java.time.ZonedDateTime;
-import java.util.Random;
 
 /**
  * Бизнес-логика работы с задачей
@@ -47,8 +46,6 @@ public class TaskCreateService implements CreateService<Task> {
      */
     @Override
     public void create(Task model) {
-        if (model.getId() == null) //TODO - for testing generate id
-            model.setId(new Random().nextLong());
         if (model.getCode() == null)
             model.setCode(generateTaskCode(model.getProject_id()));
         if (model.getCreated() == null)

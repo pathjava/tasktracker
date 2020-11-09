@@ -8,8 +8,6 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
-import java.util.Random;
-
 /**
  * Бизнес-логика создания связанной задачи
  *
@@ -38,8 +36,6 @@ public class RelatedTaskCreateService implements CreateService<RelatedTask> {
      */
     @Override
     public void create(RelatedTask model) {
-        if (model.getId() == null) //TODO - for testing generate id
-            model.setId(new Random().nextLong());
         repository.create(converter.toEntity(model));
     }
 }

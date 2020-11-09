@@ -26,7 +26,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
 
     @Override
     public Collection<RelatedTaskEntity> get() {
-        return null;
+        return jsonHandler.getMap().values();
     }
 
     /**

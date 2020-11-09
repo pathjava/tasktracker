@@ -7,7 +7,7 @@ package ru.progwards.tasktracker.service.vo;
  */
 public class RelationType {
 
-    private Long id;
+    private final Long id;
     private String name;
     private RelationType counterRelation;
 
@@ -19,10 +19,6 @@ public class RelationType {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

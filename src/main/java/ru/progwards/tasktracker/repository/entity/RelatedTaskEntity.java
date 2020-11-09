@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.repository.entity;
 
+import java.util.Random;
+
 /**
  * сущность для хранения связанной задачи в БД
  *
@@ -12,7 +14,12 @@ public class RelatedTaskEntity {
     private Long parentTaskId;
     private Long taskId;
 
+    public RelatedTaskEntity() {
+    }
+
     public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long parentTaskId, Long taskId) {
+        if (id == null) //TODO - for testing generate id
+            id = new Random().nextLong();
         this.id = id;
         this.relationTypeEntity = relationTypeEntity;
         this.parentTaskId = parentTaskId;
@@ -21,10 +28,6 @@ public class RelatedTaskEntity {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public RelationTypeEntity getRelationTypeEntity() {
