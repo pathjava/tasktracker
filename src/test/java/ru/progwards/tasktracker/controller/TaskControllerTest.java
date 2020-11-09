@@ -67,7 +67,7 @@ class TaskControllerTest {
     }
 
     @Test
-    void getAllTasks_From_Project() throws Exception {
+    void getListTasks_From_Project() throws Exception {
         Collection<TaskDtoPreview> tempTasks = getListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(2L))
                 .map(task -> dtoPreviewConverter.toDto(task))
@@ -82,21 +82,21 @@ class TaskControllerTest {
     }
 
     @Test()
-    void getAllTasks_From_Project_BadRequestException() {
+    void getListTasks_From_Project_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.getListTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
-    void getAllTasks_From_Project_NotFoundException() {
+    void getListTasks_From_Project_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> controller.getListTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));
     }
 
     @Test
-    void addTask() throws Exception {
+    void createTask() throws Exception {
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -129,7 +129,7 @@ class TaskControllerTest {
     }
 
     @Test()
-    void addTask_BadRequestException_Null() {
+    void createTask_BadRequestException_Null() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.createTask(null));
         assertTrue(exception.getMessage().contains("Пустой объект!"));
@@ -189,7 +189,7 @@ class TaskControllerTest {
     }
 
     @Test
-    void deleteTaskById() throws Exception {
+    void deleteTask() throws Exception {
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -225,21 +225,21 @@ class TaskControllerTest {
     }
 
     @Test()
-    void deleteTaskById_BadRequestException() {
+    void deleteTask_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.deleteTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
-    void deleteTaskById_NotFoundException() {
+    void deleteTask_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> controller.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 
     @Test
-    void getTaskByCode() throws Exception {
+    void getByCodeTask() throws Exception {
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -273,14 +273,14 @@ class TaskControllerTest {
     }
 
     @Test
-    void getTaskByCode_BadRequestException() {
+    void getByCodeTask_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.getByCodeTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
-    void getTaskByCode_NotFoundException() {
+    void getByCodeTask_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> controller.getByCodeTask("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));

@@ -32,7 +32,7 @@ public class TaskUpdateFieldController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return статус
      */
-    @PutMapping("/rest/project/{project_id}/tasks/{task_id}/field")
+    @PutMapping("/rest/task/{task_id}/field")
     public ResponseEntity<UpdateOneValue> updateOneField(
             @PathVariable Long task_id, @RequestBody UpdateOneValue oneValue
     ) {

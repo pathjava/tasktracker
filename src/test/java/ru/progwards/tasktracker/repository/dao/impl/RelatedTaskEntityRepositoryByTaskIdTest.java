@@ -34,7 +34,7 @@ class RelatedTaskEntityRepositoryByTaskIdTest {
 
     @Test
     void getByTaskId_Return_One_RelatedTask() {
-        creatingEntitiesForGetAllTest();
+        createEntitiesForGetAllTest();
 
         Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(2L);
 
@@ -50,7 +50,7 @@ class RelatedTaskEntityRepositoryByTaskIdTest {
         assertTrue(collection.isEmpty());
     }
 
-    private void creatingEntitiesForGetAllTest() {
+    private void createEntitiesForGetAllTest() {
         jsonHandler.getMap().clear();
 
         repository.create(

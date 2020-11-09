@@ -55,7 +55,7 @@ public class TaskGetServiceTest {
     }
 
     @Test
-    public void testGet() {
+    public void get() {
         Long id = getListService.getList().stream()
                 .filter(e -> e.getName().equals("Test task 1 GetService")).findFirst()
                 .map(Task::getId)
@@ -74,7 +74,7 @@ public class TaskGetServiceTest {
     }
 
     @Test
-    void testGet_Return_Null(){
+    void get_Return_Null(){
         Task task = getService.get(anyLong());
 
         assertNull(task);

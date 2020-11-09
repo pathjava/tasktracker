@@ -37,7 +37,7 @@ public class TaskEntityRepositoryTest {
 
     @Test
     public void getAll() {
-        creatingEntitiesForGetAllTest();
+        createEntitiesForGetAllTest();
 
         Collection<TaskEntity> collection = repository.get();
 
@@ -65,7 +65,7 @@ public class TaskEntityRepositoryTest {
     }
 
     @Test
-    public void getOne() {
+    public void get() {
         TaskEntity entity = createEntityForTest();
 
         repository.create(entity);
@@ -84,7 +84,7 @@ public class TaskEntityRepositoryTest {
     }
 
     @Test
-    public void getOne_Return_Null() {
+    public void get_Return_Null() {
         TaskEntity entity = repository.get(anyLong());
 
         assertNull(entity);
@@ -167,7 +167,7 @@ public class TaskEntityRepositoryTest {
         );
     }
 
-    private void creatingEntitiesForGetAllTest() {
+    private void createEntitiesForGetAllTest() {
         jsonHandler.getMap().clear();
         repository.create(
                 new TaskEntity(

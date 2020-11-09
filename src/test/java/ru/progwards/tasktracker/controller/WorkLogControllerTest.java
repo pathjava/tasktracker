@@ -41,7 +41,7 @@ class WorkLogControllerTest {
     private GetListByTaskService<Long, WorkLog> listByTaskService;
 
     @Test
-    void getAllWorkLog() throws Exception {
+    void getListWorkLogs() throws Exception {
         mockMvc.perform(get("/rest/task/{task_id}/worklogs", 2)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -54,21 +54,21 @@ class WorkLogControllerTest {
     }
 
     @Test
-    void getAllWorkLog_BadRequestException() {
+    void getListWorkLogs_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.getListWorkLogs(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
-    void getAllWorkLog_NotFoundException() {
+    void getListWorkLogs_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> controller.getListWorkLogs(120L));
         assertTrue(exception.getMessage().contains("Список логов пустой!"));
     }
 
     @Test
-    void addWorkLog() throws Exception {
+    void createWorkLog() throws Exception {
         mockMvc.perform(post("/rest/worklog/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -88,7 +88,7 @@ class WorkLogControllerTest {
     }
 
     @Test
-    void addWorkLog_BadRequestException() {
+    void createWorkLog_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.createWorkLog(null));
         assertTrue(exception.getMessage().contains("Пустой объект!"));

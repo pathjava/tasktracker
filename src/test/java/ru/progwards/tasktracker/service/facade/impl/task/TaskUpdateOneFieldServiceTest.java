@@ -56,7 +56,7 @@ public class TaskUpdateOneFieldServiceTest {
     }
 
     @Test
-    public void testSetOneField() {
+    public void updateOneField() {
         Long id = getListService.getList().stream()
                 .filter(e -> e.getName().equals("Test task 1 UpdateOneFieldService")).findFirst()
                 .map(Task::getId)

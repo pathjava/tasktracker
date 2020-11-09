@@ -40,7 +40,7 @@ public class TaskCreateServiceTest {
     private GetListService<Task> getListService;
 
     @Test
-    public void testCreate() {
+    public void create() {
         createService.create(
                 new Task(null, "TT1-1", "Test CreateService", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),

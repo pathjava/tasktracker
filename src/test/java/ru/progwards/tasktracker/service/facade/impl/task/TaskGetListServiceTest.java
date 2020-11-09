@@ -65,7 +65,7 @@ public class TaskGetListServiceTest {
     }
 
     @Test
-    public void testGetList() {
+    public void getList() {
         Collection<Task> collection = getListService.getList();
 
         assertNotNull(collection);
@@ -81,7 +81,7 @@ public class TaskGetListServiceTest {
     }
 
     @Test
-    public void testGetList_Return_Empty_Collection() {
+    public void getList_Return_Empty_Collection() {
         jsonHandler.getMap().clear();
 
         Collection<Task> collection = getListService.getList();

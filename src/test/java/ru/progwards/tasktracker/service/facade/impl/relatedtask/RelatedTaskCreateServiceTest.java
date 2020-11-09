@@ -36,7 +36,7 @@ class RelatedTaskCreateServiceTest {
     private GetListByTaskService<Long, RelatedTask> listByTaskService;
 
     @Test
-    void testCreate() {
+    void create() {
         createService.create(
                 new RelatedTask(
                         null, new RelationType(1L, "блокирующая CreateService", new RelationType(

@@ -67,7 +67,7 @@ class RelatedTaskEntityRepositoryTest {
     }
 
     @Test
-    void getOne() {
+    void get() {
         RelatedTaskEntity entity = createEntityForTest();
 
         repository.create(entity);
@@ -89,7 +89,7 @@ class RelatedTaskEntityRepositoryTest {
 
     @Test
     void getAll() {
-        creatingEntitiesForGetAllTest();
+        createEntitiesForGetAllTest();
 
         Collection<RelatedTaskEntity> collection = repository.get();
 
@@ -107,7 +107,7 @@ class RelatedTaskEntityRepositoryTest {
         jsonHandler.getMap().clear();
     }
 
-    private void creatingEntitiesForGetAllTest() {
+    private void createEntitiesForGetAllTest() {
         jsonHandler.getMap().clear();
 
         repository.create(

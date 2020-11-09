@@ -33,7 +33,7 @@ public class TaskEntityRepositoryUpdateFieldTest {
     private RepositoryUpdateField<TaskEntity> updateField;
 
     @Test
-    public void testUpdateField() {
+    public void updateField() {
         repository.create(
                 new TaskEntity(
                         null, "TT1-1", "Test task", "Description RepositoryUpdateField",

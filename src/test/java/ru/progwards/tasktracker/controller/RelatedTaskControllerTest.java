@@ -41,7 +41,7 @@ class RelatedTaskControllerTest {
     private GetService<Long, RelatedTask> getService;
 
     @Test
-    void addRelatedTask() throws Exception {
+    void createRelatedTask() throws Exception {
         mockMvc.perform(post("/rest/relatedtask/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -65,14 +65,14 @@ class RelatedTaskControllerTest {
     }
 
     @Test
-    void addRelatedTask_BadRequestException() {
+    void createRelatedTask_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.createRelatedTask(null));
         assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
     @Test
-    void getAllRelatedTasks() throws Exception {
+    void getListRelatedTasks() throws Exception {
         mockMvc.perform(get("/rest/relatedtask/{task_id}/list", 2)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -85,14 +85,14 @@ class RelatedTaskControllerTest {
     }
 
     @Test
-    void getAllRelatedTasks_BadRequestException() {
+    void getListRelatedTasks_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.getListRelatedTasks(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
-    void getAllRelatedTasks_NotFoundException() {
+    void getListRelatedTasks_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> controller.getListRelatedTasks(20L));
         assertTrue(exception.getMessage().contains("Список задач пустой!"));

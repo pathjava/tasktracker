@@ -53,7 +53,7 @@ public class TaskRefreshServiceTest {
     }
 
     @Test
-    public void testRefresh() {
+    public void refresh() {
         Long id = getListService.getList().stream()
                 .filter(e -> e.getName().equals("Test RefreshService")).findFirst()
                 .map(Task::getId)

@@ -52,7 +52,7 @@ public class TaskRemoveServiceTest {
     }
 
     @Test
-    public void testRemove() {
+    public void remove() {
         Long id = getListService.getList().stream()
                 .filter(e -> e.getDescription().equals("Description RemoveService")).findFirst()
                 .map(Task::getId)

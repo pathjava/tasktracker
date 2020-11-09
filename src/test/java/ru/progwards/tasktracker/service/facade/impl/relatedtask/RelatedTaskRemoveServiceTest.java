@@ -45,7 +45,7 @@ class RelatedTaskRemoveServiceTest {
     }
 
     @Test
-    void testRemove() {
+    void remove() {
         Long id = listByTaskService.getListByTaskId(2L).stream()
                 .filter(e -> e.getRelationType().getName().equals("блокирующая RemoveService")).findFirst()
                 .map(RelatedTask::getId)

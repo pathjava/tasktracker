@@ -38,7 +38,7 @@ public class TaskEntityJsonHandlerTest {
     }
 
     @Test
-    public void testWrite() {
+    public void write() {
         assertEquals(0, jsonHandler.getMap().size());
 
         createEntitiesForTest();
@@ -49,7 +49,7 @@ public class TaskEntityJsonHandlerTest {
     }
 
     @Test
-    public void testRead() {
+    public void read() {
         assertEquals(0, jsonHandler.getMap().size());
         createEntitiesForTest();
         jsonHandler.read();
