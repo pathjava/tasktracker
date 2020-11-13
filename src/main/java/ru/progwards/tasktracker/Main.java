@@ -3,7 +3,11 @@ package ru.progwards.tasktracker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import ru.progwards.tasktracker.controller.converter.Converter;
+import ru.progwards.tasktracker.controller.converter.impl.ProjectDtoConverter;
+import ru.progwards.tasktracker.controller.dto.ProjectDto;
 import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.impl.UserService;
 import ru.progwards.tasktracker.service.facade.impl.project.ProjectCreateService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.User;
@@ -20,9 +24,12 @@ public class Main {
 
         CreateService<Project> createService = context.getBean(ProjectCreateService.class);
 
+        Converter<Project, ProjectDto> converter = context.getBean(ProjectDtoConverter.class);
+
+        UserService userService = context.getBean(UserService.class);
+
         for (long i = 0; i < 5; i++) {
-            createService.create(new Project(i, "name"+i, "description"+i, "prefix", new User(),
-                    ZonedDateTime.now(), new WorkFlow(i, "name", true, i, null), new ArrayList<>(), 0L));
+            createService.create(converter.toModel(new ProjectDto(i, "name"+i+i, "desc"+i, "prefix", userService.get(i))));
         }
     }
 }

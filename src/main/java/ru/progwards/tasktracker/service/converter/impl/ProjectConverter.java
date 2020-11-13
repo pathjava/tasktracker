@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.facade.GetListService;
+import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -15,7 +15,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Класс, позволяющий преобразовывать сущности репозитория в бизнес-модель и обратно
@@ -25,10 +24,10 @@ import java.util.stream.Collectors;
 public class ProjectConverter implements Converter<ProjectEntity, Project> {
 
     /**
-     * сервис со списком всех задач
+     * сервис с методом получения списка всех задач по определенному проекту
      */
     @Autowired
-    private GetListService<Task> taskGetListService;
+    private GetListByProjectService<Long, Task> taskGetListByProjectService;
 
     /**
      * сервис по поиску пользователя
@@ -52,9 +51,7 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
                 entity.getPrefix(), userGetService.get(entity.getOwnerId()),
                 getZDTCreated(entity.getCreated()), workFlowGetService.get(entity.getWorkFlowId()),
-                getListTasks(entity.getId()), entity.getLastTaskCode());
-        //TODO переговорить с командой о создании метода в объекте GetListService, при помощи
-        // которого получать задачи конктетного проекта
+                (List<Task>) taskGetListByProjectService.getListByProjectId(entity.getId()), entity.getLastTaskCode());
     }
 
     /**
@@ -88,15 +85,5 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
      */
     private ZonedDateTime getZDTCreated(Long milli) {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(milli), ZoneId.of("Europe/Moscow"));
-    }
-
-    /**
-     * метод, позволяющий получить список задач конкретного проекта
-     * @param projectId идентификатор нужного проекта
-     * @return список задач данного проета
-     */
-    private List<Task> getListTasks(Long projectId) {
-        return taskGetListService.getList().stream().
-                filter(e -> e.getProject_id().equals(projectId)).collect(Collectors.toList());
     }
 }

@@ -3,24 +3,27 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootTest
 public class ProjectEntityRepositoryTest {
-//    @InjectMocks
-//    private ProjectEntityRepository repository;
-//    @Mock
-//    private JsonHandlerProjectEntity jsonHandlerProjectEntity;
 
-    @Autowired
-    private Repository<Long, ProjectEntity> repositoryAuto;
+    @InjectMocks
+    private ProjectEntityRepository repository;
+
+    @Mock
+    private JsonHandler<Long, ProjectEntity> projectEntityJsonHandler;
+
+    private Map<Long, ProjectEntity> map;
 
     @BeforeEach
     public void initMock() {
@@ -29,61 +32,82 @@ public class ProjectEntityRepositoryTest {
 
     @Test
     public void getEntitiesTest() {
-        Collection<ProjectEntity> entityList = new ArrayList<>();
+        map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            entityList.add(new ProjectEntity(i, "name"+i, "desc"+i, "", i, 1000L, i, 0L));
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
         }
 
-        entityList.forEach(e -> repositoryAuto.create(e));
+        Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
 
-        Collection<ProjectEntity> result = repositoryAuto.get();
-
-        Assertions.assertNotNull(result);
-
-        Assertions.assertEquals(entityList, result);
+        Assertions.assertEquals(map.values().size(), repository.get().size());
     }
 
     @Test
     public void getEntityTest() {
-        ProjectEntity entity = new ProjectEntity(1L, "name1", "desc1", "",1L, 1000L, 1L, 0L);
-        repositoryAuto.create(entity);
+        map = new ConcurrentHashMap<>();
 
-        Assertions.assertEquals(entity, repositoryAuto.get(entity.getId()));
+        for (long i = 0; i < 10; i++) {
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+        }
+
+        Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
+
+        ProjectEntity entity = map.get(1L);
+
+        Assertions.assertEquals(entity, repository.get(entity.getId()));
     }
 
     @Test
     public void createTest() {
-//        for (long i = 0; i < 10; i++) {
-//            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
-//        }
-//        Mockito.verify(jsonHandlerProjectEntity, Mockito.times(10)).write();
+        for (long i = 0; i < 10; i++) {
+            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+        }
 
-        ProjectEntity entity = new ProjectEntity(1L, "name1", "desc1","",1L, 1000L, 1L, 0L);
-        repositoryAuto.create(entity);
-        Assertions.assertNotNull(repositoryAuto.get(entity.getId()));
+        Mockito.verify(projectEntityJsonHandler, Mockito.times(10)).write();
     }
 
     @Test
     public void updateTest() {
-        ProjectEntity entityBefore = new ProjectEntity(1L, "name1", "desc1", "", 1L, 1000L, 1L, 0L);
-        repositoryAuto.create(entityBefore);
-        String nameBefore = repositoryAuto.get(entityBefore.getId()).getName();
+        map = new ConcurrentHashMap<>();
 
-        ProjectEntity entityAfter = new ProjectEntity(1L, "name123", "desc1", "", 1L, 1000L, 1L, 0L);
-        repositoryAuto.update(entityAfter);
-        String nameAfter = repositoryAuto.get(entityAfter.getId()).getName();
+        for (long i = 0; i < 10; i++) {
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+        }
 
-        Assertions.assertEquals(nameAfter, nameBefore + "23");
+        Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
+
+        ProjectEntity entity = projectEntityJsonHandler.getMap().get(1L);
+        String newName = entity.getName() + 23;
+
+        entity.setName(newName);
+
+        repository.update(entity);
+
+        ProjectEntity entityAfter = projectEntityJsonHandler.getMap().get(1L);
+        String nameAfterUpdate = entityAfter.getName();
+
+        Assertions.assertEquals(nameAfterUpdate, newName);
     }
 
     @Test
     public void deleteTest() {
-        ProjectEntity entity = new ProjectEntity(1L, "name1", "desc1", "", 1L, 1000L, 1L, 0L);
-        repositoryAuto.create(entity);
-        Assertions.assertNotNull(repositoryAuto.get(entity.getId()));
+        map = new ConcurrentHashMap<>();
 
-        repositoryAuto.delete(entity.getId());
-        Assertions.assertNull(repositoryAuto.get(entity.getId()));
+        for (long i = 0; i < 10; i++) {
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+        }
+
+        Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
+
+        ProjectEntity entity = repository.get(3L);
+
+        Assertions.assertNotNull(entity);
+
+        repository.delete(entity.getId());
+
+        ProjectEntity entityAfterDelete = repository.get(3L);
+
+        Assertions.assertNull(entityAfterDelete);
     }
 }

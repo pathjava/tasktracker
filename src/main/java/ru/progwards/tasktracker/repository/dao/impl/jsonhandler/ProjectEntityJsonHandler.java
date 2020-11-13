@@ -33,6 +33,7 @@ public class ProjectEntityJsonHandler implements JsonHandler<Long, ProjectEntity
             PROJECT_PATH = new File("src/main/resources/data/projects.json");
         }
     }
+
     public ProjectEntityJsonHandler() {
         try {
             read();
@@ -47,10 +48,6 @@ public class ProjectEntityJsonHandler implements JsonHandler<Long, ProjectEntity
 
     public Map<Long, ProjectEntity> getMap() {
         return map;
-    }
-
-    public void addMap(Long id, ProjectEntity entity) {
-        map.put(id, entity);
     }
 
     @Override

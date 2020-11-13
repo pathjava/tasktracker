@@ -50,10 +50,6 @@ public class TaskPriorityEntityJsonHandler implements JsonHandler<Long, TaskPrio
         return map;
     }
 
-    public void addMap(Long id, TaskPriorityEntity entity) {
-        map.put(id, entity);
-    }
-
     @Override
     public void write() {
         synchronized (this) {
