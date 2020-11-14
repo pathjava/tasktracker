@@ -7,23 +7,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SpringBootTest
-public class ProjectEntityRepositoryTest {
+public class TaskPriorityEntityRepositoryTest {
 
     @InjectMocks
-    private ProjectEntityRepository repository;
+    private TaskPriorityEntityRepository repository;
 
     @Mock
-    private JsonHandler<Long, ProjectEntity> projectEntityJsonHandler;
+    private JsonHandler<Long, TaskPriorityEntity> projectEntityJsonHandler;
 
-    private Map<Long, ProjectEntity> map;
+    private Map<Long, TaskPriorityEntity> map;
 
     @BeforeEach
     public void initMock() {
@@ -35,7 +33,7 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i, new TaskPriorityEntity(i, "name"+i, (int)i));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
@@ -48,12 +46,12 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i, new TaskPriorityEntity(i, "name"+i, (int)i));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
 
-        ProjectEntity entity = map.get(1L);
+        TaskPriorityEntity entity = map.get(1L);
 
         Assertions.assertEquals(entity, repository.get(entity.getId()));
     }
@@ -61,7 +59,7 @@ public class ProjectEntityRepositoryTest {
     @Test
     public void createTest() {
         for (long i = 0; i < 10; i++) {
-            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            repository.create(new TaskPriorityEntity(i, "name"+i, (int)i));
         }
 
         Mockito.verify(projectEntityJsonHandler, Mockito.times(10)).write();
@@ -72,19 +70,19 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i, new TaskPriorityEntity(i, "name"+i, (int)i));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
 
-        ProjectEntity entity = projectEntityJsonHandler.getMap().get(1L);
+        TaskPriorityEntity entity = projectEntityJsonHandler.getMap().get(1L);
         String newName = entity.getName() + 23;
 
         entity.setName(newName);
 
         repository.update(entity);
 
-        ProjectEntity entityAfterUpdate = projectEntityJsonHandler.getMap().get(1L);
+        TaskPriorityEntity entityAfterUpdate = projectEntityJsonHandler.getMap().get(1L);
         String nameAfterUpdate = entityAfterUpdate.getName();
 
         Assertions.assertEquals(nameAfterUpdate, newName);
@@ -95,18 +93,18 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i, new TaskPriorityEntity(i, "name"+i, (int)i));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
 
-        ProjectEntity entity = repository.get(3L);
+        TaskPriorityEntity entity = repository.get(3L);
 
         Assertions.assertNotNull(entity);
 
         repository.delete(entity.getId());
 
-        ProjectEntity entityAfterDelete = repository.get(3L);
+        TaskPriorityEntity entityAfterDelete = repository.get(3L);
 
         Assertions.assertNull(entityAfterDelete);
     }

@@ -8,16 +8,16 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootTest
-public class ProjectEntityJsonHandlerTest {
+public class TaskPriorityEntityJsonHandlerTest {
 
     @Mock
-    private JsonHandler<Long, ProjectEntity> projectEntityJsonHandler;
+    private JsonHandler<Long, TaskPriorityEntity> taskPriorityEntityJsonHandler;
 
     @BeforeEach
     public void initMock() {
@@ -28,19 +28,19 @@ public class ProjectEntityJsonHandlerTest {
     @Test
     final void writeReadTest() {
 
-        Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
+        Map<Long, TaskPriorityEntity> map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i, new TaskPriorityEntity(i, "name"+i, (int)i));
         }
 
-        Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
+        Mockito.when(taskPriorityEntityJsonHandler.getMap()).thenReturn(map);
 
-        int beforeSize = projectEntityJsonHandler.getMap().size();
-        projectEntityJsonHandler.write();
+        int beforeSize = taskPriorityEntityJsonHandler.getMap().size();
+        taskPriorityEntityJsonHandler.write();
 
-        projectEntityJsonHandler.read();
-        int afterSize = projectEntityJsonHandler.getMap().size();
+        taskPriorityEntityJsonHandler.read();
+        int afterSize = taskPriorityEntityJsonHandler.getMap().size();
 
         Assertions.assertEquals(beforeSize, afterSize);
     }

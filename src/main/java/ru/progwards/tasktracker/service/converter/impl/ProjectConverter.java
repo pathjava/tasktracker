@@ -48,6 +48,10 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
         if (entity == null)
             return null;
 
+        System.out.println(userGetService);
+        System.out.println(workFlowGetService);
+        System.out.println(taskGetListByProjectService);
+
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
                 entity.getPrefix(), userGetService.get(entity.getOwnerId()),
                 getZDTCreated(entity.getCreated()), workFlowGetService.get(entity.getWorkFlowId()),
