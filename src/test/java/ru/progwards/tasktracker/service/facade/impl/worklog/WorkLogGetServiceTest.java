@@ -1,18 +1,22 @@
 package ru.progwards.tasktracker.service.facade.impl.worklog;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
 import java.time.ZonedDateTime;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+
 /**
  * тестирование сервиса получения одного лога
  *
@@ -21,22 +25,51 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class WorkLogGetServiceTest {
 
-    @Mock
-    private GetService<Long, WorkLog> service;
+    @Autowired
+    private GetService<Long, WorkLog> getService;
+
+    @Autowired
+    private CreateService<WorkLog> createService;
+
+    @Autowired
+    private GetListByTaskService<Long, WorkLog> byTaskService;
+
+    @Autowired
+    private RemoveService<WorkLog> removeService;
+
+    @BeforeEach
+    void before() {
+        createService.create(
+                new WorkLog(
+                        null, 2L, null, null, ZonedDateTime.now(),
+                        "Description Log GetService", null, null
+                )
+        );
+    }
 
     @Test
     void get() {
-        when(service.get(anyLong())).thenReturn(
-                new WorkLog(
-                        1L, 2L, null, null, ZonedDateTime.now(),
-                        "Description Log 1", null, null
-                )
-        );
+        Long id = byTaskService.getListByTaskId(2L).stream()
+                .filter(e -> e.getDescription().equals("Description Log GetService")).findFirst()
+                .map(WorkLog::getId)
+                .orElse(null);
 
-        WorkLog workLog = service.get(1L);
+        if (id != null) {
+            WorkLog workLog = getService.get(id);
 
-        assertNotNull(workLog);
+            assertNotNull(workLog);
 
-        assertThat(workLog.getDescription(), equalTo("Description Log 1"));
+            assertThat(workLog.getDescription(), equalTo("Description Log GetService"));
+
+            removeService.remove(workLog);
+        } else
+            fail();
+    }
+
+    @Test
+    void get_Return_Null() {
+        WorkLog workLog = getService.get(anyLong());
+
+        assertNull(workLog);
     }
 }

@@ -34,54 +34,35 @@ class RelatedTaskEntityJsonHandlerTest {
 
     @Test
     void write() {
-        assertEquals(jsonHandler.getMap().size(), 0);
+        assertEquals(0, jsonHandler.getMap().size());
 
+        createEntitiesForTest();
+
+        jsonHandler.write();
+
+        assertEquals(2, jsonHandler.getMap().size());
+    }
+
+    @Test
+    void read() {
+        assertEquals(0, jsonHandler.getMap().size());
+        createEntitiesForTest();
+        jsonHandler.read();
+        assertEquals(2, jsonHandler.getMap().size());
+    }
+
+    private void createEntitiesForTest() {
         jsonHandler.getMap().put(
                 1L, new RelatedTaskEntity(
-                        1L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(
+                        1L, new RelationTypeEntity(null, "блокирующая", new RelationTypeEntity(
                         2L, "блокируемая", null)),
                         1L, 2L)
         );
         jsonHandler.getMap().put(
                 2L, new RelatedTaskEntity(
-                        2L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(
+                        2L, new RelationTypeEntity(null, "блокирующая", new RelationTypeEntity(
                         1L, "блокируемая", null)),
                         2L, 3L)
         );
-        jsonHandler.getMap().put(
-                3L, new RelatedTaskEntity(
-                        3L, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(
-                        3L, "блокируемая", null)),
-                        2L, 4L)
-        );
-        jsonHandler.getMap().put(
-                5L, new RelatedTaskEntity(
-                        5L, new RelationTypeEntity(2L, "блокируемая", new RelationTypeEntity(
-                        3L, "блокирующая", null)),
-                        2L, 1L)
-        );
-        jsonHandler.getMap().put(
-                6L, new RelatedTaskEntity(
-                        6L, new RelationTypeEntity(2L, "блокируемая", new RelationTypeEntity(
-                        3L, "блокирующая", null)),
-                        3L, 2L)
-        );
-        jsonHandler.getMap().put(
-                7L, new RelatedTaskEntity(
-                        7L, new RelationTypeEntity(2L, "блокируемая", new RelationTypeEntity(
-                        3L, "блокирующая", null)),
-                        4L, 2L)
-        );
-
-        jsonHandler.write();
-
-        assertEquals(jsonHandler.getMap().size(), 6);
-    }
-
-    @Test
-    void read() {
-        assertEquals(jsonHandler.getMap().size(), 0);
-        jsonHandler.read();
-        assertEquals(jsonHandler.getMap().size(), 6);
     }
 }

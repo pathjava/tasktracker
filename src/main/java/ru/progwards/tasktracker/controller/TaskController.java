@@ -12,7 +12,6 @@ import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -24,10 +23,10 @@ import java.util.stream.Collectors;
 @RestController
 public class TaskController {
 
-    private GetService<Long, Task> taskGetService;
-    private RemoveService<Task> taskRemoveService;
-    private CreateService<Task> taskCreateService;
-    private RefreshService<Task> taskRefreshService;
+    private GetService<Long, Task> getService;
+    private RemoveService<Task> removeService;
+    private CreateService<Task> createService;
+    private RefreshService<Task> refreshService;
     private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
     private Converter<Task, TaskDtoFull> dtoFullConverter;
     private GetService<String, Task> byCodeGetService;
@@ -44,10 +43,10 @@ public class TaskController {
             GetService<String, Task> byCodeGetService,
             GetListByProjectService<Long, Task> listByProjectService
     ) {
-        this.taskGetService = taskGetService;
-        this.taskRemoveService = taskRemoveService;
-        this.taskCreateService = taskCreateService;
-        this.taskRefreshService = taskRefreshService;
+        this.getService = taskGetService;
+        this.removeService = taskRemoveService;
+        this.createService = taskCreateService;
+        this.refreshService = taskRefreshService;
         this.dtoPreviewConverter = dtoPreviewConverter;
         this.dtoFullConverter = dtoFullConverter;
         this.byCodeGetService = byCodeGetService;
@@ -61,7 +60,7 @@ public class TaskController {
      * @return коллекция превью задач
      */
     @GetMapping("/rest/project/{project_id}/tasks")
-    public ResponseEntity<Collection<TaskDtoPreview>> getAllTasks(@PathVariable Long project_id) {
+    public ResponseEntity<Collection<TaskDtoPreview>> getListTasks(@PathVariable Long project_id) {
         if (project_id == null)
             throw new BadRequestException("Id: " + project_id + " не задан или задан неверно!");
 
@@ -82,12 +81,12 @@ public class TaskController {
      * @return возвращает созданную задачу
      */
     @PostMapping("/rest/task/create")
-    public ResponseEntity<TaskDtoFull> addTask(@RequestBody TaskDtoFull taskDtoFull) {
+    public ResponseEntity<TaskDtoFull> createTask(@RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
         Task task = dtoFullConverter.toModel(taskDtoFull);
-        taskCreateService.create(task);
+        createService.create(task);
         TaskDtoFull createdTask = dtoFullConverter.toDto(task);
 
         //TODO - перед добавлением проверять, есть ли уже в БД такая задача, но id генерируется в entity - подумать
@@ -102,16 +101,16 @@ public class TaskController {
      * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную задачу
      */
-    @PutMapping("/rest/project/{project_id}/tasks/{task_id}/update")
+    @PutMapping("/rest/task/{task_id}/update")
     public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
-            throw new BadRequestException("Задача не существует!");
+            throw new BadRequestException("Пустой объект!");
 
         if (!task_id.equals(taskDtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
         Task task = dtoFullConverter.toModel(taskDtoFull);
-        taskRefreshService.refresh(task);
+        refreshService.refresh(task);
         TaskDtoFull updatedTask = dtoFullConverter.toDto(task);
 
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
@@ -123,14 +122,14 @@ public class TaskController {
      * @param task_id идентификатор задачи
      * @return возвращает статус ответа
      */
-    @DeleteMapping("/rest/project/{project_id}/tasks/{task_id}/delete")
+    @DeleteMapping("/rest/task/{task_id}/delete")
     public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 
-        Task task = taskGetService.get(task_id);
+        Task task = getService.get(task_id);
         if (task != null)//TODO - при удалении задачи вызывать метод удаления связанных задач
-            taskRemoveService.remove(task);
+            removeService.remove(task);
         else
             throw new NotFoundException("Задача с id: " + task_id + " не найдена!");
 
@@ -144,7 +143,7 @@ public class TaskController {
      * @return возвращает найденную задачу
      */
     @GetMapping("/rest/task/{code}/getbycode")
-    public ResponseEntity<TaskDtoFull> getTaskByCode(@PathVariable String code) {
+    public ResponseEntity<TaskDtoFull> getByCodeTask(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");
 

@@ -58,7 +58,7 @@ class TaskUpdateFieldControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(put("/rest/project/2/tasks/112/field")
+        mockMvc.perform(put("/rest/task/112/field")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -72,7 +72,7 @@ class TaskUpdateFieldControllerTest {
     }
 
     @Test()
-    void updateTask_BadRequestException_Null() {
+    void updateOneField_BadRequestException_Null() {
         Exception exception = assertThrows(BadRequestException.class, () -> {
             updateFieldController.updateOneField(null, null);
         });
@@ -80,7 +80,7 @@ class TaskUpdateFieldControllerTest {
     }
 
     @Test()
-    void updateTask_BadRequestException_Wrong() {
+    void updateOneField_BadRequestException_Wrong() {
         UpdateOneValue value = new UpdateOneValue(11L, "Test task 10-1", "name");
 
         Exception exception = assertThrows(BadRequestException.class, () -> {

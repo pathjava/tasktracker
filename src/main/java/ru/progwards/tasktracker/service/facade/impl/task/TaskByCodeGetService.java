@@ -16,17 +16,17 @@ import ru.progwards.tasktracker.service.vo.Task;
 @Service
 public class TaskByCodeGetService implements GetService<String, Task> {
 
-    private Repository<String, TaskEntity> taskRepository;
-    private Converter<TaskEntity, Task> converterTask;
+    private Repository<String, TaskEntity> repository;
+    private Converter<TaskEntity, Task> converter;
 
     @Autowired
-    public void setTaskRepository(Repository<String, TaskEntity> taskRepository) {
-        this.taskRepository = taskRepository;
+    public void setRepository(Repository<String, TaskEntity> repository) {
+        this.repository = repository;
     }
 
     @Autowired
-    public void setConverterTask(Converter<TaskEntity, Task> converterTask) {
-        this.converterTask = converterTask;
+    public void setConverter(Converter<TaskEntity, Task> converter) {
+        this.converter = converter;
     }
 
     /**
@@ -35,6 +35,6 @@ public class TaskByCodeGetService implements GetService<String, Task> {
      */
     @Override
     public Task get(String code) {
-        return code == null ? null : converterTask.toVo(taskRepository.get(code));
+        return code == null ? null : converter.toVo(repository.get(code));
     }
 }

@@ -7,7 +7,7 @@ package ru.progwards.tasktracker.controller.dto;
  */
 public class TaskDtoPreview {
 
-    private Long id;
+    private final Long id;
     private String code;
     private String name;
 
@@ -19,10 +19,6 @@ public class TaskDtoPreview {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCode() {

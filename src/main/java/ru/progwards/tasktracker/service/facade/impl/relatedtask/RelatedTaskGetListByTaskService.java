@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class RelatedTaskGetListByTaskService implements GetListByTaskService<Long, RelatedTask> {
 
     private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
-    private Converter<RelatedTaskEntity, RelatedTask> taskConverter;
+    private Converter<RelatedTaskEntity, RelatedTask> converter;
 
     @Autowired
     public void setByTaskId(RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId) {
@@ -28,8 +28,8 @@ public class RelatedTaskGetListByTaskService implements GetListByTaskService<Lon
     }
 
     @Autowired
-    public void setTaskConverter(Converter<RelatedTaskEntity, RelatedTask> taskConverter) {
-        this.taskConverter = taskConverter;
+    public void setConverter(Converter<RelatedTaskEntity, RelatedTask> converter) {
+        this.converter = converter;
     }
 
     /**
@@ -39,7 +39,7 @@ public class RelatedTaskGetListByTaskService implements GetListByTaskService<Lon
     @Override
     public Collection<RelatedTask> getListByTaskId(Long taskId) {
         return byTaskId.getByTaskId(taskId).stream()
-                .map(entity -> taskConverter.toVo(entity))
+                .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());
     }
 }

@@ -37,7 +37,7 @@ class TaskConverterTest {
     @Test
     void toVo_return_Not_Null() {
         Task tempTask = converter.toVo(
-                new TaskEntity(1L, "TT1", "Test task 1 TEST", "Description task 1",
+                new TaskEntity(null, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
                         null,
@@ -58,7 +58,7 @@ class TaskConverterTest {
     @Test
     void toEntity_return_Not_Null() {
         TaskEntity tempTaskEntity = converter.toEntity(
-                new Task(1L, "TT1", "Test task 1 TEST", "Description task 1",
+                new Task(null, "TT1", "Test task 1 TEST", "Description task 1",
                         TaskType.BUG, null, 11L, new User(), new User(),
                         ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
                         null,

@@ -7,7 +7,7 @@ package ru.progwards.tasktracker.service.vo;
  */
 public class RelatedTask {
 
-    private Long id;
+    private final Long id;
     private RelationType relationType;
     private Long parentTaskId;
     private Long taskId;
@@ -21,10 +21,6 @@ public class RelatedTask {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public RelationType getRelationType() {

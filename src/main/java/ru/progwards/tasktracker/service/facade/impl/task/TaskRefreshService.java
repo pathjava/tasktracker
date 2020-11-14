@@ -20,25 +20,25 @@ import java.time.ZonedDateTime;
 @Service
 public class TaskRefreshService implements RefreshService<Task> {
 
-    private Repository<Long, TaskEntity> taskRepository;
-    private Converter<TaskEntity, Task> converterTask;
+    private Repository<Long, TaskEntity> repository;
+    private Converter<TaskEntity, Task> converter;
 
     @Autowired
-    public void setTaskRepository(TaskEntityRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public void setRepository(TaskEntityRepository repository) {
+        this.repository = repository;
     }
 
     @Autowired
-    public void setConverterTask(TaskConverter converterTask) {
-        this.converterTask = converterTask;
+    public void setConverter(TaskConverter converter) {
+        this.converter = converter;
     }
 
     /**
-     * @param task  value object - объект бизнес логики (задача), который необходимо обновить
+     * @param model  value object - объект бизнес логики (задача), который необходимо обновить
      */
     @Override
-    public void refresh(Task task) {
-        task.setUpdated(ZonedDateTime.now());
-        taskRepository.update(converterTask.toEntity(task));
+    public void refresh(Task model) {
+        model.setUpdated(ZonedDateTime.now());
+        repository.update(converter.toEntity(model));
     }
 }

@@ -3,7 +3,6 @@ package ru.progwards.tasktracker.service.converter.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.controller.dto.WorkLogDto;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.WorkLog;
@@ -13,7 +12,7 @@ import java.time.ZonedDateTime;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * тестирование конвертера между valueObject <-> entity
@@ -37,7 +36,7 @@ class WorkLogConverterTest {
     void toVo_Return_Not_Null() {
         WorkLog workLog = converter.toVo(
                 new WorkLogEntity(
-                        1L, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
+                        null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
                         "Description", null, null
                 )
         );
@@ -56,7 +55,7 @@ class WorkLogConverterTest {
     void toEntity_Return_Not_Null() {
         WorkLogEntity entity = converter.toEntity(
                 new WorkLog(
-                        1L, 2L, null, null, ZonedDateTime.now(),
+                        null, 2L, null, null, ZonedDateTime.now(),
                         "Description", null, null
                 )
         );

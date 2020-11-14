@@ -29,6 +29,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -66,41 +67,27 @@ class TaskControllerTest {
     }
 
     @Test
-    void getAllTasks_From_Project() throws Exception {
-        Collection<TaskDtoPreview> tempTasks = getListService.getList().stream()
+    void getListTasks_From_Project() throws Exception {
+        createDtoForGetListTasks();
+
+        Collection<TaskDtoPreview> collection = getListService.getList().stream()
                 .filter(task -> task.getProject_id().equals(2L))
                 .map(task -> dtoPreviewConverter.toDto(task))
                 .collect(Collectors.toList());
 
         String jsonString = new ObjectMapper()
-                .registerModule(new JavaTimeModule()).writeValueAsString(tempTasks);
+                .registerModule(new JavaTimeModule()).writeValueAsString(collection);
 
         mockMvc.perform(get("/rest/project/2/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonString));
     }
 
-    @Test()
-    void getAllTasks_From_Project_BadRequestException() {
-        Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.getAllTasks(null));
-        assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
-    }
-
-    @Test()
-    void getAllTasks_From_Project_NotFoundException() {
-        Exception exception = assertThrows(NotFoundException.class,
-                () -> controller.getAllTasks(20L));
-        assertTrue(exception.getMessage().contains("Список задач пустой!"));
-    }
-
-    @Test
-    void addTask() throws Exception {
+    private void createDtoForGetListTasks() throws Exception {
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
-                                "    \"id\": 110,\n" +
                                 "    \"code\": \"TT110-1\",\n" +
                                 "    \"name\": \"Test task 110\",\n" +
                                 "    \"description\": \"Description task 110\",\n" +
@@ -120,23 +107,86 @@ class TaskControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful()
                 );
-
-        mockMvc.perform(get("/rest/task/TT110-1/getbycode"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(110)))
-                .andExpect(jsonPath("$.name", equalTo("Test task 110")));
+        mockMvc.perform(post("/rest/task/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"code\": \"TT110-2\",\n" +
+                                "    \"name\": \"Test task 110\",\n" +
+                                "    \"description\": \"Description task 110\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
     }
 
     @Test()
-    void addTask_BadRequestException_Null() {
+    void getListTasks_From_Project_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.addTask(null));
+                () -> controller.getListTasks(null));
+        assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
+    }
+
+    @Test()
+    void getListTasks_From_Project_NotFoundException() {
+        Exception exception = assertThrows(NotFoundException.class,
+                () -> controller.getListTasks(20L));
+        assertTrue(exception.getMessage().contains("Список задач пустой!"));
+    }
+
+    @Test
+    void createTask() throws Exception {
+        mockMvc.perform(post("/rest/task/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        "{\n" +
+                                "    \"code\": \"TT1110-1\",\n" +
+                                "    \"name\": \"Test task 1110\",\n" +
+                                "    \"description\": \"Description task 1110\",\n" +
+                                "    \"type\": \"BUG\",\n" +
+                                "    \"project_id\": 2,\n" +
+                                "    \"author\": {},\n" +
+                                "    \"executor\": {},\n" +
+                                "    \"created\": 1603274345,\n" +
+                                "    \"updated\": null,\n" +
+                                "    \"timeSpent\": null,\n" +
+                                "    \"timeLeft\": null,\n" +
+                                "    \"relatedTasks\": [],\n" +
+                                "    \"attachments\": [],\n" +
+                                "    \"workLogs\": []\n" +
+                                "  }"
+                ))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
+                );
+
+        mockMvc.perform(get("/rest/task/TT1110-1/getbycode"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", equalTo("Test task 1110")));
+    }
+
+    @Test()
+    void createTask_BadRequestException_Null() {
+        Exception exception = assertThrows(BadRequestException.class,
+                () -> controller.createTask(null));
         assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
     @Test
     void updateTask() throws Exception {
-        this.mockMvc.perform(put("/rest/project/2/tasks/111/update")
+        mockMvc.perform(put("/rest/task/{task_id}/update", 111)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         "{\n" +
@@ -161,17 +211,16 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        this.mockMvc.perform(get("/rest/task/TT111-1/getbycode"))
+        mockMvc.perform(get("/rest/task/TT111-1/getbycode"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(111)))
                 .andExpect(jsonPath("$.name", equalTo("Test task 111 updated")));
     }
-
     @Test()
-    void updateTask_BadRequestException_Null() {
+    void updateTask_BadRequestException_Null_Object() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.updateTask(null, null));
-        assertTrue(exception.getMessage().contains("Задача не существует!"));
+                () -> controller.updateTask(anyLong(), null));
+        assertTrue(exception.getMessage().contains("Пустой объект!"));
     }
 
     @Test()
@@ -189,7 +238,7 @@ class TaskControllerTest {
     }
 
     @Test
-    void deleteTaskById() throws Exception {
+    void deleteTask() throws Exception {
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -215,7 +264,7 @@ class TaskControllerTest {
                 .andExpect(status().is2xxSuccessful()
                 );
 
-        mockMvc.perform(delete("/rest/project/2/tasks/{id}/delete", 210)
+        mockMvc.perform(delete("/rest/task/{task_id}/delete", 210)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
@@ -225,21 +274,21 @@ class TaskControllerTest {
     }
 
     @Test()
-    void deleteTaskById_BadRequestException() {
+    void deleteTask_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
                 () -> controller.deleteTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test()
-    void deleteTaskById_NotFoundException() {
+    void deleteTask_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
                 () -> controller.deleteTask(20L));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 
     @Test
-    void getTaskByCode() throws Exception {
+    void getByCodeTask() throws Exception {
         mockMvc.perform(post("/rest/task/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -273,16 +322,16 @@ class TaskControllerTest {
     }
 
     @Test
-    void getTaskByCode_BadRequestException() {
+    void getByCodeTask_BadRequestException() {
         Exception exception = assertThrows(BadRequestException.class,
-                () -> controller.getTaskByCode(null));
+                () -> controller.getByCodeTask(null));
         assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
     }
 
     @Test
-    void getTaskByCode_NotFoundException() {
+    void getByCodeTask_NotFoundException() {
         Exception exception = assertThrows(NotFoundException.class,
-                () -> controller.getTaskByCode("TT10-11"));
+                () -> controller.getByCodeTask("TT10-11"));
         assertTrue(exception.getMessage().contains(" не найдена!"));
     }
 }

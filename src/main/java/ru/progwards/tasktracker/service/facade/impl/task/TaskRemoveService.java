@@ -16,18 +16,18 @@ import ru.progwards.tasktracker.service.vo.Task;
 @Service
 public class TaskRemoveService implements RemoveService<Task> {
 
-    private Repository<Long, TaskEntity> taskRepository;
+    private Repository<Long, TaskEntity> repository;
 
     @Autowired
-    public void setTaskRepository(TaskEntityRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public void setRepository(TaskEntityRepository repository) {
+        this.repository = repository;
     }
 
     /**
-     * @param task  value object - объект бизнес логики (задача), который необходимо удалить
+     * @param model  value object - объект бизнес логики (задача), который необходимо удалить
      */
     @Override
-    public void remove(Task task) {
-        taskRepository.delete(task.getId());
+    public void remove(Task model) {
+        repository.delete(model.getId());
     }
 }

@@ -53,7 +53,7 @@ public class RelatedTaskController {
      * @return возвращает созданную задачу
      */
     @PostMapping("/rest/relatedtask/create")
-    public ResponseEntity<RelatedTaskDto> addRelatedTask(@RequestBody RelatedTaskDto taskDto) {
+    public ResponseEntity<RelatedTaskDto> createRelatedTask(@RequestBody RelatedTaskDto taskDto) {
         if (taskDto == null)
             throw new BadRequestException("Пустой объект!");
 
@@ -69,7 +69,7 @@ public class RelatedTaskController {
      * @return коллекция связанных задач
      */
     @GetMapping("/rest/relatedtask/{task_id}/list")
-    public ResponseEntity<Collection<RelatedTaskDto>> getAllRelatedTasks(@PathVariable Long task_id) {
+    public ResponseEntity<Collection<RelatedTaskDto>> getListRelatedTasks(@PathVariable Long task_id) {
         if (task_id == null)
             throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
 

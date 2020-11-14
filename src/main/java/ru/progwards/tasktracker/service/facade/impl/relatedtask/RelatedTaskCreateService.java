@@ -8,8 +8,6 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 
-import java.util.Random;
-
 /**
  * Бизнес-логика создания связанной задачи
  *
@@ -18,28 +16,26 @@ import java.util.Random;
 @Service
 public class RelatedTaskCreateService implements CreateService<RelatedTask> {
 
-    private Repository<Long, RelatedTaskEntity> entityRepository;
-    private Converter<RelatedTaskEntity, RelatedTask> taskConverter;
+    private Repository<Long, RelatedTaskEntity> repository;
+    private Converter<RelatedTaskEntity, RelatedTask> converter;
 
     @Autowired
-    public void setEntityRepository(Repository<Long, RelatedTaskEntity> entityRepository) {
-        this.entityRepository = entityRepository;
+    public void setRepository(Repository<Long, RelatedTaskEntity> repository) {
+        this.repository = repository;
     }
 
     @Autowired
-    public void setTaskConverter(Converter<RelatedTaskEntity, RelatedTask> taskConverter) {
-        this.taskConverter = taskConverter;
+    public void setConverter(Converter<RelatedTaskEntity, RelatedTask> converter) {
+        this.converter = converter;
     }
 
     /**
      * метод создания связанной задачи
      *
-     * @param relatedTask value object - объект бизнес логики, который необходимо создать
+     * @param model value object - объект бизнес логики, который необходимо создать
      */
     @Override
-    public void create(RelatedTask relatedTask) {
-        if (relatedTask.getId() == null) //TODO - for testing generate id
-            relatedTask.setId(new Random().nextLong());
-        entityRepository.create(taskConverter.toEntity(relatedTask));
+    public void create(RelatedTask model) {
+        repository.create(converter.toEntity(model));
     }
 }

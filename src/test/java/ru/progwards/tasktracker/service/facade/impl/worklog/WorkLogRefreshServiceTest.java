@@ -4,27 +4,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.facade.CreateService;
-import ru.progwards.tasktracker.service.facade.GetListByTaskService;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.facade.RemoveService;
+import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
 import java.time.ZonedDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * тестирование сервиса удаления лога
+ * тестирование обновления лога
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
-class WorkLogRemoveServiceTest {
-
-    @Autowired
-    private RemoveService<WorkLog> removeService;
+class WorkLogRefreshServiceTest {
 
     @Autowired
     private CreateService<WorkLog> createService;
@@ -33,35 +28,43 @@ class WorkLogRemoveServiceTest {
     private GetListByTaskService<Long, WorkLog> byTaskService;
 
     @Autowired
+    private RefreshService<WorkLog> refreshService;
+
+    @Autowired
+    private RemoveService<WorkLog> removeService;
+
+    @Autowired
     private GetService<Long, WorkLog> getService;
 
     @BeforeEach
-    void before() {
+    void before(){
         createService.create(
                 new WorkLog(
                         null, 2L, null, null, ZonedDateTime.now(),
-                        "Description Log RemoveService", null, null
+                        "Description Log RefreshService", null, null
                 )
         );
     }
 
     @Test
-    void remove() {
+    void refresh() {
         Long id = byTaskService.getListByTaskId(2L).stream()
-                .filter(e -> e.getDescription().equals("Description Log RemoveService")).findFirst()
+                .filter(e -> e.getDescription().equals("Description Log RefreshService")).findFirst()
                 .map(WorkLog::getId)
                 .orElse(null);
 
-        if (id != null) {
-            removeService.remove(
+        if (id != null){
+            refreshService.refresh(
                     new WorkLog(
                             id, 2L, null, null, ZonedDateTime.now(),
-                            "Description Log RemoveService", null, null
+                            "Description Log RefreshService Updated", null, null
                     )
             );
             WorkLog workLog = getService.get(id);
 
-            assertNull(workLog);
+            assertThat(workLog.getDescription(), equalTo("Description Log RefreshService Updated"));
+
+            removeService.remove(workLog);
         } else
             fail();
     }
