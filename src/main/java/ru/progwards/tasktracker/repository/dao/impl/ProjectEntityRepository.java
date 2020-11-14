@@ -1,7 +1,6 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
  * Репозиторий проектов
  * @author Pavel Khovaylo
  */
-@Component
+@org.springframework.stereotype.Repository
 public class ProjectEntityRepository implements Repository<Long, ProjectEntity> {
 
     @Autowired

@@ -29,6 +29,8 @@ public class UserConverter implements Converter<UserEntity, User> {
      */
     @Override
     public User toVo(UserEntity entity) {
+        if (entity == null)
+            return null;
 //        UserStatus userStatus = userStatusGetService.get(entity.getStart_status_id()); // должно стать lazy load в будущем
         return new User(
                 entity.getId(),

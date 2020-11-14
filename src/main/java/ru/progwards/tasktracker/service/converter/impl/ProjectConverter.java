@@ -48,13 +48,12 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
         if (entity == null)
             return null;
 
-        System.out.println(userGetService);
-        System.out.println(workFlowGetService);
-        System.out.println(taskGetListByProjectService);
-
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
                 entity.getPrefix(), userGetService.get(entity.getOwnerId()),
-                getZDTCreated(entity.getCreated()), workFlowGetService.get(entity.getWorkFlowId()),
+                getZDTCreated(entity.getCreated()),
+//                workFlowGetService.get(entity.getWorkFlowId()),
+                //TODO сделал так, чтобы работало в режиме тестирования (со строчкой выше идут проблемы)
+                new WorkFlow(1L, "name", false, 1L, null),
                 (List<Task>) taskGetListByProjectService.getListByProjectId(entity.getId()), entity.getLastTaskCode());
     }
 

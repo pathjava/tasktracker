@@ -8,10 +8,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.progwards.tasktracker.controller.converter.Converter;
+import ru.progwards.tasktracker.controller.dto.ProjectDto;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.impl.ProjectEntityRepository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.service.facade.GetListService;
+import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.vo.Project;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,13 +30,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProjectControllerTest {
 
     @Autowired
-    private ProjectController controller;
-
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private ProjectEntityRepository repository;
+    private ProjectController controller;
+
+    @Autowired
+    private Repository<Long, ProjectEntity> repository;
+
+    @Autowired
+    private Converter<Project, ProjectDto> converter;
+
+    @Autowired
+    private GetListService<Project> projectGetListService;
 
     @Test
     public void loadedController() {
@@ -38,8 +51,9 @@ public class ProjectControllerTest {
 
     @Test
     public void getProjectsTest() throws Exception {
-        Collection<ProjectEntity> entities = repository.get();
-        String json = new ObjectMapper().writeValueAsString(entities);
+        Collection<ProjectDto> projectDtos = projectGetListService.getList().stream().
+                map(e -> converter.toDto(e)).collect(Collectors.toList());
+        String json = new ObjectMapper().writeValueAsString(projectDtos);
 
         mockMvc.perform(get("/rest/project/list")).
                 andExpect(status().isOk()).

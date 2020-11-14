@@ -7,9 +7,11 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.converter.impl.ProjectDtoConverter;
 import ru.progwards.tasktracker.controller.dto.ProjectDto;
 import ru.progwards.tasktracker.service.facade.CreateService;
+import ru.progwards.tasktracker.service.facade.impl.TaskPriorityService;
 import ru.progwards.tasktracker.service.facade.impl.UserService;
 import ru.progwards.tasktracker.service.facade.impl.project.ProjectCreateService;
 import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.TaskPriority;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 
@@ -22,14 +24,23 @@ public class Main {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 
-        CreateService<Project> createService = context.getBean(ProjectCreateService.class);
+//        CreateService<Project> projectCreateService = context.getBean(ProjectCreateService.class);
+//
+//        Converter<Project, ProjectDto> converter = context.getBean(ProjectDtoConverter.class);
+//
+//        UserService userService = context.getBean(UserService.class);
+//
+//        WorkFlow workFlow = new WorkFlow(1L, "name", false, 1L, null);
+//
+//        for (long i = 0; i < 5; i++) {
+//            projectCreateService.create(converter.toModel(new ProjectDto(i, "name"+i, "desc"+i, "prefix",
+//                    userService.get(i), ZonedDateTime.now(), workFlow, new ArrayList<>(), 0L)));
+//        }
 
-        Converter<Project, ProjectDto> converter = context.getBean(ProjectDtoConverter.class);
-
-        UserService userService = context.getBean(UserService.class);
+        CreateService<TaskPriority> taskPriorityService = context.getBean(TaskPriorityService.class);
 
         for (long i = 0; i < 5; i++) {
-            createService.create(converter.toModel(new ProjectDto(i, "name"+i+i, "desc"+i, "prefix", userService.get(i))));
+            taskPriorityService.create(new TaskPriority(i, "name"+i, (int)i));
         }
     }
 }

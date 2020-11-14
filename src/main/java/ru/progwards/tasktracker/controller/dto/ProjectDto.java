@@ -1,11 +1,11 @@
 package ru.progwards.tasktracker.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,30 +13,66 @@ import java.util.List;
  * @author Pavel Khovaylo
  */
 public class ProjectDto {
+    /**
+     * идентификатор проекта
+     */
     private Long id;
+    /**
+     * имя проекта
+     */
     private String name;
+    /**
+     * описание проекта
+     */
     private String description;
+    /**
+     * уникальная аббревиатура, созданная на основании имени проекта
+     */
     private String prefix;
+    /**
+     * владелец (создатель) проекта
+     */
     private User owner;
+    /**
+     * идентификатор владельца (создателя)
+     */
     private Long ownerId;
+    /**
+     * время создания проекта
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private ZonedDateTime created;
+    /**
+     * стадия разработки, в которой находится проект
+     */
     private WorkFlow workFlow;
+    /**
+     * идентификатор WorkFlow
+     */
     private Long workFlowId;
+    /**
+     * список задач, относящихся к данному проекту
+     */
     private List<Task> tasks;
+    /**
+     * хранит код последней добавленной задачи к данному проекту
+     */
     private Long lastTaskCode;
 
-    public ProjectDto(Long id, String name, String description, String prefix, User owner) {
+    public ProjectDto(Long id, String name, String description, String prefix, User owner, ZonedDateTime created,
+                      WorkFlow workFlow, List<Task> tasks, Long lastTaskCode) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.prefix = prefix;
         this.owner = owner;
-        this.ownerId = owner.getId();
-        this.created = ZonedDateTime.now();
-        this.workFlow = new WorkFlow(id, null, false, null, null);
+        //TODO для тестирования
+        this.ownerId = (owner==null) ? 1L : owner.getId();
+        this.created = created;
+        this.workFlow = workFlow;
         this.workFlowId = workFlow.getId();
-        this.tasks = new ArrayList<>();
-        this.lastTaskCode = 0L;
+        this.tasks = tasks;
+        this.lastTaskCode = lastTaskCode;
     }
 
     public Long getId() {

@@ -8,7 +8,6 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.ProjectDto;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.facade.*;
@@ -62,7 +61,7 @@ public class ProjectController {
     }
 
     /**
-     * по запросу получаем нужный проект; если такового нет, то бросаем исключение NotFoundProjectException
+     * по запросу получаем нужный проект; если такового нет, то бросаем исключение NotFoundException
      * @param id идентификатор проекта
      * @return ProjectDto
      */
@@ -105,12 +104,11 @@ public class ProjectController {
             throw new BadRequestException("Project is null");
 
         projectDto.setId(id);
-
         projectRefreshService.refresh(converter.toModel(projectDto));
     }
 
     /**
-     * по запросу удаляем нужный проект; если такого проекта не существует, то бросаем исключение NotFoundProjectException
+     * по запросу удаляем нужный проект; если такого проекта не существует, то бросаем исключение NotFoundException
      * @param id идентификатор удаляемого проекта
      */
     @PostMapping("{id}/delete")
@@ -137,5 +135,8 @@ public class ProjectController {
 
         updateOneValue.setId(id);
         projectEntityRepositoryUpdateField.updateField(updateOneValue);
+    }
+
+    public static class TaskPriorityController {
     }
 }

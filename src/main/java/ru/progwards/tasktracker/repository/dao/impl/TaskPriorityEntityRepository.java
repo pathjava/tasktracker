@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Репозиторий TaskPriorityEntity
  * @author Pavel Khovaylo
  */
-@Component
+@org.springframework.stereotype.Repository
 public class TaskPriorityEntityRepository implements Repository<Long, TaskPriorityEntity> {
 
     @Autowired

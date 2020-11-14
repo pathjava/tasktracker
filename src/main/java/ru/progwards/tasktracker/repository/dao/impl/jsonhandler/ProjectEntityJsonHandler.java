@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 
@@ -18,7 +18,11 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Component
+/**
+ * Методы записи объектов ProjectEntity в JSON-файл
+ * @author Pavel Khovaylo
+ */
+@Repository
 public class ProjectEntityJsonHandler implements JsonHandler<Long, ProjectEntity> {
     private static File PROJECT_PATH;
     private final Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();

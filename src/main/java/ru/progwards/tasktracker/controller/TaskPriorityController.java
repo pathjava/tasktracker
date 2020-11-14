@@ -1,66 +1,117 @@
 package ru.progwards.tasktracker.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.progwards.tasktracker.controller.converter.Converter;
+import ru.progwards.tasktracker.controller.dto.TaskPriorityDto;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.dao.impl.TaskPriorityEntityRepository;
-import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
+import ru.progwards.tasktracker.service.facade.*;
+import ru.progwards.tasktracker.service.vo.TaskPriority;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
+/**
+ * Контроллеры TaskPriority
+ * @author Pavel Khovaylo
+ */
 @RestController
 @RequestMapping("/rest/taskpriority/")
 public class TaskPriorityController {
 
-    private final TaskPriorityEntityRepository repository;
+    @Autowired
+    private Converter<TaskPriority, TaskPriorityDto> converter;
 
-    public TaskPriorityController(TaskPriorityEntityRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private GetService<Long, TaskPriority> taskPriorityGetService;
 
+    @Autowired
+    private GetListService<TaskPriority> taskPriorityGetListService;
+
+    @Autowired
+    private CreateService<TaskPriority> taskPriorityCreateService;
+
+    @Autowired
+    private RefreshService<TaskPriority> taskPriorityRefreshService;
+
+    @Autowired
+    private RemoveService<TaskPriority> taskPriorityRemoveService;
+
+    /**
+     * по запросу получаем список TaskPriorityDto
+     * @return список TaskPriorityDto
+     */
     @GetMapping("list")
-    public ResponseEntity<Collection<TaskPriorityEntity>> get() {
-        return new ResponseEntity<>(repository.get(), HttpStatus.OK);
+    public ResponseEntity<Collection<TaskPriorityDto>> get() {
+        Collection<TaskPriorityDto> taskPriorityDtos =
+                taskPriorityGetListService.getList().stream().
+                        map(e -> converter.toDto(e)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskPriorityDtos, HttpStatus.OK);
     }
 
+    /**
+     * по запросу получаем нужный TaskPriorityDto; если такового нет, то бросаем исключение NotFoundException
+     * @param id идентификатор TaskPriorityDto
+     * @return TaskPriorityDto
+     */
     @GetMapping("{id}")
-    public ResponseEntity<TaskPriorityEntity> get(@PathVariable("id") Long id) {
-        TaskPriorityEntity entity = repository.get(id);
-        if (entity == null)
-            throw new NotFoundException("Not found a taskpriority with id=" + id);
+    public ResponseEntity<TaskPriorityDto> get(@PathVariable("id") Long id) {
+        TaskPriority taskPriority = taskPriorityGetService.get(id);
+        if (taskPriority == null)
+            throw new NotFoundException("Not found a taskPriority with id=" + id);
 
-        return new ResponseEntity<>(repository.get(id), HttpStatus.OK);
+        return new ResponseEntity<>(converter.toDto(taskPriority), HttpStatus.OK);
     }
 
+    /**
+     * по запросу создаём TaskPriorityDto
+     * @param taskPriorityDto передаем наполненный TaskPriorityDto
+     * @return созданный TaskPriorityDto
+     */
     @PostMapping("create")
-    public ResponseEntity<TaskPriorityEntity> create(@RequestBody TaskPriorityEntity entity) {
-        if (entity == null)
-            throw new BadRequestException("TaskPriority is null");
+    public ResponseEntity<TaskPriorityDto> create(@RequestBody TaskPriorityDto taskPriorityDto) {
+        if (taskPriorityDto == null)
+            throw new BadRequestException("Project is null");
 
-        repository.create(entity);
+        taskPriorityCreateService.create(converter.toModel(taskPriorityDto));
 
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        return new ResponseEntity<>(taskPriorityDto, HttpStatus.OK);
     }
 
+    /**
+     * по запросу обновляем существующий TaskPriorityDto
+     * @param id идентификатор изменяемого TaskPriorityDto
+     * @param taskPriorityDto измененный TaskPriorityDto
+     */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityEntity entity) {
-        if (entity == null)
-            throw new BadRequestException("TaskPriority is null");
+    public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityDto taskPriorityDto) {
+        if (id == null)
+            throw new BadRequestException("Id is null");
 
-        entity.setId(id);
-        repository.update(entity);
+        if (taskPriorityDto == null)
+            throw new BadRequestException("Project is null");
+
+        taskPriorityDto.setId(id);
+        taskPriorityRefreshService.refresh(converter.toModel(taskPriorityDto));
     }
 
+    /**
+     * по запросу удаляем нужный TaskPriority; если такого TaskPriority не существует, то бросаем исключение
+     * NotFoundException
+     * @param id идентификатор удаляемого TaskPriorityDto
+     */
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
-        TaskPriorityEntity entity = repository.get(id);
-        if (entity == null)
-            throw new NotFoundException("Not found a taskpriority with id=" + id);
+        TaskPriority taskPriority = taskPriorityGetService.get(id);
+        if (taskPriority == null)
+            throw new NotFoundException("Not found a taskPriority with id=" + id);
 
-        repository.delete(id);
+        taskPriorityRemoveService.remove(taskPriority);
     }
 }

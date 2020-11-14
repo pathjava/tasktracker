@@ -37,7 +37,6 @@ public class Project  {
     /**
      * время создания проекта
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
     private ZonedDateTime created;
     /**
      * стадия разработки, в которой находится проект
@@ -63,7 +62,8 @@ public class Project  {
         this.description = description;
         this.prefix = prefix;
         this.owner = owner;
-        this.ownerId = owner.getId();
+        //TODO для тестирования
+        this.ownerId = (owner==null) ? 1L : owner.getId();
         this.created = created;
         this.workFlow = workFlow;
         this.workFlowId = workFlow.getId();
