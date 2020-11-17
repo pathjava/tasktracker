@@ -16,20 +16,15 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 @Service
 public class RelatedTaskGetService implements GetService<Long, RelatedTask> {
 
+    @Autowired
     private Repository<Long, RelatedTaskEntity> repository;
+
+    @Autowired
     private Converter<RelatedTaskEntity, RelatedTask> converter;
 
-    @Autowired
-    public void setRepository(Repository<Long, RelatedTaskEntity> repository) {
-        this.repository = repository;
-    }
-
-    @Autowired
-    public void setConverter(Converter<RelatedTaskEntity, RelatedTask> converter) {
-        this.converter = converter;
-    }
-
     /**
+     * Метод получения связанной задачи по её идентификатору
+     *
      * @param id идентификатор по которому необходимо получить связанную задачу
      * @return найденную связанную задачу или пусто
      */

@@ -11,7 +11,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * конвертер valueObject <-> entity
+ * Конвертеры valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -19,6 +19,8 @@ import java.time.ZonedDateTime;
 public class TaskConverter implements Converter<TaskEntity, Task> {
 
     /**
+     * Метод конвертирует сущность Entity в бизнес объект
+     *
      * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
      */
@@ -67,6 +69,8 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     }
 
     /**
+     * Метод конвертирует бизнес объект в сущность Entity
+     *
      * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */

@@ -16,20 +16,15 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
 @Service
 public class WorkLogGetService implements GetService<Long, WorkLog> {
 
+    @Autowired
     private Repository<Long, WorkLogEntity> repository;
+
+    @Autowired
     private Converter<WorkLogEntity, WorkLog> converter;
 
-    @Autowired
-    public void setRepository(Repository<Long, WorkLogEntity> repository) {
-        this.repository = repository;
-    }
-
-    @Autowired
-    public void setConverter(Converter<WorkLogEntity, WorkLog> converter) {
-        this.converter = converter;
-    }
-
     /**
+     * Метод получения лога по идентификатору
+     *
      * @param id идентификатор лога, который необходимо получить
      * @return найденный объект
      */

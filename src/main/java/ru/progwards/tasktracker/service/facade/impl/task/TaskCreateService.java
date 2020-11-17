@@ -21,26 +21,20 @@ import java.time.ZonedDateTime;
 @Service
 public class TaskCreateService implements CreateService<Task> {
 
+    @Autowired
     private Repository<Long, TaskEntity> repository;
-    private Converter<TaskEntity, Task> converter;
-    private GetService<Long, Project> getService;
-    private RefreshService<Project> refreshService;
 
     @Autowired
-    public void setTaskRepository(
-            Repository<Long, TaskEntity> taskRepository,
-            Converter<TaskEntity, Task> converterTask,
-            GetService<Long, Project> projectGetService,
-            RefreshService<Project> refreshService
-    ) {
-        this.repository = taskRepository;
-        this.converter = converterTask;
-        this.getService = projectGetService;
-        this.refreshService = refreshService;
-    }
+    private Converter<TaskEntity, Task> converter;
+
+    @Autowired
+    private GetService<Long, Project> getService;
+
+    @Autowired
+    private RefreshService<Project> refreshService;
 
     /**
-     * метод создает задачу
+     * Метод создает задачу
      *
      * @param model value object
      */
@@ -55,6 +49,8 @@ public class TaskCreateService implements CreateService<Task> {
     }
 
     /**
+     * Метод создания кода задачи на основе префикса проекта
+     *
      * @param project_id идентификатор проекта, к которому принадлежит задача
      * @return код задачи в формате "NGR-1"
      */

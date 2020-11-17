@@ -1,6 +1,7 @@
 package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,62 +12,62 @@ import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * контроллер для работы с задачами
+ * Контроллер для работы с задачами
  *
  * @author Oleg Kiselev
  */
 @RestController
+@RequestMapping("/rest")
 public class TaskController {
 
+    @Autowired
     private GetService<Long, Task> getService;
-    private RemoveService<Task> removeService;
-    private CreateService<Task> createService;
-    private RefreshService<Task> refreshService;
-    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
-    private Converter<Task, TaskDtoFull> dtoFullConverter;
-    private GetService<String, Task> byCodeGetService;
-    private GetListByProjectService<Long, Task> listByProjectService;
 
     @Autowired
-    public void setTaskGetService(
-            GetService<Long, Task> taskGetService,
-            RemoveService<Task> taskRemoveService,
-            CreateService<Task> taskCreateService,
-            RefreshService<Task> taskRefreshService,
-            Converter<Task, TaskDtoPreview> dtoPreviewConverter,
-            Converter<Task, TaskDtoFull> dtoFullConverter,
-            GetService<String, Task> byCodeGetService,
-            GetListByProjectService<Long, Task> listByProjectService
-    ) {
-        this.getService = taskGetService;
-        this.removeService = taskRemoveService;
-        this.createService = taskCreateService;
-        this.refreshService = taskRefreshService;
-        this.dtoPreviewConverter = dtoPreviewConverter;
-        this.dtoFullConverter = dtoFullConverter;
-        this.byCodeGetService = byCodeGetService;
-        this.listByProjectService = listByProjectService;
-    }
+    private RemoveService<Task> removeService;
+
+    @Autowired
+    private CreateService<Task> createService;
+
+    @Autowired
+    private RefreshService<Task> refreshService;
+
+    @Autowired
+    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
+
+    @Autowired
+    private Converter<Task, TaskDtoFull> dtoFullConverter;
+
+    @Autowired
+    private GetService<String, Task> byCodeGetService;
+
+    @Qualifier("taskUpdateOneFieldService")
+    @Autowired
+    private UpdateOneFieldService<Task> oneFieldService;
+
+    @Autowired
+    private GetListByProjectService<Long, Task> listByProjectService;
 
     /**
-     * выборка списка задач по идентификатору проекта
+     * Метод получения коллекции задач по идентификатору проекта
      *
-     * @param project_id идентификатор проекта
+     * @param id идентификатор проекта
      * @return коллекция превью задач
      */
-    @GetMapping("/rest/project/{project_id}/tasks")
-    public ResponseEntity<Collection<TaskDtoPreview>> getListTasks(@PathVariable Long project_id) {
-        if (project_id == null)
-            throw new BadRequestException("Id: " + project_id + " не задан или задан неверно!");
+    @GetMapping("/project/{id}/tasks")
+    public ResponseEntity<Collection<TaskDtoPreview>> getListTasks(@PathVariable Long id) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<TaskDtoPreview> tasks = listByProjectService.getListByProjectId(project_id).stream()
+        Collection<TaskDtoPreview> tasks = listByProjectService.getListByProjectId(id).stream()
                 .map(task -> dtoPreviewConverter.toDto(task))
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
 
         if (tasks.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список задач пустой!");
@@ -75,12 +76,12 @@ public class TaskController {
     }
 
     /**
-     * метод создания задачи
+     * Метод создания задачи
      *
      * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную задачу
      */
-    @PostMapping("/rest/task/create")
+    @PostMapping("/task/create")
     public ResponseEntity<TaskDtoFull> createTask(@RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -95,18 +96,18 @@ public class TaskController {
     }
 
     /**
-     * метод обновления задачи
+     * Метод обновления задачи
      *
-     * @param task_id идентификатор задачи
-     * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
+     * @param id идентификатор задачи
+     * @param taskDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную задачу
      */
-    @PutMapping("/rest/task/{task_id}/update")
-    public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long task_id, @RequestBody TaskDtoFull taskDtoFull) {
+    @PutMapping("/task/{id}/update")
+    public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long id, @RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
-        if (!task_id.equals(taskDtoFull.getId()))
+        if (!id.equals(taskDtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
         Task task = dtoFullConverter.toModel(taskDtoFull);
@@ -117,32 +118,32 @@ public class TaskController {
     }
 
     /**
-     * метод для удаления задачи
+     * Метод удаления задачи
      *
-     * @param task_id идентификатор задачи
+     * @param id идентификатор задачи
      * @return возвращает статус ответа
      */
-    @DeleteMapping("/rest/task/{task_id}/delete")
-    public ResponseEntity<Task> deleteTask(@PathVariable Long task_id) {
-        if (task_id == null)
-            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
+    @DeleteMapping("/task/{id}/delete")
+    public ResponseEntity<Task> deleteTask(@PathVariable Long id) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Task task = getService.get(task_id);
-        if (task != null)//TODO - при удалении задачи вызывать метод удаления связанных задач
+        Task task = getService.get(id);
+        if (task != null)
             removeService.remove(task);
         else
-            throw new NotFoundException("Задача с id: " + task_id + " не найдена!");
+            throw new NotFoundException("Задача с id: " + id + " не найдена!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
-     * метод поиска задачи по текстовому коду
+     * Метод поиска задачи по текстовому коду
      *
      * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную задачу
      */
-    @GetMapping("/rest/task/{code}/getbycode")
+    @GetMapping("/task/{code}")
     public ResponseEntity<TaskDtoFull> getByCodeTask(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");
@@ -153,5 +154,27 @@ public class TaskController {
             throw new NotFoundException("Задача с code: " + code + " не найдена!");
 
         return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    /**
+     * Метод обновления одного поля задачи
+     *
+     * @param id идентификатор задачи
+     * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
+     * @return статус
+     */
+    @PutMapping("/task/{id}/field")
+    public ResponseEntity<UpdateOneValue> updateOneField(
+            @PathVariable Long id, @RequestBody UpdateOneValue oneValue
+    ) {
+        if (oneValue == null)
+            throw new BadRequestException("Значение обновляемого поля отсутствует!");
+
+        if (!id.equals(oneValue.getId()))
+            throw new BadRequestException("Данная операция недопустима!");
+
+        oneFieldService.updateOneField(oneValue);
+
+        return new ResponseEntity<>(HttpStatus.OK); //TODO - стоит ли тут что-то возвращать?
     }
 }

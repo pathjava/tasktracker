@@ -18,41 +18,36 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * контроллер для работы со связанными задачами
+ * Контроллер для работы со связанными задачами
  *
  * @author Oleg Kiselev
  */
 @RestController
+@RequestMapping("/rest/relatedtask")
 public class RelatedTaskController {
 
+    @Autowired
     private RemoveService<RelatedTask> removeService;
-    private GetListByTaskService<Long, RelatedTask> listByTaskService;
-    private CreateService<RelatedTask> createService;
-    private Converter<RelatedTask, RelatedTaskDto> converter;
-    private GetService<Long, RelatedTask> getService;
 
     @Autowired
-    public void setRemoveService(
-            RemoveService<RelatedTask> removeService,
-            GetListByTaskService<Long, RelatedTask> listByTaskService,
-            CreateService<RelatedTask> createService,
-            Converter<RelatedTask, RelatedTaskDto> converter,
-            GetService<Long, RelatedTask> getService
-    ) {
-        this.removeService = removeService;
-        this.listByTaskService = listByTaskService;
-        this.createService = createService;
-        this.converter = converter;
-        this.getService = getService;
-    }
+    private GetListByTaskService<Long, RelatedTask> listByTaskService;
+
+    @Autowired
+    private CreateService<RelatedTask> createService;
+
+    @Autowired
+    private Converter<RelatedTask, RelatedTaskDto> converter;
+
+    @Autowired
+    private GetService<Long, RelatedTask> getService;
 
     /**
-     * метод создания связанной задачи
+     * Метод создания связанной задачи
      *
      * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную задачу
      */
-    @PostMapping("/rest/relatedtask/create")
+    @PostMapping("/create")
     public ResponseEntity<RelatedTaskDto> createRelatedTask(@RequestBody RelatedTaskDto taskDto) {
         if (taskDto == null)
             throw new BadRequestException("Пустой объект!");
@@ -65,15 +60,17 @@ public class RelatedTaskController {
     }
 
     /**
-     * @param task_id идентификатор задачи для которой надо получить связанные задачи
+     * Метод получения коллекции связанных задач по идентификатору задачи
+     *
+     * @param id идентификатор задачи для которой надо получить связанные задачи
      * @return коллекция связанных задач
      */
-    @GetMapping("/rest/relatedtask/{task_id}/list")
-    public ResponseEntity<Collection<RelatedTaskDto>> getListRelatedTasks(@PathVariable Long task_id) {
-        if (task_id == null)
-            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
+    @GetMapping("/{id}/list")
+    public ResponseEntity<Collection<RelatedTaskDto>> getListRelatedTasks(@PathVariable Long id) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<RelatedTaskDto> collection = listByTaskService.getListByTaskId(task_id).stream()
+        Collection<RelatedTaskDto> collection = listByTaskService.getListByTaskId(id).stream()
                 .map(relatedTask -> converter.toDto(relatedTask))
                 .collect(Collectors.toList());
 
@@ -84,19 +81,21 @@ public class RelatedTaskController {
     }
 
     /**
-     * @param task_id идентификатор удаляемой задачи
+     * Метод удаления связанной задачи
+     *
+     * @param id идентификатор удаляемой задачи
      * @return статус
      */
-    @DeleteMapping("/rest/relatedtask/{task_id}/delete")
-    public ResponseEntity<RelatedTaskDto> deleteRelatedTask(@PathVariable Long task_id) {
-        if (task_id == null)
-            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<RelatedTaskDto> deleteRelatedTask(@PathVariable Long id) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        RelatedTask relatedTask = getService.get(task_id);
+        RelatedTask relatedTask = getService.get(id);
         if (relatedTask != null)
             removeService.remove(relatedTask);
         else
-            throw new NotFoundException("Связанная задача с id: " + task_id + " не найдена!");
+            throw new NotFoundException("Связанная задача с id: " + id + " не найдена!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

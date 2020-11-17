@@ -1,13 +1,11 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.TaskEntityJsonHandler;
+import ru.progwards.tasktracker.repository.dao.*;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
+import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
+import java.lang.reflect.Field;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,17 +15,17 @@ import java.util.stream.Collectors;
  *
  * @author Oleg Kiselev
  */
-@Component
-public class TaskEntityRepository implements Repository<Long, TaskEntity> {
-
-    private JsonHandler<Long, TaskEntity> jsonHandler;
+@org.springframework.stereotype.Repository
+public class TaskEntityRepository
+        implements Repository<Long, TaskEntity>, RepositoryByProjectId<Long, TaskEntity>,
+        RepositoryUpdateField<TaskEntity>, RepositoryByCode<String, TaskEntity> {
 
     @Autowired
-    public void setJsonHandler(TaskEntityJsonHandler jsonHandler) {
-        this.jsonHandler = jsonHandler;
-    }
+    private JsonHandler<Long, TaskEntity> jsonHandler;
 
     /**
+     * Метод получения коллекции всех задач без привязки к какому-либо проекту
+     *
      * @return возвращаем коллекцию всех задач, не помеченных как удаленные
      */
     @Override
@@ -38,6 +36,8 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     }
 
     /**
+     * Метод получения задачи по числовому идентификатору
+     *
      * @param id идентификатор задачи, которую необходимо получить
      * @return возвращаем задачу, полученную по идентификатору
      */
@@ -48,7 +48,9 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     }
 
     /**
-     * @param entity создаем/записываем в репозиторий новую задачу
+     * Метод создания задачи
+     *
+     * @param entity записываемая в БД сущность
      */
     @Override
     public void create(TaskEntity entity) {
@@ -58,7 +60,9 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     }
 
     /**
-     * @param entity обновляем полученную задачу в репозитории
+     * Метод обновления задачи
+     *
+     * @param entity сущность обновляемой задачи
      */
     @Override
     public void update(TaskEntity entity) {
@@ -68,6 +72,8 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
     }
 
     /**
+     * Метод удаления задачи по её числовому идентификатору
+     *
      * @param id идентификатор по которому удаляем задачу
      */
     @Override
@@ -77,7 +83,57 @@ public class TaskEntityRepository implements Repository<Long, TaskEntity> {
             jsonHandler.getMap().remove(id);
             task.setDeleted(true);
             create(task);
-        } //TODO написать BadRequestException при неудачном добавлении? Как это увязать с контроллером?
+        }
+    }
+
+    /**
+     * Метод получения коллекции задач проекта по идентификатору проекта
+     *
+     * @param projectId идентификатор проекта
+     * @return возвращаем коллекцию всех задач проекта, не помеченных как удаленные
+     */
+    @Override
+    public Collection<TaskEntity> getByProjectId(Long projectId) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getProject_id().equals(projectId) && !entity.getDeleted())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод обновления определенного поля задачи новым значением
+     *
+     * @param oneValue объект, содержащий идентификатор и тип и значение обновляемого поля задачи
+     */
+    @Override
+    public void updateField(UpdateOneValue oneValue) {
+        TaskEntity entity = get(oneValue.getId());
+        String field = oneValue.getFieldName();
+
+        for (Field declaredField : entity.getClass().getDeclaredFields()) {
+            if (declaredField.getName().equals(field)) {
+                declaredField.setAccessible(true);
+                try {
+                    declaredField.set(entity, oneValue.getNewValue());
+                    update(entity);
+                    break;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Метод получения задачи по её текстовому коду
+     *
+     * @param code код задачи, генерируемый на основе префикса проекта и идентификатора
+     * @return возвращает сущность из БД
+     */
+    @Override
+    public TaskEntity getByCode(String code) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getCode().equals(code) && !entity.getDeleted())
+                .findFirst().orElse(null);
     }
 }
 

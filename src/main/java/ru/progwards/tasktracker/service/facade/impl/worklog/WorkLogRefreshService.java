@@ -16,21 +16,14 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
 @Service
 public class WorkLogRefreshService implements RefreshService<WorkLog> {
 
+    @Autowired
     private Repository<Long, WorkLogEntity> repository;
+
+    @Autowired
     private Converter<WorkLogEntity, WorkLog> converter;
 
-    @Autowired
-    public void setRepository(Repository<Long, WorkLogEntity> repository) {
-        this.repository = repository;
-    }
-
-    @Autowired
-    public void setConverter(Converter<WorkLogEntity, WorkLog> converter) {
-        this.converter = converter;
-    }
-
     /**
-     * метод обновления лога
+     * Метод обновления лога
      *
      * @param model value object - объект бизнес логики (задача), который необходимо обновить
      */

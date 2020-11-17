@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Repository;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
+import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,28 +22,26 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * Методы работы сущности с JSON базой данных
- *
  * @author Oleg Kiselev
  */
 @Repository
-public class WorkLogEntityJsonHandler implements JsonHandler<Long, WorkLogEntity> {
+public class TaskTypeEntityJsonHandler implements JsonHandler<Long, TaskTypeEntity> {
 
-    public final Map<Long, WorkLogEntity> logs = new ConcurrentHashMap<>();
-    private static File LOGS_PATH;
+    public final Map<Long, TaskTypeEntity> types = new ConcurrentHashMap<>();
+    private static File TYPES_PATH;
 
     static {
         try {
-            LOGS_PATH = new File(Objects.requireNonNull(
+            TYPES_PATH = new File(Objects.requireNonNull(
                     Thread.currentThread().getContextClassLoader()
-                            .getResource("data/work_logs.json")).toURI());
+                            .getResource("data/task_type.json")).toURI());
         } catch (NullPointerException | URISyntaxException e) {
             //e.printStackTrace();
-            LOGS_PATH = new File("src/main/resources/data/work_logs.json");
+            TYPES_PATH = new File("src/main/resources/data/task_type.json");
         }
     }
 
-    public WorkLogEntityJsonHandler() {
+    public TaskTypeEntityJsonHandler() {
         try {
             read();
         } catch (Exception e) {
@@ -56,8 +54,8 @@ public class WorkLogEntityJsonHandler implements JsonHandler<Long, WorkLogEntity
     }
 
     @Override
-    public Map<Long, WorkLogEntity> getMap() {
-        return logs;
+    public Map<Long, TaskTypeEntity> getMap() {
+        return types;
     }
 
     /**
@@ -66,9 +64,9 @@ public class WorkLogEntityJsonHandler implements JsonHandler<Long, WorkLogEntity
     @Override
     public void write() {
         synchronized (this) {
-            try (Writer writer = new FileWriter(LOGS_PATH)) {
+            try (Writer writer = new FileWriter(TYPES_PATH)) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                gson.toJson(logs.values().stream().collect(Collectors.toUnmodifiableList()), writer);
+                gson.toJson(types.values().stream().collect(Collectors.toUnmodifiableList()), writer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -82,13 +80,13 @@ public class WorkLogEntityJsonHandler implements JsonHandler<Long, WorkLogEntity
     public void read() {
         synchronized (this) {
             try {
-                logs.clear();
-                String json = Files.readString(LOGS_PATH.toPath());
-                Type type = new TypeToken<List<WorkLogEntity>>() {
+                types.clear();
+                String json = Files.readString(TYPES_PATH.toPath());
+                Type type = new TypeToken<List<TaskTypeEntity>>() {
                 }.getType();
-                ArrayList<WorkLogEntity> list = new Gson().fromJson(json, type);
-                list.forEach(e -> logs.put(e.getId(), e));
-            } catch (Exception e) {
+                ArrayList<TaskTypeEntity> list = new Gson().fromJson(json, type);
+                list.forEach(e -> types.put(e.getId(), e));
+            } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }

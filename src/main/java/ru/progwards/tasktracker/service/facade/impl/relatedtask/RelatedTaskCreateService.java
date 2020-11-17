@@ -16,21 +16,14 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 @Service
 public class RelatedTaskCreateService implements CreateService<RelatedTask> {
 
+    @Autowired
     private Repository<Long, RelatedTaskEntity> repository;
+
+    @Autowired
     private Converter<RelatedTaskEntity, RelatedTask> converter;
 
-    @Autowired
-    public void setRepository(Repository<Long, RelatedTaskEntity> repository) {
-        this.repository = repository;
-    }
-
-    @Autowired
-    public void setConverter(Converter<RelatedTaskEntity, RelatedTask> converter) {
-        this.converter = converter;
-    }
-
     /**
-     * метод создания связанной задачи
+     * Метод создания связанной задачи
      *
      * @param model value object - объект бизнес логики, который необходимо создать
      */

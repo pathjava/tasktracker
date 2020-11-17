@@ -19,20 +19,15 @@ import java.util.stream.Collectors;
 @Service
 public class RelatedTaskGetListByTaskService implements GetListByTaskService<Long, RelatedTask> {
 
+    @Autowired
     private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
+
+    @Autowired
     private Converter<RelatedTaskEntity, RelatedTask> converter;
 
-    @Autowired
-    public void setByTaskId(RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId) {
-        this.byTaskId = byTaskId;
-    }
-
-    @Autowired
-    public void setConverter(Converter<RelatedTaskEntity, RelatedTask> converter) {
-        this.converter = converter;
-    }
-
     /**
+     * Метод получения коллекции связанных задач по идентификатору задачи
+     *
      * @param taskId идентификатор задачи для которой необходимо получить связанные задачи
      * @return коллекция связанных задач (может иметь пустое значение)
      */

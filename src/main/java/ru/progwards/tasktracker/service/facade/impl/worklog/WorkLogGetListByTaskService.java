@@ -19,20 +19,15 @@ import java.util.stream.Collectors;
 @Service
 public class WorkLogGetListByTaskService implements GetListByTaskService<Long, WorkLog> {
 
+    @Autowired
     private RepositoryByTaskId<Long, WorkLogEntity> repository;
+
+    @Autowired
     private Converter<WorkLogEntity, WorkLog> converter;
 
-    @Autowired
-    public void setRepository(RepositoryByTaskId<Long, WorkLogEntity> repository) {
-        this.repository = repository;
-    }
-
-    @Autowired
-    public void setConverter(Converter<WorkLogEntity, WorkLog> converter) {
-        this.converter = converter;
-    }
-
     /**
+     * Метод получения коллекции логов по идентификатору задачи
+     *
      * @param taskId идентификатор задачи для которой необходимо получить логи
      * @return коллекция объектов лога
      */

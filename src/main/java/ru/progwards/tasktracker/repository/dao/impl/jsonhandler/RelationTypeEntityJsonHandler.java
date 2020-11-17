@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.repository.dao.impl.jsonhandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
@@ -14,7 +14,10 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author Oleg Kiselev
  */
-@Component
+@Repository
 public class RelationTypeEntityJsonHandler implements JsonHandler<Long, RelationTypeEntity> {
 
     public final Map<Long, RelationTypeEntity> relationType = new ConcurrentHashMap<>();

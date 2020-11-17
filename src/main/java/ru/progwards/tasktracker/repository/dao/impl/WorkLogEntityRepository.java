@@ -1,28 +1,25 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 
-import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Методы работы сущности с базой данных
  *
  * @author Oleg Kiselev
  */
-@Component
-public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> {
-
-    private JsonHandler<Long, WorkLogEntity> jsonHandler;
+@org.springframework.stereotype.Repository
+public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity>,
+        RepositoryByTaskId<Long, WorkLogEntity> {
 
     @Autowired
-    public void setJsonHandler(JsonHandler<Long, WorkLogEntity> jsonHandler) {
-        this.jsonHandler = jsonHandler;
-    }
+    private JsonHandler<Long, WorkLogEntity> jsonHandler;
 
     @Override
     public Collection<WorkLogEntity> get() {
@@ -30,6 +27,8 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> 
     }
 
     /**
+     * Метод получения лога по идентификатору
+     *
      * @param id идентификатор по которому надо получить лог
      * @return найденный лог
      */
@@ -39,6 +38,8 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> 
     }
 
     /**
+     * Метод создания сущности лога
+     *
      * @param entity новая сущность
      */
     @Override
@@ -49,6 +50,8 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> 
     }
 
     /**
+     * Метод обновления сущности лога
+     *
      * @param entity обновленная сущность
      */
     @Override
@@ -58,14 +61,29 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity> 
     }
 
     /**
+     * Метод удаления сущности лога по идентификатору
+     *
      * @param id идентификатор удаляемой сущности
      */
     @Override
     public void delete(Long id) {
-        WorkLogEntity logEntity = get(id);
-        if (logEntity != null) {
+        WorkLogEntity entity = get(id);
+        if (entity != null) {
             jsonHandler.getMap().remove(id);
             jsonHandler.write();
         }
+    }
+
+    /**
+     * Метод получения коллекции логов по идентификатору задачи
+     *
+     * @param taskId идентификатор задачи для которой ищем логи
+     * @return коллекция логов
+     */
+    @Override
+    public Collection<WorkLogEntity> getByTaskId(Long taskId) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getTaskId().equals(taskId))
+                .collect(Collectors.toList());
     }
 }

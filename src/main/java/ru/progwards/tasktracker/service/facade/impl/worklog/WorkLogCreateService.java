@@ -16,20 +16,15 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
 @Service
 public class WorkLogCreateService implements CreateService<WorkLog> {
 
+    @Autowired
     private Repository<Long, WorkLogEntity> repository;
+
+    @Autowired
     private Converter<WorkLogEntity, WorkLog> converter;
 
-    @Autowired
-    public void setRepository(Repository<Long, WorkLogEntity> repository) {
-        this.repository = repository;
-    }
-
-    @Autowired
-    public void setConverter(Converter<WorkLogEntity, WorkLog> converter) {
-        this.converter = converter;
-    }
-
     /**
+     * Метод создания лога
+     *
      * @param model объект бизнес-логики
      */
     @Override

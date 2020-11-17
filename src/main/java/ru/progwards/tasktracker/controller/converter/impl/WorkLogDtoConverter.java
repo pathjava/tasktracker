@@ -6,13 +6,15 @@ import ru.progwards.tasktracker.controller.dto.WorkLogDto;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
 /**
- * конвертеры valueObject <-> dto
+ * Конвертеры valueObject <-> dto
  *
  * @author Oleg Kiselev
  */
 @Component
 public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
     /**
+     * Метод конвертирует Dto сущность в бизнес объект
+     *
      * @param dto сущность, приходящая из пользовательского интерфейса
      * @return value object - объект бизнес логики
      */
@@ -34,6 +36,8 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
     }
 
     /**
+     * Метод конвертирует бизнес объект в сущность Dto
+     *
      * @param model value object - объект бизнес логики
      * @return сущность, возвращаемая в пользовательский интерфейс
      */

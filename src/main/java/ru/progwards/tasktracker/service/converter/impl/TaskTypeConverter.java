@@ -1,12 +1,9 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
-import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
+import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.vo.RelatedTask;
-import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 /**
  * Конвертеры valueObject <-> entity
@@ -14,10 +11,7 @@ import ru.progwards.tasktracker.service.vo.RelationType;
  * @author Oleg Kiselev
  */
 @Component
-public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
-
-    @Autowired
-    private Converter<RelationTypeEntity, RelationType> converter;
+public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
 
     /**
      * Метод конвертирует сущность Entity в бизнес объект
@@ -26,15 +20,15 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
      * @return value object - объект бизнес логики
      */
     @Override
-    public RelatedTask toVo(RelatedTaskEntity entity) {
+    public TaskType toVo(TaskTypeEntity entity) {
         if (entity == null)
             return null;
         else
-            return new RelatedTask(
+            return new TaskType(
                     entity.getId(),
-                    converter.toVo(entity.getRelationTypeEntity()),
-                    entity.getParentTaskId(),
-                    entity.getTaskId()
+                    entity.getProject_id(),
+                    entity.getWorkFlow_id(),
+                    entity.getName()
             );
     }
 
@@ -45,15 +39,15 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
      * @return сущность для БД
      */
     @Override
-    public RelatedTaskEntity toEntity(RelatedTask valueObject) {
+    public TaskTypeEntity toEntity(TaskType valueObject) {
         if (valueObject == null)
             return null;
         else
-            return new RelatedTaskEntity(
+            return new TaskTypeEntity(
                     valueObject.getId(),
-                    converter.toEntity(valueObject.getRelationType()),
-                    valueObject.getParentTaskId(),
-                    valueObject.getTaskId()
+                    valueObject.getProject_id(),
+                    valueObject.getWorkFlow_id(),
+                    valueObject.getName()
             );
     }
 }

@@ -15,14 +15,12 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
 @Service
 public class WorkLogRemoveService implements RemoveService<WorkLog> {
 
+    @Autowired
     private Repository<Long, WorkLogEntity> repository;
 
-    @Autowired
-    public void setRepository(Repository<Long, WorkLogEntity> repository) {
-        this.repository = repository;
-    }
-
     /**
+     * Метод удаления лога
+     *
      * @param model объект, который необходимо удалить
      */
     @Override

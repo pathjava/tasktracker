@@ -16,7 +16,10 @@ import java.util.stream.Stream;
  */
 @Service
 public class EstimateChangeGetListService implements GetListService<String> {
+
     /**
+     * Метод получения коллекции
+     *
      * @return коллекцию строковых значений
      */
     @Override

@@ -15,49 +15,44 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * контроллер для работы с логами задачи
+ * Контроллер для работы с логами задачи
  *
  * @author Oleg Kiselev
  */
 @RestController
+@RequestMapping("/rest")
 public class WorkLogController {
 
+    @Autowired
     private GetService<Long, WorkLog> getService;
-    private CreateService<WorkLog> createService;
-    private RemoveService<WorkLog> removeService;
-    private RefreshService<WorkLog> refreshService;
-    private GetListByTaskService<Long, WorkLog> listByTaskService;
-    private Converter<WorkLog, WorkLogDto> converter;
 
     @Autowired
-    public void setGetService(
-            GetService<Long, WorkLog> getService,
-            CreateService<WorkLog> createService,
-            RemoveService<WorkLog> removeService,
-            RefreshService<WorkLog> refreshService,
-            GetListByTaskService<Long, WorkLog> listByTaskService,
-            Converter<WorkLog, WorkLogDto> converter
-    ) {
-        this.getService = getService;
-        this.createService = createService;
-        this.removeService = removeService;
-        this.refreshService = refreshService;
-        this.listByTaskService = listByTaskService;
-        this.converter = converter;
-    }
+    private CreateService<WorkLog> createService;
+
+    @Autowired
+    private RemoveService<WorkLog> removeService;
+
+    @Autowired
+    private RefreshService<WorkLog> refreshService;
+
+    @Autowired
+    private GetListByTaskService<Long, WorkLog> listByTaskService;
+
+    @Autowired
+    private Converter<WorkLog, WorkLogDto> converter;
 
     /**
-     * метод получения списка логов по идентификатору задачи
+     * Метод получения списка логов по идентификатору задачи
      *
-     * @param task_id идентификатор задачи, для которой необходимо вывести логи
+     * @param id идентификатор задачи, для которой необходимо вывести логи
      * @return коллекция логов задачи
      */
-    @GetMapping("/rest/task/{task_id}/worklogs")
-    public ResponseEntity<Collection<WorkLogDto>> getListWorkLogs(@PathVariable Long task_id) {
-        if (task_id == null)
-            throw new BadRequestException("Id: " + task_id + " не задан или задан неверно!");
+    @GetMapping("/task/{id}/worklogs")
+    public ResponseEntity<Collection<WorkLogDto>> getListWorkLogs(@PathVariable Long id) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<WorkLogDto> logs = listByTaskService.getListByTaskId(task_id).stream()
+        Collection<WorkLogDto> logs = listByTaskService.getListByTaskId(id).stream()
                 .map(workLog -> converter.toDto(workLog))
                 .collect(Collectors.toList());
 
@@ -68,12 +63,12 @@ public class WorkLogController {
     }
 
     /**
-     * метод создания лога
+     * Метод создания лога
      *
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PostMapping("/rest/worklog/create")
+    @PostMapping("/worklog/create")
     public ResponseEntity<WorkLogDto> createWorkLog(@RequestBody WorkLogDto workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("Пустой объект!");
@@ -88,17 +83,17 @@ public class WorkLogController {
     }
 
     /**
-     * метод обновления лога
+     * Метод обновления лога
      *
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PutMapping("/rest/worklog/{log_id}/update")
-    public ResponseEntity<WorkLogDto> updateWorkLog(@PathVariable Long log_id, @RequestBody WorkLogDto workLogDto) {
+    @PutMapping("/worklog/{id}/update")
+    public ResponseEntity<WorkLogDto> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDto workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("Пустой объект!");
 
-        if (!log_id.equals(workLogDto.getId()))
+        if (!id.equals(workLogDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
         WorkLog workLog = converter.toModel(workLogDto);
@@ -109,21 +104,21 @@ public class WorkLogController {
     }
 
     /**
-     * метод удаления лога
+     * Метод удаления лога
      *
-     * @param log_id идентификатор удаляемого лога
+     * @param id идентификатор удаляемого лога
      * @return статус ответа
      */
-    @DeleteMapping("/rest/worklog/{log_id}/delete")
-    public ResponseEntity<WorkLogDto> deleteWorkLog(@PathVariable Long log_id) {
-        if (log_id == null)
-            throw new BadRequestException("Id: " + log_id + " не задан или задан неверно!");
+    @DeleteMapping("/worklog/{id}/delete")
+    public ResponseEntity<WorkLogDto> deleteWorkLog(@PathVariable Long id) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        WorkLog workLog = getService.get(log_id);
+        WorkLog workLog = getService.get(id);
         if (workLog != null)
             removeService.remove(workLog);
         else
-            throw new NotFoundException("Лог с id: " + log_id + " не найден!");
+            throw new NotFoundException("Лог с id: " + id + " не найден!");
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

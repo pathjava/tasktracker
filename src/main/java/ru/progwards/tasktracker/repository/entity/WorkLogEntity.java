@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.util.types.EstimateChange;
 import java.util.Random;
 
 /**
- * сущность для хранения лога в БД
+ * Сущность для хранения лога в БД
  *
  * @author Oleg Kiselev
  */

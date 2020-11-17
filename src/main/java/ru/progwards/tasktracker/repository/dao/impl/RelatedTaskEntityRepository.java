@@ -1,36 +1,38 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.RelatedTaskEntityJsonHandler;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
- * методы для работы с БД для сущности связанной задачи RelatedTaskEntity
+ * Методы для работы с БД для сущности связанной задачи RelatedTaskEntity
  *
  * @author Oleg Kiselev
  */
-@Component
-public class RelatedTaskEntityRepository implements Repository<Long, RelatedTaskEntity> {
-
-    private JsonHandler<Long, RelatedTaskEntity> jsonHandler;
+@org.springframework.stereotype.Repository
+public class RelatedTaskEntityRepository implements Repository<Long, RelatedTaskEntity>,
+        RepositoryByTaskId<Long, RelatedTaskEntity> {
 
     @Autowired
-    public void setJsonHandler(RelatedTaskEntityJsonHandler jsonHandler) {
-        this.jsonHandler = jsonHandler;
-    }
+    private JsonHandler<Long, RelatedTaskEntity> jsonHandler;
 
+    /**
+     * Метод получения всех связанных задач из базы данных без привязки к какой-либо задаче
+     *
+     * @return коллекция сущностей
+     */
     @Override
     public Collection<RelatedTaskEntity> get() {
         return jsonHandler.getMap().values();
     }
 
     /**
-     * метод получения связанной задачи по её идентификатору
+     * Метод получения связанной задачи по её идентификатору
      *
      * @param id идентификатор связанной задачи
      * @return связанную задачу
@@ -41,7 +43,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     }
 
     /**
-     * метод создания и записи в БД сущности RelatedTaskEntity
+     * Метод создания и записи в БД сущности RelatedTaskEntity
      *
      * @param entity сущность с данными связанной задачи
      */
@@ -57,7 +59,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     }
 
     /**
-     * метод удаления связанных задач по идентификатору из параметра метода
+     * Метод удаления связанных задач по идентификатору из параметра метода
      *
      * @param id идентификатор удаляемой сущности
      */
@@ -72,5 +74,19 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
             jsonHandler.getMap().remove(id);
             jsonHandler.write();
         }
+    }
+
+    /**
+     * Метод получения коллекции связанных задач по идентификатору задачи
+     *
+     * @param taskId идентификатор задачи для которой необходимо получить связанные задачи
+     * @return возвращается коллекция (может быть пустой) связанных задач
+     */
+    @Override
+    public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
+        //TODO - проверить возможность попадания в связанные задачи задач, помеченных как удаленные
+        return jsonHandler.getMap().values().stream()
+                .filter(value -> value.getTaskId().equals(taskId))
+                .collect(Collectors.toList());
     }
 }

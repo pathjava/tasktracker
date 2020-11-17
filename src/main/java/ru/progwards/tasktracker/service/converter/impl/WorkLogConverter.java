@@ -11,13 +11,16 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * конвертеры valueObject <-> entity
+ * Конвертеры valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
 @Component
 public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
+
     /**
+     * Метод конвертирует сущность Entity в бизнес объект
+     *
      * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
      */
@@ -56,6 +59,8 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
     }
 
     /**
+     * Метод конвертирует бизнес объект в сущность Entity
+     *
      * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */

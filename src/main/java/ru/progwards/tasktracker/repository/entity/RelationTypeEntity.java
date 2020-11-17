@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.repository.entity;
 import java.util.Random;
 
 /**
- * сущность для хранения связей в БД
+ * Сущность для хранения связей в БД
  *
  * @author Oleg Kiselev
  */

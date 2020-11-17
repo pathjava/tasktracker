@@ -15,15 +15,11 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 @Service
 public class RelatedTaskRemoveService implements RemoveService<RelatedTask> {
 
+    @Autowired
     private Repository<Long, RelatedTaskEntity> repository;
 
-    @Autowired
-    public void setRepository(Repository<Long, RelatedTaskEntity> repository) {
-        this.repository = repository;
-    }
-
     /**
-     * метод удаления связанной задачи
+     * Метод удаления связанной задачи
      *
      * @param model value object - объект бизнес логики, который необходимо удалить
      */

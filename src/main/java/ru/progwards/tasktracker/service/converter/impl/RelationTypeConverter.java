@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 /**
- * конвертер valueObject <-> entity
+ * Конвертеры valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -14,6 +14,8 @@ import ru.progwards.tasktracker.service.vo.RelationType;
 public class RelationTypeConverter implements Converter<RelationTypeEntity, RelationType> {
 
     /**
+     * Метод конвертирует сущность Entity в бизнес объект
+     *
      * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
      */
@@ -30,6 +32,8 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
     }
 
     /**
+     * Метод конвертирует бизнес объект в сущность Entity
+     *
      * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */

@@ -1,13 +1,13 @@
 package ru.progwards.tasktracker.repository.entity;
 
 import ru.progwards.tasktracker.service.vo.*;
-import ru.progwards.tasktracker.util.types.TaskType;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * сущность для хранения задачи в БД
+ * Сущность для хранения задачи в БД
  *
  * @author Oleg Kiselev
  */

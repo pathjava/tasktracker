@@ -2,8 +2,8 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelatedTaskDto;
-import ru.progwards.tasktracker.service.vo.RelatedTask;
+import ru.progwards.tasktracker.controller.dto.TaskTypeDto;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -11,7 +11,8 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
  * @author Oleg Kiselev
  */
 @Component
-public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTaskDto> {
+public class TaskTypeDtoConverter implements Converter<TaskType, TaskTypeDto> {
+
     /**
      * Метод конвертирует Dto сущность в бизнес объект
      *
@@ -19,15 +20,15 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
      * @return value object - объект бизнес логики
      */
     @Override
-    public RelatedTask toModel(RelatedTaskDto dto) {
+    public TaskType toModel(TaskTypeDto dto) {
         if (dto == null)
             return null;
         else
-            return new RelatedTask(
+            return new TaskType(
                     dto.getId(),
-                    dto.getRelationType(),
-                    dto.getParentTaskId(),
-                    dto.getTaskId()
+                    dto.getProject_id(),
+                    dto.getWorkFlow_id(),
+                    dto.getName()
             );
     }
 
@@ -38,15 +39,15 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override
-    public RelatedTaskDto toDto(RelatedTask model) {
+    public TaskTypeDto toDto(TaskType model) {
         if (model == null)
             return null;
         else
-            return new RelatedTaskDto(
+            return new TaskTypeDto(
                     model.getId(),
-                    model.getRelationType(),
-                    model.getParentTaskId(),
-                    model.getTaskId()
+                    model.getProject_id(),
+                    model.getWorkFlow_id(),
+                    model.getName()
             );
     }
 }
