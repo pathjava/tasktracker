@@ -2,11 +2,13 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.controller.exception.DeletionIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByProjectId;
 import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
+import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskType;
 
 import java.util.Collection;
@@ -29,6 +31,9 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
 
     @Autowired
     private Converter<TaskTypeEntity, TaskType> converter;
+
+    @Autowired
+    private GetListService<Task> getListService;
 
     /**
      * Метод создания типа задачи
@@ -58,7 +63,21 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public void remove(TaskType model) {
+        if(checkingOtherDependenciesTaskType(model.getId()))
+            throw new DeletionIsNotPossibleException("Удаление невозможно, данный тип задачи используется в других задачах!");
         repository.delete(model.getId());
+    }
+
+    private boolean checkingOtherDependenciesTaskType(Long id) {
+        int count = 0;
+        for (Task task : getListService.getList()) {
+            if (task.getType().getId().equals(id)){
+                count++;
+                if (count == 2)
+                    return true;
+            }
+        }
+        return false;
     }
 
     /**
