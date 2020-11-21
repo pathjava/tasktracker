@@ -143,7 +143,7 @@ public class TaskController {
      * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную задачу
      */
-    @GetMapping("/task/{code}")
+    @GetMapping("/task/{code}/getbycode")
     public ResponseEntity<TaskDtoFull> getByCodeTask(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");

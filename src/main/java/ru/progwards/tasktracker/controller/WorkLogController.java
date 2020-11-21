@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * Контроллер для работы с логами задачи
+ * Контроллер для работы с логами (Журналом работ) задачи
  *
  * @author Oleg Kiselev
  */

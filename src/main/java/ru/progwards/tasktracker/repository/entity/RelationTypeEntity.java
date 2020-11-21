@@ -11,17 +11,17 @@ public class RelationTypeEntity {
 
     private Long id;
     private String name;
-    private RelationTypeEntity counterRelation;
+    private Long counterRelationId;
 
     public RelationTypeEntity() {
     }
 
-    public RelationTypeEntity(Long id, String name, RelationTypeEntity counterRelation) {
+    public RelationTypeEntity(Long id, String name, Long counterRelationId) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
         this.id = id;
         this.name = name;
-        this.counterRelation = counterRelation;
+        this.counterRelationId = counterRelationId;
     }
 
     public Long getId() {
@@ -36,11 +36,11 @@ public class RelationTypeEntity {
         this.name = name;
     }
 
-    public RelationTypeEntity getCounterRelation() {
-        return counterRelation;
+    public Long getCounterRelationId() {
+        return counterRelationId;
     }
 
-    public void setCounterRelation(RelationTypeEntity counterRelation) {
-        this.counterRelation = counterRelation;
+    public void setCounterRelationId(Long counterRelationId) {
+        this.counterRelationId = counterRelationId;
     }
 }

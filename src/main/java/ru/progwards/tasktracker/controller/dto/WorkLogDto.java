@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
- * объект, содержащий лог-данные о действиях в задаче
+ * объект, содержащий лог-данные (Журнала работ) о действиях в задаче
  *
  * @author Oleg Kiselev
  */

@@ -68,7 +68,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
         RelatedTaskEntity entity = jsonHandler.getMap().get(id);
         if (entity != null) {
             for (RelatedTaskEntity value : jsonHandler.getMap().values()) {
-                if (value.getParentTaskId().equals(entity.getId()) && value.getTaskId().equals(id))
+                if (value.getCurrentTaskId().equals(entity.getId()) && value.getAttachedTaskId().equals(id))
                     jsonHandler.getMap().remove(value.getId());
             }
             jsonHandler.getMap().remove(id);
@@ -86,7 +86,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
         //TODO - проверить возможность попадания в связанные задачи задач, помеченных как удаленные
         return jsonHandler.getMap().values().stream()
-                .filter(value -> value.getTaskId().equals(taskId))
+                .filter(value -> value.getAttachedTaskId().equals(taskId))
                 .collect(Collectors.toList());
     }
 }

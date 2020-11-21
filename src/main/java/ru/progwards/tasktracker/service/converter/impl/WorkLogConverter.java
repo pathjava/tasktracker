@@ -11,7 +11,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * Конвертеры valueObject <-> entity
+ * Конвертеры valueObject <-> entity (Журнала работ)
  *
  * @author Oleg Kiselev
  */
@@ -36,8 +36,8 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
                     entity.getWorker(),
                     checkUpdatedEntityNotNull(entity.getWhen()),
                     entity.getDescription(),
-                    entity.getEstimateChange(),
-                    checkDurationEntityNotNull(entity.getEstimateValue())
+                    null,
+                    null
             );
     }
 
@@ -75,9 +75,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
                     checkDurationValueObjectNotNull(valueObject.getSpent()),
                     valueObject.getWorker(),
                     checkZonedDateTimeValueObjectNotNull(valueObject.getWhen()),
-                    valueObject.getDescription(),
-                    valueObject.getEstimateChange(),
-                    checkDurationValueObjectNotNull(valueObject.getEstimateValue())
+                    valueObject.getDescription()
             );
     }
 

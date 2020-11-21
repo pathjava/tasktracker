@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RefreshService;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
@@ -31,7 +33,11 @@ public class TaskRefreshService implements RefreshService<Task> {
      */
     @Override
     public void refresh(Task model) {
+        if (model.getTimeLeft().isNegative())
+            model.setTimeLeft(Duration.ZERO);
+
         model.setUpdated(ZonedDateTime.now());
+
         repository.update(converter.toEntity(model));
     }
 }

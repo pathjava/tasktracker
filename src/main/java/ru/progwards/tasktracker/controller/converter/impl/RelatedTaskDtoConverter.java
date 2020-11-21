@@ -26,8 +26,8 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
             return new RelatedTask(
                     dto.getId(),
                     dto.getRelationType(),
-                    dto.getParentTaskId(),
-                    dto.getTaskId()
+                    dto.getCurrentTaskId(),
+                    dto.getAttachedTaskId()
             );
     }
 
@@ -45,8 +45,8 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
             return new RelatedTaskDto(
                     model.getId(),
                     model.getRelationType(),
-                    model.getParentTaskId(),
-                    model.getTaskId()
+                    model.getCurrentTaskId(),
+                    model.getAttachedTaskId()
             );
     }
 }

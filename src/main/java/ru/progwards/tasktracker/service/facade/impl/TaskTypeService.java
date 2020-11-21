@@ -63,21 +63,14 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public void remove(TaskType model) {
-        if(checkingOtherDependenciesTaskType(model.getId()))
-            throw new DeletionIsNotPossibleException("Удаление невозможно, данный тип задачи используется в других задачах!");
+        if (checkingOtherDependenciesTaskType(model.getId()))
+            throw new DeletionIsNotPossibleException("Удаление невозможно, данный тип задачи используется!");
         repository.delete(model.getId());
     }
 
-    private boolean checkingOtherDependenciesTaskType(Long id) {
-        int count = 0;
-        for (Task task : getListService.getList()) {
-            if (task.getType().getId().equals(id)){
-                count++;
-                if (count == 2)
-                    return true;
-            }
-        }
-        return false;
+    private boolean checkingOtherDependenciesTaskType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
+        return getListService.getList().stream()
+                .anyMatch(task -> task.getType().getId().equals(id));
     }
 
     /**

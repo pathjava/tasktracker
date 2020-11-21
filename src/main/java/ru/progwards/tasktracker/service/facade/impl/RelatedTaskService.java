@@ -11,6 +11,7 @@ import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
+import ru.progwards.tasktracker.service.vo.RelationType;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -31,7 +32,10 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
 
     @Autowired
-    private Converter<RelatedTaskEntity, RelatedTask> converter;
+    private Converter<RelatedTaskEntity, RelatedTask> relatedTaskConverter;
+
+    @Autowired
+    private GetService<Long, RelationType> typeGetService;
 
     /**
      * Метод создания связанной задачи
@@ -40,7 +44,15 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      */
     @Override
     public void create(RelatedTask model) {
-        repository.create(converter.toEntity(model));
+        Long counterTypeId = model.getRelationType().getCounterRelationId();
+        RelationType counterType = counterTypeId != null ? typeGetService.get(counterTypeId) : null;
+
+        RelatedTask counterRelatedTask = new RelatedTask(
+                null, counterType, model.getAttachedTaskId(), model.getCurrentTaskId()
+        );
+        repository.create(relatedTaskConverter.toEntity(counterRelatedTask));
+
+        repository.create(relatedTaskConverter.toEntity(model));
     }
 
     /**
@@ -52,7 +64,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public Collection<RelatedTask> getListByTaskId(Long taskId) {
         return byTaskId.getByTaskId(taskId).stream()
-                .map(entity -> converter.toVo(entity))
+                .map(entity -> relatedTaskConverter.toVo(entity))
                 .collect(Collectors.toList());
     }
 
@@ -64,7 +76,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      */
     @Override
     public RelatedTask get(Long id) {
-        return id == null ? null : converter.toVo(repository.get(id));
+        return id == null ? null : relatedTaskConverter.toVo(repository.get(id));
     }
 
     /**

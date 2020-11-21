@@ -1,12 +1,11 @@
 package ru.progwards.tasktracker.repository.entity;
 
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.EstimateChange;
 
 import java.util.Random;
 
 /**
- * Сущность для хранения лога в БД
+ * Сущность для хранения лога (Журнала работ) в БД
  *
  * @author Oleg Kiselev
  */
@@ -18,16 +17,13 @@ public class WorkLogEntity {
     private User worker;
     private Long when;
     private String description;
-    private EstimateChange estimateChange;
-    private Long estimateValue;
 
     public WorkLogEntity() {
     }
 
     public WorkLogEntity(
             Long id, Long taskId, Long spent,
-            User worker, Long when, String description,
-            EstimateChange estimateChange, Long estimateValue
+            User worker, Long when, String description
     ) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
@@ -37,8 +33,6 @@ public class WorkLogEntity {
         this.worker = worker;
         this.when = when;
         this.description = description;
-        this.estimateChange = estimateChange;
-        this.estimateValue = estimateValue;
     }
 
     public Long getId() {
@@ -83,21 +77,5 @@ public class WorkLogEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public EstimateChange getEstimateChange() {
-        return estimateChange;
-    }
-
-    public void setEstimateChange(EstimateChange estimateChange) {
-        this.estimateChange = estimateChange;
-    }
-
-    public Long getEstimateValue() {
-        return estimateValue;
-    }
-
-    public void setEstimateValue(Long estimateValue) {
-        this.estimateValue = estimateValue;
     }
 }
