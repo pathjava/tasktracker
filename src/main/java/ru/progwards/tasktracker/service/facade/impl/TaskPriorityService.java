@@ -2,10 +2,12 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.controller.exception.DeletionNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
+import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskPriority;
 
 import java.util.Collection;
@@ -30,6 +32,9 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Autowired
     private Converter<TaskPriorityEntity, TaskPriority> converter;
+
+    @Autowired
+    private GetListService<Task> taskGetListService;
 
     /**
      * метот добавляет TaskPriority в репозиторий
@@ -74,6 +79,21 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public void remove(TaskPriority model) {
-        repository.delete(model.getId());
+        Collection<Task> tasks = taskGetListService.getList();
+
+        boolean isExist = false;
+
+        // если находим задачу с данным приоритетом, то удаление этого приоритета невозможно
+        for (Task t : tasks) {
+            if (t.getPriority().getId() == model.getId()) {
+                isExist = true;
+                break;
+            }
+        }
+
+        if (!isExist)
+            repository.delete(model.getId());
+        else
+            throw new DeletionNotPossibleException("TaskPriority with id = " + model.getId() + " delete not possible");
     }
 }

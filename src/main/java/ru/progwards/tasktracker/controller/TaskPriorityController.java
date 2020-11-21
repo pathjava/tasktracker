@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Pavel Khovaylo
  */
 @RestController
-@RequestMapping("/rest/taskpriority/")
+@RequestMapping("/rest/task-priority/")
 public class TaskPriorityController {
 
     @Autowired

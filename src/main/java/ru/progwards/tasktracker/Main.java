@@ -31,16 +31,16 @@ public class Main {
 //        UserService userService = context.getBean(UserService.class);
 //
 //        WorkFlow workFlow = new WorkFlow(1L, "name", false, 1L, null);
-//
+////
 //        for (long i = 0; i < 5; i++) {
 //            projectCreateService.create(converter.toModel(new ProjectDto(i, "name"+i, "desc"+i, "prefix",
 //                    userService.get(i), ZonedDateTime.now(), workFlow, new ArrayList<>(), 0L)));
 //        }
 
-        CreateService<TaskPriority> taskPriorityService = context.getBean(TaskPriorityService.class);
-
-        for (long i = 0; i < 5; i++) {
-            taskPriorityService.create(new TaskPriority(i, "name"+i, (int)i));
-        }
+//        CreateService<TaskPriority> taskPriorityService = context.getBean(TaskPriorityService.class);
+//
+//        for (long i = 0; i < 5; i++) {
+//            taskPriorityService.create(new TaskPriority(i, "name"+i, (int)i));
+//        }
     }
 }
