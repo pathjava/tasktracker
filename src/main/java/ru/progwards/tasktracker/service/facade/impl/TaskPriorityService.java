@@ -85,7 +85,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
 
         // если находим задачу с данным приоритетом, то удаление этого приоритета невозможно
         for (Task t : tasks) {
-            if (t.getPriority().getId() == model.getId()) {
+            if (t.getPriority().getId().equals(model.getId())) {
                 isExist = true;
                 break;
             }
