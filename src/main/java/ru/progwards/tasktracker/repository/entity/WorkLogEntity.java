@@ -1,7 +1,5 @@
 package ru.progwards.tasktracker.repository.entity;
 
-import ru.progwards.tasktracker.service.vo.User;
-
 import java.util.Random;
 
 /**
@@ -14,7 +12,7 @@ public class WorkLogEntity {
     private Long id;
     private Long taskId;
     private Long spent;
-    private User worker;
+    private UserEntity worker;
     private Long when;
     private String description;
 
@@ -23,7 +21,7 @@ public class WorkLogEntity {
 
     public WorkLogEntity(
             Long id, Long taskId, Long spent,
-            User worker, Long when, String description
+            UserEntity worker, Long when, String description
     ) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
@@ -55,11 +53,11 @@ public class WorkLogEntity {
         this.spent = spent;
     }
 
-    public User getWorker() {
+    public UserEntity getWorker() {
         return worker;
     }
 
-    public void setWorker(User worker) {
+    public void setWorker(UserEntity worker) {
         this.worker = worker;
     }
 

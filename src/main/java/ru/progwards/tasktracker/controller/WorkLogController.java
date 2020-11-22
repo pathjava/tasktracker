@@ -25,19 +25,14 @@ public class WorkLogController {
 
     @Autowired
     private GetService<Long, WorkLog> getService;
-
     @Autowired
     private CreateService<WorkLog> createService;
-
     @Autowired
     private RemoveService<WorkLog> removeService;
-
     @Autowired
     private RefreshService<WorkLog> refreshService;
-
     @Autowired
     private GetListByTaskService<Long, WorkLog> listByTaskService;
-
     @Autowired
     private Converter<WorkLog, WorkLogDto> converter;
 
@@ -79,7 +74,7 @@ public class WorkLogController {
 
         //TODO - перед добавлением проверять, есть ли уже в БД такой лог, но id генерируется в entity - подумать
 
-        return new ResponseEntity<>(createWorkLog, HttpStatus.CREATED);
+        return new ResponseEntity<>(createWorkLog, HttpStatus.OK);
     }
 
     /**
@@ -100,7 +95,7 @@ public class WorkLogController {
         refreshService.refresh(workLog);
         WorkLogDto updateWorkLog = converter.toDto(workLog);
 
-        return new ResponseEntity<>(updateWorkLog, HttpStatus.CREATED);
+        return new ResponseEntity<>(updateWorkLog, HttpStatus.OK);
     }
 
     /**
@@ -120,7 +115,7 @@ public class WorkLogController {
         else
             throw new NotFoundException("Лог с id: " + id + " не найден!");
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

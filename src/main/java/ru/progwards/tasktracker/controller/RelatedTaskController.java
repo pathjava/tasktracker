@@ -28,16 +28,12 @@ public class RelatedTaskController {
 
     @Autowired
     private RemoveService<RelatedTask> removeService;
-
     @Autowired
     private GetListByTaskService<Long, RelatedTask> listByTaskService;
-
     @Autowired
     private CreateService<RelatedTask> createService;
-
     @Autowired
     private Converter<RelatedTask, RelatedTaskDto> converter;
-
     @Autowired
     private GetService<Long, RelatedTask> getService;
 
@@ -56,7 +52,7 @@ public class RelatedTaskController {
         createService.create(relatedTask);
         RelatedTaskDto createdRelatedTask = converter.toDto(relatedTask);
 
-        return new ResponseEntity<>(createdRelatedTask, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdRelatedTask, HttpStatus.OK);
     }
 
     /**
@@ -97,6 +93,6 @@ public class RelatedTaskController {
         else
             throw new NotFoundException("Связанная задача с id: " + id + " не найдена!");
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,11 +1,8 @@
 package ru.progwards.tasktracker.controller.converter.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelatedTaskDto;
 import ru.progwards.tasktracker.controller.dto.RelationTypeDto;
-import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 /**
@@ -14,10 +11,7 @@ import ru.progwards.tasktracker.service.vo.RelationType;
  * @author Oleg Kiselev
  */
 @Component
-public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTaskDto> {
-
-    @Autowired
-    private Converter<RelationType, RelationTypeDto> relationTypeDtoConverter;
+public class RelationTypeDtoConverter implements Converter<RelationType, RelationTypeDto> {
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -26,15 +20,14 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
      * @return value object - объект бизнес логики
      */
     @Override
-    public RelatedTask toModel(RelatedTaskDto dto) {
+    public RelationType toModel(RelationTypeDto dto) {
         if (dto == null)
             return null;
         else
-            return new RelatedTask(
+            return new RelationType(
                     dto.getId(),
-                    relationTypeDtoConverter.toModel(dto.getRelationType()),
-                    dto.getCurrentTaskId(),
-                    dto.getAttachedTaskId()
+                    dto.getName(),
+                    dto.getCounterRelationId()
             );
     }
 
@@ -45,15 +38,14 @@ public class RelatedTaskDtoConverter implements Converter<RelatedTask, RelatedTa
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override
-    public RelatedTaskDto toDto(RelatedTask model) {
+    public RelationTypeDto toDto(RelationType model) {
         if (model == null)
             return null;
         else
-            return new RelatedTaskDto(
+            return new RelationTypeDto(
                     model.getId(),
-                    relationTypeDtoConverter.toDto(model.getRelationType()),
-                    model.getCurrentTaskId(),
-                    model.getAttachedTaskId()
+                    model.getName(),
+                    model.getCounterRelationId()
             );
     }
 }

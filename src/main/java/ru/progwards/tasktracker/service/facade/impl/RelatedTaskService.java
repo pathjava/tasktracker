@@ -6,10 +6,7 @@ import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.facade.CreateService;
-import ru.progwards.tasktracker.service.facade.GetListByTaskService;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.facade.RemoveService;
+import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
@@ -23,17 +20,14 @@ import java.util.stream.Collectors;
  */
 @Service
 public class RelatedTaskService implements CreateService<RelatedTask>, GetService<Long, RelatedTask>,
-        GetListByTaskService<Long, RelatedTask>, RemoveService<RelatedTask> {
+        GetListByTaskService<Long, RelatedTask>, RemoveService<RelatedTask>, GetListService<RelatedTask> {
 
     @Autowired
     private Repository<Long, RelatedTaskEntity> repository;
-
     @Autowired
     private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
-
     @Autowired
-    private Converter<RelatedTaskEntity, RelatedTask> relatedTaskConverter;
-
+    private Converter<RelatedTaskEntity, RelatedTask> converter;
     @Autowired
     private GetService<Long, RelationType> typeGetService;
 
@@ -43,16 +37,18 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      * @param model value object - объект бизнес логики, который необходимо создать
      */
     @Override
-    public void create(RelatedTask model) {
+    public void create(RelatedTask model) { //TODO - сделать проверку, что привязываемая задача указана, а не null
         Long counterTypeId = model.getRelationType().getCounterRelationId();
-        RelationType counterType = counterTypeId != null ? typeGetService.get(counterTypeId) : null;
+        RelationType counterType;
+        if (counterTypeId != null)
+             counterType = typeGetService.get(counterTypeId);
+        else
+            counterType = null;
 
-        RelatedTask counterRelatedTask = new RelatedTask(
-                null, counterType, model.getAttachedTaskId(), model.getCurrentTaskId()
-        );
-        repository.create(relatedTaskConverter.toEntity(counterRelatedTask));
+        RelatedTask counter = new RelatedTask(null, counterType, model.getAttachedTaskId(), model.getCurrentTaskId());
+        repository.create(converter.toEntity(counter));
 
-        repository.create(relatedTaskConverter.toEntity(model));
+        repository.create(converter.toEntity(model));
     }
 
     /**
@@ -64,7 +60,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public Collection<RelatedTask> getListByTaskId(Long taskId) {
         return byTaskId.getByTaskId(taskId).stream()
-                .map(entity -> relatedTaskConverter.toVo(entity))
+                .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());
     }
 
@@ -76,7 +72,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      */
     @Override
     public RelatedTask get(Long id) {
-        return id == null ? null : relatedTaskConverter.toVo(repository.get(id));
+        return id == null ? null : converter.toVo(repository.get(id));
     }
 
     /**
@@ -87,5 +83,17 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public void remove(RelatedTask model) {
         repository.delete(model.getId());
+    }
+
+    /**
+     * Метод получения всех связанных задач без привязки к определенной задаче
+     *
+     * @return коллекция всех связей задач
+     */
+    @Override
+    public Collection<RelatedTask> getList() {
+        return repository.get().stream()
+                .map(entity -> converter.toVo(entity))
+                .collect(Collectors.toList());
     }
 }

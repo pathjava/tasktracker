@@ -28,29 +28,21 @@ public class TaskController {
 
     @Autowired
     private GetService<Long, Task> getService;
-
     @Autowired
     private RemoveService<Task> removeService;
-
     @Autowired
     private CreateService<Task> createService;
-
     @Autowired
     private RefreshService<Task> refreshService;
-
     @Autowired
     private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
-
     @Autowired
     private Converter<Task, TaskDtoFull> dtoFullConverter;
-
     @Autowired
     private GetService<String, Task> byCodeGetService;
-
     @Qualifier("taskUpdateOneFieldService")
     @Autowired
     private UpdateOneFieldService<Task> oneFieldService;
-
     @Autowired
     private GetListByProjectService<Long, Task> listByProjectService;
 
@@ -92,7 +84,7 @@ public class TaskController {
 
         //TODO - перед добавлением проверять, есть ли уже в БД такая задача, но id генерируется в entity - подумать
 
-        return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdTask, HttpStatus.OK);
     }
 
     /**
@@ -134,7 +126,7 @@ public class TaskController {
         else
             throw new NotFoundException("Задача с id: " + id + " не найдена!");
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -152,6 +144,7 @@ public class TaskController {
 
         if (task == null) //TODO - пустая задача или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Задача с code: " + code + " не найдена!");
+        //TODO - может вместо исключения возвращать статус HttpStatus.NO_CONTENT ?
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -163,7 +156,7 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return статус
      */
-    @PutMapping("/task/{id}/field")
+    @PutMapping("/task/{id}/updatefield")
     public ResponseEntity<UpdateOneValue> updateOneField(
             @PathVariable Long id, @RequestBody UpdateOneValue oneValue
     ) {

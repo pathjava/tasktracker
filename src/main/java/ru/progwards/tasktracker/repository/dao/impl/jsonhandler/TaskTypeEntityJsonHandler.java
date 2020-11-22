@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
+ * Методы работы сущности с JSON базой данных
+ *
  * @author Oleg Kiselev
  */
 @Repository

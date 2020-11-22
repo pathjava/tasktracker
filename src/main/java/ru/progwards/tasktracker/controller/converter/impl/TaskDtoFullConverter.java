@@ -1,9 +1,13 @@
 package ru.progwards.tasktracker.controller.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
-import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.controller.dto.*;
+import ru.progwards.tasktracker.service.vo.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -12,6 +16,22 @@ import ru.progwards.tasktracker.service.vo.Task;
  */
 @Component
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
+
+    @Autowired
+    private Converter<TaskType, TaskTypeDto> taskTypeDtoConverter;
+    @Autowired
+    private Converter<TaskPriority, TaskPriorityDto> taskPriorityDtoConverter;
+    @Autowired
+    private Converter<User, UserDto> userUserDtoConverter;
+    @Autowired
+    private Converter<WorkFlowStatus, WorkFlowStatusDto> workFlowStatusDtoConverter;
+    @Autowired
+    private Converter<RelatedTask, RelatedTaskDto> relatedTaskDtoConverter;
+    @Autowired
+    private Converter<TaskAttachment, TaskAttachmentDto> taskAttachmentDtoConverter;
+    @Autowired
+    private Converter<WorkLog, WorkLogDto> workLogDtoConverter;
+
     /**
      * Метод конвертирует Dto сущность в бизнес объект
      *
@@ -28,21 +48,57 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     dto.getCode(),
                     dto.getName(),
                     dto.getDescription(),
-                    dto.getType(),
-                    dto.getPriority(),
+                    taskTypeDtoConverter.toModel(dto.getType()),
+                    taskPriorityDtoConverter.toModel(dto.getPriority()),
                     dto.getProject_id(),
-                    dto.getAuthor(),
-                    dto.getExecutor(),
+                    userUserDtoConverter.toModel(dto.getAuthor()),
+                    userUserDtoConverter.toModel(dto.getExecutor()),
                     dto.getCreated(),
                     dto.getUpdated(),
-                    dto.getStatus(),
+                    workFlowStatusDtoConverter.toModel(dto.getStatus()),
                     dto.getEstimation(),
                     dto.getTimeSpent(),
                     dto.getTimeLeft(),
-                    dto.getRelatedTasks(),
-                    dto.getAttachments(),
-                    dto.getWorkLogs()
+                    listDtoToVoRelatedTask(dto.getRelatedTasks()),
+                    listDtoToVoTaskAttachment(dto.getAttachments()),
+                    listDtoToVoTaskWorkLog(dto.getWorkLogs())
             );
+    }
+
+    /**
+     * Метод конвертирует лист из Dto в VO
+     *
+     * @param workLogs лист Dto логов
+     * @return лист VO логов
+     */
+    private List<WorkLog> listDtoToVoTaskWorkLog(List<WorkLogDto> workLogs) {
+        return workLogs.stream()
+                .map(entity -> workLogDtoConverter.toModel(entity))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод конвертирует лист из Dto в VO
+     *
+     * @param attachments лист Dto файлов задачи
+     * @return лист VO файлов задачи
+     */
+    private List<TaskAttachment> listDtoToVoTaskAttachment(List<TaskAttachmentDto> attachments) {
+        return attachments.stream()
+                .map(entity -> taskAttachmentDtoConverter.toModel(entity))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод конвертирует лист из Dto в VO
+     *
+     * @param relatedTasks лист Dto связанных задач
+     * @return лист VO связанных задач
+     */
+    private List<RelatedTask> listDtoToVoRelatedTask(List<RelatedTaskDto> relatedTasks) {
+        return relatedTasks.stream()
+                .map(entity -> relatedTaskDtoConverter.toModel(entity))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -61,20 +117,56 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     model.getCode(),
                     model.getName(),
                     model.getDescription(),
-                    model.getType(),
-                    model.getPriority(),
+                    taskTypeDtoConverter.toDto(model.getType()),
+                    taskPriorityDtoConverter.toDto(model.getPriority()),
                     model.getProject_id(),
-                    model.getAuthor(), //TODO - выводить только имя, а не объект пользователя
-                    model.getExecutor(), //TODO - выводить только имя, а не объект пользователя
+                    userUserDtoConverter.toDto(model.getAuthor()),
+                    userUserDtoConverter.toDto(model.getExecutor()),
                     model.getCreated(),
                     model.getUpdated(),
-                    model.getStatus(),
+                    workFlowStatusDtoConverter.toDto(model.getStatus()),
                     model.getEstimation(),
                     model.getTimeSpent(),
                     model.getTimeLeft(),
-                    model.getRelatedTasks(),
-                    model.getAttachments(),
-                    model.getWorkLogs()
+                    listVoToDtoRelatedTask(model.getRelatedTasks()),
+                    listVoToDtoTaskAttachment(model.getAttachments()),
+                    listVoToDtoWorkLog(model.getWorkLogs())
             );
+    }
+
+    /**
+     * Метод конвертирует лист из VO в Dto
+     *
+     * @param workLogs лист VO логов задачи
+     * @return лист Dto логов задачи
+     */
+    private List<WorkLogDto> listVoToDtoWorkLog(List<WorkLog> workLogs) {
+        return workLogs.stream()
+                .map(entity -> workLogDtoConverter.toDto(entity))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод конвертирует лист из VO в Dto
+     *
+     * @param attachments лист VO файлов задачи
+     * @return лист Dto файлов задачи
+     */
+    private List<TaskAttachmentDto> listVoToDtoTaskAttachment(List<TaskAttachment> attachments) {
+        return attachments.stream()
+                .map(entity -> taskAttachmentDtoConverter.toDto(entity))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод конвертирует лист из VO в Dto
+     *
+     * @param relatedTasks лист VO связанных задач
+     * @return лист Dto связанных задач
+     */
+    private List<RelatedTaskDto> listVoToDtoRelatedTask(List<RelatedTask> relatedTasks) {
+        return relatedTasks.stream()
+                .map(entity -> relatedTaskDtoConverter.toDto(entity))
+                .collect(Collectors.toList());
     }
 }

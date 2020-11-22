@@ -25,19 +25,14 @@ public class TaskTypeController {
 
     @Autowired
     private CreateService<TaskType> createService;
-
     @Autowired
     private GetService<Long, TaskType> getService;
-
     @Autowired
     private RemoveService<TaskType> removeService;
-
     @Autowired
     private RefreshService<TaskType> refreshService;
-
     @Autowired
     private GetListByProjectService<Long, TaskType> byProjectService;
-
     @Autowired
     private Converter<TaskType, TaskTypeDto> converter;
 
@@ -117,7 +112,7 @@ public class TaskTypeController {
         else
             throw new NotFoundException("Тип задачи с id: " + id + " не найден!");
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**

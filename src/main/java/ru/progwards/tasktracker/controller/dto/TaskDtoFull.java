@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
- * объект, содержащий данные, выводимые в пользовательском интерфейсе
+ * Объект, содержащий данные задачи, выводимые в пользовательском интерфейсе
  *
  * @author Oleg Kiselev
  */
@@ -19,34 +19,34 @@ public class TaskDtoFull {
     private String code;
     private String name;
     private String description;
-    private TaskType type;
-    private TaskPriority priority;
+    private TaskTypeDto type;
+    private TaskPriorityDto priority;
     private Long project_id;
-    private User author;
-    private User executor;
+    private UserDto author;
+    private UserDto executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime created;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime updated;
-    private WorkFlowStatus status;
+    private WorkFlowStatusDto status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimation;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeSpent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeLeft;
-    private List<RelatedTask> relatedTasks;
-    private List<TaskAttachment> attachments;
-    private List<WorkLog> workLogs;
+    private List<RelatedTaskDto> relatedTasks;
+    private List<TaskAttachmentDto> attachments;
+    private List<WorkLogDto> workLogs;
 
     public TaskDtoFull(
             Long id, String code, String name, String description,
-            TaskType type, TaskPriority priority, Long project_id,
-            User author, User executor,
+            TaskTypeDto type, TaskPriorityDto priority, Long project_id,
+            UserDto author, UserDto executor,
             ZonedDateTime created, ZonedDateTime updated,
-            WorkFlowStatus status,
+            WorkFlowStatusDto status,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs
+            List<RelatedTaskDto> relatedTasks, List<TaskAttachmentDto> attachments, List<WorkLogDto> workLogs
     ) {
         this.id = id;
         this.code = code;
@@ -96,19 +96,19 @@ public class TaskDtoFull {
         this.description = description;
     }
 
-    public TaskType getType() {
+    public TaskTypeDto getType() {
         return type;
     }
 
-    public void setType(TaskType type) {
+    public void setType(TaskTypeDto type) {
         this.type = type;
     }
 
-    public TaskPriority getPriority() {
+    public TaskPriorityDto getPriority() {
         return priority;
     }
 
-    public void setPriority(TaskPriority priority) {
+    public void setPriority(TaskPriorityDto priority) {
         this.priority = priority;
     }
 
@@ -120,19 +120,19 @@ public class TaskDtoFull {
         this.project_id = project_id;
     }
 
-    public User getAuthor() {
+    public UserDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserDto author) {
         this.author = author;
     }
 
-    public User getExecutor() {
+    public UserDto getExecutor() {
         return executor;
     }
 
-    public void setExecutor(User executor) {
+    public void setExecutor(UserDto executor) {
         this.executor = executor;
     }
 
@@ -152,11 +152,11 @@ public class TaskDtoFull {
         this.updated = updated;
     }
 
-    public WorkFlowStatus getStatus() {
+    public WorkFlowStatusDto getStatus() {
         return status;
     }
 
-    public void setStatus(WorkFlowStatus status) {
+    public void setStatus(WorkFlowStatusDto status) {
         this.status = status;
     }
 
@@ -184,27 +184,27 @@ public class TaskDtoFull {
         this.timeLeft = timeLeft;
     }
 
-    public List<RelatedTask> getRelatedTasks() {
+    public List<RelatedTaskDto> getRelatedTasks() {
         return relatedTasks;
     }
 
-    public void setRelatedTasks(List<RelatedTask> relatedTasks) {
+    public void setRelatedTasks(List<RelatedTaskDto> relatedTasks) {
         this.relatedTasks = relatedTasks;
     }
 
-    public List<TaskAttachment> getAttachments() {
+    public List<TaskAttachmentDto> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<TaskAttachment> attachments) {
+    public void setAttachments(List<TaskAttachmentDto> attachments) {
         this.attachments = attachments;
     }
 
-    public List<WorkLog> getWorkLogs() {
+    public List<WorkLogDto> getWorkLogs() {
         return workLogs;
     }
 
-    public void setWorkLogs(List<WorkLog> workLogs) {
+    public void setWorkLogs(List<WorkLogDto> workLogs) {
         this.workLogs = workLogs;
     }
 }

@@ -1,13 +1,12 @@
 package ru.progwards.tasktracker.controller.dto;
 
-import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.util.types.EstimateChange;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
- * объект, содержащий лог-данные (Журнала работ) о действиях в задаче
+ * Объект, содержащий лог-данные (Журнала работ) о действиях в задаче
  *
  * @author Oleg Kiselev
  */
@@ -16,14 +15,14 @@ public class WorkLogDto {
     private final Long id;
     private Long taskId;
     private Duration spent;
-    private User worker;
+    private UserDto worker;
     private ZonedDateTime when;
     private String description;
     private EstimateChange estimateChange;
     private Duration estimateValue;
 
     public WorkLogDto(
-            Long id, Long taskId, Duration spent, User worker,
+            Long id, Long taskId, Duration spent, UserDto worker,
             ZonedDateTime when, String description,
             EstimateChange estimateChange, Duration estimateValue
     ) {
@@ -57,11 +56,11 @@ public class WorkLogDto {
         this.spent = spent;
     }
 
-    public User getWorker() {
+    public UserDto getWorker() {
         return worker;
     }
 
-    public void setWorker(User worker) {
+    public void setWorker(UserDto worker) {
         this.worker = worker;
     }
 

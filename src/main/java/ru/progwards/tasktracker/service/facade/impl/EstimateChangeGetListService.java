@@ -26,6 +26,6 @@ public class EstimateChangeGetListService implements GetListService<String> {
     public Collection<String> getList() {
         return Stream.of(EstimateChange.values())
                 .map(EstimateChange::name)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 }

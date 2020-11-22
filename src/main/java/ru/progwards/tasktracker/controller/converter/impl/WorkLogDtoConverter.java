@@ -1,8 +1,11 @@
 package ru.progwards.tasktracker.controller.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
+import ru.progwards.tasktracker.controller.dto.UserDto;
 import ru.progwards.tasktracker.controller.dto.WorkLogDto;
+import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
 /**
@@ -12,6 +15,10 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
  */
 @Component
 public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
+
+    @Autowired
+    private Converter<User, UserDto> userUserDtoConverter;
+
     /**
      * Метод конвертирует Dto сущность в бизнес объект
      *
@@ -27,7 +34,7 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
                     dto.getId(),
                     dto.getTaskId(),
                     dto.getSpent(),
-                    dto.getWorker(),
+                    userUserDtoConverter.toModel(dto.getWorker()),
                     dto.getWhen(),
                     dto.getDescription(),
                     dto.getEstimateChange(),
@@ -50,7 +57,7 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
                     model.getId(),
                     model.getTaskId(),
                     model.getSpent(),
-                    model.getWorker(),
+                    userUserDtoConverter.toDto(model.getWorker()),
                     model.getWhen(),
                     model.getDescription(),
                     model.getEstimateChange(),
