@@ -3,13 +3,12 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.facade.GetListByTaskService;
+import ru.progwards.tasktracker.service.facade.GetListByAttachedTaskId;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.Task;
-
-import java.util.Collection;
 
 /**
  * Бизнес-логика удаления задачи
@@ -20,36 +19,32 @@ import java.util.Collection;
 public class TaskRemoveService implements RemoveService<Task> {
 
     @Autowired
-    private Repository<Long, TaskEntity> repository;
-
+    private Repository<Long, TaskEntity> repositoryTask;
     @Autowired
-    private GetListByTaskService<Long, RelatedTask> listByTaskService;
-
+    private Repository<Long, RelatedTaskEntity> repositoryRelatedTask;
     @Autowired
-    private RemoveService<RelatedTask> removeService;
+    private GetListByAttachedTaskId<Long, RelatedTask> listByAttachedTaskId;
 
     /**
      * Метод удаления задачи
+     * Предварительно в методе deleteRelatedTasks(Long id) проверяем наличие
+     * связей на задачи и если они есть, удаляем встречные (входящие)
      *
      * @param model value object - объект бизнес логики (задача), который необходимо удалить
      */
     @Override
     public void remove(Task model) {
         deleteRelatedTasks(model.getId());
-        repository.delete(model.getId());
+        repositoryTask.delete(model.getId());
     }
 
     /**
-     * Метод удаления связанных задача удаляемой задачи
+     * Метод удаления связанных входящих RelatedTask удаляемой задачи
      *
-     * @param id идентификатор задачи у которой необходимо удалить связанные с ней задачи
+     * @param id идентификатор задачи
      */
     private void deleteRelatedTasks(Long id) {
-        Collection<RelatedTask> collection = listByTaskService.getListByTaskId(id);
-        if (!collection.isEmpty()) {
-            for (RelatedTask relatedTask : collection) {
-                removeService.remove(relatedTask);
-            }
-        }
+        listByAttachedTaskId.getListByAttachedTaskId(id)
+                .forEach(relatedTask -> repositoryRelatedTask.delete(relatedTask.getId()));
     }
 }

@@ -22,7 +22,6 @@ public class TaskRefreshService implements RefreshService<Task> {
 
     @Autowired
     private Repository<Long, TaskEntity> repository;
-
     @Autowired
     private Converter<TaskEntity, Task> converter;
 

@@ -21,7 +21,6 @@ public class TaskGetListService implements GetListService<Task> {
 
     @Autowired
     private Repository<Long, TaskEntity> repository;
-
     @Autowired
     private Converter<TaskEntity, Task> converter;
 

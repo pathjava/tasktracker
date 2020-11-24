@@ -24,19 +24,14 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
 
     @Autowired
     private Repository<Long, WorkLogEntity> repository;
-
     @Autowired
     private RepositoryByTaskId<Long, WorkLogEntity> byTaskId;
-
     @Autowired
     private Converter<WorkLogEntity, WorkLog> converter;
-
     @Autowired
     private RefreshService<Task> refreshService;
-
     @Autowired
     private GetService<Long, Task> taskGetService;
-
     @Autowired
     private GetService<Long, WorkLog> workLogGetService;
 

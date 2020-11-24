@@ -18,7 +18,6 @@ public class TaskByCodeGetService implements GetService<String, Task> {
 
     @Autowired
     private RepositoryByCode<String, TaskEntity> repositoryByCode;
-
     @Autowired
     private Converter<TaskEntity, Task> converter;
 

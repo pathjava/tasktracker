@@ -23,13 +23,10 @@ public class TaskCreateService implements CreateService<Task> {
 
     @Autowired
     private Repository<Long, TaskEntity> repository;
-
     @Autowired
     private Converter<TaskEntity, Task> converter;
-
     @Autowired
     private GetService<Long, Project> getService;
-
     @Autowired
     private RefreshService<Project> refreshService;
 

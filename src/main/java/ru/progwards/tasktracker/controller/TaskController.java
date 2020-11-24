@@ -168,6 +168,6 @@ public class TaskController {
 
         oneFieldService.updateOneField(oneValue);
 
-        return new ResponseEntity<>(HttpStatus.OK); //TODO - стоит ли тут что-то возвращать?
+        return new ResponseEntity<>(oneValue, HttpStatus.OK);
     }
 }

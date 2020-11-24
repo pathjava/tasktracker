@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryByAttachedTaskId;
 import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  */
 @org.springframework.stereotype.Repository
 public class RelatedTaskEntityRepository implements Repository<Long, RelatedTaskEntity>,
-        RepositoryByTaskId<Long, RelatedTaskEntity> {
+        RepositoryByTaskId<Long, RelatedTaskEntity>, RepositoryByAttachedTaskId<Long, RelatedTaskEntity> {
 
     @Autowired
     private JsonHandler<Long, RelatedTaskEntity> jsonHandler;
@@ -67,10 +68,6 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     public void delete(Long id) {
         RelatedTaskEntity entity = jsonHandler.getMap().get(id);
         if (entity != null) {
-            for (RelatedTaskEntity value : jsonHandler.getMap().values()) {
-                if (value.getCurrentTaskId().equals(entity.getId()) && value.getAttachedTaskId().equals(id))
-                    jsonHandler.getMap().remove(value.getId());
-            }
             jsonHandler.getMap().remove(id);
             jsonHandler.write();
         }
@@ -84,9 +81,21 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
      */
     @Override
     public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
-        //TODO - проверить возможность попадания в связанные задачи задач, помеченных как удаленные
         return jsonHandler.getMap().values().stream()
-                .filter(value -> value.getAttachedTaskId().equals(taskId))
+                .filter(entity -> entity.getCurrentTaskId().equals(taskId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод получения всех входящих RelatedTaskEntity для определенной задачи
+     *
+     * @param taskId идентификатор задачи
+     * @return коллекция entity
+     */
+    @Override
+    public Collection<RelatedTaskEntity> getByAttachedTaskId(Long taskId) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getAttachedTaskId().equals(taskId))
                 .collect(Collectors.toList());
     }
 }

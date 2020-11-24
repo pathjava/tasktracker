@@ -21,7 +21,6 @@ public class TaskGetListByProjectService implements GetListByProjectService<Long
 
     @Autowired
     private Repository<Long, TaskEntity> repository;
-
     @Autowired
     private Converter<TaskEntity, Task> converter;
 

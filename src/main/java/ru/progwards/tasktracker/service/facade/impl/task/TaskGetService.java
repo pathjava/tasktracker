@@ -18,7 +18,6 @@ public class TaskGetService implements GetService<Long, Task> {
 
     @Autowired
     private Repository<Long, TaskEntity> repository;
-
     @Autowired
     private Converter<TaskEntity, Task> converter;
 

@@ -12,7 +12,9 @@ public class RelatedTask {
     private Long currentTaskId;
     private Long attachedTaskId;
 
-    public RelatedTask(Long id, RelationType relationType, Long currentTaskId, Long attachedTaskId) {
+    public RelatedTask(
+            Long id, RelationType relationType, Long currentTaskId, Long attachedTaskId
+    ) {
         this.id = id;
         this.relationType = relationType;
         this.currentTaskId = currentTaskId;
