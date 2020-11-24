@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.UserDto;
 import ru.progwards.tasktracker.controller.dto.WorkLogDto;
+import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
+import ru.progwards.tasktracker.util.types.EstimateChange;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -17,7 +19,7 @@ import ru.progwards.tasktracker.service.vo.WorkLog;
 public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
 
     @Autowired
-    private Converter<User, UserDto> userUserDtoConverter;
+    private Converter<User, UserDto> userDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -34,12 +36,26 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
                     dto.getId(),
                     dto.getTaskId(),
                     dto.getSpent(),
-                    userUserDtoConverter.toModel(dto.getWorker()),
+                    userDtoConverter.toModel(dto.getWorker()),
                     dto.getWhen(),
                     dto.getDescription(),
-                    dto.getEstimateChange(),
+                    stringToEnum(dto.getEstimateChange()),
                     dto.getEstimateValue()
             );
+    }
+
+    /**
+     * Метод конвертации строкового значения в ENUM
+     *
+     * @param estimateChange строковое значение
+     * @return enum
+     */
+    private EstimateChange stringToEnum(String estimateChange) {
+        for (EstimateChange value : EstimateChange.values()) {
+            if (value.toString().equalsIgnoreCase(estimateChange))
+                return value;
+        }
+        throw new BadRequestException(estimateChange + " не соответствует ни одному перечислению EstimateChange!");
     }
 
     /**
@@ -57,11 +73,21 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
                     model.getId(),
                     model.getTaskId(),
                     model.getSpent(),
-                    userUserDtoConverter.toDto(model.getWorker()),
+                    userDtoConverter.toDto(model.getWorker()),
                     model.getWhen(),
                     model.getDescription(),
-                    model.getEstimateChange(),
+                    enumToString(model.getEstimateChange()),
                     model.getEstimateValue()
             );
+    }
+
+    /**
+     * Метод конвертации ENUM в строку
+     *
+     * @param estimateChange enum значение
+     * @return строковое значение
+     */
+    private String enumToString(EstimateChange estimateChange) {
+        return estimateChange == null ? null : estimateChange.toString();
     }
 }

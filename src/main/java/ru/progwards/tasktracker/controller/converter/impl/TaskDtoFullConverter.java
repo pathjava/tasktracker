@@ -22,7 +22,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
     @Autowired
     private Converter<TaskPriority, TaskPriorityDto> taskPriorityDtoConverter;
     @Autowired
-    private Converter<User, UserDto> userUserDtoConverter;
+    private Converter<User, UserDto> userDtoConverter;
     @Autowired
     private Converter<WorkFlowStatus, WorkFlowStatusDto> workFlowStatusDtoConverter;
     @Autowired
@@ -51,8 +51,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     taskTypeDtoConverter.toModel(dto.getType()),
                     taskPriorityDtoConverter.toModel(dto.getPriority()),
                     dto.getProject_id(),
-                    userUserDtoConverter.toModel(dto.getAuthor()),
-                    userUserDtoConverter.toModel(dto.getExecutor()),
+                    userDtoConverter.toModel(dto.getAuthor()),
+                    userDtoConverter.toModel(dto.getExecutor()),
                     dto.getCreated(),
                     dto.getUpdated(),
                     workFlowStatusDtoConverter.toModel(dto.getStatus()),
@@ -120,8 +120,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     taskTypeDtoConverter.toDto(model.getType()),
                     taskPriorityDtoConverter.toDto(model.getPriority()),
                     model.getProject_id(),
-                    userUserDtoConverter.toDto(model.getAuthor()),
-                    userUserDtoConverter.toDto(model.getExecutor()),
+                    userDtoConverter.toDto(model.getAuthor()),
+                    userDtoConverter.toDto(model.getExecutor()),
                     model.getCreated(),
                     model.getUpdated(),
                     workFlowStatusDtoConverter.toDto(model.getStatus()),

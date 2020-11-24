@@ -1,7 +1,5 @@
 package ru.progwards.tasktracker.controller.dto;
 
-import ru.progwards.tasktracker.util.types.EstimateChange;
-
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
@@ -18,13 +16,13 @@ public class WorkLogDto {
     private UserDto worker;
     private ZonedDateTime when;
     private String description;
-    private EstimateChange estimateChange;
+    private String estimateChange;
     private Duration estimateValue;
 
     public WorkLogDto(
             Long id, Long taskId, Duration spent, UserDto worker,
             ZonedDateTime when, String description,
-            EstimateChange estimateChange, Duration estimateValue
+            String estimateChange, Duration estimateValue
     ) {
         this.id = id;
         this.taskId = taskId;
@@ -80,11 +78,11 @@ public class WorkLogDto {
         this.description = description;
     }
 
-    public EstimateChange getEstimateChange() {
+    public String getEstimateChange() {
         return estimateChange;
     }
 
-    public void setEstimateChange(EstimateChange estimateChange) {
+    public void setEstimateChange(String estimateChange) {
         this.estimateChange = estimateChange;
     }
 
