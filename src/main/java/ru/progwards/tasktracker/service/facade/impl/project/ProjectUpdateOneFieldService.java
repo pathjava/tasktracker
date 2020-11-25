@@ -3,8 +3,10 @@ package ru.progwards.tasktracker.service.facade.impl.project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.controller.exception.UpdateNotPossibleException;
+import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Project;
@@ -22,9 +24,16 @@ public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
      */
     @Autowired
     private RepositoryUpdateField<ProjectEntity> projectEntityRepositoryUpdateField;
-
+    /**
+     * репозиторий с проектами
+     */
     @Autowired
-    private GetService<Long, Project> projectGetService;
+    private Repository<Long, ProjectEntity> repository;
+    /**
+     * конвертер проектов
+     */
+    @Autowired
+    private Converter<ProjectEntity, Project> converter;
 
     /**
      * метод обновляет поле у бизнес-модели Project
@@ -32,7 +41,7 @@ public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
      */
     @Override
     public void updateOneField(UpdateOneValue oneValue) {
-        Project project = projectGetService.get(oneValue.getId());
+        Project project = converter.toVo(repository.get(oneValue.getId()));
 
         /* если обновляемое поле называется "lastTaskCode" или если обновляемое поле называется "prefix"
         * и у проекта имеются задачи, то обновление поля невозможно

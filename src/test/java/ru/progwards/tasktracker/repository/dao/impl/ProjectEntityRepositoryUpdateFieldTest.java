@@ -35,7 +35,7 @@ public class ProjectEntityRepositoryUpdateFieldTest {
     public void updateFieldTest() {
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(new ConcurrentHashMap<>());
 
-        ProjectEntity entity = new ProjectEntity(1L, "name1", "desc1", "", 1L, 1000L, 1L, 0L);
+        ProjectEntity entity = new ProjectEntity(1L, "name1", "desc1", "", 1L, 1000L, 0L);
         repository.create(entity);
 
         String beforeUpdateName = repository.get(entity.getId()).getName();

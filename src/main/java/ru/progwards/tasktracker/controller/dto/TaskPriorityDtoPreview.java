@@ -1,10 +1,10 @@
 package ru.progwards.tasktracker.controller.dto;
 
 /**
- * Dto-объект TaskPriority
+ * DtoPreview для TaskPriority
  * @author Pavel Khovaylo
  */
-public class TaskPriorityDto {
+public class TaskPriorityDtoPreview {
     /**
      * идентификатор
      */
@@ -13,15 +13,10 @@ public class TaskPriorityDto {
      * имя
      */
     private String name;
-    /**
-     * числовой приоритет
-     */
-    private Integer value;
 
-    public TaskPriorityDto(Long id, String name, Integer value) {
+    public TaskPriorityDtoPreview(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.value = value;
     }
 
     public Long getId() {
@@ -38,13 +33,5 @@ public class TaskPriorityDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
     }
 }

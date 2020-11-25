@@ -29,22 +29,23 @@ public class ProjectRefreshService implements RefreshService<Project> {
     @Autowired
     private Converter<ProjectEntity, Project> converter;
 
-    @Autowired
-    private GetService<Long, Project> projectGetService;
-
     /**
      * метод по обновлению проекта
      * @param model бизнес-модель, которую хотим обновить
      */
     @Override
     public void refresh(Project model) {
-        Project project = projectGetService.get(model.getId());
+        Project project = converter.toVo(repository.get(model.getId()));
 
         // если в обновленном проекте другой префикс и в обновляемом проекте имеются задачи, то обновление невозможно
         if (!model.getPrefix().equals(project.getPrefix()) && project.getTasks().size() > 0)
             throw new UpdateNotPossibleException("Update not possible");
-        else
+        else {
+            // если LastTaskCode не установлен, то взять значение у предыдущей версии проекта
+            if (model.getLastTaskCode() == null)
+                model.setLastTaskCode(project.getLastTaskCode());
             repository.update(converter.toEntity(model));
+        }
 
     }
 }

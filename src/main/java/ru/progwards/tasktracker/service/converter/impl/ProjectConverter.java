@@ -14,6 +14,7 @@ import ru.progwards.tasktracker.service.vo.WorkFlow;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,12 +50,10 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
             return null;
 
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
-                entity.getPrefix(), userGetService.get(entity.getOwnerId()),
-                getZDTCreated(entity.getCreated()),
-//                workFlowGetService.get(entity.getWorkFlowId()),
-                //TODO сделал так, чтобы работало в режиме тестирования (со строчкой выше идут проблемы)
-                new WorkFlow(1L, "name", false, 1L, null),
-                (List<Task>) taskGetListByProjectService.getListByProjectId(entity.getId()), entity.getLastTaskCode());
+                entity.getPrefix(), userGetService.get(entity.getOwnerId()), getZDTCreated(entity.getCreated()),
+                //TODO нужен сервисный метод для получения всех TaskType, относящихся к данному проекту
+                new ArrayList<>(),
+                entity.getLastTaskCode());
     }
 
     /**
@@ -68,8 +67,8 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
             return null;
 
         return new ProjectEntity(valueObject.getId(), valueObject.getName(), valueObject.getDescription(),
-                valueObject.getPrefix(), valueObject.getOwnerId(), getLongCreated(valueObject.getCreated()),
-                valueObject.getWorkFlowId(), valueObject.getLastTaskCode());
+                valueObject.getPrefix(), valueObject.getOwner().getId(), getLongCreated(valueObject.getCreated()),
+                valueObject.getLastTaskCode());
     }
 
     /**

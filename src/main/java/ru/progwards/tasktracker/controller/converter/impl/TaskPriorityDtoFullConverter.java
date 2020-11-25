@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskPriorityDto;
+import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.service.vo.TaskPriority;
 
 /**
@@ -10,7 +10,7 @@ import ru.progwards.tasktracker.service.vo.TaskPriority;
  * @author Pavel Khovaylo
  */
 @Component
-public class TaskPriorityDtoConverter implements Converter<TaskPriority, TaskPriorityDto> {
+public class TaskPriorityDtoFullConverter implements Converter<TaskPriority, TaskPriorityDtoFull> {
 
     /**
      * метод конвертирует объект TaskPriorityDto в объект TaskPriority
@@ -18,7 +18,7 @@ public class TaskPriorityDtoConverter implements Converter<TaskPriority, TaskPri
      * @return бизнес-модель TaskPriority
      */
     @Override
-    public TaskPriority toModel(TaskPriorityDto dto) {
+    public TaskPriority toModel(TaskPriorityDtoFull dto) {
         return new TaskPriority(dto.getId(), dto.getName(), dto.getValue());
     }
 
@@ -28,7 +28,7 @@ public class TaskPriorityDtoConverter implements Converter<TaskPriority, TaskPri
      * @return объект TaskPriorityDto
      */
     @Override
-    public TaskPriorityDto toDto(TaskPriority model) {
-        return new TaskPriorityDto(model.getId(), model.getName(), model.getValue());
+    public TaskPriorityDtoFull toDto(TaskPriority model) {
+        return new TaskPriorityDtoFull(model.getId(), model.getName(), model.getValue());
     }
 }

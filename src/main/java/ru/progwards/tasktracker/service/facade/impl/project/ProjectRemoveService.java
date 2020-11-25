@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
+import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.controller.exception.DeletionNotPossibleException;
@@ -21,9 +22,11 @@ public class ProjectRemoveService implements RemoveService<Project> {
      */
     @Autowired
     private Repository<Long, ProjectEntity> repository;
-
+    /**
+     * конвертер проектов
+     */
     @Autowired
-    private GetService<Long, Project> projectGetService;
+    private Converter<ProjectEntity, Project> converter;
 
     /**
      * метод по удалению проекта
@@ -31,7 +34,7 @@ public class ProjectRemoveService implements RemoveService<Project> {
      */
     @Override
     public void remove(Project model) {
-        Project project = projectGetService.get(model.getId());
+        Project project = converter.toVo(repository.get(model.getId()));
 
         // если спискок задач у проекта пустой, то удаляем проект; если какие-то задачи есть, то выводим исключение
         if (project.getTasks().size() == 0)

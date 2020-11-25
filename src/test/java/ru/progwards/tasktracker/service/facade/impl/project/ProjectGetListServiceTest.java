@@ -35,13 +35,10 @@ public class ProjectGetListServiceTest {
     public void getListTest() {
         User user = new User();
         user.setId(1L);
-        WorkFlow workFlow = new WorkFlow(1L, "name", false, 1L, null);
 
         List<Project> projectList = List.of(
-                new Project(1L, "name1", "desc1", "prefix", user, ZonedDateTime.now(),
-                        workFlow, new ArrayList<>(), 0L),
-                new Project(2L, "name2", "desc2", "prefix", user, ZonedDateTime.now(),
-                        workFlow, new ArrayList<>(), 0L)
+                new Project(1L, "name1", "desc1", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), 0L),
+                new Project(2L, "name2", "desc2", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), 0L)
         );
 
         Mockito.when(projectGetListService.getList()).thenReturn(projectList);

@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.ProjectDto;
+import ru.progwards.tasktracker.controller.dto.ProjectDtoFull;
+import ru.progwards.tasktracker.controller.dto.ProjectDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
@@ -26,7 +27,10 @@ import java.util.stream.Collectors;
 public class ProjectController {
 
     @Autowired
-    private Converter<Project, ProjectDto> converter;
+    private Converter<Project, ProjectDtoFull> converterFull;
+
+    @Autowired
+    private Converter<Project, ProjectDtoPreview> converterPreview;
 
     @Autowired
     private GetService<Long, Project> projectGetService;
@@ -51,11 +55,11 @@ public class ProjectController {
      * @return список проектов
      */
     @GetMapping("list")
-    public ResponseEntity<Collection<ProjectDto>> get() {
+    public ResponseEntity<Collection<ProjectDtoPreview>> get() {
 
-        Collection<ProjectDto> projectDtos =
+        Collection<ProjectDtoPreview> projectDtos =
                 projectGetListService.getList().stream().
-                        map(e -> converter.toDto(e)).collect(Collectors.toList());
+                        map(e -> converterPreview.toDto(e)).collect(Collectors.toList());
 
         return new ResponseEntity<>(projectDtos, HttpStatus.OK);
     }
@@ -66,12 +70,12 @@ public class ProjectController {
      * @return ProjectDto
      */
     @GetMapping("{id}")
-    public ResponseEntity<ProjectDto> get(@PathVariable("id") Long id) {
+    public ResponseEntity<ProjectDtoFull> get(@PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundException("Not found a project with id=" + id);
 
-        return new ResponseEntity<>(converter.toDto(project), HttpStatus.OK);
+        return new ResponseEntity<>(converterFull.toDto(project), HttpStatus.OK);
     }
 
     /**
@@ -80,11 +84,11 @@ public class ProjectController {
      * @return созданный проект
      */
     @PostMapping("create")
-    public ResponseEntity<ProjectDto> create(@RequestBody ProjectDto projectDto) {
+    public ResponseEntity<ProjectDtoFull> create(@RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");
 
-        projectCreateService.create(converter.toModel(projectDto));
+        projectCreateService.create(converterFull.toModel(projectDto));
 
         return new ResponseEntity<>(projectDto, HttpStatus.OK);
     }
@@ -96,7 +100,7 @@ public class ProjectController {
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody ProjectDto projectDto) {
+    public void update(@PathVariable("id") Long id, @RequestBody ProjectDtoFull projectDto) {
         if (id == null)
             throw new BadRequestException("Id is null");
 
@@ -104,7 +108,7 @@ public class ProjectController {
             throw new BadRequestException("Project is null");
 
         projectDto.setId(id);
-        projectRefreshService.refresh(converter.toModel(projectDto));
+        projectRefreshService.refresh(converterFull.toModel(projectDto));
     }
 
     /**
@@ -135,8 +139,5 @@ public class ProjectController {
 
         updateOneValue.setId(id);
         projectEntityRepositoryUpdateField.updateField(updateOneValue);
-    }
-
-    public static class TaskPriorityController {
     }
 }

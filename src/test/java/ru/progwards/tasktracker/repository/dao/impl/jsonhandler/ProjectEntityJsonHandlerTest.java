@@ -31,7 +31,7 @@ public class ProjectEntityJsonHandlerTest {
         Map<Long, ProjectEntity> map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "prefix"+i, i, 1000L, 0L));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);

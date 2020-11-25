@@ -1,15 +1,12 @@
-package ru.progwards.tasktracker.service.vo;
-
-import ru.progwards.tasktracker.util.types.TaskType;
+package ru.progwards.tasktracker.controller.dto;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 /**
- * Класс Project - бизнес-модель проекта
+ * DtoFull для проекта
  * @author Pavel Khovaylo
  */
-public class Project  {
+public class ProjectDtoFull {
     /**
      * идентификатор проекта
      */
@@ -29,30 +26,21 @@ public class Project  {
     /**
      * владелец (создатель) проекта
      */
-    private User owner;
+    //TODO userDtoPreview
+    private UserDto owner;
     /**
      * время создания проекта
      */
     private ZonedDateTime created;
-    /**
-     * список типов задач, относящихся к данному проекту
-     */
-    private List<TaskType> taskTypes;
-    /**
-     * хранит код последней добавленной задачи к данному проекту
-     */
-    private Long lastTaskCode;
 
-    public Project(Long id, String name, String description, String prefix, User owner, ZonedDateTime created,
-                   List<TaskType> taskTypes, Long lastTaskCode) {
+    public ProjectDtoFull(Long id, String name, String description, String prefix, UserDto owner,
+                          ZonedDateTime created) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.prefix = prefix;
         this.owner = owner;
         this.created = created;
-        this.taskTypes = taskTypes;
-        this.lastTaskCode = lastTaskCode;
     }
 
     public Long getId() {
@@ -87,11 +75,11 @@ public class Project  {
         this.prefix = prefix;
     }
 
-    public User getOwner() {
+    public UserDto getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(UserDto owner) {
         this.owner = owner;
     }
 
@@ -101,21 +89,5 @@ public class Project  {
 
     public void setCreated(ZonedDateTime created) {
         this.created = created;
-    }
-
-    public List<TaskType> getTaskTypes() {
-        return taskTypes;
-    }
-
-    public void setTaskTypes(List<TaskType> taskTypes) {
-        this.taskTypes = taskTypes;
-    }
-
-    public Long getLastTaskCode() {
-        return lastTaskCode;
-    }
-
-    public void setLastTaskCode(Long lastTaskCode) {
-        this.lastTaskCode = lastTaskCode;
     }
 }

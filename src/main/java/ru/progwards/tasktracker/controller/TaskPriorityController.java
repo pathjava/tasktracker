@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskPriorityDto;
+import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class TaskPriorityController {
 
     @Autowired
-    private Converter<TaskPriority, TaskPriorityDto> converter;
+    private Converter<TaskPriority, TaskPriorityDtoFull> converter;
 
     @Autowired
     private GetService<Long, TaskPriority> taskPriorityGetService;
@@ -45,12 +45,12 @@ public class TaskPriorityController {
      * @return список TaskPriorityDto
      */
     @GetMapping("list")
-    public ResponseEntity<Collection<TaskPriorityDto>> get() {
-        Collection<TaskPriorityDto> taskPriorityDtos =
+    public ResponseEntity<Collection<TaskPriorityDtoFull>> get() {
+        Collection<TaskPriorityDtoFull> taskPriorityDtoFulls =
                 taskPriorityGetListService.getList().stream().
                         map(e -> converter.toDto(e)).collect(Collectors.toList());
 
-        return new ResponseEntity<>(taskPriorityDtos, HttpStatus.OK);
+        return new ResponseEntity<>(taskPriorityDtoFulls, HttpStatus.OK);
     }
 
     /**
@@ -59,7 +59,7 @@ public class TaskPriorityController {
      * @return TaskPriorityDto
      */
     @GetMapping("{id}")
-    public ResponseEntity<TaskPriorityDto> get(@PathVariable("id") Long id) {
+    public ResponseEntity<TaskPriorityDtoFull> get(@PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);
@@ -69,35 +69,35 @@ public class TaskPriorityController {
 
     /**
      * по запросу создаём TaskPriorityDto
-     * @param taskPriorityDto передаем наполненный TaskPriorityDto
+     * @param taskPriorityDtoFull передаем наполненный TaskPriorityDto
      * @return созданный TaskPriorityDto
      */
     @PostMapping("create")
-    public ResponseEntity<TaskPriorityDto> create(@RequestBody TaskPriorityDto taskPriorityDto) {
-        if (taskPriorityDto == null)
+    public ResponseEntity<TaskPriorityDtoFull> create(@RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
+        if (taskPriorityDtoFull == null)
             throw new BadRequestException("Project is null");
 
-        taskPriorityCreateService.create(converter.toModel(taskPriorityDto));
+        taskPriorityCreateService.create(converter.toModel(taskPriorityDtoFull));
 
-        return new ResponseEntity<>(taskPriorityDto, HttpStatus.OK);
+        return new ResponseEntity<>(taskPriorityDtoFull, HttpStatus.OK);
     }
 
     /**
      * по запросу обновляем существующий TaskPriorityDto
      * @param id идентификатор изменяемого TaskPriorityDto
-     * @param taskPriorityDto измененный TaskPriorityDto
+     * @param taskPriorityDtoFull измененный TaskPriorityDto
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityDto taskPriorityDto) {
+    public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
         if (id == null)
             throw new BadRequestException("Id is null");
 
-        if (taskPriorityDto == null)
+        if (taskPriorityDtoFull == null)
             throw new BadRequestException("Project is null");
 
-        taskPriorityDto.setId(id);
-        taskPriorityRefreshService.refresh(converter.toModel(taskPriorityDto));
+        taskPriorityDtoFull.setId(id);
+        taskPriorityRefreshService.refresh(converter.toModel(taskPriorityDtoFull));
     }
 
     /**

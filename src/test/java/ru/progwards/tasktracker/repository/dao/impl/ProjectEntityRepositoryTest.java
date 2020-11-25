@@ -35,7 +35,7 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, 0L));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
@@ -48,7 +48,7 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, 0L));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
@@ -61,7 +61,7 @@ public class ProjectEntityRepositoryTest {
     @Test
     public void createTest() {
         for (long i = 0; i < 10; i++) {
-            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            repository.create(new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, 0L));
         }
 
         Mockito.verify(projectEntityJsonHandler, Mockito.times(10)).write();
@@ -72,7 +72,7 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, 0L));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);
@@ -95,7 +95,7 @@ public class ProjectEntityRepositoryTest {
         map = new ConcurrentHashMap<>();
 
         for (long i = 0; i < 10; i++) {
-            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, i, 0L));
+            map.put(i,new ProjectEntity(i, "name"+i, "description"+i, "", i, 1000L, 0L));
         }
 
         Mockito.when(projectEntityJsonHandler.getMap()).thenReturn(map);

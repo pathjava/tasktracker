@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskPriorityDto;
+import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 import ru.progwards.tasktracker.service.facade.*;
@@ -42,7 +42,7 @@ public class TaskPriorityControllerTest {
     private Repository<Long, TaskPriorityEntity> repository;
 
     @Autowired
-    private Converter<TaskPriority, TaskPriorityDto> converter;
+    private Converter<TaskPriority, TaskPriorityDtoFull> converter;
 
     @Autowired
     private GetListService<TaskPriority> taskPriorityGetListService;
@@ -66,10 +66,10 @@ public class TaskPriorityControllerTest {
 
     @Test
     public void getTaskPrioritiesTest() throws Exception {
-        Collection<TaskPriorityDto> taskPriorityDtos = taskPriorityGetListService.getList().stream().
+        Collection<TaskPriorityDtoFull> taskPriorityDtoFulls = taskPriorityGetListService.getList().stream().
                 map(e -> converter.toDto(e)).collect(Collectors.toList());
 
-        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtos);
+        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtoFulls);
 
         mockMvc.perform(get("/rest/task-priority/list")).
                 andExpect(status().isOk()).
@@ -78,9 +78,9 @@ public class TaskPriorityControllerTest {
 
     @Test
     public void getTaskPriorityTest() throws Exception {
-        TaskPriorityDto taskPriorityDto = converter.toDto(taskPriorityGetService.get(1L));
+        TaskPriorityDtoFull taskPriorityDtoFull = converter.toDto(taskPriorityGetService.get(1L));
 
-        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDto);
+        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtoFull);
 
         mockMvc.perform(get("/rest/task-priority/1")).
                 andExpect(status().isOk()).
@@ -89,9 +89,9 @@ public class TaskPriorityControllerTest {
 
     @Test
     public void createTest() throws Exception {
-        TaskPriorityDto taskPriorityDto = new TaskPriorityDto(6L, "name6", 6);
+        TaskPriorityDtoFull taskPriorityDtoFull = new TaskPriorityDtoFull(6L, "name6", 6);
 
-        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDto);
+        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtoFull);
 
         mockMvc.perform(post("/rest/task-priority/create").
                 content(
