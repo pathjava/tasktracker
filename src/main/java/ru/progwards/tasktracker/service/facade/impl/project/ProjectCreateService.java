@@ -1,14 +1,12 @@
 package ru.progwards.tasktracker.service.facade.impl.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.controller.exception.CreatedIsNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
-import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.vo.Project;
 
 import java.util.Collection;
@@ -50,7 +48,7 @@ public class ProjectCreateService implements CreateService<Project> {
         }
 
         if (isExist)
-            throw new CreatedIsNotPossibleException("Create not possible");
+            throw new OperationIsNotPossibleException("Create not possible");
         else
             repository.create(converter.toEntity(model));
     }

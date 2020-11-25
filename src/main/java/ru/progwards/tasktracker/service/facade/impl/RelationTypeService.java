@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.controller.exception.DeletionIsNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
@@ -82,7 +82,7 @@ public class RelationTypeService implements GetService<Long, RelationType>,
     @Override
     public void remove(RelationType model) {
         if (checkingOtherDependenciesRelationType(model.getId()))
-            throw new DeletionIsNotPossibleException("Удаление невозможно, данный RelationType используется!");
+            throw new OperationIsNotPossibleException("Удаление невозможно, данный RelationType используется!");
         repository.delete(model.getId());
     }
 

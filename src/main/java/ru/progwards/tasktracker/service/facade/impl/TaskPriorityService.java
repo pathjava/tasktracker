@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.controller.exception.DeletionNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
@@ -94,6 +94,6 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
         if (!isExist)
             repository.delete(model.getId());
         else
-            throw new DeletionNotPossibleException("TaskPriority with id = " + model.getId() + " delete not possible");
+            throw new OperationIsNotPossibleException("TaskPriority with id = " + model.getId() + " delete not possible");
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.DeletionIsNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 
 /**
@@ -32,9 +32,9 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(DeletionIsNotPossibleException.class)
+    @ExceptionHandler(OperationIsNotPossibleException.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String taskByIdNotFoundHandler(DeletionIsNotPossibleException ex) {
+    public String taskByIdNotFoundHandler(OperationIsNotPossibleException ex) {
         return ex.getMessage();
     }
 

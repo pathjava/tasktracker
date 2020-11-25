@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.controller.exception.DeletionIsNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByProjectId;
 import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
@@ -61,7 +61,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Override
     public void remove(TaskType model) {
         if (checkingOtherDependenciesTaskType(model.getId()))
-            throw new DeletionIsNotPossibleException("Удаление невозможно, данный тип задачи используется!");
+            throw new OperationIsNotPossibleException("Удаление невозможно, данный тип задачи используется!");
         repository.delete(model.getId());
     }
 
