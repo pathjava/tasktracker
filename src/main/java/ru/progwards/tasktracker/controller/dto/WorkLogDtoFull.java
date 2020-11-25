@@ -13,14 +13,14 @@ public class WorkLogDtoFull {
     private final Long id;
     private Long taskId;
     private Duration spent;
-    private UserDto worker;
+    private UserDtoFull worker;
     private ZonedDateTime when;
     private String description;
     private String estimateChange;
     private Duration estimateValue;
 
     public WorkLogDtoFull(
-            Long id, Long taskId, Duration spent, UserDto worker,
+            Long id, Long taskId, Duration spent, UserDtoFull worker,
             ZonedDateTime when, String description,
             String estimateChange, Duration estimateValue
     ) {
@@ -54,11 +54,11 @@ public class WorkLogDtoFull {
         this.spent = spent;
     }
 
-    public UserDto getWorker() {
+    public UserDtoFull getWorker() {
         return worker;
     }
 
-    public void setWorker(UserDto worker) {
+    public void setWorker(UserDtoFull worker) {
         this.worker = worker;
     }
 

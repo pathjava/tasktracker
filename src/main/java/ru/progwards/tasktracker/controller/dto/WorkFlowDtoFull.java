@@ -5,7 +5,7 @@ package ru.progwards.tasktracker.controller.dto;
  *
  * @author Gregory Lobkov
  */
-public class WorkFlowDto {
+public class WorkFlowDtoFull {
 
     Long id;
 
@@ -29,7 +29,7 @@ public class WorkFlowDto {
     Long start_status_id;
 
 
-    public WorkFlowDto(Long id, String name, boolean pattern, Long start_status_id) {
+    public WorkFlowDtoFull(Long id, String name, boolean pattern, Long start_status_id) {
         this.id = id;
         this.name = name;
         this.pattern = pattern;

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.UserDto;
+import ru.progwards.tasktracker.controller.dto.UserDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.User;
@@ -34,7 +34,7 @@ public class UserController {
     @Autowired
     GetListService<User> getListService;
     @Autowired
-    Converter<User, UserDto> dtoConverter;
+    Converter<User, UserDtoFull> dtoConverter;
 
     /**
      * Получить список всех пользователей
@@ -43,13 +43,13 @@ public class UserController {
      * @return список пользователей
      */
     @GetMapping("/list")
-    public ResponseEntity<Collection<UserDto>> getList() {
+    public ResponseEntity<Collection<UserDtoFull>> getList() {
         // получили список бизнес-объектов
         Collection<User> list = getListService.getList();
-        List<UserDto> resultList = new ArrayList<>(list.size());
+        List<UserDtoFull> resultList = new ArrayList<>(list.size());
         // преобразуем к dto
         for (User entity:list) {
-            UserDto dto = dtoConverter.toDto(entity);
+            UserDtoFull dto = dtoConverter.toDto(entity);
             resultList.add(dto);
         }
         return new ResponseEntity<>(resultList, HttpStatus.OK);
@@ -63,12 +63,12 @@ public class UserController {
      * @return объект dto
      */
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
+    public ResponseEntity<UserDtoFull> get(@PathVariable("id") Long id) {
         if (id == null)
             throw new BadRequestException("Id is not set");
 
         User vo = getService.get(id);
-        UserDto entity = dtoConverter.toDto(vo);
+        UserDtoFull entity = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
@@ -81,13 +81,13 @@ public class UserController {
      * @return объект после бизнес-логики
      */
     @PostMapping("/create")
-    public ResponseEntity<UserDto> create(@RequestBody UserDto entity) {
+    public ResponseEntity<UserDtoFull> create(@RequestBody UserDtoFull entity) {
         if (entity == null)
             throw new BadRequestException("User is null");
 
         User vo = dtoConverter.toModel(entity);
         createService.create(vo);
-        UserDto result = dtoConverter.toDto(vo);
+        UserDtoFull result = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -102,8 +102,8 @@ public class UserController {
 //    @PostMapping("/{id}/update")
     @PutMapping("/{id}/update")
     //  TODO            entity.setId(id); //    id в entity другой
-    public ResponseEntity<UserDto> update(@PathVariable("id") Long id,
-                                              @RequestBody UserDto entity) {
+    public ResponseEntity<UserDtoFull> update(@PathVariable("id") Long id,
+                                              @RequestBody UserDtoFull entity) {
         if (id == null)
             throw new BadRequestException("Id is not set");
         if (entity == null)
@@ -112,7 +112,7 @@ public class UserController {
         entity.setId(id);
         User vo = dtoConverter.toModel(entity);
         refreshService.refresh(vo);
-        UserDto result = dtoConverter.toDto(vo);
+        UserDtoFull result = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

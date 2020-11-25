@@ -21,14 +21,14 @@ public class TaskDtoFull {
     private TaskTypeDtoFull type;
     private TaskPriorityDtoPreview priority;
     private Project project;
-    private UserDto author;
-    private UserDto executor;
+    private UserDtoFull author;
+    private UserDtoFull executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime created;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime updated;
-    private WorkFlowStatusDto status;
-    private List<WorkFlowActionDto> actions;
+    private WorkFlowStatusDtoFull status;
+    private List<WorkFlowActionDtoFull> actions;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimation;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
@@ -36,17 +36,17 @@ public class TaskDtoFull {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeLeft;
     private List<RelatedTaskDtoFull> relatedTasks;
-    private List<TaskAttachmentDto> attachments;
+    private List<TaskAttachmentDtoFull> attachments;
     private List<WorkLogDtoFull> workLogs;
 
     public TaskDtoFull(
             Long id, String code, String name, String description,
             TaskTypeDtoFull type, TaskPriorityDtoPreview priority, Project project,
-            UserDto author, UserDto executor,
+            UserDtoFull author, UserDtoFull executor,
             ZonedDateTime created, ZonedDateTime updated,
-            WorkFlowStatusDto status, List<WorkFlowActionDto> actions,
+            WorkFlowStatusDtoFull status, List<WorkFlowActionDtoFull> actions,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTaskDtoFull> relatedTasks, List<TaskAttachmentDto> attachments, List<WorkLogDtoFull> workLogs
+            List<RelatedTaskDtoFull> relatedTasks, List<TaskAttachmentDtoFull> attachments, List<WorkLogDtoFull> workLogs
     ) {
         this.id = id;
         this.code = code;
@@ -121,19 +121,19 @@ public class TaskDtoFull {
         this.project = project;
     }
 
-    public UserDto getAuthor() {
+    public UserDtoFull getAuthor() {
         return author;
     }
 
-    public void setAuthor(UserDto author) {
+    public void setAuthor(UserDtoFull author) {
         this.author = author;
     }
 
-    public UserDto getExecutor() {
+    public UserDtoFull getExecutor() {
         return executor;
     }
 
-    public void setExecutor(UserDto executor) {
+    public void setExecutor(UserDtoFull executor) {
         this.executor = executor;
     }
 
@@ -153,19 +153,19 @@ public class TaskDtoFull {
         this.updated = updated;
     }
 
-    public WorkFlowStatusDto getStatus() {
+    public WorkFlowStatusDtoFull getStatus() {
         return status;
     }
 
-    public void setStatus(WorkFlowStatusDto status) {
+    public void setStatus(WorkFlowStatusDtoFull status) {
         this.status = status;
     }
 
-    public List<WorkFlowActionDto> getActions() {
+    public List<WorkFlowActionDtoFull> getActions() {
         return actions;
     }
 
-    public void setActions(List<WorkFlowActionDto> actions) {
+    public void setActions(List<WorkFlowActionDtoFull> actions) {
         this.actions = actions;
     }
 
@@ -201,11 +201,11 @@ public class TaskDtoFull {
         this.relatedTasks = relatedTasks;
     }
 
-    public List<TaskAttachmentDto> getAttachments() {
+    public List<TaskAttachmentDtoFull> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<TaskAttachmentDto> attachments) {
+    public void setAttachments(List<TaskAttachmentDtoFull> attachments) {
         this.attachments = attachments;
     }
 

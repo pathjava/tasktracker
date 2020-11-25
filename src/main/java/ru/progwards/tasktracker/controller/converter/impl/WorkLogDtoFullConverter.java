@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.UserDto;
+import ru.progwards.tasktracker.controller.dto.UserDtoFull;
 import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.vo.User;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFull> {
 
     @Autowired
-    private Converter<User, UserDto> userDtoConverter;
+    private Converter<User, UserDtoFull> userDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

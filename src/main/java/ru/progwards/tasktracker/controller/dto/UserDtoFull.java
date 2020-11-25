@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Aleksandr Sidelnikov
  */
-public class UserDto {
+public class UserDtoFull {
 
     private Long id;
     private String name;
@@ -14,7 +14,7 @@ public class UserDto {
     private String password;
     private List<UserRole> roles;
 
-    public UserDto(Long id, String name, String email, String password, List<UserRole> roles) {
+    public UserDtoFull(Long id, String name, String email, String password, List<UserRole> roles) {
         this.id = id;
         this.name = name;
         this.email = email;

@@ -2,25 +2,25 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.controller.dto.WorkFlowActionDto;
+import ru.progwards.tasktracker.controller.dto.WorkFlowDtoFull;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.vo.WorkFlowAction;
+import ru.progwards.tasktracker.service.vo.WorkFlow;
 import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
 
 
 /**
  * Преобразование valueObject <-> dto
  *
- * WorkFlowAction <-> WorkFlowActionDto
+ * WorkFlow <-> WorkFlowDtoFull
  *
  * @author Gregory Lobkov
  */
 @Component
-public class WorkFlowActionDtoConverter implements Converter<WorkFlowAction, WorkFlowActionDto> {
+public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDtoFull> {
 
     /**
-     * Сервис получения татусов WorkFlow
+     * Сервис получения статусов Workflow
      */
     @Autowired
     private GetService<Long, WorkFlowStatus> workFlowStatusGetService;
@@ -33,10 +33,10 @@ public class WorkFlowActionDtoConverter implements Converter<WorkFlowAction, Wor
      * @return бизнес-объект
      */
     @Override
-    public WorkFlowAction toModel(WorkFlowActionDto dto) {
-        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(dto.getStatus_id()); // должно стать lazy load в будущем
-        return new WorkFlowAction(dto.getId(), dto.getParentStatus_id(), dto.getName(),
-                dto.getStatus_id(), workFlowStatus);
+    public WorkFlow toModel(WorkFlowDtoFull dto) {
+        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(dto.getStart_status_id()); // должно стать lazy load в будущем
+        return new WorkFlow(dto.getId(), dto.getName(), dto.isPattern(),
+                dto.getStart_status_id(), workFlowStatus);
     }
 
 
@@ -47,8 +47,8 @@ public class WorkFlowActionDtoConverter implements Converter<WorkFlowAction, Wor
      * @return сущность dto
      */
     @Override
-    public WorkFlowActionDto toDto(WorkFlowAction model) {
-        return new WorkFlowActionDto(model.getId(), model.getParentStatus_id(), model.getName(), model.getStatus_id());
+    public WorkFlowDtoFull toDto(WorkFlow model) {
+        return new WorkFlowDtoFull(model.getId(), model.getName(), model.isPattern(), model.getStart_status_id());
     }
 
 }

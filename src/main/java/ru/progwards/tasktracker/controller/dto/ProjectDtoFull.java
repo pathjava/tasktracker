@@ -27,13 +27,13 @@ public class ProjectDtoFull {
      * владелец (создатель) проекта
      */
     //TODO userDtoPreview
-    private UserDto owner;
+    private UserDtoFull owner;
     /**
      * время создания проекта
      */
     private ZonedDateTime created;
 
-    public ProjectDtoFull(Long id, String name, String description, String prefix, UserDto owner,
+    public ProjectDtoFull(Long id, String name, String description, String prefix, UserDtoFull owner,
                           ZonedDateTime created) {
         this.id = id;
         this.name = name;
@@ -75,11 +75,11 @@ public class ProjectDtoFull {
         this.prefix = prefix;
     }
 
-    public UserDto getOwner() {
+    public UserDtoFull getOwner() {
         return owner;
     }
 
-    public void setOwner(UserDto owner) {
+    public void setOwner(UserDtoFull owner) {
         this.owner = owner;
     }
 

@@ -12,7 +12,7 @@ import java.io.InputStream;
  *
  * @author Gregory Lobkov
  */
-public class AttachmentContentDto {
+public class AttachmentContentDtoFull {
 
 
     private Long id;
@@ -24,7 +24,7 @@ public class AttachmentContentDto {
     private InputStream data;
 
 
-    public AttachmentContentDto(Long id, InputStream data) {
+    public AttachmentContentDtoFull(Long id, InputStream data) {
         this.id = id;
         this.data = data;
     }

@@ -7,7 +7,7 @@ import ru.progwards.tasktracker.util.types.WorkFlowState;
  *
  * @author Gregory Lobkov
  */
-public class WorkFlowStatusDto {
+public class WorkFlowStatusDtoFull {
 
     Long id;
 
@@ -32,7 +32,7 @@ public class WorkFlowStatusDto {
     Boolean allowFromAnyStatus;
 
 
-    public WorkFlowStatusDto(Long id, Long workflow_id, String name, WorkFlowState state, Boolean allowFromAnyStatus) {
+    public WorkFlowStatusDtoFull(Long id, Long workflow_id, String name, WorkFlowState state, Boolean allowFromAnyStatus) {
         this.id = id;
         this.workflow_id = workflow_id;
         this.name = name;

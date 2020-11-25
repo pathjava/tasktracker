@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskAttachmentDto;
+import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
@@ -35,7 +35,7 @@ public class AttachmentsController {
     @Autowired
     GetListByTaskService<Long, TaskAttachment> getListByTaskService;
     @Autowired
-    Converter<TaskAttachment, TaskAttachmentDto> dtoConverter;
+    Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
 
 
     /**
@@ -45,16 +45,16 @@ public class AttachmentsController {
      * @return список вложений
      */
     @GetMapping("")
-    public ResponseEntity<Collection<TaskAttachmentDto>> getList(@PathVariable("task_id") Long task_id) {
+    public ResponseEntity<Collection<TaskAttachmentDtoFull>> getList(@PathVariable("task_id") Long task_id) {
         if(task_id == null)
             throw new BadRequestException("Task_id is not set");
 
         // получили список бизнес-объектов
         Collection<TaskAttachment> listByTaskId = getListByTaskService.getListByTaskId(task_id);
-        List<TaskAttachmentDto> resultList = new ArrayList<>(listByTaskId.size());
+        List<TaskAttachmentDtoFull> resultList = new ArrayList<>(listByTaskId.size());
         // преобразуем к dto
         for (TaskAttachment entity:listByTaskId) {
-            TaskAttachmentDto dto = dtoConverter.toDto(entity);
+            TaskAttachmentDtoFull dto = dtoConverter.toDto(entity);
             resultList.add(dto);
         }
         return new ResponseEntity<>(resultList, HttpStatus.OK);
@@ -69,8 +69,8 @@ public class AttachmentsController {
      * @return возвращаем список связей задача-вложение
      */
     @PostMapping("/add")
-    public ResponseEntity<Collection<TaskAttachmentDto>> createList(@PathVariable("task_id") Long task_id,
-                                                                    @RequestBody Collection<TaskAttachmentDto> newEntities) {
+    public ResponseEntity<Collection<TaskAttachmentDtoFull>> createList(@PathVariable("task_id") Long task_id,
+                                                                        @RequestBody Collection<TaskAttachmentDtoFull> newEntities) {
         if (task_id == null)
             throw new BadRequestException("Task_id is not set");
         if (newEntities == null)
@@ -78,8 +78,8 @@ public class AttachmentsController {
         if (newEntities.size() == 0)
             throw new BadRequestException("TaskAttachment is empty");
 
-        List<TaskAttachmentDto> resultList = new ArrayList<>(newEntities.size());
-        for(TaskAttachmentDto entity: newEntities) {
+        List<TaskAttachmentDtoFull> resultList = new ArrayList<>(newEntities.size());
+        for(TaskAttachmentDtoFull entity: newEntities) {
             entity.setTaskId(task_id);
             TaskAttachment vo = dtoConverter.toModel(entity);
             createService.create(vo);

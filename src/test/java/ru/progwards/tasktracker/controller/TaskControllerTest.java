@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
-import ru.progwards.tasktracker.controller.dto.UserDto;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.GetListService;
@@ -20,20 +19,12 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
-import ru.progwards.tasktracker.service.vo.User;
-
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

@@ -3,26 +3,30 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.UserDto;
+import ru.progwards.tasktracker.controller.dto.WorkFlowStatusDtoFull;
 import ru.progwards.tasktracker.service.facade.GetListByParentService;
 import ru.progwards.tasktracker.service.vo.WorkFlowAction;
-import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
+
+import java.util.List;
+
 
 /**
  * Преобразование valueObject <-> dto
  *
- * User <-> UserDto
+ * WorkFlowStatus <-> WorkFlowStatusDtoFull
  *
- * @author Aleksandr Sidelnikov
+ * @author Gregory Lobkov
  */
 @Component
-public class UserDtoConverter implements Converter<User, UserDto> {
+public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus, WorkFlowStatusDtoFull> {
 
     /**
      * Сервис получения списка действий по статусу
      */
     @Autowired
     private GetListByParentService<Long, WorkFlowAction> workFlowActionGetListByParentService;
+
 
     /**
      * Преобразовать в бизнес-объект
@@ -31,12 +35,12 @@ public class UserDtoConverter implements Converter<User, UserDto> {
      * @return бизнес-объект
      */
     @Override
-    public User toModel(UserDto dto) {
-        return new User(dto.getId(),
-                dto.getName(),
-                dto.getEmail(), dto.getPassword(),
-                dto.getRoles());
+    public WorkFlowStatus toModel(WorkFlowStatusDtoFull dto) {
+        List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(dto.getId()); // должно стать lazy load в будущем
+        return new WorkFlowStatus(dto.getId(), dto.getWorkflow_id(), dto.getName(),
+                dto.getState(), listByParentId, dto.getAllowFromAnyStatus());
     }
+
 
     /**
      * Преобразовать в сущность dto
@@ -45,10 +49,8 @@ public class UserDtoConverter implements Converter<User, UserDto> {
      * @return сущность dto
      */
     @Override
-    public UserDto toDto(User model) {
-        return new UserDto(model.getId(),
-                model.getName(), model.getEmail(), model.getPassword(),
-        model.getRoles());
+    public WorkFlowStatusDtoFull toDto(WorkFlowStatus model) {
+        return new WorkFlowStatusDtoFull(model.getId(), model.getWorkflow_id(), model.getName(), model.getState(), model.getAllowFromAnyStatus());
     }
 
 }

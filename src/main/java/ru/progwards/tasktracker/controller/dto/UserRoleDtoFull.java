@@ -5,13 +5,13 @@ import ru.progwards.tasktracker.util.types.SystemRole;
 
 import java.util.List;
 
-public class UserRoleDto {
+public class UserRoleDtoFull {
     private Long id;
     private String name;
     private SystemRole systemRole;
     private List<Long> accessRules;
 
-    public UserRoleDto(Long id, String name, SystemRole systemRole, List<Long> accessRules) {
+    public UserRoleDtoFull(Long id, String name, SystemRole systemRole, List<Long> accessRules) {
         this.id = id;
         this.name = name;
         this.systemRole = systemRole;

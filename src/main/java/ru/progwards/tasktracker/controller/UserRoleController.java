@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.AccessRuleDto;
-import ru.progwards.tasktracker.controller.dto.UserRoleDto;
+import ru.progwards.tasktracker.controller.dto.AccessRuleDtoFull;
+import ru.progwards.tasktracker.controller.dto.UserRoleDtoFull;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.AccessRule;
 import ru.progwards.tasktracker.service.vo.UserRole;
@@ -36,19 +36,19 @@ public class UserRoleController {
     private UpdateDetailingService<UserRole, AccessRule> updateAccessRuleService;
 
     @Autowired
-    private Converter<UserRole, UserRoleDto> userRoleDtoConverter;
+    private Converter<UserRole, UserRoleDtoFull> userRoleDtoConverter;
     @Autowired
-    private Converter<AccessRule, AccessRuleDto> accessRuleDtoConverter;
+    private Converter<AccessRule, AccessRuleDtoFull> accessRuleDtoConverter;
 
     @GetMapping("/rest/userRole/list")
-    public ResponseEntity<List<UserRoleDto>> getUserRoleList() {
+    public ResponseEntity<List<UserRoleDtoFull>> getUserRoleList() {
         Collection<UserRole> voList = userRoleGetListService.getList();
-        List<UserRoleDto> dtoList = voList.stream().map(vo -> userRoleDtoConverter.toDto(vo)).collect(Collectors.toList());
+        List<UserRoleDtoFull> dtoList = voList.stream().map(vo -> userRoleDtoConverter.toDto(vo)).collect(Collectors.toList());
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @GetMapping("/rest/userRole/{id}")
-    public ResponseEntity<UserRoleDto> getUserRole(@PathVariable("id") Long id) {
+    public ResponseEntity<UserRoleDtoFull> getUserRole(@PathVariable("id") Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -58,20 +58,20 @@ public class UserRoleController {
     }
 
     @GetMapping("/rest/userRole/{id}/accessRules")
-    public ResponseEntity<List<AccessRuleDto>> getRules(@PathVariable("id") Long id) {
+    public ResponseEntity<List<AccessRuleDtoFull>> getRules(@PathVariable("id") Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
         if (vo == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        List<AccessRuleDto> rules = vo.getAccessRules().values().stream()
+        List<AccessRuleDtoFull> rules = vo.getAccessRules().values().stream()
                 .map(r -> accessRuleDtoConverter.toDto(r)).collect(Collectors.toList());
         return new ResponseEntity<>(rules, HttpStatus.OK);
     }
 
     @PostMapping("/rest/userRole/create")
-    public ResponseEntity<?> createUserRole(@RequestBody UserRoleDto dto) {
+    public ResponseEntity<?> createUserRole(@RequestBody UserRoleDtoFull dto) {
         UserRole vo = userRoleDtoConverter.toModel(dto);
         userRoleCreateService.create(vo);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -90,7 +90,7 @@ public class UserRoleController {
     }
 
     @PostMapping("/rest/userRole/{id}/update")
-    public ResponseEntity<?> updateUserRole(@PathVariable Long id, @RequestBody UserRoleDto dto) {
+    public ResponseEntity<?> updateUserRole(@PathVariable Long id, @RequestBody UserRoleDtoFull dto) {
         if (id == null || !id.equals(dto.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -102,7 +102,7 @@ public class UserRoleController {
     }
 
     @PostMapping("/rest/userRole/{id}/accessRules/add")
-    public ResponseEntity<?> addRules(@PathVariable Long id, @RequestBody List<AccessRuleDto> newRules) {
+    public ResponseEntity<?> addRules(@PathVariable Long id, @RequestBody List<AccessRuleDtoFull> newRules) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -128,7 +128,7 @@ public class UserRoleController {
     }
 
     @PostMapping("/rest/userRole/{id}/accessRules/update")
-    public ResponseEntity<?> updateRules(@PathVariable Long id, @RequestBody List<AccessRuleDto> rulesDto) {
+    public ResponseEntity<?> updateRules(@PathVariable Long id, @RequestBody List<AccessRuleDtoFull> rulesDto) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);

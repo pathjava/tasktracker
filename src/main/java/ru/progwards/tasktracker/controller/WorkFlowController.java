@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.WorkFlowDto;
+import ru.progwards.tasktracker.controller.dto.WorkFlowDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
@@ -34,7 +34,7 @@ public class WorkFlowController {
     @Autowired
     GetListService<WorkFlow> getListService;
     @Autowired
-    Converter<WorkFlow, WorkFlowDto> dtoConverter;
+    Converter<WorkFlow, WorkFlowDtoFull> dtoConverter;
 
 
     /**
@@ -44,13 +44,13 @@ public class WorkFlowController {
      * @return список вложений
      */
     @GetMapping("/list")
-    public ResponseEntity<Collection<WorkFlowDto>> getList() {
+    public ResponseEntity<Collection<WorkFlowDtoFull>> getList() {
         // получили список бизнес-объектов
         Collection<WorkFlow> list = getListService.getList();
-        List<WorkFlowDto> resultList = new ArrayList<>(list.size());
+        List<WorkFlowDtoFull> resultList = new ArrayList<>(list.size());
         // преобразуем к dto
         for (WorkFlow entity:list) {
-            WorkFlowDto dto = dtoConverter.toDto(entity);
+            WorkFlowDtoFull dto = dtoConverter.toDto(entity);
             resultList.add(dto);
         }
         return new ResponseEntity<>(resultList, HttpStatus.OK);
@@ -65,12 +65,12 @@ public class WorkFlowController {
      * @return объект dto
      */
     @GetMapping("/{id}")
-    public ResponseEntity<WorkFlowDto> get(@PathVariable("id") Long id) {
+    public ResponseEntity<WorkFlowDtoFull> get(@PathVariable("id") Long id) {
         if (id == null)
             throw new BadRequestException("Id is not set");
 
         WorkFlow vo = getService.get(id);
-        WorkFlowDto entity = dtoConverter.toDto(vo);
+        WorkFlowDtoFull entity = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
@@ -84,13 +84,13 @@ public class WorkFlowController {
      * @return объект после бизнес-логики
      */
     @PostMapping("/create")
-    public ResponseEntity<WorkFlowDto> create(@RequestBody WorkFlowDto entity) {
+    public ResponseEntity<WorkFlowDtoFull> create(@RequestBody WorkFlowDtoFull entity) {
         if (entity == null)
             throw new BadRequestException("WorkFlow is null");
 
         WorkFlow vo = dtoConverter.toModel(entity);
         createService.create(vo);
-        WorkFlowDto result = dtoConverter.toDto(vo);
+        WorkFlowDtoFull result = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -104,8 +104,8 @@ public class WorkFlowController {
      * @param entity измененный объект
      */
     @PostMapping("/{id}/update")
-    public ResponseEntity<WorkFlowDto> update(@PathVariable("id") Long id,
-                                              @RequestBody WorkFlowDto entity) {
+    public ResponseEntity<WorkFlowDtoFull> update(@PathVariable("id") Long id,
+                                                  @RequestBody WorkFlowDtoFull entity) {
         if (id == null)
             throw new BadRequestException("Id is not set");
         if (entity == null)
@@ -114,7 +114,7 @@ public class WorkFlowController {
         entity.setId(id);
         WorkFlow vo = dtoConverter.toModel(entity);
         refreshService.refresh(vo);
-        WorkFlowDto result = dtoConverter.toDto(vo);
+        WorkFlowDtoFull result = dtoConverter.toDto(vo);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

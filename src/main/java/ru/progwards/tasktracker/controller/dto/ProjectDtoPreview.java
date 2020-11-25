@@ -21,7 +21,7 @@ public class ProjectDtoPreview {
 //     * владелец (создатель) проекта
 //     */
 //    //TODO userDtoPreview
-//    private UserDto owner;
+//    private UserDtoFull owner;
 
     public ProjectDtoPreview(Long id, String name) {
         this.id = id;

@@ -2,14 +2,14 @@ package ru.progwards.tasktracker.controller.dto;
 
 import ru.progwards.tasktracker.util.types.AccessType;
 
-public class AccessRuleDto {
+public class AccessRuleDtoFull {
     private Long id;
     private String objectName;
     private String propertyName; // null == all
     private Long objectId; // null == all
     private AccessType accessType;
 
-    public AccessRuleDto(Long id, String objectName, String propertyName, Long objectId, AccessType accessType) {
+    public AccessRuleDtoFull(Long id, String objectName, String propertyName, Long objectId, AccessType accessType) {
         this.id = id;
         this.objectName = objectName;
         this.propertyName = propertyName;

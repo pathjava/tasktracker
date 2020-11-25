@@ -2,19 +2,19 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.AttachmentContentDto;
+import ru.progwards.tasktracker.controller.dto.AttachmentContentDtoFull;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
 
 
 /**
  * Преобразование valueObject <-> dto
  *
- * AttachmentContent <-> AttachmentContentDto
+ * AttachmentContent <-> AttachmentContentDtoFull
  *
  * @author Gregory Lobkov
  */
 @Component
-public class AttachmentContentDtoConverter implements Converter<AttachmentContent, AttachmentContentDto> {
+public class AttachmentContentDtoFullConverter implements Converter<AttachmentContent, AttachmentContentDtoFull> {
 
 
     /**
@@ -24,7 +24,7 @@ public class AttachmentContentDtoConverter implements Converter<AttachmentConten
      * @return бизнес-объект
      */
     @Override
-    public AttachmentContent toModel(AttachmentContentDto dto) {
+    public AttachmentContent toModel(AttachmentContentDtoFull dto) {
         return new AttachmentContent(dto.getId(), dto.getData());
     }
 
@@ -36,8 +36,8 @@ public class AttachmentContentDtoConverter implements Converter<AttachmentConten
      * @return сущность dto
      */
     @Override
-    public AttachmentContentDto toDto(AttachmentContent model) {
-        return new AttachmentContentDto(model.getId(), model.getData());
+    public AttachmentContentDtoFull toDto(AttachmentContent model) {
+        return new AttachmentContentDtoFull(model.getId(), model.getData());
     }
 
 }

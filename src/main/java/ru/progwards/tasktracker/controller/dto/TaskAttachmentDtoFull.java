@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
  *
  * @author Gregory Lobkov
  */
-public class TaskAttachmentDto {
+public class TaskAttachmentDtoFull {
 
     /**
      * ID связки задача-вложение
@@ -49,7 +49,7 @@ public class TaskAttachmentDto {
     private ZonedDateTime dateCreated;
 
 
-    public TaskAttachmentDto(Long id, Long taskId, Long attachmentContentId, String name, String extension, Long size, ZonedDateTime dateCreated) {
+    public TaskAttachmentDtoFull(Long id, Long taskId, Long attachmentContentId, String name, String extension, Long size, ZonedDateTime dateCreated) {
         this.id = id;
         this.taskId = taskId;
         this.attachmentContentId = attachmentContentId;

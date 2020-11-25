@@ -2,13 +2,13 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.AccessRuleDto;
+import ru.progwards.tasktracker.controller.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.service.vo.AccessRule;
 
 @Component
-public class AccessRuleDtoConverter implements Converter<AccessRule, AccessRuleDto> {
+public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessRuleDtoFull> {
     @Override
-    public AccessRule toModel(AccessRuleDto dto) {
+    public AccessRule toModel(AccessRuleDtoFull dto) {
         if (dto == null)
             return null;
         return new AccessRule(dto.getId(), dto.getObjectName(), dto.getPropertyName(), dto.getObjectId(),
@@ -16,10 +16,10 @@ public class AccessRuleDtoConverter implements Converter<AccessRule, AccessRuleD
     }
 
     @Override
-    public AccessRuleDto toDto(AccessRule model) {
+    public AccessRuleDtoFull toDto(AccessRule model) {
         if (model == null)
             return null;
-        return new AccessRuleDto(model.getId(), model.getObjectName(), model.getPropertyName(), model.getObjectId(),
+        return new AccessRuleDtoFull(model.getId(), model.getObjectName(), model.getPropertyName(), model.getObjectId(),
                 model.getAccessType());
     }
 }

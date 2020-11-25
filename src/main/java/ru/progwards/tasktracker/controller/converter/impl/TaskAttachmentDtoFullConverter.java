@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskAttachmentDto;
+import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -13,12 +13,12 @@ import ru.progwards.tasktracker.service.vo.TaskAttachment;
 /**
  * Преобразование valueObject <-> dto
  *
- * TaskAttachment <-> TaskAttachmentDto
+ * TaskAttachment <-> TaskAttachmentDtoFull
  *
  * @author Gregory Lobkov
  */
 @Controller
-public class TaskAttachmentDtoConverter implements Converter<TaskAttachment, TaskAttachmentDto> {
+public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment, TaskAttachmentDtoFull> {
 
 
     /**
@@ -42,7 +42,7 @@ public class TaskAttachmentDtoConverter implements Converter<TaskAttachment, Tas
      * @return бизнес-объект
      */
     @Override
-    public TaskAttachment toModel(TaskAttachmentDto dto) {
+    public TaskAttachment toModel(TaskAttachmentDtoFull dto) {
         String fileExtension = dto.getExtension();
         if(fileExtension==null || fileExtension.isEmpty()) {
             int lastDotPos = dto.getName().lastIndexOf('.');
@@ -66,8 +66,8 @@ public class TaskAttachmentDtoConverter implements Converter<TaskAttachment, Tas
      * @return сущность dto
      */
     @Override
-    public TaskAttachmentDto toDto(TaskAttachment model) {
-        return new TaskAttachmentDto(model.getId(), model.getTaskId(), model.getAttachmentContentId(),
+    public TaskAttachmentDtoFull toDto(TaskAttachment model) {
+        return new TaskAttachmentDtoFull(model.getId(), model.getTaskId(), model.getAttachmentContentId(),
                 model.getName(), model.getExtension(), model.getSize(), model.getDateCreated());
     }
 

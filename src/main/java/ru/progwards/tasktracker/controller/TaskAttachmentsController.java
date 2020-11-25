@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.AttachmentContentDto;
-import ru.progwards.tasktracker.controller.dto.TaskAttachmentDto;
+import ru.progwards.tasktracker.controller.dto.AttachmentContentDtoFull;
+import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
@@ -33,9 +33,9 @@ public class TaskAttachmentsController {
     @Autowired
     CreateService<AttachmentContent> createContentService;
     @Autowired
-    Converter<TaskAttachment, TaskAttachmentDto> dtoConverter;
+    Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
     @Autowired
-    Converter<AttachmentContent, AttachmentContentDto> dtoContentConverter;
+    Converter<AttachmentContent, AttachmentContentDtoFull> dtoContentConverter;
 
 
     /**
@@ -50,8 +50,8 @@ public class TaskAttachmentsController {
             throw new BadRequestException("TaskAttachment_id is not set");
 
         TaskAttachment vo = getService.get(id);
-        TaskAttachmentDto entity = dtoConverter.toDto(vo);
-        AttachmentContentDto content = dtoContentConverter.toDto(vo.getContent());
+        TaskAttachmentDtoFull entity = dtoConverter.toDto(vo);
+        AttachmentContentDtoFull content = dtoContentConverter.toDto(vo.getContent());
 
         response.setContentType("application/x-binary");
         response.setHeader("Content-disposition", "attachment;filename=" + entity.getName());
@@ -72,17 +72,17 @@ public class TaskAttachmentsController {
      * @return возвращаем идентификатор сохраненного файла
      */
     @PostMapping("/upload")
-    public ResponseEntity<AttachmentContentDto> upload(@PathVariable("id") Long task_id,
-                                                       @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<AttachmentContentDtoFull> upload(@PathVariable("id") Long task_id,
+                                                           @RequestParam("file") MultipartFile file) {
         if (task_id == null)
             throw new BadRequestException("TaskAttachment_id is not set");
         if (file == null && file.getOriginalFilename().isEmpty())
             throw new BadRequestException("AttachmentContent 'file' is empty");
 
-        AttachmentContentDto content = null;
+        AttachmentContentDtoFull content = null;
 
         try {
-            content = new AttachmentContentDto(0L, file.getInputStream());
+            content = new AttachmentContentDtoFull(0L, file.getInputStream());
             AttachmentContent model = dtoContentConverter.toModel(content);
             createContentService.create(model);
             content.setId(model.getId());

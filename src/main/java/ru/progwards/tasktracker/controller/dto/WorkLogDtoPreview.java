@@ -10,10 +10,10 @@ public class WorkLogDtoPreview {
 
     private final Long id;
     private Duration spent;
-    private UserDto worker;
+    private UserDtoFull worker;
     private ZonedDateTime when;
 
-    public WorkLogDtoPreview(Long id, Duration spent, UserDto worker, ZonedDateTime when) {
+    public WorkLogDtoPreview(Long id, Duration spent, UserDtoFull worker, ZonedDateTime when) {
         this.id = id;
         this.spent = spent;
         this.worker = worker;
@@ -32,11 +32,11 @@ public class WorkLogDtoPreview {
         this.spent = spent;
     }
 
-    public UserDto getWorker() {
+    public UserDtoFull getWorker() {
         return worker;
     }
 
-    public void setWorker(UserDto worker) {
+    public void setWorker(UserDtoFull worker) {
         this.worker = worker;
     }
 

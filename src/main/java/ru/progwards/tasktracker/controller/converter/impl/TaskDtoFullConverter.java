@@ -22,17 +22,17 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 //    @Autowired
 //    private Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
     @Autowired
-    private Converter<User, UserDto> userDtoConverter;
+    private Converter<User, UserDtoFull> userDtoConverter;
     @Autowired
-    private Converter<WorkFlowStatus, WorkFlowStatusDto> workFlowStatusDtoConverter;
+    private Converter<WorkFlowStatus, WorkFlowStatusDtoFull> workFlowStatusDtoConverter;
     @Autowired
     private Converter<RelatedTask, RelatedTaskDtoFull> relatedTaskDtoConverter;
     @Autowired
-    private Converter<TaskAttachment, TaskAttachmentDto> taskAttachmentDtoConverter;
+    private Converter<TaskAttachment, TaskAttachmentDtoFull> taskAttachmentDtoConverter;
     @Autowired
     private Converter<WorkLog, WorkLogDtoFull> workLogDtoConverter;
     @Autowired
-    private Converter<WorkFlowAction, WorkFlowActionDto> workFlowActionDtoConverter;
+    private Converter<WorkFlowAction, WorkFlowActionDtoFull> workFlowActionDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -75,7 +75,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param actions лист Dto WorkFlowAction
      * @return лист VO WorkFlowAction
      */
-    private List<WorkFlowAction> listDtoToVoWorkFlowAction(List<WorkFlowActionDto> actions) {
+    private List<WorkFlowAction> listDtoToVoWorkFlowAction(List<WorkFlowActionDtoFull> actions) {
         return actions.stream()
                 .map(dto -> workFlowActionDtoConverter.toModel(dto))
                 .collect(Collectors.toList());
@@ -99,7 +99,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param attachments лист Dto файлов задачи
      * @return лист VO файлов задачи
      */
-    private List<TaskAttachment> listDtoToVoTaskAttachment(List<TaskAttachmentDto> attachments) {
+    private List<TaskAttachment> listDtoToVoTaskAttachment(List<TaskAttachmentDtoFull> attachments) {
         return attachments.stream()
                 .map(dto -> taskAttachmentDtoConverter.toModel(dto))
                 .collect(Collectors.toList());
@@ -157,7 +157,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param actions лист VO WorkFlowAction задачи
      * @return лист Dto WorkFlowAction задачи
      */
-    private List<WorkFlowActionDto> listVoToDtoWorkFlowAction(List<WorkFlowAction> actions) {
+    private List<WorkFlowActionDtoFull> listVoToDtoWorkFlowAction(List<WorkFlowAction> actions) {
         return actions.stream()
                 .map(model -> workFlowActionDtoConverter.toDto(model))
                 .collect(Collectors.toList());
@@ -181,7 +181,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param attachments лист VO файлов задачи
      * @return лист Dto файлов задачи
      */
-    private List<TaskAttachmentDto> listVoToDtoTaskAttachment(List<TaskAttachment> attachments) {
+    private List<TaskAttachmentDtoFull> listVoToDtoTaskAttachment(List<TaskAttachment> attachments) {
         return attachments.stream()
                 .map(model -> taskAttachmentDtoConverter.toDto(model))
                 .collect(Collectors.toList());
