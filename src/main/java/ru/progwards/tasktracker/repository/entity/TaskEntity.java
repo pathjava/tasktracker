@@ -16,12 +16,13 @@ public class TaskEntity {
     private String description;
     private TaskTypeEntity type;
     private TaskPriorityEntity priority;
-    private Long project_id;
+    private ProjectEntity project;
     private UserEntity author;
     private UserEntity executor;
     private Long created;
     private Long updated;
     private WorkFlowStatusEntity status;
+    private List<WorkFlowActionEntity> actions;
     private Long estimation;
     private Long timeSpent;
     private Long timeLeft;
@@ -35,10 +36,10 @@ public class TaskEntity {
 
     public TaskEntity(
             Long id, String code, String name, String description,
-            TaskTypeEntity type, TaskPriorityEntity priority, Long project_id,
+            TaskTypeEntity type, TaskPriorityEntity priority, ProjectEntity project,
             UserEntity author, UserEntity executor,
             Long created, Long updated,
-            WorkFlowStatusEntity status,
+            WorkFlowStatusEntity status, List<WorkFlowActionEntity> actions,
             Long estimation, Long timeSpent, Long timeLeft,
             List<RelatedTaskEntity> relatedTasks, List<TaskAttachmentEntity> attachments,
             List<WorkLogEntity> workLogs, Boolean isDeleted
@@ -51,12 +52,13 @@ public class TaskEntity {
         this.description = description;
         this.type = type;
         this.priority = priority;
-        this.project_id = project_id;
+        this.project = project;
         this.author = author;
         this.executor = executor;
         this.created = created;
         this.updated = updated;
         this.status = status;
+        this.actions = actions;
         this.estimation = estimation;
         this.timeSpent = timeSpent;
         this.timeLeft = timeLeft;
@@ -68,6 +70,10 @@ public class TaskEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {
@@ -110,12 +116,12 @@ public class TaskEntity {
         this.priority = priority;
     }
 
-    public Long getProject_id() {
-        return project_id;
+    public ProjectEntity getProject() {
+        return project;
     }
 
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
+    public void setProject(ProjectEntity project) {
+        this.project = project;
     }
 
     public UserEntity getAuthor() {
@@ -156,6 +162,14 @@ public class TaskEntity {
 
     public void setStatus(WorkFlowStatusEntity status) {
         this.status = status;
+    }
+
+    public List<WorkFlowActionEntity> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<WorkFlowActionEntity> actions) {
+        this.actions = actions;
     }
 
     public Long getEstimation() {

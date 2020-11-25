@@ -95,7 +95,7 @@ public class TaskEntityRepository
     @Override
     public Collection<TaskEntity> getByProjectId(Long projectId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getProject_id().equals(projectId) && !entity.getDeleted())
+                .filter(entity -> entity.getProject().getId().equals(projectId) && !entity.getDeleted())
                 .collect(Collectors.toList());
     }
 

@@ -34,8 +34,7 @@ class RelatedTaskConverterTest {
     void toVo_return_Not_Null() {
         RelatedTask task = converter.toVo(
                 new RelatedTaskEntity(
-                        null, new RelationTypeEntity(1L, "блокирующая", new RelationTypeEntity(
-                        2L, "блокируемая", null)),
+                        null, new RelationTypeEntity(1L, "блокирующая", 2L),
                         1L, 2L)
         );
 
@@ -53,8 +52,7 @@ class RelatedTaskConverterTest {
     void toEntity_return_Not_Null() {
         RelatedTaskEntity taskEntity = converter.toEntity(
                 new RelatedTask(
-                        null, new RelationType(1L, "блокирующая", new RelationType(
-                        2L, "блокируемая", null)),
+                        null, new RelationType(1L, "блокирующая", 2L),
                         1L, 2L)
         );
 

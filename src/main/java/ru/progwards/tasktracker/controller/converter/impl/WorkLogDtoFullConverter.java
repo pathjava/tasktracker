@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.UserDto;
-import ru.progwards.tasktracker.controller.dto.WorkLogDto;
+import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 import ru.progwards.tasktracker.util.types.EstimateChange;
+
+import java.util.Arrays;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -16,7 +18,7 @@ import ru.progwards.tasktracker.util.types.EstimateChange;
  * @author Oleg Kiselev
  */
 @Component
-public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
+public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFull> {
 
     @Autowired
     private Converter<User, UserDto> userDtoConverter;
@@ -28,7 +30,7 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
      * @return value object - объект бизнес логики
      */
     @Override
-    public WorkLog toModel(WorkLogDto dto) {
+    public WorkLog toModel(WorkLogDtoFull dto) {
         if (dto == null)
             return null;
         else
@@ -48,14 +50,13 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
      * Метод конвертации строкового значения в ENUM
      *
      * @param estimateChange строковое значение
-     * @return enum
+     * @return перечисление enum
      */
     private EstimateChange stringToEnum(String estimateChange) {
-        for (EstimateChange value : EstimateChange.values()) {
-            if (value.toString().equalsIgnoreCase(estimateChange))
-                return value;
-        }
-        throw new BadRequestException(estimateChange + " не соответствует ни одному перечислению EstimateChange!");
+        return Arrays.stream(EstimateChange.values())
+                .filter(enumValue -> enumValue.toString().equalsIgnoreCase(estimateChange)).findFirst()
+                .orElseThrow(() -> new BadRequestException(estimateChange +
+                        " не соответствует ни одному перечислению EstimateChange!"));
     }
 
     /**
@@ -65,11 +66,11 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override
-    public WorkLogDto toDto(WorkLog model) {
+    public WorkLogDtoFull toDto(WorkLog model) {
         if (model == null)
             return null;
         else
-            return new WorkLogDto(
+            return new WorkLogDtoFull(
                     model.getId(),
                     model.getTaskId(),
                     model.getSpent(),
@@ -84,7 +85,7 @@ public class WorkLogDtoConverter implements Converter<WorkLog, WorkLogDto> {
     /**
      * Метод конвертации ENUM в строку
      *
-     * @param estimateChange enum значение
+     * @param estimateChange enum перечисление
      * @return строковое значение
      */
     private String enumToString(EstimateChange estimateChange) {

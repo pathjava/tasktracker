@@ -2,8 +2,8 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelationTypeDto;
-import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.controller.dto.TaskTypeDtoFull;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -11,7 +11,7 @@ import ru.progwards.tasktracker.service.vo.RelationType;
  * @author Oleg Kiselev
  */
 @Component
-public class RelationTypeDtoConverter implements Converter<RelationType, RelationTypeDto> {
+public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDtoFull> {
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -20,14 +20,14 @@ public class RelationTypeDtoConverter implements Converter<RelationType, Relatio
      * @return value object - объект бизнес логики
      */
     @Override
-    public RelationType toModel(RelationTypeDto dto) {
+    public TaskType toModel(TaskTypeDtoFull dto) {
         if (dto == null)
             return null;
         else
-            return new RelationType(
+            return new TaskType(
                     dto.getId(),
-                    dto.getName(),
-                    dto.getCounterRelationId()
+                    dto.getWorkFlow(),
+                    dto.getName()
             );
     }
 
@@ -38,14 +38,14 @@ public class RelationTypeDtoConverter implements Converter<RelationType, Relatio
      * @return сущность, возвращаемая в пользовательский интерфейс
      */
     @Override
-    public RelationTypeDto toDto(RelationType model) {
+    public TaskTypeDtoFull toDto(TaskType model) {
         if (model == null)
             return null;
         else
-            return new RelationTypeDto(
+            return new TaskTypeDtoFull(
                     model.getId(),
-                    model.getName(),
-                    model.getCounterRelationId()
+                    model.getWorkFlow(),
+                    model.getName()
             );
     }
 }

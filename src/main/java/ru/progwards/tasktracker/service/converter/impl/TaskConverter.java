@@ -35,6 +35,10 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     private Converter<TaskAttachmentEntity, TaskAttachment> taskAttachmentConverter;
     @Autowired
     private Converter<WorkLogEntity, WorkLog> workLogConverter;
+    @Autowired
+    private Converter<ProjectEntity, Project> projectConverter;
+    @Autowired
+    private Converter<WorkFlowActionEntity, WorkFlowAction> workFlowActionConverter;
 
     /**
      * Метод конвертирует сущность Entity в бизнес объект
@@ -54,12 +58,13 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     entity.getDescription(),
                     taskTypeConverter.toVo(entity.getType()),
                     taskPriorityConverter.toVo(entity.getPriority()),
-                    entity.getProject_id(),
+                    projectConverter.toVo(entity.getProject()),
                     userConverter.toVo(entity.getAuthor()),
                     userConverter.toVo(entity.getExecutor()),
                     ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), ZoneId.of("Europe/Moscow")),
                     checkUpdatedEntityNotNull(entity.getUpdated()),
                     workFlowStatusConverter.toVo(entity.getStatus()),
+                    listEntityToVoWorkFlowAction(entity.getActions()),
                     checkDurationEntityNotNull(entity.getEstimation()),
                     checkDurationEntityNotNull(entity.getTimeSpent()),
                     checkDurationEntityNotNull(entity.getTimeLeft()),
@@ -67,6 +72,18 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     listEntityToVoTaskAttachment(entity.getAttachments()),
                     listEntityToVoWorkLog(entity.getWorkLogs())
             );
+    }
+
+    /**
+     * Метод конвертирует лист из Entity в VO
+     *
+     * @param actions лист Entity WorkFlowAction задачи
+     * @return лист VO WorkFlowAction задачи
+     */
+    private List<WorkFlowAction> listEntityToVoWorkFlowAction(List<WorkFlowActionEntity> actions) {
+        return actions.stream()
+                .map(entity -> workFlowActionConverter.toVo(entity))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -140,12 +157,13 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     valueObject.getDescription(),
                     taskTypeConverter.toEntity(valueObject.getType()),
                     taskPriorityConverter.toEntity(valueObject.getPriority()),
-                    valueObject.getProject_id(),
+                    projectConverter.toEntity(valueObject.getProject()),
                     userConverter.toEntity(valueObject.getAuthor()),
                     userConverter.toEntity(valueObject.getExecutor()),
                     checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),
                     checkZonedDateTimeValueObjectNotNull(valueObject.getUpdated()),
                     workFlowStatusConverter.toEntity(valueObject.getStatus()),
+                    listVoToEntityWorkFlowAction(valueObject.getActions()),
                     checkDurationValueObjectNotNull(valueObject.getEstimation()),
                     checkDurationValueObjectNotNull(valueObject.getTimeSpent()),
                     checkDurationValueObjectNotNull(valueObject.getTimeLeft()),
@@ -159,12 +177,24 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     /**
      * Метод конвертирует лист из VO в Entity
      *
+     * @param actions лист VO WorkFlowAction задачи
+     * @return лист Entity WorkFlowAction задачи
+     */
+    private List<WorkFlowActionEntity> listVoToEntityWorkFlowAction(List<WorkFlowAction> actions) {
+        return actions.stream()
+                .map(valueObject -> workFlowActionConverter.toEntity(valueObject))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод конвертирует лист из VO в Entity
+     *
      * @param workLogs лист VO логов задачи
      * @return лист Entity логов задачи
      */
     private List<WorkLogEntity> listVoToEntityWorkLog(List<WorkLog> workLogs) {
         return workLogs.stream()
-                .map(entity -> workLogConverter.toEntity(entity))
+                .map(valueObject -> workLogConverter.toEntity(valueObject))
                 .collect(Collectors.toList());
     }
 
@@ -176,7 +206,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      */
     private List<TaskAttachmentEntity> listVoToEntityTaskAttachment(List<TaskAttachment> attachments) {
         return attachments.stream()
-                .map(entity -> taskAttachmentConverter.toEntity(entity))
+                .map(valueObject -> taskAttachmentConverter.toEntity(valueObject))
                 .collect(Collectors.toList());
     }
 
@@ -188,7 +218,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      */
     private List<RelatedTaskEntity> listVoToEntityRelatedTask(List<RelatedTask> relatedTasks) {
         return relatedTasks.stream()
-                .map(entity -> relatedTaskConverter.toEntity(entity))
+                .map(valueObject -> relatedTaskConverter.toEntity(valueObject))
                 .collect(Collectors.toList());
     }
 

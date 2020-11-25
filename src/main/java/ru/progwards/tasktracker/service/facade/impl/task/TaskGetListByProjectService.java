@@ -33,7 +33,7 @@ public class TaskGetListByProjectService implements GetListByProjectService<Long
     @Override
     public Collection<Task> getListByProjectId(Long projectId) {
         return repository.get().stream()
-                .filter(taskEntity -> taskEntity.getProject_id().equals(projectId) && !taskEntity.getDeleted())
+                .filter(taskEntity -> taskEntity.getProject().getId().equals(projectId) && !taskEntity.getDeleted())
                 .map(taskEntity -> converter.toVo(taskEntity))
                 .collect(Collectors.toList());
     }

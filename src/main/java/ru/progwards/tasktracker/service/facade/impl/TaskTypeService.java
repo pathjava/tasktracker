@@ -25,13 +25,10 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
 
     @Autowired
     private Repository<Long, TaskTypeEntity> repository;
-
     @Autowired
     private RepositoryByProjectId<Long, TaskTypeEntity> byProjectId;
-
     @Autowired
     private Converter<TaskTypeEntity, TaskType> converter;
-
     @Autowired
     private GetListService<Task> getListService;
 

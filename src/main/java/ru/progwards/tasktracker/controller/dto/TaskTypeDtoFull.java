@@ -1,17 +1,19 @@
-package ru.progwards.tasktracker.service.vo;
+package ru.progwards.tasktracker.controller.dto;
+
+import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 /**
- * value object - объект бизнес логики (тип задачи)
+ * Объект, содержащий данные, выводимые в пользовательском интерфейсе
  *
  * @author Oleg Kiselev
  */
-public class TaskType {
+public class TaskTypeDtoFull {
 
     private final Long id;
     private WorkFlow workFlow;
     private String name;
 
-    public TaskType(Long id, WorkFlow workFlow, String name) {
+    public TaskTypeDtoFull(Long id, WorkFlow workFlow, String name) {
         this.id = id;
         this.workFlow = workFlow;
         this.name = name;

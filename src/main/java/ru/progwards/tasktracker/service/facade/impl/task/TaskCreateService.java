@@ -38,7 +38,7 @@ public class TaskCreateService implements CreateService<Task> {
     @Override
     public void create(Task model) {
         if (model.getCode() == null)
-            model.setCode(generateTaskCode(model.getProject_id()));
+            model.setCode(generateTaskCode(model.getProject().getId()));
         if (model.getCreated() == null)
             model.setCreated(ZonedDateTime.now());
 

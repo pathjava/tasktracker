@@ -22,7 +22,7 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
      * Метод конвертирует бизнес объект в сущность Dto
      *
      * @param model value object - объект бизнес логики
-     * @return ceoyjcnm - превью задачи для отображения в пользовательском интерфейсе
+     * @return dto превью задачи для отображения в пользовательском интерфейсе
      */
     @Override
     public TaskDtoPreview toDto(Task model) {

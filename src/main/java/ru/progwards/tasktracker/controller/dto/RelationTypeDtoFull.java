@@ -5,13 +5,13 @@ package ru.progwards.tasktracker.controller.dto;
  *
  * @author Oleg Kiselev
  */
-public class RelationTypeDto {
+public class RelationTypeDtoFull {
 
     private final Long id;
     private String name;
     private Long counterRelationId;
 
-    public RelationTypeDto(Long id, String name, Long counterRelationId) {
+    public RelationTypeDtoFull(Long id, String name, Long counterRelationId) {
         this.id = id;
         this.name = name;
         this.counterRelationId = counterRelationId;

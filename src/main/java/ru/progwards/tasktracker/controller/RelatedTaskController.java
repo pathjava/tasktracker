@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelatedTaskDto;
+import ru.progwards.tasktracker.controller.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.CreateService;
@@ -33,7 +33,7 @@ public class RelatedTaskController {
     @Autowired
     private CreateService<RelatedTask> createService;
     @Autowired
-    private Converter<RelatedTask, RelatedTaskDto> converter;
+    private Converter<RelatedTask, RelatedTaskDtoFull> converter;
     @Autowired
     private GetService<Long, RelatedTask> getService;
 
@@ -44,13 +44,13 @@ public class RelatedTaskController {
      * @return возвращает созданную задачу
      */
     @PostMapping("/create")
-    public ResponseEntity<RelatedTaskDto> createRelatedTask(@RequestBody RelatedTaskDto taskDto) {
+    public ResponseEntity<RelatedTaskDtoFull> createRelatedTask(@RequestBody RelatedTaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("Пустой объект!");
 
         RelatedTask relatedTask = converter.toModel(taskDto);
         createService.create(relatedTask);
-        RelatedTaskDto createdRelatedTask = converter.toDto(relatedTask);
+        RelatedTaskDtoFull createdRelatedTask = converter.toDto(relatedTask);
 
         return new ResponseEntity<>(createdRelatedTask, HttpStatus.OK);
     }
@@ -62,11 +62,11 @@ public class RelatedTaskController {
      * @return коллекция связанных задач
      */
     @GetMapping("/{id}/list")
-    public ResponseEntity<Collection<RelatedTaskDto>> getListRelatedTasks(@PathVariable Long id) {
+    public ResponseEntity<Collection<RelatedTaskDtoFull>> getListRelatedTasks(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<RelatedTaskDto> collection = listByTaskService.getListByTaskId(id).stream()
+        Collection<RelatedTaskDtoFull> collection = listByTaskService.getListByTaskId(id).stream()
                 .map(relatedTask -> converter.toDto(relatedTask))
                 .collect(Collectors.toList());
 
@@ -83,7 +83,7 @@ public class RelatedTaskController {
      * @return статус
      */
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<RelatedTaskDto> deleteRelatedTask(@PathVariable Long id) {
+    public ResponseEntity<RelatedTaskDtoFull> deleteRelatedTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 

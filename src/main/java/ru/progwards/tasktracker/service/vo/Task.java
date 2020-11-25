@@ -19,7 +19,7 @@ public class Task {
     private String description;
     private TaskType type;
     private TaskPriority priority;
-    private Long project_id;
+    private Project project;
     private User author;
     private User executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
@@ -27,6 +27,7 @@ public class Task {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime updated;
     private WorkFlowStatus status;
+    private List<WorkFlowAction> actions;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimation;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
@@ -39,10 +40,10 @@ public class Task {
 
     public Task(
             Long id, String code, String name, String description,
-            TaskType type, TaskPriority priority, Long project_id,
+            TaskType type, TaskPriority priority, Project project,
             User author, User executor,
             ZonedDateTime created, ZonedDateTime updated,
-            WorkFlowStatus status,
+            WorkFlowStatus status, List<WorkFlowAction> actions,
             Duration estimation, Duration timeSpent, Duration timeLeft,
             List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs
     ) {
@@ -52,12 +53,13 @@ public class Task {
         this.description = description;
         this.type = type;
         this.priority = priority;
-        this.project_id = project_id;
+        this.project = project;
         this.author = author;
         this.executor = executor;
         this.created = created;
         this.updated = updated;
         this.status = status;
+        this.actions = actions;
         this.estimation = estimation;
         this.timeSpent = timeSpent;
         this.timeLeft = timeLeft;
@@ -110,12 +112,12 @@ public class Task {
         this.priority = priority;
     }
 
-    public Long getProject_id() {
-        return project_id;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public User getAuthor() {
@@ -156,6 +158,14 @@ public class Task {
 
     public void setStatus(WorkFlowStatus status) {
         this.status = status;
+    }
+
+    public List<WorkFlowAction> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<WorkFlowAction> actions) {
+        this.actions = actions;
     }
 
     public Duration getEstimation() {

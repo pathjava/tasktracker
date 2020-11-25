@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 /**
  * тестирование создания и удаления связанной задачи
@@ -26,6 +28,9 @@ class RelatedTaskEntityRepositoryTest {
 
     @Autowired
     private Repository<Long, RelatedTaskEntity> repository;
+
+    @Autowired
+    private RepositoryByTaskId<Long, RelatedTaskEntity> byTaskId;
 
     @Autowired
     private JsonHandler<Long, RelatedTaskEntity> jsonHandler;
@@ -107,20 +112,36 @@ class RelatedTaskEntityRepositoryTest {
         jsonHandler.getMap().clear();
     }
 
+    @Test
+    void getByTaskId_Return_One_RelatedTask() {
+        createEntitiesForGetAllTest();
+
+        Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(2L);
+
+        assertEquals(collection.size(), 2);
+
+        jsonHandler.getMap().clear();
+    }
+
+    @Test
+    public void getByTaskId_Return_Empty_Collection() {
+        Collection<RelatedTaskEntity> collection = byTaskId.getByTaskId(anyLong());
+
+        assertTrue(collection.isEmpty());
+    }
+
     private void createEntitiesForGetAllTest() {
         jsonHandler.getMap().clear();
 
         repository.create(
                 new RelatedTaskEntity(
-                        null, new RelationTypeEntity(1L, "блокирующая Test 1", new RelationTypeEntity(
-                        2L, "блокируемая", null)),
+                        null, new RelationTypeEntity(1L, "блокирующая Test 1", 2L),
                         1L, 2L
                 )
         );
         repository.create(
                 new RelatedTaskEntity(
-                        null, new RelationTypeEntity(2L, "блокирующая Test 2", new RelationTypeEntity(
-                        2L, "блокируемая", null)),
+                        null, new RelationTypeEntity(2L, "блокирующая Test 2", 2L),
                         1L, 2L
                 )
         );
@@ -128,8 +149,7 @@ class RelatedTaskEntityRepositoryTest {
 
     private RelatedTaskEntity createEntityForTest() {
         return new RelatedTaskEntity(
-                null, new RelationTypeEntity(1L, "блокирующая Test", new RelationTypeEntity(
-                2L, "блокируемая", null)),
+                null, new RelationTypeEntity(1L, "блокирующая Test", 2L),
                 1L, 2L
         );
     }
@@ -140,5 +160,4 @@ class RelatedTaskEntityRepositoryTest {
                 .map(RelatedTaskEntity::getId)
                 .orElse(null);
     }
-
 }

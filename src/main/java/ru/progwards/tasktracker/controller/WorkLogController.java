@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.WorkLogDto;
+import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
@@ -34,7 +34,7 @@ public class WorkLogController {
     @Autowired
     private GetListByTaskService<Long, WorkLog> listByTaskService;
     @Autowired
-    private Converter<WorkLog, WorkLogDto> converter;
+    private Converter<WorkLog, WorkLogDtoFull> converter;
 
     /**
      * Метод получения списка логов по идентификатору задачи
@@ -43,11 +43,11 @@ public class WorkLogController {
      * @return коллекция логов задачи
      */
     @GetMapping("/task/{id}/worklogs")
-    public ResponseEntity<Collection<WorkLogDto>> getListWorkLogs(@PathVariable Long id) {
+    public ResponseEntity<Collection<WorkLogDtoFull>> getListWorkLogs(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<WorkLogDto> logs = listByTaskService.getListByTaskId(id).stream()
+        Collection<WorkLogDtoFull> logs = listByTaskService.getListByTaskId(id).stream()
                 .map(workLog -> converter.toDto(workLog))
                 .collect(Collectors.toList());
 
@@ -60,17 +60,17 @@ public class WorkLogController {
     /**
      * Метод создания лога
      *
-     * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @param workLogDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
     @PostMapping("/worklog/create")
-    public ResponseEntity<WorkLogDto> createWorkLog(@RequestBody WorkLogDto workLogDto) {
-        if (workLogDto == null)
+    public ResponseEntity<WorkLogDtoFull> createWorkLog(@RequestBody WorkLogDtoFull workLogDtoFull) {
+        if (workLogDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
-        WorkLog workLog = converter.toModel(workLogDto);
+        WorkLog workLog = converter.toModel(workLogDtoFull);
         createService.create(workLog);
-        WorkLogDto createWorkLog = converter.toDto(workLog);
+        WorkLogDtoFull createWorkLog = converter.toDto(workLog);
 
         //TODO - перед добавлением проверять, есть ли уже в БД такой лог, но id генерируется в entity - подумать
 
@@ -80,20 +80,20 @@ public class WorkLogController {
     /**
      * Метод обновления лога
      *
-     * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @param workLogDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
     @PutMapping("/worklog/{id}/update")
-    public ResponseEntity<WorkLogDto> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDto workLogDto) {
-        if (workLogDto == null)
+    public ResponseEntity<WorkLogDtoFull> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDtoFull workLogDtoFull) {
+        if (workLogDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
-        if (!id.equals(workLogDto.getId()))
+        if (!id.equals(workLogDtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        WorkLog workLog = converter.toModel(workLogDto);
+        WorkLog workLog = converter.toModel(workLogDtoFull);
         refreshService.refresh(workLog);
-        WorkLogDto updateWorkLog = converter.toDto(workLog);
+        WorkLogDtoFull updateWorkLog = converter.toDto(workLog);
 
         return new ResponseEntity<>(updateWorkLog, HttpStatus.OK);
     }
@@ -105,7 +105,7 @@ public class WorkLogController {
      * @return статус ответа
      */
     @DeleteMapping("/worklog/{id}/delete")
-    public ResponseEntity<WorkLogDto> deleteWorkLog(@PathVariable Long id) {
+    public ResponseEntity<WorkLogDtoFull> deleteWorkLog(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 

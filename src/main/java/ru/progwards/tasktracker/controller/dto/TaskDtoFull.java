@@ -2,7 +2,6 @@ package ru.progwards.tasktracker.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.progwards.tasktracker.service.vo.*;
-import ru.progwards.tasktracker.service.vo.TaskType;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -19,9 +18,9 @@ public class TaskDtoFull {
     private String code;
     private String name;
     private String description;
-    private TaskTypeDto type;
+    private TaskTypeDtoFull type;
     private TaskPriorityDto priority;
-    private Long project_id;
+    private Project project;
     private UserDto author;
     private UserDto executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
@@ -29,24 +28,25 @@ public class TaskDtoFull {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime updated;
     private WorkFlowStatusDto status;
+    private List<WorkFlowActionDto> actions;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimation;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeSpent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeLeft;
-    private List<RelatedTaskDto> relatedTasks;
+    private List<RelatedTaskDtoFull> relatedTasks;
     private List<TaskAttachmentDto> attachments;
-    private List<WorkLogDto> workLogs;
+    private List<WorkLogDtoFull> workLogs;
 
     public TaskDtoFull(
             Long id, String code, String name, String description,
-            TaskTypeDto type, TaskPriorityDto priority, Long project_id,
+            TaskTypeDtoFull type, TaskPriorityDto priority, Project project,
             UserDto author, UserDto executor,
             ZonedDateTime created, ZonedDateTime updated,
-            WorkFlowStatusDto status,
+            WorkFlowStatusDto status, List<WorkFlowActionDto> actions,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTaskDto> relatedTasks, List<TaskAttachmentDto> attachments, List<WorkLogDto> workLogs
+            List<RelatedTaskDtoFull> relatedTasks, List<TaskAttachmentDto> attachments, List<WorkLogDtoFull> workLogs
     ) {
         this.id = id;
         this.code = code;
@@ -54,12 +54,13 @@ public class TaskDtoFull {
         this.description = description;
         this.type = type;
         this.priority = priority;
-        this.project_id = project_id;
+        this.project = project;
         this.author = author;
         this.executor = executor;
         this.created = created;
         this.updated = updated;
         this.status = status;
+        this.actions = actions;
         this.estimation = estimation;
         this.timeSpent = timeSpent;
         this.timeLeft = timeLeft;
@@ -96,11 +97,11 @@ public class TaskDtoFull {
         this.description = description;
     }
 
-    public TaskTypeDto getType() {
+    public TaskTypeDtoFull getType() {
         return type;
     }
 
-    public void setType(TaskTypeDto type) {
+    public void setType(TaskTypeDtoFull type) {
         this.type = type;
     }
 
@@ -112,12 +113,12 @@ public class TaskDtoFull {
         this.priority = priority;
     }
 
-    public Long getProject_id() {
-        return project_id;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public UserDto getAuthor() {
@@ -160,6 +161,14 @@ public class TaskDtoFull {
         this.status = status;
     }
 
+    public List<WorkFlowActionDto> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<WorkFlowActionDto> actions) {
+        this.actions = actions;
+    }
+
     public Duration getEstimation() {
         return estimation;
     }
@@ -184,11 +193,11 @@ public class TaskDtoFull {
         this.timeLeft = timeLeft;
     }
 
-    public List<RelatedTaskDto> getRelatedTasks() {
+    public List<RelatedTaskDtoFull> getRelatedTasks() {
         return relatedTasks;
     }
 
-    public void setRelatedTasks(List<RelatedTaskDto> relatedTasks) {
+    public void setRelatedTasks(List<RelatedTaskDtoFull> relatedTasks) {
         this.relatedTasks = relatedTasks;
     }
 
@@ -200,11 +209,11 @@ public class TaskDtoFull {
         this.attachments = attachments;
     }
 
-    public List<WorkLogDto> getWorkLogs() {
+    public List<WorkLogDtoFull> getWorkLogs() {
         return workLogs;
     }
 
-    public void setWorkLogs(List<WorkLogDto> workLogs) {
+    public void setWorkLogs(List<WorkLogDtoFull> workLogs) {
         this.workLogs = workLogs;
     }
 }

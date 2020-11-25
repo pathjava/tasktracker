@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
  *
  * @author Oleg Kiselev
  */
-public class WorkLogDto {
+public class WorkLogDtoFull {
 
     private final Long id;
     private Long taskId;
@@ -19,7 +19,7 @@ public class WorkLogDto {
     private String estimateChange;
     private Duration estimateValue;
 
-    public WorkLogDto(
+    public WorkLogDtoFull(
             Long id, Long taskId, Duration spent, UserDto worker,
             ZonedDateTime when, String description,
             String estimateChange, Duration estimateValue

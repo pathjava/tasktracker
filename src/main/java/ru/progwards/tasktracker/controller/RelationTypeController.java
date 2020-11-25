@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelationTypeDto;
+import ru.progwards.tasktracker.controller.dto.RelationTypeDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
@@ -34,7 +34,7 @@ public class RelationTypeController {
     @Autowired
     private GetListService<RelationType> getListService;
     @Autowired
-    private Converter<RelationType, RelationTypeDto> converter;
+    private Converter<RelationType, RelationTypeDtoFull> converter;
 
     /**
      * Метод получения типа отношения связанных задач
@@ -43,11 +43,11 @@ public class RelationTypeController {
      * @return полученный по идентификатору Dto тип отношения
      */
     @GetMapping("/{id}")
-    public ResponseEntity<RelationTypeDto> getRelationType(@PathVariable Long id) {
+    public ResponseEntity<RelationTypeDtoFull> getRelationType(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        RelationTypeDto typeDto = converter.toDto(getService.get(id));
+        RelationTypeDtoFull typeDto = converter.toDto(getService.get(id));
 
         if (typeDto == null) //TODO - пустой тип или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Тип отношения с id: " + id + " не найден!");
@@ -61,9 +61,9 @@ public class RelationTypeController {
      * @return коллекция Dto типов отношений
      */
     @GetMapping("/list")
-    public ResponseEntity<Collection<RelationTypeDto>> getListRelationType() {
+    public ResponseEntity<Collection<RelationTypeDtoFull>> getListRelationType() {
 
-        Collection<RelationTypeDto> collection = getListService.getList().stream()
+        Collection<RelationTypeDtoFull> collection = getListService.getList().stream()
                 .map(relationType -> converter.toDto(relationType))
                 .collect(Collectors.toUnmodifiableList());
 
@@ -80,13 +80,13 @@ public class RelationTypeController {
      * @return созданный тип отношения
      */
     @PostMapping("/create")
-    public ResponseEntity<RelationTypeDto> createRelationType(@RequestBody RelationTypeDto typeDto) {
+    public ResponseEntity<RelationTypeDtoFull> createRelationType(@RequestBody RelationTypeDtoFull typeDto) {
         if (typeDto == null)
             throw new BadRequestException("Пустой объект!");
 
         RelationType relationType = converter.toModel(typeDto);
         createService.create(relationType);
-        RelationTypeDto createdRelationType = converter.toDto(relationType);
+        RelationTypeDtoFull createdRelationType = converter.toDto(relationType);
 
         return new ResponseEntity<>(createdRelationType, HttpStatus.OK);
     }
@@ -99,8 +99,8 @@ public class RelationTypeController {
      * @return обновленный тип отношения
      */
     @PutMapping("/{id}/update")
-    public ResponseEntity<RelationTypeDto> updateRelationType(@PathVariable Long id,
-                                                              @RequestBody RelationTypeDto typeDto) {
+    public ResponseEntity<RelationTypeDtoFull> updateRelationType(@PathVariable Long id,
+                                                                  @RequestBody RelationTypeDtoFull typeDto) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
@@ -109,7 +109,7 @@ public class RelationTypeController {
 
         RelationType relationType = converter.toModel(typeDto);
         refreshService.refresh(relationType);
-        RelationTypeDto updatedRelationType = converter.toDto(relationType);
+        RelationTypeDtoFull updatedRelationType = converter.toDto(relationType);
 
         return new ResponseEntity<>(updatedRelationType, HttpStatus.OK);
     }
@@ -121,7 +121,7 @@ public class RelationTypeController {
      * @return статус
      */
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<RelationTypeDto> deleteRelationType(@PathVariable Long id) {
+    public ResponseEntity<RelationTypeDtoFull> deleteRelationType(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 

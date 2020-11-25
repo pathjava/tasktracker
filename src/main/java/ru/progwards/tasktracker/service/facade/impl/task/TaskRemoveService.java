@@ -10,6 +10,8 @@ import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.Task;
 
+import java.util.Collection;
+
 /**
  * Бизнес-логика удаления задачи
  *
@@ -44,7 +46,9 @@ public class TaskRemoveService implements RemoveService<Task> {
      * @param id идентификатор задачи
      */
     private void deleteRelatedTasks(Long id) {
-        listByAttachedTaskId.getListByAttachedTaskId(id)
-                .forEach(relatedTask -> repositoryRelatedTask.delete(relatedTask.getId()));
+        Collection<RelatedTask> collection = listByAttachedTaskId.getListByAttachedTaskId(id);
+        if (!collection.isEmpty()){
+            collection.forEach(relatedTask -> repositoryRelatedTask.delete(relatedTask.getId()));
+        }
     }
 }

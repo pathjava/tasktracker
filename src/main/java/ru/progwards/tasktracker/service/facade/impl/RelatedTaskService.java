@@ -50,7 +50,6 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
             );
             repository.create(converter.toEntity(counter));
         }
-
         repository.create(converter.toEntity(model));
     }
 
@@ -99,10 +98,13 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public void remove(RelatedTask model) {
         if (model.getRelationType().getCounterRelationId() != null) {
-            getListByAttachedTaskId(model.getCurrentTaskId()).stream()
-                    .filter(relatedTask -> model.getCurrentTaskId().equals(relatedTask.getAttachedTaskId())
-                            && model.getAttachedTaskId().equals(relatedTask.getCurrentTaskId()))
-                    .forEach(relatedTask -> repository.delete(relatedTask.getId()));
+            Collection<RelatedTask> collection = getListByAttachedTaskId(model.getCurrentTaskId());
+            if (!collection.isEmpty()) {
+                collection.stream()
+                        .filter(relatedTask -> model.getCurrentTaskId().equals(relatedTask.getAttachedTaskId())
+                                && model.getAttachedTaskId().equals(relatedTask.getCurrentTaskId()))
+                        .forEach(relatedTask -> repository.delete(relatedTask.getId()));
+            }
         }
         repository.delete(model.getId());
     }
