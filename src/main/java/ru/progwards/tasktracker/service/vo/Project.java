@@ -1,7 +1,5 @@
 package ru.progwards.tasktracker.service.vo;
 
-import ru.progwards.tasktracker.util.types.TaskType;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 

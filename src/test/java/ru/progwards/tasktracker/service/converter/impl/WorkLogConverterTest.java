@@ -37,7 +37,7 @@ class WorkLogConverterTest {
         WorkLog workLog = converter.toVo(
                 new WorkLogEntity(
                         null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description", null, null
+                        "Description"
                 )
         );
 

@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.dto.WorkLogDto;
+import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
@@ -183,7 +183,7 @@ class WorkLogControllerTest {
 
     @Test
     void updateWorkLog_Wrong() {
-        WorkLogDto workLog = new WorkLogDto(
+        WorkLogDtoFull workLog = new WorkLogDtoFull(
                 1L, 2L, null, null, ZonedDateTime.now(),
                 "Description", null, null
         );

@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
- * value object - объект бизнес логики (лог)
+ * value object - объект бизнес логики (лог) (Журнала работ)
  *
  * @author Oleg Kiselev
  */

@@ -37,10 +37,10 @@ public class ProjectRemoveService implements RemoveService<Project> {
         Project project = converter.toVo(repository.get(model.getId()));
 
         // если спискок задач у проекта пустой, то удаляем проект; если какие-то задачи есть, то выводим исключение
-        if (project.getTasks().size() == 0)
-            repository.delete(model.getId());
-        else
-            throw new DeletionNotPossibleException("Project with id = " + model.getId() +
-                    " have tasks. Delete not possible");
+//        if (project.getTasks().size() == 0)
+//            repository.delete(model.getId());
+//        else
+//            throw new DeletionNotPossibleException("Project with id = " + model.getId() +
+//                    " have tasks. Delete not possible");
     }
 }

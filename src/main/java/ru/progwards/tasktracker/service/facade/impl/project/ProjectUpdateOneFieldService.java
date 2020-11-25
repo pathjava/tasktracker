@@ -46,10 +46,10 @@ public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
         /* если обновляемое поле называется "lastTaskCode" или если обновляемое поле называется "prefix"
         * и у проекта имеются задачи, то обновление поля невозможно
         */
-        if (oneValue.getFieldName().equals("lastTaskCode") ||
-                (oneValue.getFieldName().equals("prefix") && project.getTasks().size() > 0))
-            throw new UpdateNotPossibleException("Update field \"" + oneValue.getFieldName() + "\" not possible");
-        else
-            projectEntityRepositoryUpdateField.updateField(oneValue);
+//        if (oneValue.getFieldName().equals("lastTaskCode") ||
+//                (oneValue.getFieldName().equals("prefix") && project.getTasks().size() > 0))
+//            throw new UpdateNotPossibleException("Update field \"" + oneValue.getFieldName() + "\" not possible");
+//        else
+//            projectEntityRepositoryUpdateField.updateField(oneValue);
     }
 }

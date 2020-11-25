@@ -53,17 +53,17 @@ class RelationTypeEntityJsonHandlerTest {
     private void createEntitiesForTest() {
         jsonHandler.getMap().put(
                 1L, new RelationTypeEntity(
-                        null, "блокирующая", new RelationTypeEntity(2L, "блокируемая", null)
+                        null, "блокирующая", 2L
                 )
         );
         jsonHandler.getMap().put(
                 2L, new RelationTypeEntity(
-                        null, "блокируемая", new RelationTypeEntity(1L, "блокирующая", null)
+                        null, "блокируемая", 2L
                 )
         );
         jsonHandler.getMap().put(
                 3L, new RelationTypeEntity(
-                        null, "ссылается", new RelationTypeEntity(3L, "ссылается", null)
+                        null, "ссылается", 2L
                 )
         );
     }

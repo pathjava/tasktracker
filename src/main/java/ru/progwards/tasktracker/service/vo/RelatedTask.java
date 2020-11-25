@@ -9,14 +9,16 @@ public class RelatedTask {
 
     private final Long id;
     private RelationType relationType;
-    private Long parentTaskId;
-    private Long taskId;
+    private Long currentTaskId;
+    private Long attachedTaskId;
 
-    public RelatedTask(Long id, RelationType relationType, Long parentTaskId, Long taskId) {
+    public RelatedTask(
+            Long id, RelationType relationType, Long currentTaskId, Long attachedTaskId
+    ) {
         this.id = id;
         this.relationType = relationType;
-        this.parentTaskId = parentTaskId;
-        this.taskId = taskId;
+        this.currentTaskId = currentTaskId;
+        this.attachedTaskId = attachedTaskId;
     }
 
     public Long getId() {
@@ -31,19 +33,19 @@ public class RelatedTask {
         this.relationType = relationType;
     }
 
-    public Long getParentTaskId() {
-        return parentTaskId;
+    public Long getCurrentTaskId() {
+        return currentTaskId;
     }
 
-    public void setParentTaskId(Long parentTaskId) {
-        this.parentTaskId = parentTaskId;
+    public void setCurrentTaskId(Long currentTaskId) {
+        this.currentTaskId = currentTaskId;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public Long getAttachedTaskId() {
+        return attachedTaskId;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setAttachedTaskId(Long attachedTaskId) {
+        this.attachedTaskId = attachedTaskId;
     }
 }

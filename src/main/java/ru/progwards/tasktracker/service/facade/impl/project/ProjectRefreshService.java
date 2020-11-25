@@ -38,14 +38,14 @@ public class ProjectRefreshService implements RefreshService<Project> {
         Project project = converter.toVo(repository.get(model.getId()));
 
         // если в обновленном проекте другой префикс и в обновляемом проекте имеются задачи, то обновление невозможно
-        if (!model.getPrefix().equals(project.getPrefix()) && project.getTasks().size() > 0)
-            throw new UpdateNotPossibleException("Update not possible");
-        else {
-            // если LastTaskCode не установлен, то взять значение у предыдущей версии проекта
-            if (model.getLastTaskCode() == null)
-                model.setLastTaskCode(project.getLastTaskCode());
-            repository.update(converter.toEntity(model));
-        }
+//        if (!model.getPrefix().equals(project.getPrefix()) && project.getTasks().size() > 0)
+//            throw new UpdateNotPossibleException("Update not possible");
+//        else {
+//            // если LastTaskCode не установлен, то взять значение у предыдущей версии проекта
+//            if (model.getLastTaskCode() == null)
+//                model.setLastTaskCode(project.getLastTaskCode());
+//            repository.update(converter.toEntity(model));
+//        }
 
     }
 }

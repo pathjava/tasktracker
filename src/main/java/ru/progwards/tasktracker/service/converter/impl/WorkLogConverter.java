@@ -1,8 +1,11 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.entity.UserEntity;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
 import java.time.Duration;
@@ -11,13 +14,19 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
- * конвертеры valueObject <-> entity
+ * Конвертеры valueObject <-> entity (Журнала работ)
  *
  * @author Oleg Kiselev
  */
 @Component
 public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
+
+    @Autowired
+    private Converter<UserEntity, User> userConverter;
+
     /**
+     * Метод конвертирует сущность Entity в бизнес объект
+     *
      * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
      */
@@ -30,15 +39,18 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
                     entity.getId(),
                     entity.getTaskId(),
                     checkDurationEntityNotNull(entity.getSpent()),
-                    entity.getWorker(),
+                    userConverter.toVo(entity.getWorker()),
                     checkUpdatedEntityNotNull(entity.getWhen()),
                     entity.getDescription(),
-                    entity.getEstimateChange(),
-                    checkDurationEntityNotNull(entity.getEstimateValue())
+                    null,
+                    null
             );
     }
 
     /**
+     * Метод проверки поля и возвращения содержимого
+     * из условия что было на входе, null или объект
+     *
      * @param duration секунды, могут быть пустыми и значение
      * @return продолжительность или пусто
      */
@@ -47,6 +59,9 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
     }
 
     /**
+     * Метод проверки поля и возвращения содержимого
+     * из условия что было на входе, null или объект
+     *
      * @param updated секунды, могут быть пустыми и значение
      * @return дату-время или пусто
      */
@@ -56,6 +71,8 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
     }
 
     /**
+     * Метод конвертирует бизнес объект в сущность Entity
+     *
      * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */
@@ -68,15 +85,16 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
                     valueObject.getId(),
                     valueObject.getTaskId(),
                     checkDurationValueObjectNotNull(valueObject.getSpent()),
-                    valueObject.getWorker(),
+                    userConverter.toEntity(valueObject.getWorker()),
                     checkZonedDateTimeValueObjectNotNull(valueObject.getWhen()),
-                    valueObject.getDescription(),
-                    valueObject.getEstimateChange(),
-                    checkDurationValueObjectNotNull(valueObject.getEstimateValue())
+                    valueObject.getDescription()
             );
     }
 
     /**
+     * Метод проверки поля и возвращения содержимого
+     * из условия что было на входе, null или объект
+     *
      * @param duration продолжительность
      * @return продолжительность в секундах или пусто
      */
@@ -85,6 +103,9 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
     }
 
     /**
+     * Метод проверки поля и возвращения содержимого
+     * из условия что было на входе, null или объект
+     *
      * @param time дата-время
      * @return дата-время в секундах или пусто
      */

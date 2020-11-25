@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.util.types.TaskType;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -45,14 +45,14 @@ public class TaskUpdateOneFieldServiceTest {
 
     @BeforeEach
     void before() {
-        createService.create(
-                new Task(null, "TT1-1", "Test task 1 UpdateOneFieldService", "Description task 1",
-                        TaskType.BUG, null, 11L, new User(), new User(),
-                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-                        null,
-                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-        );
+//        createService.create(
+//                new Task(null, "TT1-1", "Test task 1 UpdateOneFieldService", "Description task 1",
+//                        null, null, 11L, new User(), new User(),
+//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+//                        null,
+//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
+//        );
     }
 
     @Test

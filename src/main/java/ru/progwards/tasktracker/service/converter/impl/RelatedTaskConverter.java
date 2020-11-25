@@ -9,21 +9,19 @@ import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 /**
- * конвертер valueObject <-> entity
+ * Конвертеры valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
 @Component
 public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
 
-    private Converter<RelationTypeEntity, RelationType> relationTypeConverter;
-
     @Autowired
-    public void setRelationTypeConverter(Converter<RelationTypeEntity, RelationType> relationTypeConverter) {
-        this.relationTypeConverter = relationTypeConverter;
-    }
+    private Converter<RelationTypeEntity, RelationType> converter;
 
     /**
+     * Метод конвертирует сущность Entity в бизнес объект
+     *
      * @param entity сущность, полученная из БД
      * @return value object - объект бизнес логики
      */
@@ -34,13 +32,15 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
         else
             return new RelatedTask(
                     entity.getId(),
-                    relationTypeConverter.toVo(entity.getRelationTypeEntity()),
-                    entity.getParentTaskId(),
-                    entity.getTaskId()
+                    converter.toVo(entity.getRelationTypeEntity()),
+                    entity.getCurrentTaskId(),
+                    entity.getAttachedTaskId()
             );
     }
 
     /**
+     * Метод конвертирует бизнес объект в сущность Entity
+     *
      * @param valueObject value object - объект бизнес логики
      * @return сущность для БД
      */
@@ -51,9 +51,9 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
         else
             return new RelatedTaskEntity(
                     valueObject.getId(),
-                    relationTypeConverter.toEntity(valueObject.getRelationType()),
-                    valueObject.getParentTaskId(),
-                    valueObject.getTaskId()
+                    converter.toEntity(valueObject.getRelationType()),
+                    valueObject.getCurrentTaskId(),
+                    valueObject.getAttachedTaskId()
             );
     }
 }

@@ -9,12 +9,12 @@ public class RelationType {
 
     private final Long id;
     private String name;
-    private RelationType counterRelation;
+    private Long counterRelationId;
 
-    public RelationType(Long id, String name, RelationType counterRelation) {
+    public RelationType(Long id, String name, Long counterRelationId) {
         this.id = id;
         this.name = name;
-        this.counterRelation = counterRelation;
+        this.counterRelationId = counterRelationId;
     }
 
     public Long getId() {
@@ -29,11 +29,11 @@ public class RelationType {
         this.name = name;
     }
 
-    public RelationType getCounterRelation() {
-        return counterRelation;
+    public Long getCounterRelationId() {
+        return counterRelationId;
     }
 
-    public void setCounterRelation(RelationType counterRelation) {
-        this.counterRelation = counterRelation;
+    public void setCounterRelationId(Long counterRelationId) {
+        this.counterRelationId = counterRelationId;
     }
 }

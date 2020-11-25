@@ -1,13 +1,10 @@
 package ru.progwards.tasktracker.repository.entity;
 
-import ru.progwards.tasktracker.service.vo.*;
-import ru.progwards.tasktracker.util.types.TaskType;
-
 import java.util.List;
 import java.util.Random;
 
 /**
- * сущность для хранения задачи в БД
+ * Сущность для хранения задачи в БД
  *
  * @author Oleg Kiselev
  */
@@ -17,20 +14,21 @@ public class TaskEntity {
     private String code;
     private String name;
     private String description;
-    private TaskType type;
-    private TaskPriority priority;
-    private Long project_id;
-    private User author;
-    private User executor;
+    private TaskTypeEntity type;
+    private TaskPriorityEntity priority;
+    private ProjectEntity project;
+    private UserEntity author;
+    private UserEntity executor;
     private Long created;
     private Long updated;
-    private WorkFlowStatus status;
+    private WorkFlowStatusEntity status;
+    private List<WorkFlowActionEntity> actions;
     private Long estimation;
     private Long timeSpent;
     private Long timeLeft;
-    private List<RelatedTask> relatedTasks;
-    private List<TaskAttachment> attachments;
-    private List<WorkLog> workLogs;
+    private List<RelatedTaskEntity> relatedTasks;
+    private List<TaskAttachmentEntity> attachments;
+    private List<WorkLogEntity> workLogs;
     private Boolean isDeleted;
 
     public TaskEntity() {
@@ -38,13 +36,13 @@ public class TaskEntity {
 
     public TaskEntity(
             Long id, String code, String name, String description,
-            TaskType type, TaskPriority priority, Long project_id,
-            User author, User executor,
+            TaskTypeEntity type, TaskPriorityEntity priority, ProjectEntity project,
+            UserEntity author, UserEntity executor,
             Long created, Long updated,
-            WorkFlowStatus status,
+            WorkFlowStatusEntity status, List<WorkFlowActionEntity> actions,
             Long estimation, Long timeSpent, Long timeLeft,
-            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs,
-            Boolean isDeleted
+            List<RelatedTaskEntity> relatedTasks, List<TaskAttachmentEntity> attachments,
+            List<WorkLogEntity> workLogs, Boolean isDeleted
     ) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
@@ -54,12 +52,13 @@ public class TaskEntity {
         this.description = description;
         this.type = type;
         this.priority = priority;
-        this.project_id = project_id;
+        this.project = project;
         this.author = author;
         this.executor = executor;
         this.created = created;
         this.updated = updated;
         this.status = status;
+        this.actions = actions;
         this.estimation = estimation;
         this.timeSpent = timeSpent;
         this.timeLeft = timeLeft;
@@ -71,6 +70,10 @@ public class TaskEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {
@@ -97,43 +100,43 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public TaskType getType() {
+    public TaskTypeEntity getType() {
         return type;
     }
 
-    public void setType(TaskType type) {
+    public void setType(TaskTypeEntity type) {
         this.type = type;
     }
 
-    public TaskPriority getPriority() {
+    public TaskPriorityEntity getPriority() {
         return priority;
     }
 
-    public void setPriority(TaskPriority priority) {
+    public void setPriority(TaskPriorityEntity priority) {
         this.priority = priority;
     }
 
-    public Long getProject_id() {
-        return project_id;
+    public ProjectEntity getProject() {
+        return project;
     }
 
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
+    public void setProject(ProjectEntity project) {
+        this.project = project;
     }
 
-    public User getAuthor() {
+    public UserEntity getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserEntity author) {
         this.author = author;
     }
 
-    public User getExecutor() {
+    public UserEntity getExecutor() {
         return executor;
     }
 
-    public void setExecutor(User executor) {
+    public void setExecutor(UserEntity executor) {
         this.executor = executor;
     }
 
@@ -153,12 +156,20 @@ public class TaskEntity {
         this.updated = updated;
     }
 
-    public WorkFlowStatus getStatus() {
+    public WorkFlowStatusEntity getStatus() {
         return status;
     }
 
-    public void setStatus(WorkFlowStatus status) {
+    public void setStatus(WorkFlowStatusEntity status) {
         this.status = status;
+    }
+
+    public List<WorkFlowActionEntity> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<WorkFlowActionEntity> actions) {
+        this.actions = actions;
     }
 
     public Long getEstimation() {
@@ -185,27 +196,27 @@ public class TaskEntity {
         this.timeLeft = timeLeft;
     }
 
-    public List<RelatedTask> getRelatedTasks() {
+    public List<RelatedTaskEntity> getRelatedTasks() {
         return relatedTasks;
     }
 
-    public void setRelatedTasks(List<RelatedTask> relatedTasks) {
+    public void setRelatedTasks(List<RelatedTaskEntity> relatedTasks) {
         this.relatedTasks = relatedTasks;
     }
 
-    public List<TaskAttachment> getAttachments() {
+    public List<TaskAttachmentEntity> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<TaskAttachment> attachments) {
+    public void setAttachments(List<TaskAttachmentEntity> attachments) {
         this.attachments = attachments;
     }
 
-    public List<WorkLog> getWorkLogs() {
+    public List<WorkLogEntity> getWorkLogs() {
         return workLogs;
     }
 
-    public void setWorkLogs(List<WorkLog> workLogs) {
+    public void setWorkLogs(List<WorkLogEntity> workLogs) {
         this.workLogs = workLogs;
     }
 

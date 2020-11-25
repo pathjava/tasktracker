@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.repository.entity;
 import java.util.Random;
 
 /**
- * сущность для хранения связанной задачи в БД
+ * Сущность для хранения связанной задачи в БД
  *
  * @author Oleg Kiselev
  */
@@ -11,19 +11,19 @@ public class RelatedTaskEntity {
 
     private Long id;
     private RelationTypeEntity relationTypeEntity;
-    private Long parentTaskId;
-    private Long taskId;
+    private Long currentTaskId;
+    private Long attachedTaskId;
 
     public RelatedTaskEntity() {
     }
 
-    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long parentTaskId, Long taskId) {
+    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long currentTaskId, Long attachedTaskId) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
         this.id = id;
         this.relationTypeEntity = relationTypeEntity;
-        this.parentTaskId = parentTaskId;
-        this.taskId = taskId;
+        this.currentTaskId = currentTaskId;
+        this.attachedTaskId = attachedTaskId;
     }
 
     public Long getId() {
@@ -38,19 +38,19 @@ public class RelatedTaskEntity {
         this.relationTypeEntity = relationTypeEntity;
     }
 
-    public Long getParentTaskId() {
-        return parentTaskId;
+    public Long getCurrentTaskId() {
+        return currentTaskId;
     }
 
-    public void setParentTaskId(Long parentTaskId) {
-        this.parentTaskId = parentTaskId;
+    public void setCurrentTaskId(Long currentTaskId) {
+        this.currentTaskId = currentTaskId;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public Long getAttachedTaskId() {
+        return attachedTaskId;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setAttachedTaskId(Long attachedTaskId) {
+        this.attachedTaskId = attachedTaskId;
     }
 }
