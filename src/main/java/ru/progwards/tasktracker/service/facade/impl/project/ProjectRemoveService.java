@@ -7,7 +7,7 @@ import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
-import ru.progwards.tasktracker.controller.exception.DeletionNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.service.vo.Project;
 
 /**

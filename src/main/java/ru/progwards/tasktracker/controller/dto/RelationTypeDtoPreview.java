@@ -1,6 +1,8 @@
 package ru.progwards.tasktracker.controller.dto;
 
 /**
+ * Объект, содержащий краткие данные об отношениях связанных задач
+ *
  * @author Oleg Kiselev
  */
 public class RelationTypeDtoPreview {

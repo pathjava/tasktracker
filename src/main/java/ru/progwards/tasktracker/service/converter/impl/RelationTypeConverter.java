@@ -27,7 +27,7 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
             return new RelationType(
                     entity.getId(),
                     entity.getName(),
-                    entity.getCounterRelationId()
+                    toVo(entity.getCounterRelation())
             );
     }
 
@@ -45,7 +45,7 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
             return new RelationTypeEntity(
                     valueObject.getId(),
                     valueObject.getName(),
-                    valueObject.getCounterRelationId()
+                    toEntity(valueObject.getCounterRelation())
             );
     }
 }

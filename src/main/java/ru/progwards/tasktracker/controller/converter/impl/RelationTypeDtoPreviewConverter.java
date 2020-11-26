@@ -8,6 +8,8 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
 /**
+ * Конвертеры valueObject <-> dto
+ *
  * @author Oleg Kiselev
  */
 @Component
@@ -16,6 +18,12 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
     @Autowired
     private GetService<Long, RelationType> getService;
 
+    /**
+     * Метод конвертирует Dto сущность в бизнес объект
+     *
+     * @param dto сущность, приходящая из пользовательского интерфейса
+     * @return value object - объект бизнес логики
+     */
     @Override
     public RelationType toModel(RelationTypeDtoPreview dto) {
         if (dto == null)
@@ -25,11 +33,17 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
             return new RelationType(
                     dto.getId(),
                     dto.getName(),
-                    relationType.getCounterRelationId()
+                    relationType.getCounterRelation()
             );
         }
     }
 
+    /**
+     * Метод конвертирует бизнес объект в сущность Dto
+     *
+     * @param model value object - объект бизнес логики
+     * @return сущность, возвращаемая в пользовательский интерфейс
+     */
     @Override
     public RelationTypeDtoPreview toDto(RelationType model) {
         if (model == null)

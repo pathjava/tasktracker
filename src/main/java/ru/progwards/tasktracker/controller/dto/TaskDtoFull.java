@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
- * Объект, содержащий данные задачи, выводимые в пользовательском интерфейсе
+ * Объект, содержащий полные данные задачи, выводимые в пользовательском интерфейсе
  *
  * @author Oleg Kiselev
  */
@@ -18,35 +18,34 @@ public class TaskDtoFull {
     private String code;
     private String name;
     private String description;
-    private TaskTypeDtoFull type;
+    private TaskTypeDtoPreview type;
     private TaskPriorityDtoPreview priority;
-    private Project project;
-    private UserDtoFull author;
-    private UserDtoFull executor;
+    private ProjectDtoPreview project;
+    private UserDtoPreview author;
+    private UserDtoPreview executor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime created;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime updated;
-    private WorkFlowStatusDtoFull status;
-    private List<WorkFlowActionDtoFull> actions;
+    private WorkFlowStatusDtoPreview status;
+    private List<WorkFlowActionDtoPreview> actions;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimation;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeSpent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration timeLeft;
-    private List<RelatedTaskDtoFull> relatedTasks;
-    private List<TaskAttachmentDtoFull> attachments;
-    private List<WorkLogDtoFull> workLogs;
+    private List<RelatedTaskDtoPreview> relatedTasks;
+    private List<TaskAttachmentDtoPreview> attachments;
 
     public TaskDtoFull(
             Long id, String code, String name, String description,
-            TaskTypeDtoFull type, TaskPriorityDtoPreview priority, Project project,
-            UserDtoFull author, UserDtoFull executor,
+            TaskTypeDtoPreview type, TaskPriorityDtoPreview priority,
+            ProjectDtoPreview project, UserDtoPreview author, UserDtoPreview executor,
             ZonedDateTime created, ZonedDateTime updated,
-            WorkFlowStatusDtoFull status, List<WorkFlowActionDtoFull> actions,
+            WorkFlowStatusDtoPreview status, List<WorkFlowActionDtoPreview> actions,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTaskDtoFull> relatedTasks, List<TaskAttachmentDtoFull> attachments, List<WorkLogDtoFull> workLogs
+            List<RelatedTaskDtoPreview> relatedTasks, List<TaskAttachmentDtoPreview> attachments
     ) {
         this.id = id;
         this.code = code;
@@ -66,7 +65,6 @@ public class TaskDtoFull {
         this.timeLeft = timeLeft;
         this.relatedTasks = relatedTasks;
         this.attachments = attachments;
-        this.workLogs = workLogs;
     }
 
     public Long getId() {
@@ -97,11 +95,11 @@ public class TaskDtoFull {
         this.description = description;
     }
 
-    public TaskTypeDtoFull getType() {
+    public TaskTypeDtoPreview getType() {
         return type;
     }
 
-    public void setType(TaskTypeDtoFull type) {
+    public void setType(TaskTypeDtoPreview type) {
         this.type = type;
     }
 
@@ -113,27 +111,27 @@ public class TaskDtoFull {
         this.priority = priority;
     }
 
-    public Project getProject() {
+    public ProjectDtoPreview getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectDtoPreview project) {
         this.project = project;
     }
 
-    public UserDtoFull getAuthor() {
+    public UserDtoPreview getAuthor() {
         return author;
     }
 
-    public void setAuthor(UserDtoFull author) {
+    public void setAuthor(UserDtoPreview author) {
         this.author = author;
     }
 
-    public UserDtoFull getExecutor() {
+    public UserDtoPreview getExecutor() {
         return executor;
     }
 
-    public void setExecutor(UserDtoFull executor) {
+    public void setExecutor(UserDtoPreview executor) {
         this.executor = executor;
     }
 
@@ -153,19 +151,19 @@ public class TaskDtoFull {
         this.updated = updated;
     }
 
-    public WorkFlowStatusDtoFull getStatus() {
+    public WorkFlowStatusDtoPreview getStatus() {
         return status;
     }
 
-    public void setStatus(WorkFlowStatusDtoFull status) {
+    public void setStatus(WorkFlowStatusDtoPreview status) {
         this.status = status;
     }
 
-    public List<WorkFlowActionDtoFull> getActions() {
+    public List<WorkFlowActionDtoPreview> getActions() {
         return actions;
     }
 
-    public void setActions(List<WorkFlowActionDtoFull> actions) {
+    public void setActions(List<WorkFlowActionDtoPreview> actions) {
         this.actions = actions;
     }
 
@@ -193,27 +191,19 @@ public class TaskDtoFull {
         this.timeLeft = timeLeft;
     }
 
-    public List<RelatedTaskDtoFull> getRelatedTasks() {
+    public List<RelatedTaskDtoPreview> getRelatedTasks() {
         return relatedTasks;
     }
 
-    public void setRelatedTasks(List<RelatedTaskDtoFull> relatedTasks) {
+    public void setRelatedTasks(List<RelatedTaskDtoPreview> relatedTasks) {
         this.relatedTasks = relatedTasks;
     }
 
-    public List<TaskAttachmentDtoFull> getAttachments() {
+    public List<TaskAttachmentDtoPreview> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<TaskAttachmentDtoFull> attachments) {
+    public void setAttachments(List<TaskAttachmentDtoPreview> attachments) {
         this.attachments = attachments;
-    }
-
-    public List<WorkLogDtoFull> getWorkLogs() {
-        return workLogs;
-    }
-
-    public void setWorkLogs(List<WorkLogDtoFull> workLogs) {
-        this.workLogs = workLogs;
     }
 }

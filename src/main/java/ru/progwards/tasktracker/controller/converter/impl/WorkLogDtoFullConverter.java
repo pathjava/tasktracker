@@ -3,14 +3,12 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.UserDtoFull;
+import ru.progwards.tasktracker.controller.dto.UserDtoPreview;
 import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 import ru.progwards.tasktracker.util.types.EstimateChange;
-
-import java.util.Arrays;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -21,7 +19,7 @@ import java.util.Arrays;
 public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFull> {
 
     @Autowired
-    private Converter<User, UserDtoFull> userDtoConverter;
+    private Converter<User, UserDtoPreview> userDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -53,10 +51,12 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
      * @return перечисление enum
      */
     private EstimateChange stringToEnum(String estimateChange) {
-        return Arrays.stream(EstimateChange.values())
-                .filter(enumValue -> enumValue.toString().equalsIgnoreCase(estimateChange)).findFirst()
-                .orElseThrow(() -> new BadRequestException(estimateChange +
-                        " не соответствует ни одному перечислению EstimateChange!"));
+        try {
+            return EstimateChange.valueOf(estimateChange.toUpperCase());
+        } catch (BadRequestException e) {
+            throw new BadRequestException(
+                    estimateChange + " не соответствует ни одному перечислению EstimateChange!");
+        }
     }
 
     /**

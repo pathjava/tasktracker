@@ -43,10 +43,10 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      */
     @Override
     public void create(RelatedTask model) {
-        if (model.getRelationType().getCounterRelationId() != null) {
-            RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelationId());
+        if (model.getRelationType().getCounterRelation() != null) {
+            RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
             RelatedTask counter = new RelatedTask(
-                    null, counterType, model.getAttachedTaskId(), model.getCurrentTaskId()
+                    null, counterType, model.getCurrentTaskId(), model.getAttachedTask()
             );
             repository.create(converter.toEntity(counter));
         }
@@ -97,12 +97,12 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      */
     @Override
     public void remove(RelatedTask model) {
-        if (model.getRelationType().getCounterRelationId() != null) {
+        if (model.getRelationType().getCounterRelation() != null) {
             Collection<RelatedTask> collection = getListByAttachedTaskId(model.getCurrentTaskId());
             if (!collection.isEmpty()) {
                 collection.stream()
-                        .filter(relatedTask -> model.getCurrentTaskId().equals(relatedTask.getAttachedTaskId())
-                                && model.getAttachedTaskId().equals(relatedTask.getCurrentTaskId()))
+                        .filter(relatedTask -> model.getCurrentTaskId().equals(relatedTask.getAttachedTask().getId())
+                                && model.getAttachedTask().getId().equals(relatedTask.getCurrentTaskId()))
                         .forEach(relatedTask -> repository.delete(relatedTask.getId()));
             }
         }

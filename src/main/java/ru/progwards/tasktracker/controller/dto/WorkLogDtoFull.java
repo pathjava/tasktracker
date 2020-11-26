@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
- * Объект, содержащий лог-данные (Журнала работ) о действиях в задаче
+ * Объект, содержащий полные лог-данные (Журнала работ) о действиях в задаче
  *
  * @author Oleg Kiselev
  */
@@ -13,16 +13,15 @@ public class WorkLogDtoFull {
     private final Long id;
     private Long taskId;
     private Duration spent;
-    private UserDtoFull worker;
+    private UserDtoPreview worker;
     private ZonedDateTime when;
     private String description;
     private String estimateChange;
     private Duration estimateValue;
 
     public WorkLogDtoFull(
-            Long id, Long taskId, Duration spent, UserDtoFull worker,
-            ZonedDateTime when, String description,
-            String estimateChange, Duration estimateValue
+            Long id, Long taskId, Duration spent, UserDtoPreview worker,
+            ZonedDateTime when, String description, String estimateChange, Duration estimateValue
     ) {
         this.id = id;
         this.taskId = taskId;
@@ -54,11 +53,11 @@ public class WorkLogDtoFull {
         this.spent = spent;
     }
 
-    public UserDtoFull getWorker() {
+    public UserDtoPreview getWorker() {
         return worker;
     }
 
-    public void setWorker(UserDtoFull worker) {
+    public void setWorker(UserDtoPreview worker) {
         this.worker = worker;
     }
 

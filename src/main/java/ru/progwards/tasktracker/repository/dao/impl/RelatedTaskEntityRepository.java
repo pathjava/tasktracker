@@ -95,7 +95,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     @Override
     public Collection<RelatedTaskEntity> getByAttachedTaskId(Long taskId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getAttachedTaskId().equals(taskId))
+                .filter(entity -> entity.getAttachedTask().getId().equals(taskId))
                 .collect(Collectors.toList());
     }
 }

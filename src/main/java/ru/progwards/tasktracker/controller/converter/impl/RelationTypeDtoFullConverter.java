@@ -27,7 +27,7 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
             return new RelationType(
                     dto.getId(),
                     dto.getName(),
-                    dto.getCounterRelationId()
+                    toModel(dto.getCounterRelation())
             );
     }
 
@@ -45,7 +45,7 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
             return new RelationTypeDtoFull(
                     model.getId(),
                     model.getName(),
-                    model.getCounterRelationId()
+                    toDto(model.getCounterRelation())
             );
     }
 }
