@@ -9,12 +9,11 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Бизнес-логика работы со статусами воркфлоу
+ * Бизнес-логика работы со статусами бизнес процесса
  *
  * @author Gregory Lobkov
  */
@@ -79,33 +78,27 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
 
 
     /**
-     * Получить список статусов для определенного статуса
+     * Получить список статусов для определенного бизнес-процесса
      *
      * @param parentId WorkFlowStatusStatus.id
-     * @return список действий
+     * @return список статусов
      */
     @Override
     public Collection<WorkFlowStatus> getListByParentId(Long parentId) {
-        // получили список сущностей
-        Collection<WorkFlowStatusEntity> workFlowStatusEntities = workFlowStatusEntityRepositoryByParentId.getByParentId(parentId);
-        List<WorkFlowStatus> workFlowStatusActions = new ArrayList<>(workFlowStatusEntities.size());
-        // преобразуем к бизнес-объектам
-        for (WorkFlowStatusEntity entity:workFlowStatusEntities) {
-            workFlowStatusActions.add(workFlowStatusConverter.toVo(entity));
-        }
-        return workFlowStatusActions;
+        return workFlowStatusEntityRepositoryByParentId.getByParentId(parentId).stream()
+                .map(workFlowEntity -> workFlowStatusConverter.toVo(workFlowEntity))
+                .collect(Collectors.toList());
     }
 
-
+    /**
+     * Получить весь список статусов
+     *
+     * @return список статусов
+     */
     @Override
     public Collection<WorkFlowStatus> getList() {
-        // получили список сущностей
-        Collection<WorkFlowStatusEntity> workFlowStatusEntities = workFlowStatusRepository.get();
-        List<WorkFlowStatus> workFlowStatusActions = new ArrayList<>(workFlowStatusEntities.size());
-        // преобразуем к бизнес-объектам
-        for (WorkFlowStatusEntity entity:workFlowStatusEntities) {
-            workFlowStatusActions.add(workFlowStatusConverter.toVo(entity));
-        }
-        return workFlowStatusActions;
+        return workFlowStatusRepository.get().stream()
+                .map(workFlowEntity -> workFlowStatusConverter.toVo(workFlowEntity))
+                .collect(Collectors.toList());
     }
 }

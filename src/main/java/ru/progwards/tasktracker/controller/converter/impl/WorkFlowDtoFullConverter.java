@@ -4,9 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.dto.WorkFlowDtoFull;
 import ru.progwards.tasktracker.controller.converter.Converter;
+import ru.progwards.tasktracker.service.facade.GetListByParentService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,7 +27,13 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
      * Сервис получения статусов Workflow
      */
     @Autowired
-    private GetService<Long, WorkFlowStatus> workFlowStatusGetService;
+    private GetService<Long, WorkFlowStatus> statusGetService;
+
+    /**
+     * Сервис получения статусов Workflow по бизнес-процессу
+     */
+    @Autowired
+    private GetListByParentService<Long, WorkFlowStatus> statusGetListByParentService;
 
 
     /**
@@ -34,11 +44,11 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
      */
     @Override
     public WorkFlow toModel(WorkFlowDtoFull dto) {
-        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(dto.getStart_status_id()); // должно стать lazy load в будущем
+        WorkFlowStatus startStatus = statusGetService.get(dto.getStart_status_id()); // должно стать lazy load в будущем
+        List<WorkFlowStatus> statuses = new ArrayList(statusGetListByParentService.getListByParentId(dto.getId()));
         return new WorkFlow(dto.getId(), dto.getName(), dto.isPattern(),
-                dto.getStart_status_id(), workFlowStatus);
+                dto.getStart_status_id(), startStatus, statuses);
     }
-
 
     /**
      * Преобразовать в сущность dto
@@ -50,5 +60,6 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
     public WorkFlowDtoFull toDto(WorkFlow model) {
         return new WorkFlowDtoFull(model.getId(), model.getName(), model.isPattern(), model.getStart_status_id());
     }
+
 
 }

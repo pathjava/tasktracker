@@ -24,14 +24,14 @@ public class WorkFlowActionDtoFull {
     /**
      * Идентификатор статуса, в который переводится задача после применения действия
      */
-    Long status_id;
+    Long nextStatus_id;
 
 
-    public WorkFlowActionDtoFull(Long id, Long parentStatus_id, String name, Long status_id) {
+    public WorkFlowActionDtoFull(Long id, Long parentStatus_id, String name, Long nextStatus_id) {
         this.id = id;
         this.parentStatus_id = parentStatus_id;
         this.name = name;
-        this.status_id = status_id;
+        this.nextStatus_id = nextStatus_id;
     }
 
 
@@ -59,12 +59,12 @@ public class WorkFlowActionDtoFull {
         this.name = name;
     }
 
-    public Long getStatus_id() {
-        return status_id;
+    public Long getNextStatus_id() {
+        return nextStatus_id;
     }
 
-    public void setStatus_id(Long status_id) {
-        this.status_id = status_id;
+    public void setNextStatus_id(Long nextStatus_id) {
+        this.nextStatus_id = nextStatus_id;
     }
 
 }

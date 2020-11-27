@@ -36,16 +36,16 @@ public class WorkFlowStatus {
     /**
      * На данный статус задачу можно переводить из любого состояния
      */
-    Boolean allowFromAnyStatus;
+    Boolean alwaysAllow;
 
 
-    public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean allowFromAnyStatus) {
+    public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean alwaysAllow) {
         this.id = id;
         this.workflow_id = workflow_id;
         this.name = name;
         this.state = state;
         this.actions = actions;
-        this.allowFromAnyStatus = allowFromAnyStatus;
+        this.alwaysAllow = alwaysAllow;
     }
 
 
@@ -89,12 +89,12 @@ public class WorkFlowStatus {
         this.actions = actions;
     }
 
-    public Boolean getAllowFromAnyStatus() {
-        return allowFromAnyStatus;
+    public Boolean getAlwaysAllow() {
+        return alwaysAllow;
     }
 
-    public void setAllowFromAnyStatus(Boolean allowFromAnyStatus) {
-        this.allowFromAnyStatus = allowFromAnyStatus;
+    public void setAlwaysAllow(Boolean alwaysAllow) {
+        this.alwaysAllow = alwaysAllow;
     }
 
 }

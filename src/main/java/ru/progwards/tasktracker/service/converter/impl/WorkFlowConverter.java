@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.WorkFlowEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.facade.GetListByParentService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
+ * Бизнес процесс
  * Преобразование valueObject <-> entity
  *
  * WorkFlow <-> WorkFlowEntity
@@ -23,7 +28,13 @@ public class WorkFlowConverter implements Converter<WorkFlowEntity, WorkFlow> {
      * Сервис получения статусов Workflow
      */
     @Autowired
-    private GetService<Long, WorkFlowStatus> workFlowStatusGetService;
+    private GetService<Long, WorkFlowStatus> statusGetService;
+
+    /**
+     * Сервис получения статусов Workflow по бизнес-процессу
+     */
+    @Autowired
+    private GetListByParentService<Long, WorkFlowStatus> statusGetListByParentService;
 
 
     /**
@@ -34,9 +45,10 @@ public class WorkFlowConverter implements Converter<WorkFlowEntity, WorkFlow> {
      */
     @Override
     public WorkFlow toVo(WorkFlowEntity entity) {
-        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(entity.getStart_status_id()); // должно стать lazy load в будущем
+        WorkFlowStatus workFlowStatus = statusGetService.get(entity.getStart_status_id());
+        List<WorkFlowStatus> statuses = new ArrayList(statusGetListByParentService.getListByParentId(entity.getId()));
         return new WorkFlow(entity.getId(), entity.getName(), entity.isPattern(),
-                entity.getStart_status_id(), workFlowStatus);
+                entity.getStart_status_id(), workFlowStatus, statuses);
     }
 
 
