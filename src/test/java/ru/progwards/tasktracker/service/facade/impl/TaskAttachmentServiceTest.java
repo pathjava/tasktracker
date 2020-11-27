@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.service.api.impl;
+package ru.progwards.tasktracker.service.facade.impl;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
