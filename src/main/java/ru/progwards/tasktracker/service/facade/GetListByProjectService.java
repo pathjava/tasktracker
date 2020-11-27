@@ -3,10 +3,10 @@ package ru.progwards.tasktracker.service.facade;
 import java.util.Collection;
 
 /**
- * Получение списка для данного идентификатора проекта
+ * Получение списка бизнес-объектов для данного идентификатора проекта
  *
- * @param <T> тип идентификатора (Long)
- * @param <M> список бизнес-объектов
+ * @param <T> тип идентификатора
+ * @param <M> тип бизнес-объекта
  */
 public interface GetListByProjectService<T, M> {
 
