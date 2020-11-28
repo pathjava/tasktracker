@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.controller.dto;
 
+import ru.progwards.tasktracker.service.vo.WorkFlowAction;
 import ru.progwards.tasktracker.util.types.WorkFlowState;
+
+import java.util.List;
 
 /**
  * Статус, в который может быть переведена задача по ходу WorkFlowEntity
@@ -29,17 +32,21 @@ public class WorkFlowStatusDtoFull {
     /**
      * На данный статус задачу можно переводить из любого состояния
      */
-    Boolean allowFromAnyStatus;
+    Boolean alwaysAllow;
 
+    /**
+     * Действия, в которые могут быть применены к задаче с данным статусом
+     */
+    List<WorkFlowAction> actions;
 
-    public WorkFlowStatusDtoFull(Long id, Long workflow_id, String name, WorkFlowState state, Boolean allowFromAnyStatus) {
+    public WorkFlowStatusDtoFull(Long id, Long workflow_id, String name, WorkFlowState state, Boolean alwaysAllow, List<WorkFlowAction> actions) {
         this.id = id;
         this.workflow_id = workflow_id;
         this.name = name;
         this.state = state;
-        this.allowFromAnyStatus = allowFromAnyStatus;
+        this.alwaysAllow = alwaysAllow;
+        this.actions = actions;
     }
-
 
     public Long getId() {
         return id;
@@ -73,12 +80,21 @@ public class WorkFlowStatusDtoFull {
         this.state = state;
     }
 
-    public Boolean getAllowFromAnyStatus() {
-        return allowFromAnyStatus;
+    public Boolean getAlwaysAllow() {
+        return alwaysAllow;
     }
 
-    public void setAllowFromAnyStatus(Boolean allowFromAnyStatus) {
-        this.allowFromAnyStatus = allowFromAnyStatus;
+    public void setAlwaysAllow(Boolean alwaysAllow) {
+        this.alwaysAllow = alwaysAllow;
+    }
+
+
+    public List<WorkFlowAction> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<WorkFlowAction> actions) {
+        this.actions = actions;
     }
 
 }

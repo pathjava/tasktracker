@@ -1,7 +1,10 @@
 package ru.progwards.tasktracker.service.vo;
 
+import java.util.List;
+
 /**
- * Дерево движения задачи по статусам
+ * Бизнес-процесс
+ * Формирует дерево движения задачи по статусам
  *
  * @author Gregory Lobkov
  */
@@ -31,15 +34,29 @@ public class WorkFlow {
     /**
      * С какого статуса начинать движение задачи
      */
-    WorkFlowStatus start;
+    WorkFlowStatus startStatus;
+
+    /**
+     * Статусы, возможные по бизнес-процессу
+     */
+    List<WorkFlowStatus> statuses;
 
 
-    public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus start) {
+    public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses) {
         this.id = id;
         this.name = name;
         this.pattern = pattern;
         this.start_status_id = start_status_id;
-        this.start = start;
+        this.startStatus = startStatus;
+        this.statuses = statuses;
+    }
+
+    public List<WorkFlowStatus> getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(List<WorkFlowStatus> statuses) {
+        this.statuses = statuses;
     }
 
     public Long getId() {
@@ -74,12 +91,12 @@ public class WorkFlow {
         this.start_status_id = start_status_id;
     }
 
-    public WorkFlowStatus getStart() {
-        return start;
+    public WorkFlowStatus getStartStatus() {
+        return startStatus;
     }
 
-    public void setStart(WorkFlowStatus start) {
-        this.start = start;
+    public void setStartStatus(WorkFlowStatus startStatus) {
+        this.startStatus = startStatus;
     }
 
 }

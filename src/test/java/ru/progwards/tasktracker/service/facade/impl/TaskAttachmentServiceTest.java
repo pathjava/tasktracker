@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.service.api.impl;
+package ru.progwards.tasktracker.service.facade.impl;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class TaskAttachmentServiceTest {
                 null, null, null, null);
         InputStream targetStream = new ByteArrayInputStream(dataBytes);
         content = new AttachmentContent(-12341L, targetStream);
-        attachment = new TaskAttachment(-23124L, task.getId(), task, null, content, "test1.txt", "txt", 3L, ZonedDateTime.now());
+        attachment = new TaskAttachment(-23124L, task.getId(), "test1.txt", "txt", 3L, ZonedDateTime.now(), null, content);
     }
 
     //@BeforeAll
@@ -154,8 +154,8 @@ public class TaskAttachmentServiceTest {
         Assertions.assertTrue(list.size() > 0, "Вложений для задачи " + task.getId() + " не найдено");
         TaskAttachment gotAttachment = (TaskAttachment) list.toArray()[0];
         Assertions.assertEquals(gotAttachment.getId(), attachment.getId(), "Идентификатор связки различается");
-        Assertions.assertNotNull(gotAttachment.getAttachmentContentId(), "Идентификатор вложения не задан");
-        Assertions.assertEquals(gotAttachment.getAttachmentContentId(), content.getId(), "Идентификатор вложения в связке сохранен не верно");
+        Assertions.assertNotNull(gotAttachment.getContentId(), "Идентификатор вложения не задан");
+        Assertions.assertEquals(gotAttachment.getContentId(), content.getId(), "Идентификатор вложения в связке сохранен не верно");
         AttachmentContent gotContent = gotAttachment.getContent();
         Assertions.assertNotNull(gotContent, "Вложение не определено");
         Assertions.assertEquals(gotContent.getId(), content.getId(), "Идентификатор вложения различается");

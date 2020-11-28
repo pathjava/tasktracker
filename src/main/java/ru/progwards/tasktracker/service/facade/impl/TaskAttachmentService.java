@@ -44,14 +44,14 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public void create(TaskAttachment taskAttachment) {
-        Long contentId = taskAttachment.getAttachmentContentId();
+        Long contentId = taskAttachment.getContentId();
         AttachmentContent content = taskAttachment.getContent();
         if(contentId==null && content != null) {
             // Если содержимое новое, добавим его в таблицу содержимого
             if (content.getId() == null || content.getId() <= 0) {
                 attachmentContentCreateService.create(content);
             }
-            taskAttachment.setAttachmentContentId(content.getId());
+            taskAttachment.setContentId(content.getId());
         }
         TaskAttachmentEntity entity = taskAttachmentConverter.toEntity(taskAttachment);
         taskAttachmentRepository.create(entity);

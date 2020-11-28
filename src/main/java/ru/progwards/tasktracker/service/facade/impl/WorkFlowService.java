@@ -18,7 +18,7 @@ import java.util.List;
  * @author Gregory Lobkov
  */
 @Service
-public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<WorkFlow>, GetService<Long, WorkFlow>, RefreshService<WorkFlow>, GetListService<WorkFlow> {
+public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<WorkFlow>, GetService<Long, WorkFlow>, RefreshService<WorkFlow>, GetListService<WorkFlow>, CopyService<WorkFlow> {
 
     @Autowired
     private Repository<Long, WorkFlowEntity> workFlowRepository;
@@ -89,4 +89,16 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
         return WorkFlows;
     }
 
+    /**
+     * Создать копию Workflow
+     * Если задан шаблон, то свойства в скопированном объекте заменятся на не null свойства объекта
+     *
+     * @param modelFrom бизнес объект, который необходимо скопировать
+     * @param template  шаблон для замены свойств во вновь созданном объекте
+     * @return копия объекта {@code model}
+     */
+    @Override
+    public WorkFlow copy(WorkFlow modelFrom, WorkFlow template) {
+        return null;
+    }
 }

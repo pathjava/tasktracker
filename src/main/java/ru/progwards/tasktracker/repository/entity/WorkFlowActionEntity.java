@@ -24,16 +24,16 @@ public class WorkFlowActionEntity {
     /**
      * Статус, в который переводится задача после применения действия
      */
-    Long status_id;
+    Long next_status_id;
 
     public WorkFlowActionEntity() {
     }
 
-    public WorkFlowActionEntity(Long id, Long parentStatus_id, String name, Long status_id) {
+    public WorkFlowActionEntity(Long id, Long parentStatus_id, String name, Long next_status_id) {
         this.id = id;
         this.parentStatus_id = parentStatus_id;
         this.name = name;
-        this.status_id = status_id;
+        this.next_status_id = next_status_id;
     }
 
     public Long getId() {
@@ -60,12 +60,12 @@ public class WorkFlowActionEntity {
         this.name = name;
     }
 
-    public Long getStatus_id() {
-        return status_id;
+    public Long getNext_status_id() {
+        return next_status_id;
     }
 
-    public void setStatus_id(Long status_id) {
-        this.status_id = status_id;
+    public void setNext_status_id(Long next_status_id) {
+        this.next_status_id = next_status_id;
     }
 
 }

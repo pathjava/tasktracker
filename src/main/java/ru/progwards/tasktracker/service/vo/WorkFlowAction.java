@@ -29,15 +29,15 @@ public class WorkFlowAction {
     /**
      * Статус, в который переводится задача после применения действия
      */
-    WorkFlowStatus status;
+    WorkFlowStatus nextStatus;
 
 
-    public WorkFlowAction(Long id, Long parentStatus_id, String name, Long status_id, WorkFlowStatus status) {
+    public WorkFlowAction(Long id, Long parentStatus_id, String name, Long status_id, WorkFlowStatus nextStatus) {
         this.id = id;
         this.parentStatus_id = parentStatus_id;
         this.name = name;
         this.status_id = status_id;
-        this.status = status;
+        this.nextStatus = nextStatus;
     }
 
 
@@ -73,12 +73,12 @@ public class WorkFlowAction {
         this.status_id = status_id;
     }
 
-    public WorkFlowStatus getStatus() {
-        return status;
+    public WorkFlowStatus getNextStatus() {
+        return nextStatus;
     }
 
-    public void setStatus(WorkFlowStatus status) {
-        this.status = status;
+    public void setNextStatus(WorkFlowStatus nextStatus) {
+        this.nextStatus = nextStatus;
     }
 
 }

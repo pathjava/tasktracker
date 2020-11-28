@@ -8,6 +8,7 @@ import ru.progwards.tasktracker.service.facade.GetListByParentService;
 import ru.progwards.tasktracker.service.vo.WorkFlowAction;
 import ru.progwards.tasktracker.service.vo.WorkFlowStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +39,7 @@ public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus,
     public WorkFlowStatus toModel(WorkFlowStatusDtoFull dto) {
         List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(dto.getId()); // должно стать lazy load в будущем
         return new WorkFlowStatus(dto.getId(), dto.getWorkflow_id(), dto.getName(),
-                dto.getState(), listByParentId, dto.getAllowFromAnyStatus());
+                dto.getState(), listByParentId, dto.getAlwaysAllow());
     }
 
 
@@ -50,7 +51,7 @@ public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus,
      */
     @Override
     public WorkFlowStatusDtoFull toDto(WorkFlowStatus model) {
-        return new WorkFlowStatusDtoFull(model.getId(), model.getWorkflow_id(), model.getName(), model.getState(), model.getAllowFromAnyStatus());
+        return new WorkFlowStatusDtoFull(model.getId(), model.getWorkflow_id(), model.getName(), model.getState(), model.getAlwaysAllow(), new ArrayList<WorkFlowAction>());
     }
 
 }

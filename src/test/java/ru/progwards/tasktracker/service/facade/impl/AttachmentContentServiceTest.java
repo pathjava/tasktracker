@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.service.api.impl;
+package ru.progwards.tasktracker.service.facade.impl;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -77,7 +77,8 @@ public class AttachmentContentServiceTest {
         String expectedData = null;
         try {
             expectedData = Arrays.toString(content.getData().readAllBytes());
-            String gotData = Arrays.toString(content.getData().readAllBytes());
+            expectedData = Arrays.toString(dataBytes);
+            String gotData = Arrays.toString(got.getData().readAllBytes());
             Assertions.assertEquals(expectedData, gotData, "Данные файлов не совпадают");
         } catch (IOException e) {
             e.printStackTrace();

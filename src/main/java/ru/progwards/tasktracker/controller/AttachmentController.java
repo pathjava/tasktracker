@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/rest/taskattachment")
-public class TaskAttachmentsController {
+public class AttachmentController {
 
     @Autowired
     GetService<Long, TaskAttachment> getService;
