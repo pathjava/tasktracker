@@ -13,21 +13,10 @@ public class ProjectDtoPreview {
      * имя проекта
      */
     private String name;
-//    /**
-//     * уникальная аббревиатура, созданная на основании имени проекта
-//     */
-//    private String prefix;
-//    /**
-//     * владелец (создатель) проекта
-//     */
-//    //TODO userDtoPreview
-//    private UserDtoFull owner;
 
     public ProjectDtoPreview(Long id, String name) {
         this.id = id;
         this.name = name;
-//        this.prefix = prefix;
-//        this.owner = owner;
     }
 
     public Long getId() {

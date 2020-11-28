@@ -25,28 +25,44 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/rest/project/")
 public class ProjectController {
-
+    /**
+     * конвертер Project <-> ProjectDtoFull
+     */
     @Autowired
     private Converter<Project, ProjectDtoFull> converterFull;
-
+    /**
+     * конвертер Project <-> ProjectDtoPreview
+     */
     @Autowired
     private Converter<Project, ProjectDtoPreview> converterPreview;
-
+    /**
+     * сервисный класс для получение списка проекта
+     */
     @Autowired
     private GetService<Long, Project> projectGetService;
-
+    /**
+     * сервисный класс для получение проекта
+     */
     @Autowired
     private GetListService<Project> projectGetListService;
-
+    /**
+     * сервисный класс для создания проекта
+     */
     @Autowired
     private CreateService<Project> projectCreateService;
-
+    /**
+     * сервисный класс для обновления проекта
+     */
     @Autowired
     private RefreshService<Project> projectRefreshService;
-
+    /**
+     * сервисный класс для удаления проекта
+     */
     @Autowired
     private RemoveService<Project> projectRemoveService;
-
+    /**
+     * сервисный класс для обновления одного поля проекта
+     */
     @Autowired
     private RepositoryUpdateField<ProjectEntity> projectEntityRepositoryUpdateField;
 

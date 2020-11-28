@@ -2,14 +2,16 @@ package ru.progwards.tasktracker.service.facade.impl.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.controller.exception.UpdateNotPossibleException;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.TaskType;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 /**
@@ -17,7 +19,7 @@ import ru.progwards.tasktracker.service.vo.UpdateOneValue;
  * @author Pavel Khovaylo
  */
 @Service
-public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
+public class ProjectUpdateOneFieldService implements UpdateOneFieldService<Project> {
 
     /**
      * класс, по обновлению поля у сущности ProjectEntity
@@ -34,6 +36,11 @@ public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
      */
     @Autowired
     private Converter<ProjectEntity, Project> converter;
+    /**
+     * для получения Task, относящихся к проекту
+     */
+    @Autowired
+    private GetListByProjectService<Long, Task> taskGetListByProjectService;
 
     /**
      * метод обновляет поле у бизнес-модели Project
@@ -46,10 +53,11 @@ public class ProjectUpdateOneFieldService implements UpdateOneFieldService {
         /* если обновляемое поле называется "lastTaskCode" или если обновляемое поле называется "prefix"
         * и у проекта имеются задачи, то обновление поля невозможно
         */
-//        if (oneValue.getFieldName().equals("lastTaskCode") ||
-//                (oneValue.getFieldName().equals("prefix") && project.getTasks().size() > 0))
-//            throw new UpdateNotPossibleException("Update field \"" + oneValue.getFieldName() + "\" not possible");
-//        else
-//            projectEntityRepositoryUpdateField.updateField(oneValue);
+        if (oneValue.getFieldName().equals("lastTaskCode") ||
+                (oneValue.getFieldName().equals("prefix") &&
+                        taskGetListByProjectService.getListByProjectId(project.getId()).size() > 0))
+            throw new OperationIsNotPossibleException("Update field \"" + oneValue.getFieldName() + "\" not possible");
+        else
+            projectEntityRepositoryUpdateField.updateField(oneValue);
     }
 }

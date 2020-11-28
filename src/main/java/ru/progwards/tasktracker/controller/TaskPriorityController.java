@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoFull;
+import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoPreview;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
@@ -21,41 +22,58 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/rest/task-priority/")
 public class TaskPriorityController {
-
+    /**
+     * конвертер TaskPriority <-> TaskPriorityDtoFull
+     */
     @Autowired
-    private Converter<TaskPriority, TaskPriorityDtoFull> converter;
-
+    private Converter<TaskPriority, TaskPriorityDtoFull> converterFull;
+    /**
+     * конвертер TaskPriority <-> TaskPriorityDtoPreview
+     */
+    @Autowired
+    private Converter<TaskPriority, TaskPriorityDtoPreview> converterPreview;
+    /**
+     * сервисный класс для получение списка TaskPriority
+     */
     @Autowired
     private GetService<Long, TaskPriority> taskPriorityGetService;
-
+    /**
+     * сервисный класс для получение TaskPriority
+     */
     @Autowired
     private GetListService<TaskPriority> taskPriorityGetListService;
-
+    /**
+     * сервисный класс для создания TaskPriority
+     */
     @Autowired
     private CreateService<TaskPriority> taskPriorityCreateService;
-
+    /**
+     * сервисный класс для обновления TaskPriority
+     */
     @Autowired
     private RefreshService<TaskPriority> taskPriorityRefreshService;
-
+    /**
+     * сервисный класс для удаления TaskPriority
+     */
     @Autowired
     private RemoveService<TaskPriority> taskPriorityRemoveService;
 
     /**
-     * по запросу получаем список TaskPriorityDto
+     * по запросу получаем список TaskPriorityDtoPreview
      * @return список TaskPriorityDto
      */
     @GetMapping("list")
-    public ResponseEntity<Collection<TaskPriorityDtoFull>> get() {
-        Collection<TaskPriorityDtoFull> taskPriorityDtoFulls =
+    public ResponseEntity<Collection<TaskPriorityDtoPreview>> get() {
+        Collection<TaskPriorityDtoPreview> taskPriorityDtoPreviews =
                 taskPriorityGetListService.getList().stream().
-                        map(e -> converter.toDto(e)).collect(Collectors.toList());
+                        map(e -> converterPreview.toDto(e)).collect(Collectors.toList());
 
-        return new ResponseEntity<>(taskPriorityDtoFulls, HttpStatus.OK);
+        return new ResponseEntity<>(taskPriorityDtoPreviews, HttpStatus.OK);
     }
 
     /**
-     * по запросу получаем нужный TaskPriorityDto; если такового нет, то бросаем исключение NotFoundException
-     * @param id идентификатор TaskPriorityDto
+     * по запросу получаем нужный TaskPriorityDtoFull; если такового нет, то бросаем исключение NotFoundException
+     * @param id идентификатор TaskPriorityDtoFull
      * @return TaskPriorityDto
      */
     @GetMapping("{id}")
@@ -64,11 +82,11 @@ public class TaskPriorityController {
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);
 
-        return new ResponseEntity<>(converter.toDto(taskPriority), HttpStatus.OK);
+        return new ResponseEntity<>(converterFull.toDto(taskPriority), HttpStatus.OK);
     }
 
     /**
-     * по запросу создаём TaskPriorityDto
+     * по запросу создаём TaskPriorityDtoFull
      * @param taskPriorityDtoFull передаем наполненный TaskPriorityDto
      * @return созданный TaskPriorityDto
      */
@@ -77,15 +95,15 @@ public class TaskPriorityController {
         if (taskPriorityDtoFull == null)
             throw new BadRequestException("Project is null");
 
-        taskPriorityCreateService.create(converter.toModel(taskPriorityDtoFull));
+        taskPriorityCreateService.create(converterFull.toModel(taskPriorityDtoFull));
 
         return new ResponseEntity<>(taskPriorityDtoFull, HttpStatus.OK);
     }
 
     /**
-     * по запросу обновляем существующий TaskPriorityDto
-     * @param id идентификатор изменяемого TaskPriorityDto
-     * @param taskPriorityDtoFull измененный TaskPriorityDto
+     * по запросу обновляем существующий TaskPriorityDtoFull
+     * @param id идентификатор изменяемого TaskPriorityDtoFull
+     * @param taskPriorityDtoFull измененный TaskPriorityDtoFull
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
@@ -97,7 +115,7 @@ public class TaskPriorityController {
             throw new BadRequestException("Project is null");
 
         taskPriorityDtoFull.setId(id);
-        taskPriorityRefreshService.refresh(converter.toModel(taskPriorityDtoFull));
+        taskPriorityRefreshService.refresh(converterFull.toModel(taskPriorityDtoFull));
     }
 
     /**

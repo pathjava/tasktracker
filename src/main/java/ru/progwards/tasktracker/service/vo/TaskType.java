@@ -7,12 +7,21 @@ package ru.progwards.tasktracker.service.vo;
  */
 public class TaskType {
 
-    private final Long id;
+    private Long id;
+    private Long project_id;
     private WorkFlow workFlow;
     private String name;
 
-    public TaskType(Long id, WorkFlow workFlow, String name) {
+    public TaskType(Long id, Long project_id, WorkFlow workFlow, String name) {
         this.id = id;
+        this.project_id = project_id;
+        this.workFlow = workFlow;
+        this.name = name;
+    }
+
+    //TODO добавил для своей реализации
+    public TaskType(Long project_id, WorkFlow workFlow, String name) {
+        this.project_id = project_id;
         this.workFlow = workFlow;
         this.name = name;
     }
@@ -35,5 +44,18 @@ public class TaskType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    //TODO добавил для своей реализации
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(Long project_id) {
+        this.project_id = project_id;
     }
 }

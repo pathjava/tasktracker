@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.service.vo.TaskPriority;
 
 /**
- * Конвертер из dto-объекта в бизнес-модель и обратно
+ * Конвертер TaskPriority <-> TaskPriorityDtoFull
  * @author Pavel Khovaylo
  */
 @Component

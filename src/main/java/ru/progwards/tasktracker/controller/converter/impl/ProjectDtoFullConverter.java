@@ -1,18 +1,30 @@
 package ru.progwards.tasktracker.controller.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.ProjectDtoFull;
+import ru.progwards.tasktracker.controller.dto.UserDtoPreview;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.User;
 
 /**
- * Конвертер dtoFull <-> model
+ * Конвертер Project <-> ProjectDtoFull
  * @author Pavel Khovaylo
  */
 @Component
 public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFull> {
-
-    //TODO как будем получать поля бизнес-модели, если они отсутствуют в Dto  ???
+    /**
+     * конвертер User <-> UserDtoPreview
+     */
+    @Autowired
+    private Converter<User, UserDtoPreview> userDtoPreviewConverter;
+    /**
+     * сервис для получения бизнес модели
+     */
+    @Autowired
+    private GetService<Long, Project> projectGetService;
 
     /**
      * метод конвертирует объект ProjectDtoFull в model Project
@@ -21,9 +33,21 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
      */
     @Override
     public Project toModel(ProjectDtoFull dto) {
-//        return new Project(dto.getId(), dto.getName(), dto.getDescription(),
-//                dto.getPrefix(), dto.getOwner(), dto.getCreated(), dto.getLastTaskCode());
-        return null;
+        if (dto == null)
+            return null;
+
+        Project model = projectGetService.get(dto.getId());
+
+        //проверка на наличие этого проекта в базе данных
+        if (model == null) {
+            return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
+                    userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(),
+                    null, 0L);
+        }
+
+        return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
+                userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(),
+                model.getTaskTypes(), model.getLastTaskCode());
     }
 
     /**
@@ -33,9 +57,10 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
      */
     @Override
     public ProjectDtoFull toDto(Project model) {
-//        return new ProjectDto(model.getId(), model.getName(), model.getDescription(), model.getPrefix(),
-//                model.getOwner(), model.getCreated(), model.getTasks(), model.getLastTaskCode());
+        if (model == null)
+            return null;
 
-        return null;
+        return new ProjectDtoFull(model.getId(), model.getName(), model.getDescription(), model.getPrefix(),
+                userDtoPreviewConverter.toDto(model.getOwner()), model.getCreated());
     }
 }
