@@ -14,8 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserRoleService implements CreateService<UserRole>, GetListService<UserRole>, GetService<Long, UserRole>,
-        RefreshService<UserRole>, RemoveService<UserRole>, AddDetailingService<UserRole, AccessRule>,
-        DeleteDetailingService<UserRole, Long>, UpdateDetailingService<UserRole, AccessRule> {
+        RefreshService<UserRole>, RemoveService<UserRole> {
 
     @Autowired
     private Repository<Long, UserRoleEntity> userRoleRepository;
@@ -47,33 +46,5 @@ public class UserRoleService implements CreateService<UserRole>, GetListService<
     @Override
     public void remove(UserRole model) {
         userRoleRepository.delete(model.getId());
-    }
-
-    @Override
-    public void addDetailing(UserRole valueObject, Collection<? extends AccessRule> detailing) {
-        Map<Long, AccessRule> ruleMap = valueObject.getAccessRules();
-        for (AccessRule newRule : detailing) {
-            ruleMap.putIfAbsent(newRule.getId(), newRule);
-        }
-        this.refresh(valueObject);
-    }
-
-    @Override
-    public void deleteDetailing(UserRole valueObject, Collection<? extends Long> detailing) {
-        Map<Long, AccessRule> ruleMap = valueObject.getAccessRules();
-        for (Long ruleId : detailing) {
-            ruleMap.remove(ruleId);
-        }
-        this.refresh(valueObject);
-    }
-
-    @Override
-    public void updateDetailing(UserRole valueObject, Collection<? extends AccessRule> detailing) {
-        Map<Long, AccessRule> ruleMap = valueObject.getAccessRules();
-        for (AccessRule rule : detailing) {
-            if (ruleMap.containsKey(rule.getId()))
-                ruleMap.put(rule.getId(), rule);
-        }
-        this.refresh(valueObject);
     }
 }

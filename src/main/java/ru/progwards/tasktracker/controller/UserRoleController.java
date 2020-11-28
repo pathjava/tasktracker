@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.vo.UserRole;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,12 +29,6 @@ public class UserRoleController {
     private RefreshService<UserRole> userRoleRefreshService;
     @Autowired
     private RemoveService<UserRole> userRoleRemoveService;
-    @Autowired
-    private AddDetailingService<UserRole, AccessRule> addAccessRuleService;
-    @Autowired
-    private DeleteDetailingService<UserRole, Long> deleteAccessRuleService;
-    @Autowired
-    private UpdateDetailingService<UserRole, AccessRule> updateAccessRuleService;
 
     @Autowired
     private Converter<UserRole, UserRoleDtoFull> userRoleDtoConverter;
@@ -111,7 +106,11 @@ public class UserRoleController {
 
         List<AccessRule> newRulesVo = newRules.stream()
                 .map(r -> accessRuleDtoConverter.toModel(r)).collect(Collectors.toList());
-        addAccessRuleService.addDetailing(vo, newRulesVo);
+        Map<Long, AccessRule> ruleMap = vo.getAccessRules();
+        for (AccessRule newRule : newRulesVo) {
+            ruleMap.putIfAbsent(newRule.getId(), newRule);
+        }
+        userRoleRefreshService.refresh(vo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -122,8 +121,11 @@ public class UserRoleController {
         UserRole vo = userRoleGetService.get(id);
         if (vo == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        deleteAccessRuleService.deleteDetailing(vo, ruleIds);
+        Map<Long, AccessRule> ruleMap = vo.getAccessRules();
+        for (Long ruleId : ruleIds) {
+            ruleMap.remove(ruleId);
+        }
+        userRoleRefreshService.refresh(vo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -134,9 +136,13 @@ public class UserRoleController {
         UserRole vo = userRoleGetService.get(id);
         if (vo == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        updateAccessRuleService.updateDetailing(vo, rulesDto.stream()
-                .map(r -> accessRuleDtoConverter.toModel(r)).collect(Collectors.toList()));
+        List<AccessRule> rulesVO = rulesDto.stream().map(r -> accessRuleDtoConverter.toModel(r)).collect(Collectors.toList());
+        Map<Long, AccessRule> ruleMap = vo.getAccessRules();
+        for (AccessRule rule : rulesVO) {
+            if (ruleMap.containsKey(rule.getId()))
+                ruleMap.put(rule.getId(), rule);
+        }
+        userRoleRefreshService.refresh(vo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
