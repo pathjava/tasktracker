@@ -21,21 +21,6 @@ public class TaskAttachment {
     private Long taskId;
 
     /**
-     * Задача
-     */
-    private Task task;
-
-    /**
-     * Ссылка на вложение
-     */
-    private Long attachmentContentId;
-
-    /**
-     * Вложение
-     */
-    private AttachmentContent content;
-
-    /**
      * Полное имя файла-вложения
      */
     private String name;
@@ -53,19 +38,28 @@ public class TaskAttachment {
     /**
      * Дата создания
      */
-    private ZonedDateTime dateCreated;
+    private ZonedDateTime created;
+
+    /**
+     * Ссылка на вложение
+     */
+    private Long contentId;
+
+    /**
+     * Вложение
+     */
+    private AttachmentContent content;
 
 
-    public TaskAttachment(Long id, Long taskId, Task task, Long attachmentContentId, AttachmentContent content, String name, String extension, Long size, ZonedDateTime dateCreated) {
+    public TaskAttachment(Long id, Long taskId, String name, String extension, Long size, ZonedDateTime created, Long contentId, AttachmentContent content) {
         this.id = id;
         this.taskId = taskId;
-        this.task = task;
-        this.attachmentContentId = attachmentContentId;
-        this.content = content;
         this.name = name;
         this.extension = extension;
         this.size = size;
-        this.dateCreated = dateCreated;
+        this.created = created;
+        this.contentId = contentId;
+        this.content = content;
     }
 
     public Long getId() {
@@ -84,20 +78,12 @@ public class TaskAttachment {
         this.taskId = taskId;
     }
 
-    public Task getTask() {
-        return task;
+    public Long getContentId() {
+        return contentId;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
-    }
-
-    public Long getAttachmentContentId() {
-        return attachmentContentId;
-    }
-
-    public void setAttachmentContentId(Long attachmentContentId) {
-        this.attachmentContentId = attachmentContentId;
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
     }
 
     public AttachmentContent getContent() {
@@ -132,12 +118,12 @@ public class TaskAttachment {
         this.size = size;
     }
 
-    public ZonedDateTime getDateCreated() {
-        return dateCreated;
+    public ZonedDateTime getCreated() {
+        return created;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setCreated(ZonedDateTime created) {
+        this.created = created;
     }
 
 }

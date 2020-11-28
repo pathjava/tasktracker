@@ -24,7 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rest/task/{task_id}/attachments")
-public class AttachmentsController {
+public class TaskAttachmentController {
 
     @Autowired
     CreateService<TaskAttachment> createService;

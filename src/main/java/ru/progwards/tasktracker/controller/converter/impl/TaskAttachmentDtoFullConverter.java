@@ -6,7 +6,6 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
-import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
 
@@ -27,12 +26,11 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
     @Autowired
     private GetService<Long, AttachmentContent> attachmentContentGetService;
 
-
     /**
-     * Сервис получения задачи
+     * Сервис получения связи задача - вложение
      */
     @Autowired
-    private GetService<Long, Task> taskGetService;
+    private GetService<Long, TaskAttachment> taskAttachmentGetService;
 
 
     /**
@@ -43,19 +41,11 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachment toModel(TaskAttachmentDtoFull dto) {
-        String fileExtension = dto.getExtension();
-        if(fileExtension==null || fileExtension.isEmpty()) {
-            int lastDotPos = dto.getName().lastIndexOf('.');
-            if (lastDotPos > 0) {
-                fileExtension = dto.getName().substring(lastDotPos + 1);
-            }
-        }
-        AttachmentContent attachmentContent = attachmentContentGetService.get(dto.getAttachmentContentId()); // должно стать lazy load в будущем
-        Long taskId = dto.getTaskId();
-        Task task = null;
-        //if (taskId != null) taskGetService.get(taskId); // раскомментировать только после внедрения lazy load
-        return new TaskAttachment(dto.getId(), dto.getTaskId(), task, dto.getAttachmentContentId(),
-                attachmentContent, dto.getName(), fileExtension, dto.getSize(), dto.getDateCreated());
+        TaskAttachment saved = taskAttachmentGetService.get(dto.getId());
+        AttachmentContent attachmentContent = attachmentContentGetService.get(saved.getContentId());
+
+        return new TaskAttachment(dto.getId(), dto.getTaskId(), dto.getName(), dto.getExtension(),
+                dto.getSize(), dto.getCreated(), saved.getContentId(), attachmentContent);
     }
 
 
@@ -67,8 +57,8 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachmentDtoFull toDto(TaskAttachment model) {
-        return new TaskAttachmentDtoFull(model.getId(), model.getTaskId(), model.getAttachmentContentId(),
-                model.getName(), model.getExtension(), model.getSize(), model.getDateCreated());
+        return new TaskAttachmentDtoFull(model.getId(), model.getTaskId(), model.getName(), model.getExtension(),
+                model.getSize(), model.getCreated());
     }
 
 }

@@ -23,11 +23,6 @@ public class TaskAttachmentDtoFull {
     private Long taskId;
 
     /**
-     * Ссылка на вложение
-     */
-    private Long attachmentContentId;
-
-    /**
      * Полное имя файла-вложения
      */
     private String name;
@@ -46,19 +41,17 @@ public class TaskAttachmentDtoFull {
      * Дата создания
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private ZonedDateTime dateCreated;
+    private ZonedDateTime created;
 
 
-    public TaskAttachmentDtoFull(Long id, Long taskId, Long attachmentContentId, String name, String extension, Long size, ZonedDateTime dateCreated) {
+    public TaskAttachmentDtoFull(Long id, Long taskId, String name, String extension, Long size, ZonedDateTime created) {
         this.id = id;
         this.taskId = taskId;
-        this.attachmentContentId = attachmentContentId;
         this.name = name;
         this.extension = extension;
         this.size = size;
-        this.dateCreated = dateCreated;
+        this.created = created;
     }
-
 
     public Long getId() {
         return id;
@@ -66,22 +59,6 @@ public class TaskAttachmentDtoFull {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
-    }
-
-    public Long getAttachmentContentId() {
-        return attachmentContentId;
-    }
-
-    public void setAttachmentContentId(Long attachmentContentId) {
-        this.attachmentContentId = attachmentContentId;
     }
 
     public String getName() {
@@ -108,12 +85,19 @@ public class TaskAttachmentDtoFull {
         this.size = size;
     }
 
-    public ZonedDateTime getDateCreated() {
-        return dateCreated;
+    public ZonedDateTime getCreated() {
+        return created;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setCreated(ZonedDateTime created) {
+        this.created = created;
     }
 
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
 }

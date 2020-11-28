@@ -18,11 +18,6 @@ public class TaskAttachmentEntity {
     private Long taskId;
 
     /**
-     * Ссылка на содержимое вложения
-     */
-    private Long attachmentContentId;
-
-    /**
      * Полное имя файла-вложения
      */
     private String name;
@@ -40,7 +35,12 @@ public class TaskAttachmentEntity {
     /**
      * Дата создания, секунд от 1970-01-01T00:00:00Z
      */
-    private Long dateCreated;
+    private Long created;
+
+    /**
+     * Ссылка на содержимое вложения
+     */
+    private Long attachmentContentId;
 
 
     /**
@@ -49,14 +49,14 @@ public class TaskAttachmentEntity {
     public TaskAttachmentEntity() {
     }
 
-    public TaskAttachmentEntity(Long id, Long taskId, Long attachmentContentId, String name, String extension, Long size, Long dateCreated) {
+    public TaskAttachmentEntity(Long id, Long taskId, String name, String extension, Long size, Long created, Long attachmentContentId) {
         this.id = id;
         this.taskId = taskId;
-        this.attachmentContentId = attachmentContentId;
         this.name = name;
         this.extension = extension;
         this.size = size;
-        this.dateCreated = dateCreated;
+        this.created = created;
+        this.attachmentContentId = attachmentContentId;
     }
 
 
@@ -108,12 +108,12 @@ public class TaskAttachmentEntity {
         this.size = size;
     }
 
-    public Long getDateCreated() {
-        return dateCreated;
+    public Long getCreated() {
+        return created;
     }
 
-    public void setDateCreated(Long dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setCreated(Long created) {
+        this.created = created;
     }
 
 }
