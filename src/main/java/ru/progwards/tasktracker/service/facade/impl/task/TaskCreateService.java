@@ -48,7 +48,7 @@ public class TaskCreateService implements CreateService<Task> {
         if (model.getType() != null) {
             WorkFlow workFlow = model.getType().getWorkFlow();
             if (workFlow != null)
-                model.setStatus(workFlow.getStart());
+                model.setStatus(workFlow.getStartStatus());
         }
 
         repository.create(converter.toEntity(model));

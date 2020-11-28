@@ -7,6 +7,7 @@ import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
 
 import java.util.Collection;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +33,8 @@ public class TaskPriorityEntityRepository implements Repository<Long, TaskPriori
     @Override
     public void create(TaskPriorityEntity entity) {
         if (entity != null) {
+            if (entity.getId() == null)
+                entity.setId(new Random().nextLong());
             TaskPriorityEntity newEntity = taskPriorityEntityJsonHandler.getMap().put(entity.getId(), entity);
             if (newEntity == null)
                 taskPriorityEntityJsonHandler.write();

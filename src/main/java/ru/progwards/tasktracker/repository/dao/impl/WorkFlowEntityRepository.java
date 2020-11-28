@@ -7,10 +7,7 @@ import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.WorkFlowEntity;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -64,6 +61,8 @@ public class WorkFlowEntityRepository implements Repository<Long, WorkFlowEntity
      */
     @Override
     public void create(WorkFlowEntity entity) {
+        if (entity.getId() == null)
+            entity.setId(new Random().nextLong());
         String newLine = json.toJson(entity);
 
         lockWrite.lock();

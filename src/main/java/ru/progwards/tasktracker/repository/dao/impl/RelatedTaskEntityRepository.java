@@ -8,6 +8,7 @@ import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 
 import java.util.Collection;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**

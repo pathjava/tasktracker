@@ -55,12 +55,10 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
         if (valueObject == null)
             return null;
         else {
-            //TODO если конвертация будет на методе create, то taskTypeEntity будет всегда null (убрал у себя в репо)
-//            TaskTypeEntity taskTypeEntity = taskTypeEntityRepository.get(valueObject.getId());
-
+            TaskTypeEntity taskTypeEntity = taskTypeEntityRepository.get(valueObject.getId());
             return new TaskTypeEntity(
                     valueObject.getId(),
-                    valueObject.getProject_id(),
+                    taskTypeEntity.getProject_id(),
                     valueObject.getWorkFlow().getId(),
                     valueObject.getName()
             );

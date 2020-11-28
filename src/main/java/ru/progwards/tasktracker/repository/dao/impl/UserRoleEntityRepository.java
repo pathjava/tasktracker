@@ -8,10 +8,7 @@ import ru.progwards.tasktracker.repository.entity.AccessRuleEntity;
 import ru.progwards.tasktracker.repository.entity.UserRoleEntity;
 import ru.progwards.tasktracker.util.types.SystemRole;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -44,6 +41,8 @@ public class UserRoleEntityRepository implements Repository<Long, UserRoleEntity
 
     @Override
     public void create(UserRoleEntity role) {
+        if (role.getId() == null)
+            role.setId(new Random().nextLong());
         roles.putIfAbsent(role.getId(), role);
     }
 

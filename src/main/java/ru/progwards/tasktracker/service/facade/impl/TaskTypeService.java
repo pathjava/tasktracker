@@ -32,10 +32,6 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Autowired
     private GetListService<Task> getListService;
 
-    //TODO ДОБАВИЛ ДЛЯ СВОЕЙ РЕАЛИЗАЦИИ
-    @Autowired
-    private GenerationID<TaskType> taskTypeGenerationID;
-
     /**
      * Метод создания типа задачи
      *
@@ -43,9 +39,6 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public void create(TaskType model) {
-        //TODO сгенерировали и присвоили id
-        model.setId(taskTypeGenerationID.generateId());
-
         repository.create(converter.toEntity(model));
     }
 

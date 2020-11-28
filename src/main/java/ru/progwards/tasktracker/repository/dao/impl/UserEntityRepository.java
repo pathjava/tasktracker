@@ -6,6 +6,7 @@ import ru.progwards.tasktracker.repository.dao.impl.jsonhandler.UserEntityJsonHa
 import ru.progwards.tasktracker.repository.entity.UserEntity;
 
 import java.util.Collection;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,6 +31,8 @@ public class UserEntityRepository implements Repository<Long, UserEntity> {
     @Override
     public void create(UserEntity entity) {
         if (entity != null) {
+            if (entity.getId() == null)
+                entity.setId(new Random().nextLong());
             UserEntity newEntity = userEntityJsonHandler.getMap().put(entity.getId(), entity);
             if (newEntity == null)
                 userEntityJsonHandler.write();

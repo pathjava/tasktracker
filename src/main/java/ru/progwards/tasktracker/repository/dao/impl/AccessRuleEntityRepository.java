@@ -8,6 +8,7 @@ import ru.progwards.tasktracker.util.types.AccessType;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,8 @@ public class AccessRuleEntityRepository implements Repository<Long, AccessRuleEn
 
     @Override
     public void create(AccessRuleEntity rule) {
+        if (rule.getId() == null)
+            rule.setId(new Random().nextLong());
         rules.putIfAbsent(rule.getId(), rule);
     }
 
