@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
 
 /**
- * Бизнес-логика получения задачи
+ * Бизнес-логика получения задачи по идентификатору
  *
  * @author Oleg Kiselev
  */

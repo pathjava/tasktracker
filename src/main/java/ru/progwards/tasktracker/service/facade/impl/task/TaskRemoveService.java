@@ -36,16 +36,16 @@ public class TaskRemoveService implements RemoveService<Task> {
      */
     @Override
     public void remove(Task model) {
-        deleteRelatedTasks(model.getId());
+        deleteRelatedTasksBeforeRemoveTask(model.getId());
         repositoryTask.delete(model.getId());
     }
 
     /**
-     * Метод удаления связанных входящих RelatedTask удаляемой задачи
+     * Метод удаления связанных входящих RelatedTask удаляемой задачи Task
      *
      * @param id идентификатор задачи
      */
-    private void deleteRelatedTasks(Long id) {
+    private void deleteRelatedTasksBeforeRemoveTask(Long id) {
         Collection<RelatedTask> collection = listByAttachedTaskId.getListByAttachedTaskId(id);
         if (!collection.isEmpty()){
             collection.forEach(relatedTask -> repositoryRelatedTask.delete(relatedTask.getId()));

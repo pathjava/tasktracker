@@ -8,13 +8,12 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RefreshService;
-import ru.progwards.tasktracker.service.vo.Project;
-import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.*;
 
 import java.time.ZonedDateTime;
 
 /**
- * Бизнес-логика работы с задачей
+ * Бизнес-логика создания задачи
  *
  * @author Oleg Kiselev
  */
@@ -32,6 +31,9 @@ public class TaskCreateService implements CreateService<Task> {
 
     /**
      * Метод создает задачу
+     * 1) создается текстовый код задачи на основе префикса проекта
+     * 2) устанавливается время создания задачи
+     * 3) устанавливается статус WorkFlowStatus
      *
      * @param model value object
      */
@@ -39,23 +41,32 @@ public class TaskCreateService implements CreateService<Task> {
     public void create(Task model) {
         if (model.getCode() == null)
             model.setCode(generateTaskCode(model.getProject().getId()));
+
         if (model.getCreated() == null)
             model.setCreated(ZonedDateTime.now());
+
+        if (model.getType() != null) {
+            WorkFlow workFlow = model.getType().getWorkFlow();
+            if (workFlow != null)
+                model.setStatus(workFlow.getStart());
+        }
 
         repository.create(converter.toEntity(model));
     }
 
     /**
      * Метод создания кода задачи на основе префикса проекта
+     * Из бизнес-объекта проекта получаем крайний индекс задачи,
+     * инкрементируем +1 и создаем код задачи, обновляем проект
      *
      * @param project_id идентификатор проекта, к которому принадлежит задача
      * @return код задачи в формате "NGR-1"
      */
     private String generateTaskCode(Long project_id) {
         Project project = getService.get(project_id);
-        Long lastTaskCode = project.getLastTaskCode();
+        Long lastTaskCode = project.getLastTaskCode() + 1;
         String taskCode = project.getPrefix() + "-" + lastTaskCode;
-        project.setLastTaskCode(lastTaskCode + 1);
+        project.setLastTaskCode(lastTaskCode);
         refreshService.refresh(project);
         return taskCode;
     }

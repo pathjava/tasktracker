@@ -10,6 +10,7 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -34,23 +35,52 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     private Converter<RelatedTaskEntity, RelatedTask> converter;
     @Autowired
     private GetService<Long, RelationType> typeGetService;
+    @Autowired
+    private GetService<Long, Task> taskGetService;
 
     /**
      * Метод создания связанной задачи
-     * Если getCounterRelationId() != null, тогда создается встречная связь
+     * Первоначально в методе проверяется существование между двумя задачами связей одного типа,
+     * и если связь такого типа как в пришедшей в параметре метода create существует,
+     * новая связь не добавляется.
+     * <p>
+     * Далее проверяется, если getCounterRelationId() != null, тогда создается встречная связь
      *
      * @param model value object - объект бизнес логики, который необходимо создать
      */
     @Override
     public void create(RelatedTask model) {
-        if (model.getRelationType().getCounterRelation() != null) {
-            RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
-            RelatedTask counter = new RelatedTask(
-                    null, counterType, model.getCurrentTaskId(), model.getAttachedTask()
-            );
-            repository.create(converter.toEntity(counter));
+        Long currentTaskId = model.getCurrentTaskId();
+        Long attachedTaskId = model.getAttachedTask().getId();
+
+        if (checkExistTypeAndLink(currentTaskId, attachedTaskId, model.getRelationType().getId())) {
+            if (model.getRelationType().getCounterRelation() != null) {
+                RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
+                Task task = taskGetService.get(currentTaskId);
+                RelatedTask counter = new RelatedTask(null, counterType, attachedTaskId, task);
+                repository.create(converter.toEntity(counter));
+            }
+            repository.create(converter.toEntity(model));
         }
-        repository.create(converter.toEntity(model));
+    }
+
+    /**
+     * Метод проверки существования между двумя задачами связей одного типа
+     *
+     * @param currentTaskId  идентификатор задачи из которой создается связь
+     * @param attachedTaskId идентификатор задачи на которую создается связь
+     * @param relationTypeId тип связи создаваемой RelatedTask
+     * @return false - если такой тип связи RelationType уже существует в текущей задаче
+     * и true если такого типа связи RelationType нет
+     */
+    private boolean checkExistTypeAndLink(Long currentTaskId, Long attachedTaskId, Long relationTypeId) {
+        Collection<RelatedTask> collection = getListByTaskId(currentTaskId);
+        for (RelatedTask relatedTask : collection) {
+            if (relatedTask.getRelationType().getId().equals(relationTypeId)
+                    && relatedTask.getCurrentTaskId().equals(attachedTaskId))
+                return false;
+        }
+        return true;
     }
 
     /**
