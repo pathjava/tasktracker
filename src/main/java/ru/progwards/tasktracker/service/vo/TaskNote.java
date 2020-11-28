@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.service.vo;
 import java.time.ZonedDateTime;
 
 /**
- * value object - объект бизнес логики (комментарий)
+ * value object - это объект бизнес логики (комментарий)
  *
  * @author Konstantin Kishkin
  */
