@@ -12,18 +12,18 @@ public class RelatedTaskEntity {
     private Long id;
     private RelationTypeEntity relationTypeEntity;
     private Long currentTaskId;
-    private Long attachedTaskId;
+    private TaskEntity attachedTask;
 
     public RelatedTaskEntity() {
     }
 
-    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long currentTaskId, Long attachedTaskId) {
+    public RelatedTaskEntity(Long id, RelationTypeEntity relationTypeEntity, Long currentTaskId, TaskEntity attachedTask) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
         this.id = id;
         this.relationTypeEntity = relationTypeEntity;
         this.currentTaskId = currentTaskId;
-        this.attachedTaskId = attachedTaskId;
+        this.attachedTask = attachedTask;
     }
 
     public Long getId() {
@@ -46,11 +46,11 @@ public class RelatedTaskEntity {
         this.currentTaskId = currentTaskId;
     }
 
-    public Long getAttachedTaskId() {
-        return attachedTaskId;
+    public TaskEntity getAttachedTask() {
+        return attachedTask;
     }
 
-    public void setAttachedTaskId(Long attachedTaskId) {
-        this.attachedTaskId = attachedTaskId;
+    public void setAttachedTask(TaskEntity attachedTask) {
+        this.attachedTask = attachedTask;
     }
 }

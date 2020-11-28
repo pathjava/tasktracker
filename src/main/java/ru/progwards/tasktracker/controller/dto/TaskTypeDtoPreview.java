@@ -1,6 +1,8 @@
 package ru.progwards.tasktracker.controller.dto;
 
 /**
+ * Объект, содержащий краткие данные о типе задачи, выводимые в пользовательском интерфейсе
+ *
  * @author Oleg Kiselev
  */
 public class TaskTypeDtoPreview {

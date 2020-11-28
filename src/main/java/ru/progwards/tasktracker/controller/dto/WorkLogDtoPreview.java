@@ -4,16 +4,20 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 
 /**
+ * Объект, содержащий краткие лог-данные (Журнала работ) о действиях в задаче
+ *
  * @author Oleg Kiselev
  */
 public class WorkLogDtoPreview {
 
     private final Long id;
     private Duration spent;
-    private UserDtoFull worker;
+    private UserDtoPreview worker;
     private ZonedDateTime when;
 
-    public WorkLogDtoPreview(Long id, Duration spent, UserDtoFull worker, ZonedDateTime when) {
+    public WorkLogDtoPreview(
+            Long id, Duration spent, UserDtoPreview worker, ZonedDateTime when
+    ) {
         this.id = id;
         this.spent = spent;
         this.worker = worker;
@@ -32,11 +36,11 @@ public class WorkLogDtoPreview {
         this.spent = spent;
     }
 
-    public UserDtoFull getWorker() {
+    public UserDtoPreview getWorker() {
         return worker;
     }
 
-    public void setWorker(UserDtoFull worker) {
+    public void setWorker(UserDtoPreview worker) {
         this.worker = worker;
     }
 

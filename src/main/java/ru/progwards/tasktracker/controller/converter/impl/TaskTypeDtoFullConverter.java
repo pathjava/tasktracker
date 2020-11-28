@@ -1,9 +1,12 @@
 package ru.progwards.tasktracker.controller.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskTypeDtoFull;
+import ru.progwards.tasktracker.controller.dto.WorkFlowDtoPreview;
 import ru.progwards.tasktracker.service.vo.TaskType;
+import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -12,6 +15,9 @@ import ru.progwards.tasktracker.service.vo.TaskType;
  */
 @Component
 public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDtoFull> {
+
+    @Autowired
+    private Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -26,7 +32,7 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
         else
             return new TaskType(
                     dto.getId(),
-                    dto.getWorkFlow(),
+                    workFlowDtoConverter.toModel(dto.getWorkFlow()),
                     dto.getName()
             );
     }
@@ -44,7 +50,7 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
         else
             return new TaskTypeDtoFull(
                     model.getId(),
-                    model.getWorkFlow(),
+                    workFlowDtoConverter.toDto(model.getWorkFlow()),
                     model.getName()
             );
     }

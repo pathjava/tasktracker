@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.*;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.*;
 
 import java.util.List;
@@ -18,21 +19,23 @@ import java.util.stream.Collectors;
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 
     @Autowired
-    private Converter<TaskType, TaskTypeDtoFull> taskTypeDtoConverter;
-//    @Autowired
-//    private Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
+    private Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
     @Autowired
-    private Converter<User, UserDtoFull> userDtoConverter;
+    private Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
     @Autowired
-    private Converter<WorkFlowStatus, WorkFlowStatusDtoFull> workFlowStatusDtoConverter;
+    private Converter<User, UserDtoPreview> userDtoConverter;
     @Autowired
-    private Converter<RelatedTask, RelatedTaskDtoFull> relatedTaskDtoConverter;
+    private Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> workFlowStatusDtoConverter;
     @Autowired
-    private Converter<TaskAttachment, TaskAttachmentDtoFull> taskAttachmentDtoConverter;
+    private Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoConverter;
     @Autowired
-    private Converter<WorkLog, WorkLogDtoFull> workLogDtoConverter;
+    private Converter<TaskAttachment, TaskAttachmentDtoPreview> taskAttachmentDtoConverter;
     @Autowired
-    private Converter<WorkFlowAction, WorkFlowActionDtoFull> workFlowActionDtoConverter;
+    private Converter<WorkFlowAction, WorkFlowActionDtoPreview> workFlowActionDtoConverter;
+    @Autowired
+    private Converter<Project, ProjectDtoPreview> projectDtoConverter;
+    @Autowired
+    private GetService<Long, Task> taskGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -44,16 +47,16 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
     public Task toModel(TaskDtoFull dto) {
         if (dto == null)
             return null;
-        else
+        else {
+            Task task = taskGetService.get(dto.getId());
             return new Task(
                     dto.getId(),
                     dto.getCode(),
                     dto.getName(),
                     dto.getDescription(),
                     taskTypeDtoConverter.toModel(dto.getType()),
-                    null,
-                    //taskPriorityDtoConverter.toModel(dto.getPriority()),
-                    dto.getProject(),
+                    taskPriorityDtoConverter.toModel(dto.getPriority()),
+                    projectDtoConverter.toModel(dto.getProject()),
                     userDtoConverter.toModel(dto.getAuthor()),
                     userDtoConverter.toModel(dto.getExecutor()),
                     dto.getCreated(),
@@ -65,8 +68,9 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     dto.getTimeLeft(),
                     listDtoToVoRelatedTask(dto.getRelatedTasks()),
                     listDtoToVoTaskAttachment(dto.getAttachments()),
-                    listDtoToVoTaskWorkLog(dto.getWorkLogs())
+                    task.getWorkLogs()
             );
+        }
     }
 
     /**
@@ -75,21 +79,9 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param actions лист Dto WorkFlowAction
      * @return лист VO WorkFlowAction
      */
-    private List<WorkFlowAction> listDtoToVoWorkFlowAction(List<WorkFlowActionDtoFull> actions) {
+    private List<WorkFlowAction> listDtoToVoWorkFlowAction(List<WorkFlowActionDtoPreview> actions) {
         return actions.stream()
                 .map(dto -> workFlowActionDtoConverter.toModel(dto))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Метод конвертирует лист из Dto в VO
-     *
-     * @param workLogs лист Dto логов
-     * @return лист VO логов
-     */
-    private List<WorkLog> listDtoToVoTaskWorkLog(List<WorkLogDtoFull> workLogs) {
-        return workLogs.stream()
-                .map(dto -> workLogDtoConverter.toModel(dto))
                 .collect(Collectors.toList());
     }
 
@@ -99,7 +91,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param attachments лист Dto файлов задачи
      * @return лист VO файлов задачи
      */
-    private List<TaskAttachment> listDtoToVoTaskAttachment(List<TaskAttachmentDtoFull> attachments) {
+    private List<TaskAttachment> listDtoToVoTaskAttachment(List<TaskAttachmentDtoPreview> attachments) {
         return attachments.stream()
                 .map(dto -> taskAttachmentDtoConverter.toModel(dto))
                 .collect(Collectors.toList());
@@ -111,7 +103,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param relatedTasks лист Dto связанных задач
      * @return лист VO связанных задач
      */
-    private List<RelatedTask> listDtoToVoRelatedTask(List<RelatedTaskDtoFull> relatedTasks) {
+    private List<RelatedTask> listDtoToVoRelatedTask(List<RelatedTaskDtoPreview> relatedTasks) {
         return relatedTasks.stream()
                 .map(dto -> relatedTaskDtoConverter.toModel(dto))
                 .collect(Collectors.toList());
@@ -134,8 +126,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     model.getName(),
                     model.getDescription(),
                     taskTypeDtoConverter.toDto(model.getType()),
-                    null,//taskPriorityDtoConverter.toDto(model.getPriority()),
-                    model.getProject(),
+                    taskPriorityDtoConverter.toDto(model.getPriority()),
+                    projectDtoConverter.toDto(model.getProject()),
                     userDtoConverter.toDto(model.getAuthor()),
                     userDtoConverter.toDto(model.getExecutor()),
                     model.getCreated(),
@@ -146,8 +138,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     model.getTimeSpent(),
                     model.getTimeLeft(),
                     listVoToDtoRelatedTask(model.getRelatedTasks()),
-                    listVoToDtoTaskAttachment(model.getAttachments()),
-                    listVoToDtoWorkLog(model.getWorkLogs())
+                    listVoToDtoTaskAttachment(model.getAttachments())
             );
     }
 
@@ -157,21 +148,9 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param actions лист VO WorkFlowAction задачи
      * @return лист Dto WorkFlowAction задачи
      */
-    private List<WorkFlowActionDtoFull> listVoToDtoWorkFlowAction(List<WorkFlowAction> actions) {
+    private List<WorkFlowActionDtoPreview> listVoToDtoWorkFlowAction(List<WorkFlowAction> actions) {
         return actions.stream()
                 .map(model -> workFlowActionDtoConverter.toDto(model))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Метод конвертирует лист из VO в Dto
-     *
-     * @param workLogs лист VO логов задачи
-     * @return лист Dto логов задачи
-     */
-    private List<WorkLogDtoFull> listVoToDtoWorkLog(List<WorkLog> workLogs) {
-        return workLogs.stream()
-                .map(model -> workLogDtoConverter.toDto(model))
                 .collect(Collectors.toList());
     }
 
@@ -181,7 +160,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param attachments лист VO файлов задачи
      * @return лист Dto файлов задачи
      */
-    private List<TaskAttachmentDtoFull> listVoToDtoTaskAttachment(List<TaskAttachment> attachments) {
+    private List<TaskAttachmentDtoPreview> listVoToDtoTaskAttachment(List<TaskAttachment> attachments) {
         return attachments.stream()
                 .map(model -> taskAttachmentDtoConverter.toDto(model))
                 .collect(Collectors.toList());
@@ -193,7 +172,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @param relatedTasks лист VO связанных задач
      * @return лист Dto связанных задач
      */
-    private List<RelatedTaskDtoFull> listVoToDtoRelatedTask(List<RelatedTask> relatedTasks) {
+    private List<RelatedTaskDtoPreview> listVoToDtoRelatedTask(List<RelatedTask> relatedTasks) {
         return relatedTasks.stream()
                 .map(model -> relatedTaskDtoConverter.toDto(model))
                 .collect(Collectors.toList());

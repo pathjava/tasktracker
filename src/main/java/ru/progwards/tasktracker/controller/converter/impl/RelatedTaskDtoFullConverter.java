@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.RelationTypeDtoFull;
+import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.service.vo.Task;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -17,7 +19,9 @@ import ru.progwards.tasktracker.service.vo.RelationType;
 public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, RelatedTaskDtoFull> {
 
     @Autowired
-    private Converter<RelationType, RelationTypeDtoFull> relationTypeDtoConverter;
+    private Converter<RelationType, RelationTypeDtoFull> typeDtoConverter;
+    @Autowired
+    private Converter<Task, TaskDtoPreview> taskDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -32,9 +36,9 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
         else
             return new RelatedTask(
                     dto.getId(),
-                    relationTypeDtoConverter.toModel(dto.getRelationType()),
+                    typeDtoConverter.toModel(dto.getRelationType()),
                     dto.getCurrentTaskId(),
-                    dto.getAttachedTaskId()
+                    taskDtoConverter.toModel(dto.getAttachedTask())
             );
     }
 
@@ -51,9 +55,9 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
         else
             return new RelatedTaskDtoFull(
                     model.getId(),
-                    relationTypeDtoConverter.toDto(model.getRelationType()),
+                    typeDtoConverter.toDto(model.getRelationType()),
                     model.getCurrentTaskId(),
-                    model.getAttachedTaskId()
+                    taskDtoConverter.toDto(model.getAttachedTask())
             );
     }
 }

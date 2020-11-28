@@ -1,6 +1,8 @@
 package ru.progwards.tasktracker.controller.dto;
 
 /**
+ * Объект, содержащий краткие данные о связанной задаче и выводимые в пользовательском интерфейсе
+ *
  * @author Oleg Kiselev
  */
 public class RelatedTaskDtoPreview {
@@ -8,13 +10,15 @@ public class RelatedTaskDtoPreview {
     private final Long id;
     private RelationTypeDtoPreview relationType;
     private Long currentTaskId;
-    private Long attachedTaskId;
+    private TaskDtoPreview attachedTask;
 
-    public RelatedTaskDtoPreview(Long id, RelationTypeDtoPreview relationType, Long currentTaskId, Long attachedTaskId) {
+    public RelatedTaskDtoPreview(
+            Long id, RelationTypeDtoPreview relationType, Long currentTaskId, TaskDtoPreview attachedTask
+    ) {
         this.id = id;
         this.relationType = relationType;
         this.currentTaskId = currentTaskId;
-        this.attachedTaskId = attachedTaskId;
+        this.attachedTask = attachedTask;
     }
 
     public Long getId() {
@@ -37,11 +41,11 @@ public class RelatedTaskDtoPreview {
         this.currentTaskId = currentTaskId;
     }
 
-    public Long getAttachedTaskId() {
-        return attachedTaskId;
+    public TaskDtoPreview getAttachedTask() {
+        return attachedTask;
     }
 
-    public void setAttachedTaskId(Long attachedTaskId) {
-        this.attachedTaskId = attachedTaskId;
+    public void setAttachedTask(TaskDtoPreview attachedTask) {
+        this.attachedTask = attachedTask;
     }
 }

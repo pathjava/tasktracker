@@ -17,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.nullable;
 
 /**
  * тестирование создания и удаления связанной задачи
@@ -135,22 +136,22 @@ class RelatedTaskEntityRepositoryTest {
 
         repository.create(
                 new RelatedTaskEntity(
-                        null, new RelationTypeEntity(1L, "блокирующая Test 1", 2L),
-                        1L, 2L
+                        null, new RelationTypeEntity(1L, "блокирующая Test 1", null),
+                        1L, null
                 )
         );
         repository.create(
                 new RelatedTaskEntity(
-                        null, new RelationTypeEntity(2L, "блокирующая Test 2", 2L),
-                        1L, 2L
+                        null, new RelationTypeEntity(2L, "блокирующая Test 2", null),
+                        1L, null
                 )
         );
     }
 
     private RelatedTaskEntity createEntityForTest() {
         return new RelatedTaskEntity(
-                null, new RelationTypeEntity(1L, "блокирующая Test", 2L),
-                1L, 2L
+                null, new RelationTypeEntity(1L, "блокирующая Test", null),
+                1L, null
         );
     }
 

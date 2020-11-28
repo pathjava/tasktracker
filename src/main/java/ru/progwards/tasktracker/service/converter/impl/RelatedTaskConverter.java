@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
+import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.service.vo.Task;
 
 /**
  * Конвертеры valueObject <-> entity
@@ -17,7 +19,9 @@ import ru.progwards.tasktracker.service.vo.RelationType;
 public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
 
     @Autowired
-    private Converter<RelationTypeEntity, RelationType> converter;
+    private Converter<RelationTypeEntity, RelationType> typeConverter;
+    @Autowired
+    private Converter<TaskEntity, Task> taskConverter;
 
     /**
      * Метод конвертирует сущность Entity в бизнес объект
@@ -29,13 +33,14 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
     public RelatedTask toVo(RelatedTaskEntity entity) {
         if (entity == null)
             return null;
-        else
+        else {
             return new RelatedTask(
                     entity.getId(),
-                    converter.toVo(entity.getRelationTypeEntity()),
+                    typeConverter.toVo(entity.getRelationTypeEntity()),
                     entity.getCurrentTaskId(),
-                    entity.getAttachedTaskId()
+                    taskConverter.toVo(entity.getAttachedTask())
             );
+        }
     }
 
     /**
@@ -51,9 +56,9 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
         else
             return new RelatedTaskEntity(
                     valueObject.getId(),
-                    converter.toEntity(valueObject.getRelationType()),
+                    typeConverter.toEntity(valueObject.getRelationType()),
                     valueObject.getCurrentTaskId(),
-                    valueObject.getAttachedTaskId()
+                    taskConverter.toEntity(valueObject.getAttachedTask())
             );
     }
 }
