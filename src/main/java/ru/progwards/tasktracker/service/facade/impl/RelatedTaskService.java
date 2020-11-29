@@ -58,9 +58,14 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
                 RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
                 Task task = taskGetService.get(currentTaskId);
                 RelatedTask counter = new RelatedTask(null, counterType, attachedTaskId, task);
-                repository.create(converter.toEntity(counter));
+
+                RelatedTaskEntity entity = converter.toEntity(counter);
+                repository.create(entity);
+                counter.setId(entity.getId());
             }
-            repository.create(converter.toEntity(model));
+            RelatedTaskEntity entity = converter.toEntity(model);
+            repository.create(entity);
+            model.setId(entity.getId());
         }
     }
 

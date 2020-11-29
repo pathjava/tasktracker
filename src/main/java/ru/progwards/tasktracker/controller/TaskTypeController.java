@@ -42,16 +42,16 @@ public class TaskTypeController {
      * @param taskTypeDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный тип задачи
      */
-    @GetMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<TaskTypeDtoFull> createTaskType(@RequestBody TaskTypeDtoFull taskTypeDtoFull) {
         if (taskTypeDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
         TaskType taskType = converter.toModel(taskTypeDtoFull);
         createService.create(taskType);
-        TaskTypeDtoFull createTaskType = converter.toDto(taskType);
+        TaskTypeDtoFull createdTaskType = converter.toDto(taskType);
 
-        return new ResponseEntity<>(createTaskType, HttpStatus.OK);
+        return new ResponseEntity<>(createdTaskType, HttpStatus.OK);
     }
 
     /**

@@ -19,15 +19,20 @@ public class TaskType {
         this.name = name;
     }
 
-    //TODO добавил для своей реализации
-    public TaskType(Long project_id, WorkFlow workFlow, String name) {
-        this.project_id = project_id;
-        this.workFlow = workFlow;
-        this.name = name;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(Long project_id) {
+        this.project_id = project_id;
     }
 
     public WorkFlow getWorkFlow() {
@@ -44,18 +49,5 @@ public class TaskType {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    //TODO добавил для своей реализации
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getProject_id() {
-        return project_id;
-    }
-
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
     }
 }

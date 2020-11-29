@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskTypeDtoFull;
 import ru.progwards.tasktracker.controller.dto.WorkFlowDtoPreview;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.TaskType;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 
@@ -18,6 +19,8 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
 
     @Autowired
     private Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
+    @Autowired
+    private GetService<Long, TaskType> taskTypeGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -29,12 +32,15 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
     public TaskType toModel(TaskTypeDtoFull dto) {
         if (dto == null)
             return null;
-        else
+        else {
+            TaskType taskType = taskTypeGetService.get(dto.getId());
             return new TaskType(
                     dto.getId(),
+                    taskType.getProject_id(),
                     workFlowDtoConverter.toModel(dto.getWorkFlow()),
                     dto.getName()
             );
+        }
     }
 
     /**

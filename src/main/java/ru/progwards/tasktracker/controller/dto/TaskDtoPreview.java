@@ -10,11 +10,17 @@ public class TaskDtoPreview {
     private final Long id;
     private String code;
     private String name;
+    private TaskTypeDtoPreview type;
+    private TaskPriorityDtoPreview priority;
 
-    public TaskDtoPreview(Long id, String code, String name) {
+    public TaskDtoPreview(
+            Long id, String code, String name, TaskTypeDtoPreview type, TaskPriorityDtoPreview priority
+    ) {
         this.id = id;
         this.code = code;
         this.name = name;
+        this.type = type;
+        this.priority = priority;
     }
 
     public Long getId() {
@@ -35,5 +41,21 @@ public class TaskDtoPreview {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public TaskTypeDtoPreview getType() {
+        return type;
+    }
+
+    public void setType(TaskTypeDtoPreview type) {
+        this.type = type;
+    }
+
+    public TaskPriorityDtoPreview getPriority() {
+        return priority;
+    }
+
+    public void setPriority(TaskPriorityDtoPreview priority) {
+        this.priority = priority;
     }
 }

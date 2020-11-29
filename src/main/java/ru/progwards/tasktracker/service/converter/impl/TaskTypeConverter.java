@@ -38,6 +38,7 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
             WorkFlow workFlow = workFlowConverter.toVo(workFlowRepository.get(entity.getWorkFlow_id()));
             return new TaskType(
                     entity.getId(),
+                    entity.getProject_id(),
                     workFlow,
                     entity.getName()
             );

@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoPreview;
+import ru.progwards.tasktracker.controller.dto.TaskTypeDtoPreview;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.TaskPriority;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -17,6 +21,10 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
 
     @Autowired
     private GetService<Long, Task> taskGetService;
+    @Autowired
+    private Converter<TaskType, TaskTypeDtoPreview> typeDtoConverter;
+    @Autowired
+    private Converter<TaskPriority, TaskPriorityDtoPreview> priorityDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -68,7 +76,9 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
             return new TaskDtoPreview(
                     model.getId(),
                     model.getCode(),
-                    model.getName()
+                    model.getName(),
+                    typeDtoConverter.toDto(model.getType()),
+                    priorityDtoConverter.toDto(model.getPriority())
             );
     }
 }

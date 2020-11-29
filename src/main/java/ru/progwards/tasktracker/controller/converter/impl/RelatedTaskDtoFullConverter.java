@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.RelatedTaskDtoFull;
-import ru.progwards.tasktracker.controller.dto.RelationTypeDtoFull;
+import ru.progwards.tasktracker.controller.dto.RelationTypeDtoPreview;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
@@ -19,7 +19,7 @@ import ru.progwards.tasktracker.service.vo.Task;
 public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, RelatedTaskDtoFull> {
 
     @Autowired
-    private Converter<RelationType, RelationTypeDtoFull> typeDtoConverter;
+    private Converter<RelationType, RelationTypeDtoPreview> typeDtoConverter;
     @Autowired
     private Converter<Task, TaskDtoPreview> taskDtoConverter;
 

@@ -39,7 +39,9 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public void create(TaskType model) {
-        repository.create(converter.toEntity(model));
+        TaskTypeEntity entity = converter.toEntity(model);
+        repository.create(entity);
+        model.setId(entity.getId());
     }
 
     /**
