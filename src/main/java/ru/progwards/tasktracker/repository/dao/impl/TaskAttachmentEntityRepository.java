@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.repository.dao.impl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.dao.RepositoryByParentId;
 import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.TaskAttachmentEntity;
 
@@ -19,7 +20,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Gregory Lobkov
  */
 @org.springframework.stereotype.Repository
-public class TaskAttachmentEntityRepository implements Repository<Long, TaskAttachmentEntity>, RepositoryByTaskId<Long, TaskAttachmentEntity> {
+public class TaskAttachmentEntityRepository implements Repository<Long, TaskAttachmentEntity>, RepositoryByTaskId<Long, TaskAttachmentEntity>, RepositoryByParentId<Long, TaskAttachmentEntity> {
 
     /**
      * Имя файла-хранилища данных
@@ -331,4 +332,34 @@ public class TaskAttachmentEntityRepository implements Repository<Long, TaskAtta
         return result;
     }
 
+    /**
+     * Получить список объектов по идентификатору родителя
+     *
+     * @param parentId идентификатор родителя
+     * @return список сущностей репозитория
+     */
+    @Override
+    public Collection<TaskAttachmentEntity> getByParentId(Long parentId) {
+        List<TaskAttachmentEntity> result = new ArrayList<>();
+        lockRead.readLock().lock();
+        try {
+            try (FileReader fileReader = new FileReader(file);
+                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    TaskAttachmentEntity instance = new TaskAttachmentEntity();
+                    instance = json.fromJson(line, TaskAttachmentEntity.class);
+                    if(instance.getContentId().equals(parentId)) {
+                        result.add(instance);
+                    }
+                    line = bufferedReader.readLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            lockRead.readLock().unlock();
+        }
+        return result;
+    }
 }
