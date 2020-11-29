@@ -11,7 +11,9 @@ public class TaskTypeDtoFull {
     private WorkFlowDtoPreview workFlow;
     private String name;
 
-    public TaskTypeDtoFull(Long id, WorkFlowDtoPreview workFlow, String name) {
+    public TaskTypeDtoFull(
+            Long id, WorkFlowDtoPreview workFlow, String name
+    ) {
         this.id = id;
         this.workFlow = workFlow;
         this.name = name;

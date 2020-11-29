@@ -61,7 +61,9 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      */
     @Override
     public void create(RelationType model) {
-        repository.create(converter.toEntity(model));
+        RelationTypeEntity entity = converter.toEntity(model);
+        repository.create(entity);
+        model.setId(entity.getId());
     }
 
     /**

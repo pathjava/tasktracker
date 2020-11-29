@@ -69,7 +69,10 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
         }
 
         refreshService.refresh(task);
-        repository.create(converter.toEntity(model));
+
+        WorkLogEntity entity = converter.toEntity(model);
+        repository.create(entity);
+        model.setId(entity.getId());
     }
 
     /**
