@@ -40,7 +40,7 @@ public class TaskAttachmentEntity {
     /**
      * Ссылка на содержимое вложения
      */
-    private Long attachmentContentId;
+    private Long contentId;
 
 
     /**
@@ -49,14 +49,14 @@ public class TaskAttachmentEntity {
     public TaskAttachmentEntity() {
     }
 
-    public TaskAttachmentEntity(Long id, Long taskId, String name, String extension, Long size, Long created, Long attachmentContentId) {
+    public TaskAttachmentEntity(Long id, Long taskId, String name, String extension, Long size, Long created, Long contentId) {
         this.id = id;
         this.taskId = taskId;
         this.name = name;
         this.extension = extension;
         this.size = size;
         this.created = created;
-        this.attachmentContentId = attachmentContentId;
+        this.contentId = contentId;
     }
 
 
@@ -76,12 +76,12 @@ public class TaskAttachmentEntity {
         this.taskId = taskId;
     }
 
-    public Long getAttachmentContentId() {
-        return attachmentContentId;
+    public Long getContentId() {
+        return contentId;
     }
 
-    public void setAttachmentContentId(Long attachmentContentId) {
-        this.attachmentContentId = attachmentContentId;
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
     }
 
     public String getName() {

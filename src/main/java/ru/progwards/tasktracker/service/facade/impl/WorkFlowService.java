@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.service.facade.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.WorkFlowEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
@@ -69,6 +70,9 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
      */
     @Override
     public void refresh(WorkFlow workFlow) {
+        if(workFlow.isPattern()) {
+            throw new OperationIsNotPossibleException("Workflow is a pattern. Can't remove");
+        }
         workFlowRepository.update(workFlowConverter.toEntity(workFlow));
     }
 
