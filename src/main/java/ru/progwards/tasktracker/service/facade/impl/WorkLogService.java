@@ -37,6 +37,19 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
 
     /**
      * Метод создания лога
+     *
+     * @param model объект бизнес-логики журнала работ
+     */
+    @Override
+    public void create(WorkLog model) {
+        logCreateEstimateChange(model);
+
+        WorkLogEntity entity = converter.toEntity(model);
+        repository.create(entity);
+        model.setId(entity.getId());
+    }
+
+    /**
      * В момент создания лога у задачи, которой принадлежит лог, происходит увеличение значения
      * затраченного времени, а также изменение оставшегося времени согласно выбранного параметра
      * в пользовательском интерфейсе.
@@ -46,10 +59,9 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      * DONT_CHANGE - не уменьшать оставшееся время
      * INCREASE_BY_VALUE - увеличение оставшегося времени на произвольное значение
      *
-     * @param model объект бизнес-логики
+     * @param model объект бизнес-логики журнала работ
      */
-    @Override
-    public void create(WorkLog model) {
+    private void logCreateEstimateChange(WorkLog model) {
         Task task = taskGetService.get(model.getTaskId());
         task.setTimeSpent(task.getTimeSpent().plus(model.getSpent()));
 
@@ -67,12 +79,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
             case INCREASE_BY_VALUE:
                 break;
         }
-
         refreshService.refresh(task);
-
-        WorkLogEntity entity = converter.toEntity(model);
-        repository.create(entity);
-        model.setId(entity.getId());
     }
 
     /**
@@ -102,14 +109,24 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
 
     /**
      * Метод обновления лога
+     *
+     * @param model объект бизнес-логики журнала работ, который необходимо обновить
+     */
+    @Override
+    public void refresh(WorkLog model) {
+        logRefreshEstimateChange(model);
+
+        repository.update(converter.toEntity(model));
+    }
+
+    /**
      * В момент обновления лога у задачи, которой принадлежит лог, происходит изменение значения
      * затраченного времени, а также изменение оставшегося времени согласно выбранного параметра
      * в пользовательском интерфейсе.
      *
-     * @param model value object - объект бизнес логики (задача), который необходимо обновить
+     * @param model объект бизнес-логики журнала работ
      */
-    @Override
-    public void refresh(WorkLog model) {
+    private void logRefreshEstimateChange(WorkLog model) {
         Task task = taskGetService.get(model.getTaskId());
         WorkLog workLog = workLogGetService.get(model.getId());
 
@@ -129,22 +146,30 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
             case INCREASE_BY_VALUE:
                 break;
         }
-
         refreshService.refresh(task);
-        repository.update(converter.toEntity(model));
     }
 
     /**
      * Метод удаления лога
+     *
+     * @param model объект бизнес-логики журнала работ, который необходимо удалить
+     */
+    @Override
+    public void remove(WorkLog model) {
+        logRemoveEstimateChange(model);
+
+        repository.delete(model.getId());
+    }
+
+    /**
      * В момент удаления лога у задачи, которой принадлежит лог, происходит уменьшения значения
      * затраченного времени на значение, ранее установленное в удаляемом логе,
      * а также изменение оставшегося времени согласно выбранного параметра
      * в пользовательском интерфейсе.
      *
-     * @param model объект, который необходимо удалить
+     * @param model объект бизнес-логики журнала работ
      */
-    @Override
-    public void remove(WorkLog model) {
+    private void logRemoveEstimateChange(WorkLog model) {
         Task task = taskGetService.get(model.getTaskId());
         WorkLog workLog = workLogGetService.get(model.getId());
 
@@ -164,8 +189,6 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
             case REDUCE_BY_VALUE:
                 break;
         }
-
         refreshService.refresh(task);
-        repository.delete(model.getId());
     }
 }
