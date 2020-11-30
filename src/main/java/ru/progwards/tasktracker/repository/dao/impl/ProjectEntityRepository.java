@@ -32,8 +32,6 @@ public class ProjectEntityRepository implements Repository<Long, ProjectEntity> 
     @Override
     public void create(ProjectEntity entity) {
         if (entity != null) {
-            if (entity.getId() == null)
-                entity.setId(new Random().nextLong());
             ProjectEntity newEntity = projectEntityJsonHandler.getMap().put(entity.getId(), entity);
             if (newEntity == null)
                 projectEntityJsonHandler.write();
