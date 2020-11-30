@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -46,6 +47,7 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public void create(TaskAttachment taskAttachment) {
+        // сохраним содержимое, если подкреплено
         Long contentId = taskAttachment.getContentId();
         AttachmentContent content = taskAttachment.getContent();
         if(contentId==null && content != null) {
@@ -55,6 +57,9 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
             }
             taskAttachment.setContentId(content.getId());
         }
+        // установим время создания
+        taskAttachment.setCreated(ZonedDateTime.now());
+        // сохраним в репозиторий
         TaskAttachmentEntity entity = converter.toEntity(taskAttachment);
         repository.create(entity);
         taskAttachment.setId(entity.getId());

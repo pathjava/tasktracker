@@ -13,7 +13,7 @@ public interface CopyService<M> {
      *
      * @param modelFrom бизнес объект, который необходимо скопировать
      * @param template  шаблон для замены свойств во вновь созданном объекте
-     * @return копия объекта {@code model}
+     * @return копия объекта {@code modelFrom}
      */
     M copy(M modelFrom, M template);
 
