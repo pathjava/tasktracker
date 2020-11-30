@@ -42,7 +42,7 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
         if (model == null) {
             return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                     userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(),
-                    null, 0L);
+                    null, null);
         }
 
         return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),

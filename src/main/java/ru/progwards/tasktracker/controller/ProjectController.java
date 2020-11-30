@@ -106,6 +106,9 @@ public class ProjectController {
 
         projectCreateService.create(converterFull.toModel(projectDto));
 
+        // TODO как вернуть ProjectDtoFull, если его id генерируется в сервисном слое и в контроллере мы его не знаем
+//        ProjectDtoFull result = projectGetService.get()
+
         return new ResponseEntity<>(projectDto, HttpStatus.OK);
     }
 

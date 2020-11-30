@@ -42,6 +42,8 @@ public class ProjectRefreshService implements RefreshService<Project> {
     public void refresh(Project model) {
         Project project = converter.toVo(repository.get(model.getId()));
 
+        //TODO реализовать логику: если обновляем префикс у проекта, то смотреть, чтобы проектов с таким префиксом не было
+
          //если в обновленном проекте другой префикс и в обновляемом проекте имеются задачи, то обновление невозможно
         if (!model.getPrefix().equals(project.getPrefix()) &&
                 taskGetListByProjectService.getListByProjectId(project.getId()).size() > 0)

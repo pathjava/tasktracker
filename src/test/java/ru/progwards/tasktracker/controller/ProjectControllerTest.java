@@ -10,11 +10,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.ProjectDtoFull;
+import ru.progwards.tasktracker.controller.dto.UserDtoPreview;
+import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
+import ru.progwards.tasktracker.service.vo.User;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,38 +51,59 @@ public class ProjectControllerTest {
     @Autowired
     private GetService<Long, Project> projectGetService;
 
+    @Autowired
+    private GetService<Long, User> userGetService;
+
+    @Autowired
+    private Converter<User, UserDtoPreview> converterUserDtoPreview;
+
     @Test
     public void loadedController() {
         Assertions.assertNotNull(controller);
     }
 
+//    @Test
+//    public void getProjectsTest() throws Exception {
+//        Collection<ProjectDtoFull> projectDtos = projectGetListService.getList().stream().
+//                map(e -> converter.toDto(e)).collect(Collectors.toList());
+//        String stringJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(projectDtos);
+//
+//        mockMvc.perform(get("/rest/project/list")).
+//                andExpect(status().isOk()).
+//                andExpect(content().json(stringJson));
+//    }
+//
+//    @Test
+//    public void getProject() throws Exception {
+//        ProjectDtoFull projectDto = converter.toDto(projectGetService.get(4L));
+//        String stringJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(projectDto);
+//
+//        mockMvc.perform(get("/rest/project/4")).
+//                andExpect(status().isOk()).
+//                andExpect(content().json(stringJson));
+//    }
+//
+//    @Test
+//    public void NotFoundProjectExceptionTest() throws Exception {
+//        mockMvc.perform(get("/rest/project/100")).andExpect(content().
+//                string("Not found a project with id=100"));
+//
+//        mockMvc.perform(post("/rest/project/100/delete")).andExpect(content().
+//                string("Not found a project with id=100"));
+//    }
+
     @Test
-    public void getProjectsTest() throws Exception {
-        Collection<ProjectDtoFull> projectDtos = projectGetListService.getList().stream().
-                map(e -> converter.toDto(e)).collect(Collectors.toList());
-        String stringJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(projectDtos);
+    public void create() {
+//        System.out.println(userGetService.get(0L));
+//        System.out.println(userGetService.get(1L));
+//        System.out.println(userGetService.get(2L));
 
-        mockMvc.perform(get("/rest/project/list")).
-                andExpect(status().isOk()).
-                andExpect(content().json(stringJson));
-    }
+        List<ProjectDtoFull> projectDtoFullList = new ArrayList<>(List.of(
+                new ProjectDtoFull(null, "name1", "desc1", "prefix1", converterUserDtoPreview.toDto(userGetService.get(0L)), ZonedDateTime.now()),
+                new ProjectDtoFull(null, "name2", "desc2", "prefix2", converterUserDtoPreview.toDto(userGetService.get(1L)), ZonedDateTime.now()),
+                new ProjectDtoFull(null, "name3", "desc3", "prefix3", converterUserDtoPreview.toDto(userGetService.get(2L)), ZonedDateTime.now())
+                ));
 
-    @Test
-    public void getProject() throws Exception {
-        ProjectDtoFull projectDto = converter.toDto(projectGetService.get(4L));
-        String stringJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(projectDto);
-
-        mockMvc.perform(get("/rest/project/4")).
-                andExpect(status().isOk()).
-                andExpect(content().json(stringJson));
-    }
-
-    @Test
-    public void NotFoundProjectExceptionTest() throws Exception {
-        mockMvc.perform(get("/rest/project/100")).andExpect(content().
-                string("Not found a project with id=100"));
-
-        mockMvc.perform(post("/rest/project/100/delete")).andExpect(content().
-                string("Not found a project with id=100"));
+        projectDtoFullList.forEach(e -> controller.create(e));
     }
 }

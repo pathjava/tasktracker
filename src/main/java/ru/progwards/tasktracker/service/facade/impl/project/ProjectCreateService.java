@@ -8,12 +8,15 @@ import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListByProjectService;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.TaskType;
+import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Класс по созданию бизнес-модели Project
@@ -21,8 +24,6 @@ import java.util.List;
  */
 @Service
 public class ProjectCreateService implements CreateService<Project> {
-
-
     /**
      * репозиторий с проектами
      */
@@ -38,11 +39,6 @@ public class ProjectCreateService implements CreateService<Project> {
      */
     @Autowired
     private CreateService<TaskType> taskTypeCreateService;
-    /**
-     * класс с методом для получения списка TaskType для данного проекта
-     */
-    @Autowired
-    private GetListByProjectService<Long, TaskType> taskTypeGetListByProjectService;
 
     /**
      * метот добавляет проект в репозиторий
@@ -50,6 +46,7 @@ public class ProjectCreateService implements CreateService<Project> {
      */
     @Override
     public void create(Project model) {
+        // получаем список проектов, чтобы искать в них одинаковые prefix
         Collection<ProjectEntity> projectEntities = repository.get();
 
         boolean isExist = false;
@@ -66,21 +63,36 @@ public class ProjectCreateService implements CreateService<Project> {
 
         if (isExist)
             throw new OperationIsNotPossibleException("Create not possible");
-        else {
-            //создаем список TaskType проекта
-            List<TaskType> taskTypeList = new ArrayList<>(List.of(
-                    new TaskType(model.getId(), null, "EPIC"),
-                    new TaskType(model.getId(), null, "TASK"),
-                    new TaskType(model.getId(), null, "BUG")
-                )
-            );
 
-            //добавляем TaskType в базу данных
-            taskTypeList.forEach(e -> taskTypeCreateService.create(e));
+        if (model.getId() == null)
+            model.setId(new Random().nextLong());
+        //создаем список TaskType проекта
+        List<TaskType> taskTypeList = new ArrayList<>(List.of(
+                new TaskType(null, model.getId(),
+                        //TODO сделал так исключительно чтобы протестировать
+//                            new WorkFlow(null, "name", false, 0L, null, null),
+                        null,
+                        "EPIC"),
+                new TaskType(null, model.getId(),
+                        //TODO сделал так исключительно чтобы протестировать
+//                            new WorkFlow(null, "name", false, 0L, null, null),
+                        null,
+                        "TASK"),
+                new TaskType(null, model.getId(),
+                        //TODO сделал так исключительно чтобы протестировать
+//                            new WorkFlow(null, "name", false, 0L, null, null),
+                        null,
+                        "BUG")
+            )
+        );
 
-            model.setTaskTypes(taskTypeList);
+        //добавляем TaskType в базу данных
+        taskTypeList.forEach(e -> taskTypeCreateService.create(e));
 
-            repository.create(converter.toEntity(model));
-        }
+        model.setTaskTypes(taskTypeList);
+        // при создании LastTaskCode всегда = 0
+        model.setLastTaskCode(0L);
+
+        repository.create(converter.toEntity(model));
     }
 }
