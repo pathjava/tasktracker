@@ -20,21 +20,21 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String idBadRequestHandler(BadRequestException ex) {
+    public String badRequestHandler(BadRequestException ex) {
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String taskByIdNotFoundHandler(NotFoundException ex) {
+    public String notFoundHandler(NotFoundException ex) {
         return ex.getMessage();
     }
 
     @ResponseBody
     @ExceptionHandler(OperationIsNotPossibleException.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String taskByIdNotFoundHandler(OperationIsNotPossibleException ex) {
+    public String operationIsNotPossibleHandler(OperationIsNotPossibleException ex) {
         return ex.getMessage();
     }
 

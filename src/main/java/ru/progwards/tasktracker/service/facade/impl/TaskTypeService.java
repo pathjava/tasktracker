@@ -10,12 +10,13 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskType;
+import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * Бизнес-логика получения списка типов задачи
+ * Бизнес-логика типов задачи
  *
  * @author Oleg Kiselev
  */
@@ -31,6 +32,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     private Converter<TaskTypeEntity, TaskType> converter;
     @Autowired
     private GetListService<Task> getListService;
+    @Autowired
+    private CopyService<WorkFlow> copyService;
 
     /**
      * Метод создания типа задачи
@@ -39,9 +42,34 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public void create(TaskType model) {
+        if (model.getWorkFlow().isPattern()) {
+            WorkFlow copyWorkFlow = copyService.copy(
+                    model.getWorkFlow(), getTemplateWorkFlow(model.getWorkFlow().getName(), model.getName())
+            );
+            model.setWorkFlow(copyWorkFlow);
+        }
+
         TaskTypeEntity entity = converter.toEntity(model);
         repository.create(entity);
         model.setId(entity.getId());
+    }
+
+    /**
+     * Метод создания шаблона WorkFlow для метода копирования
+     *
+     * @param workFlowName имя текущего WorkFlow
+     * @param typeName     имя текущего TaskType
+     * @return шаблон WorkFlow
+     */
+    private WorkFlow getTemplateWorkFlow(String workFlowName, String typeName) {
+        return new WorkFlow(
+                null,
+                workFlowName + " - TaskType " + typeName,
+                false,
+                null,
+                null,
+                null
+        );
     }
 
     /**
@@ -57,6 +85,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
 
     /**
      * Метод удаления типа задачи
+     * Перед удалением выполняется проверка на доступность удаления типа задачи
      *
      * @param model удаляемый объект типа задачи
      */
@@ -67,6 +96,13 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
         repository.delete(model.getId());
     }
 
+    /**
+     * Метод проверки использования типа задачи другими ресурсами
+     *
+     * @param id идентификатор типа задачи
+     * @return true - если удаляемый тип задачи где-то используется
+     * и false - если тип задачи "свободный" и его можно удалять
+     */
     private boolean checkingOtherDependenciesTaskType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
         return getListService.getList().stream()
                 .anyMatch(task -> task.getType().getId().equals(id));
@@ -79,6 +115,13 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public void refresh(TaskType model) {
+        if (model.getWorkFlow().isPattern()) {
+            WorkFlow copyWorkFlow = copyService.copy(
+                    model.getWorkFlow(), getTemplateWorkFlow(model.getWorkFlow().getName(), model.getName())
+            );
+            model.setWorkFlow(copyWorkFlow);
+        }
+
         repository.update(converter.toEntity(model));
     }
 
