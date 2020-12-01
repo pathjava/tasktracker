@@ -10,6 +10,7 @@ import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,9 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      */
     @Override
     public void create(WorkLog model) {
-        logCreateEstimateChange(model);
+        Task task = taskGetService.get(model.getTaskId());
+        task = logCreateEstimateChange(model, task);
+        refreshService.refresh(task);
 
         WorkLogEntity entity = converter.toEntity(model);
         repository.create(entity);
@@ -60,9 +63,10 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      * INCREASE_BY_VALUE - увеличение оставшегося времени на произвольное значение
      *
      * @param model объект бизнес-логики журнала работ
+     * @param task  задача, к которой принадлежит WorkLog
+     *              и у которой выполняется изменение затраченного и оставшегося времени
      */
-    private void logCreateEstimateChange(WorkLog model) {
-        Task task = taskGetService.get(model.getTaskId());
+    public Task logCreateEstimateChange(WorkLog model, Task task) {
         task.setTimeSpent(task.getTimeSpent().plus(model.getSpent()));
 
         switch (model.getEstimateChange()) {
@@ -79,7 +83,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
             case INCREASE_BY_VALUE:
                 break;
         }
-        refreshService.refresh(task);
+        return task;
     }
 
     /**
@@ -114,7 +118,10 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      */
     @Override
     public void refresh(WorkLog model) {
-        logRefreshEstimateChange(model);
+        Task task = taskGetService.get(model.getTaskId());
+        Duration spent = workLogGetService.get(model.getId()).getSpent();
+        task = logRefreshEstimateChange(model, spent, task);
+        refreshService.refresh(task);
 
         repository.update(converter.toEntity(model));
     }
@@ -124,18 +131,17 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      * затраченного времени, а также изменение оставшегося времени согласно выбранного параметра
      * в пользовательском интерфейсе.
      *
-     * @param model объект бизнес-логики журнала работ
+     * @param model обновляемый объект бизнес-логики журнала работ
+     * @param spent ранее затраченное время журнала работ
+     * @param task  задача, к которой принадлежит WorkLog
      */
-    private void logRefreshEstimateChange(WorkLog model) {
-        Task task = taskGetService.get(model.getTaskId());
-        WorkLog workLog = workLogGetService.get(model.getId());
-
-        task.setTimeSpent(task.getTimeSpent().minus(workLog.getSpent()));
+    public Task logRefreshEstimateChange(WorkLog model, Duration spent, Task task) {
+        task.setTimeSpent(task.getTimeSpent().minus(spent));
         task.setTimeSpent(task.getTimeSpent().plus(model.getSpent()));
 
         switch (model.getEstimateChange()) {
             case AUTO_REDUCE:
-                task.setTimeLeft(task.getTimeLeft().plus(workLog.getSpent()));
+                task.setTimeLeft(task.getTimeLeft().plus(spent));
                 task.setTimeLeft(task.getTimeLeft().minus(model.getSpent()));
                 break;
             case SET_TO_VALUE:
@@ -146,7 +152,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
             case INCREASE_BY_VALUE:
                 break;
         }
-        refreshService.refresh(task);
+        return task;
     }
 
     /**
@@ -156,7 +162,10 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      */
     @Override
     public void remove(WorkLog model) {
-        logRemoveEstimateChange(model);
+        Task task = taskGetService.get(model.getTaskId());
+        Duration spent = workLogGetService.get(model.getId()).getSpent();
+        task = logRemoveEstimateChange(model, spent, task);
+        refreshService.refresh(task);
 
         repository.delete(model.getId());
     }
@@ -167,17 +176,16 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      * а также изменение оставшегося времени согласно выбранного параметра
      * в пользовательском интерфейсе.
      *
-     * @param model объект бизнес-логики журнала работ
+     * @param model удаляемый объект бизнес-логики журнала работ
+     * @param spent ранее затраченное время журнала работ
+     * @param task  задача, к которой принадлежит WorkLog
      */
-    private void logRemoveEstimateChange(WorkLog model) {
-        Task task = taskGetService.get(model.getTaskId());
-        WorkLog workLog = workLogGetService.get(model.getId());
-
-        task.setTimeSpent(task.getTimeSpent().minus(workLog.getSpent()));
+    public Task logRemoveEstimateChange(WorkLog model, Duration spent, Task task) {
+        task.setTimeSpent(task.getTimeSpent().minus(spent));
 
         switch (model.getEstimateChange()) {
             case AUTO_REDUCE:
-                task.setTimeLeft(task.getTimeLeft().minus(workLog.getSpent()));
+                task.setTimeLeft(task.getTimeLeft().minus(spent));
                 break;
             case SET_TO_VALUE:
                 task.setTimeLeft(model.getEstimateValue());
@@ -189,6 +197,6 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
             case REDUCE_BY_VALUE:
                 break;
         }
-        refreshService.refresh(task);
+        return task;
     }
 }
