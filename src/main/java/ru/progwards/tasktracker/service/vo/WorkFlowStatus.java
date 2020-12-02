@@ -39,6 +39,8 @@ public class WorkFlowStatus {
     Boolean alwaysAllow;
 
 
+    public WorkFlowStatus() { }
+
     public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean alwaysAllow) {
         this.id = id;
         this.workflow_id = workflow_id;

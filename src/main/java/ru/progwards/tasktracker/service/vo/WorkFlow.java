@@ -41,6 +41,7 @@ public class WorkFlow {
      */
     List<WorkFlowStatus> statuses;
 
+    public WorkFlow() { }
 
     public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses) {
         this.id = id;

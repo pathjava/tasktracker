@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,13 +27,15 @@ import java.util.List;
 public class TaskAttachmentService implements CreateService<TaskAttachment>, RemoveService<TaskAttachment>, GetService<Long, TaskAttachment>, GetListByTaskService<Long, TaskAttachment> {
 
     @Autowired
-    private Repository<Long, TaskAttachmentEntity> taskAttachmentRepository;
+    private Repository<Long, TaskAttachmentEntity> repository;
     @Autowired
-    private RepositoryByTaskId<Long, TaskAttachmentEntity> taskAttachmentEntityRepositoryByTaskId;
+    private RepositoryByTaskId<Long, TaskAttachmentEntity> repositoryByTaskId;
     @Autowired
-    private Converter<TaskAttachmentEntity, TaskAttachment> taskAttachmentConverter;
+    private Converter<TaskAttachmentEntity, TaskAttachment> converter;
     @Autowired
     private CreateService<AttachmentContent> attachmentContentCreateService;
+    @Autowired
+    private RemoveService<AttachmentContent> attachmentContentRemoveService;
 
 
     /**
@@ -44,6 +47,7 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public void create(TaskAttachment taskAttachment) {
+        // сохраним содержимое, если подкреплено
         Long contentId = taskAttachment.getContentId();
         AttachmentContent content = taskAttachment.getContent();
         if(contentId==null && content != null) {
@@ -53,8 +57,11 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
             }
             taskAttachment.setContentId(content.getId());
         }
-        TaskAttachmentEntity entity = taskAttachmentConverter.toEntity(taskAttachment);
-        taskAttachmentRepository.create(entity);
+        // установим время создания
+        taskAttachment.setCreated(ZonedDateTime.now());
+        // сохраним в репозиторий
+        TaskAttachmentEntity entity = converter.toEntity(taskAttachment);
+        repository.create(entity);
         taskAttachment.setId(entity.getId());
     }
 
@@ -66,7 +73,10 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public void remove(TaskAttachment taskAttachment) {
-        taskAttachmentRepository.delete(taskAttachment.getId());
+        AttachmentContent content = taskAttachment.getContent();
+        repository.delete(taskAttachment.getId());
+        // содержимое удаляем ПОСЛЕ удаления TaskAttachment
+        attachmentContentRemoveService.remove(content);
     }
 
 
@@ -78,7 +88,7 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public TaskAttachment get(Long id) {
-        return taskAttachmentConverter.toVo(taskAttachmentRepository.get(id));
+        return converter.toVo(repository.get(id));
     }
 
 
@@ -91,11 +101,11 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
     @Override
     public Collection<TaskAttachment> getListByTaskId(Long taskId) {
         // получили список сущностей
-        Collection<TaskAttachmentEntity> taskAttachmentEntities = taskAttachmentEntityRepositoryByTaskId.getByTaskId(taskId);
+        Collection<TaskAttachmentEntity> taskAttachmentEntities = repositoryByTaskId.getByTaskId(taskId);
         List<TaskAttachment> taskAttachments = new ArrayList<>(taskAttachmentEntities.size());
         // преобразуем к бизнес-объектам
         for (TaskAttachmentEntity entity:taskAttachmentEntities) {
-            taskAttachments.add(taskAttachmentConverter.toVo(entity));
+            taskAttachments.add(converter.toVo(entity));
         }
         return taskAttachments;
     }

@@ -31,6 +31,7 @@ public class WorkFlowAction {
      */
     WorkFlowStatus nextStatus;
 
+    public WorkFlowAction() { }
 
     public WorkFlowAction(Long id, Long parentStatus_id, String name, Long status_id, WorkFlowStatus nextStatus) {
         this.id = id;

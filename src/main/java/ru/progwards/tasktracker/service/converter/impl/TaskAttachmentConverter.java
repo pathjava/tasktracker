@@ -48,10 +48,10 @@ public class TaskAttachmentConverter implements Converter<TaskAttachmentEntity, 
         if (lastDotPos > 0) {
             fileExtension = entity.getName().substring(lastDotPos + 1);
         }
-        AttachmentContent attachmentContent = attachmentContentGetService.get(entity.getAttachmentContentId()); // должно стать lazy load в будущем
+        AttachmentContent attachmentContent = attachmentContentGetService.get(entity.getContentId()); // должно стать lazy load в будущем
         return new TaskAttachment(entity.getId(), entity.getTaskId(), entity.getName(), fileExtension, entity.getSize(),
                 ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), UTC),
-                entity.getAttachmentContentId(), attachmentContent);
+                entity.getContentId(), attachmentContent);
     }
 
     /**
