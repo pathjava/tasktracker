@@ -61,7 +61,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      * @param typeName     имя текущего TaskType
      * @return шаблон WorkFlow
      */
-    private WorkFlow getTemplateWorkFlow(String workFlowName, String typeName) {
+    public WorkFlow getTemplateWorkFlow(String workFlowName, String typeName) {
         return new WorkFlow(
                 null,
                 workFlowName + " - TaskType " + typeName,
