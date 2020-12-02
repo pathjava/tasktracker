@@ -138,9 +138,7 @@ class TaskTypeServiceTest {
                         .map(TaskType::getName)
                         .collect(Collectors.toList()),
                 containsInAnyOrder(
-                        "taskType 1",
-                        "taskType 2",
-                        "taskType 3"
+                        "taskType 1", "taskType 2", "taskType 3"
                 )
         );
     }
