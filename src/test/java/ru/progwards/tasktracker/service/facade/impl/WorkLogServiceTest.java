@@ -60,14 +60,14 @@ class WorkLogServiceTest {
                             user,
                             ZonedDateTime.now(),
                             "WorkLog description " + (1 + i),
-                            changeEstimate(i),
+                            setEstimateValue(i),
                             Duration.ofHours(40)
                     )
             );
         }
     }
 
-    public EstimateChange changeEstimate(int i) {
+    public EstimateChange setEstimateValue(int i) {
         switch (i) {
             case 0:
                 return EstimateChange.AUTO_REDUCE;
@@ -83,7 +83,7 @@ class WorkLogServiceTest {
         return null;
     }
 
-    public Task createTask() {
+    public Task createTestTask() {
         return new Task(
                 1L, null, null, null,
                 null, null, null, null, null,
@@ -104,7 +104,7 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_AUTO_REDUCE() {
-        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(0), createTask());
+        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(0), createTestTask());
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(35)));
@@ -112,7 +112,7 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_SET_TO_VALUE() {
-        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(1), createTask());
+        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(1), createTestTask());
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(40)));
@@ -120,7 +120,7 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_REDUCE_BY_VALUE() {
-        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(2), createTask());
+        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(2), createTestTask());
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(10)));
@@ -128,12 +128,12 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_BREAK_to_DONT_CHANGE_and_INCREASE_BY_VALUE() {
-        Task task_DONT_CHANGE = workLogService.logCreateEstimateChange(workLog.get(3), createTask());
+        Task task_DONT_CHANGE = workLogService.logCreateEstimateChange(workLog.get(3), createTestTask());
 
         assertThat(task_DONT_CHANGE.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(task_DONT_CHANGE.getTimeLeft(), equalTo(Duration.ofHours(50)));
 
-        Task task_INCREASE_BY_VALUE = workLogService.logCreateEstimateChange(workLog.get(4), createTask());
+        Task task_INCREASE_BY_VALUE = workLogService.logCreateEstimateChange(workLog.get(4), createTestTask());
 
         assertThat(task_INCREASE_BY_VALUE.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(task_INCREASE_BY_VALUE.getTimeLeft(), equalTo(Duration.ofHours(50)));
@@ -209,7 +209,7 @@ class WorkLogServiceTest {
 
     @Test
     void logRefreshEstimateChange_AUTO_REDUCE() {
-        Task task = createTask();
+        Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
         Duration spentEarlier = Duration.ofHours(10);
 
@@ -221,7 +221,7 @@ class WorkLogServiceTest {
 
     @Test
     void logRefreshEstimateChange_SET_TO_VALUE() {
-        Task task = createTask();
+        Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
         Duration spentEarlier = Duration.ofHours(10);
 
@@ -234,7 +234,7 @@ class WorkLogServiceTest {
     @Test
     void logRefreshEstimateChange_BREAK_to_DONT_CHANGE_and_REDUCE_BY_VALUE_and_INCREASE_BY_VALUE() {
         Duration spentEarlier = Duration.ofHours(10);
-        Task task = createTask();
+        Task task = createTestTask();
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_DONT_CHANGE = workLogService.logRefreshEstimateChange(
@@ -270,7 +270,7 @@ class WorkLogServiceTest {
     @Test
     void logRemoveEstimateChange_AUTO_REDUCE() {
         Duration spentEarlier = Duration.ofHours(10);
-        Task task = createTask();
+        Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
 
         Task updatedTask = workLogService.logRemoveEstimateChange(workLog.get(0), spentEarlier, task);
@@ -282,7 +282,7 @@ class WorkLogServiceTest {
     @Test
     void logRemoveEstimateChange_SET_TO_VALUE() {
         Duration spentEarlier = Duration.ofHours(10);
-        Task task = createTask();
+        Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
 
         Task updatedTask = workLogService.logRemoveEstimateChange(workLog.get(1), spentEarlier, task);
@@ -294,7 +294,7 @@ class WorkLogServiceTest {
     @Test
     void logRemoveEstimateChange_INCREASE_BY_VALUE() {
         Duration spentEarlier = Duration.ofHours(10);
-        Task task = createTask();
+        Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
 
         Task updatedTask = workLogService.logRemoveEstimateChange(workLog.get(4), spentEarlier, task);
@@ -306,7 +306,7 @@ class WorkLogServiceTest {
     @Test
     void logRemoveEstimateChange_BREAK_to_DONT_CHANGE_and_REDUCE_BY_VALUE() {
         Duration spentEarlier = Duration.ofHours(10);
-        Task task = createTask();
+        Task task = createTestTask();
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_DONT_CHANGE = workLogService.logRefreshEstimateChange(
