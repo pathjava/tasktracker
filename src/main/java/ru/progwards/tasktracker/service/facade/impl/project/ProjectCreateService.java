@@ -69,9 +69,9 @@ public class ProjectCreateService implements CreateService<Project> {
         else {
             //создаем список TaskType проекта
             List<TaskType> taskTypeList = new ArrayList<>(List.of(
-                    new TaskType(model.getId(), null, "EPIC"),
-                    new TaskType(model.getId(), null, "TASK"),
-                    new TaskType(model.getId(), null, "BUG")
+                    new TaskType(model.getId(), null, null,"EPIC"),
+                    new TaskType(model.getId(), null, null,"TASK"),
+                    new TaskType(model.getId(), null, null,"BUG")
                 )
             );
 

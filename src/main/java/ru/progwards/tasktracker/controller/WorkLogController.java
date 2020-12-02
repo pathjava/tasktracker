@@ -70,11 +70,11 @@ public class WorkLogController {
 
         WorkLog workLog = converter.toModel(workLogDtoFull);
         createService.create(workLog);
-        WorkLogDtoFull createWorkLog = converter.toDto(workLog);
+        WorkLogDtoFull createdWorkLog = converter.toDto(workLog);
 
         //TODO - перед добавлением проверять, есть ли уже в БД такой лог, но id генерируется в entity - подумать
 
-        return new ResponseEntity<>(createWorkLog, HttpStatus.OK);
+        return new ResponseEntity<>(createdWorkLog, HttpStatus.OK);
     }
 
     /**
@@ -93,9 +93,9 @@ public class WorkLogController {
 
         WorkLog workLog = converter.toModel(workLogDtoFull);
         refreshService.refresh(workLog);
-        WorkLogDtoFull updateWorkLog = converter.toDto(workLog);
+        WorkLogDtoFull updatedWorkLog = converter.toDto(workLog);
 
-        return new ResponseEntity<>(updateWorkLog, HttpStatus.OK);
+        return new ResponseEntity<>(updatedWorkLog, HttpStatus.OK);
     }
 
     /**

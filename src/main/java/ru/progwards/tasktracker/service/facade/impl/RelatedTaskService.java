@@ -58,9 +58,14 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
                 RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
                 Task task = taskGetService.get(currentTaskId);
                 RelatedTask counter = new RelatedTask(null, counterType, attachedTaskId, task);
-                repository.create(converter.toEntity(counter));
+
+                RelatedTaskEntity entity = converter.toEntity(counter);
+                repository.create(entity);
+                counter.setId(entity.getId());
             }
-            repository.create(converter.toEntity(model));
+            RelatedTaskEntity entity = converter.toEntity(model);
+            repository.create(entity);
+            model.setId(entity.getId());
         }
     }
 
@@ -73,7 +78,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      * @return false - если такой тип связи RelationType уже существует в текущей задаче
      * и true если такого типа связи RelationType нет
      */
-    private boolean checkExistTypeAndLink(Long currentTaskId, Long attachedTaskId, Long relationTypeId) {
+    public boolean checkExistTypeAndLink(Long currentTaskId, Long attachedTaskId, Long relationTypeId) {
         Collection<RelatedTask> collection = getListByTaskId(currentTaskId);
         for (RelatedTask relatedTask : collection) {
             if (relatedTask.getRelationType().getId().equals(relationTypeId)

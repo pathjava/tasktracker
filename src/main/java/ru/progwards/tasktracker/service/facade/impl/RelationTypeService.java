@@ -61,7 +61,9 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      */
     @Override
     public void create(RelationType model) {
-        repository.create(converter.toEntity(model));
+        RelationTypeEntity entity = converter.toEntity(model);
+        repository.create(entity);
+        model.setId(entity.getId());
     }
 
     /**
@@ -86,7 +88,7 @@ public class RelationTypeService implements GetService<Long, RelationType>,
         repository.delete(model.getId());
     }
 
-    private boolean checkingOtherDependenciesRelationType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
+    public boolean checkingOtherDependenciesRelationType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
         return getListService.getList().stream()
                 .anyMatch(relatedTask -> relatedTask.getRelationType().getId().equals(id));
     }

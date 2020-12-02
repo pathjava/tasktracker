@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
  */
 public class WorkLog {
 
-    private final Long id;
+    private Long id;
     private Long taskId;
     private Duration spent;
     private User worker;
@@ -38,6 +38,10 @@ public class WorkLog {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getTaskId() {

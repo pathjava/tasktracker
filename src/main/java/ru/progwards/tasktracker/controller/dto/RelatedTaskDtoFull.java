@@ -8,12 +8,12 @@ package ru.progwards.tasktracker.controller.dto;
 public class RelatedTaskDtoFull {
 
     private final Long id;
-    private RelationTypeDtoFull relationType;
+    private RelationTypeDtoPreview relationType;
     private Long currentTaskId;
     private TaskDtoPreview attachedTask;
 
     public RelatedTaskDtoFull(
-            Long id, RelationTypeDtoFull relationType, Long currentTaskId, TaskDtoPreview attachedTask
+            Long id, RelationTypeDtoPreview relationType, Long currentTaskId, TaskDtoPreview attachedTask
     ) {
         this.id = id;
         this.relationType = relationType;
@@ -25,11 +25,11 @@ public class RelatedTaskDtoFull {
         return id;
     }
 
-    public RelationTypeDtoFull getRelationType() {
+    public RelationTypeDtoPreview getRelationType() {
         return relationType;
     }
 
-    public void setRelationType(RelationTypeDtoFull relationType) {
+    public void setRelationType(RelationTypeDtoPreview relationType) {
         this.relationType = relationType;
     }
 

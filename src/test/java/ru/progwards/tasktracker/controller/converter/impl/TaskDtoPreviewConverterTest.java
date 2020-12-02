@@ -37,7 +37,7 @@ class TaskDtoPreviewConverterTest {
     @Test
     void toModel_Return_Not_Null() {
         Task task = converter.toModel(
-                new TaskDtoPreview(1L, "TT1", "Test task 1 TEST")
+                new TaskDtoPreview(1L, "TT1", "Test task 1 TEST", null, null)
         );
 
         assertThat(task, is(nullValue())); //TODO - пока в конвертере из TaskDtoPreview в Task возвращается null
