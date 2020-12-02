@@ -78,7 +78,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      * @return false - если такой тип связи RelationType уже существует в текущей задаче
      * и true если такого типа связи RelationType нет
      */
-    private boolean checkExistTypeAndLink(Long currentTaskId, Long attachedTaskId, Long relationTypeId) {
+    public boolean checkExistTypeAndLink(Long currentTaskId, Long attachedTaskId, Long relationTypeId) {
         Collection<RelatedTask> collection = getListByTaskId(currentTaskId);
         for (RelatedTask relatedTask : collection) {
             if (relatedTask.getRelationType().getId().equals(relationTypeId)

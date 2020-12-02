@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -30,6 +31,16 @@ class EstimateChangeGetListServiceTest {
 
         assertNotNull(collection);
 
-        assertThat(collection, containsInAnyOrder("AUTO_REDUCE", "DONT_CHANGE", "SET_TO_VALUE"));
+        assertThat(collection.size(), equalTo(5));
+
+        assertThat(
+                collection, containsInAnyOrder(
+                        "AUTO_REDUCE",
+                        "DONT_CHANGE",
+                        "SET_TO_VALUE",
+                        "REDUCE_BY_VALUE",
+                        "INCREASE_BY_VALUE"
+                )
+        );
     }
 }
