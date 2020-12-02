@@ -4,9 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.UserDtoFull;
-import ru.progwards.tasktracker.service.facade.GetListByParentService;
-import ru.progwards.tasktracker.service.vo.WorkFlowAction;
+import ru.progwards.tasktracker.controller.dto.UserRoleDtoPreview;
+import ru.progwards.tasktracker.controller.dto.UserRoleDtoPreview;
+import ru.progwards.tasktracker.service.vo.UserRole;
 import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.service.vo.UserRole;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Преобразование valueObject <-> dto
@@ -17,12 +22,8 @@ import ru.progwards.tasktracker.service.vo.User;
  */
 @Component
 public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
-
-    /**
-     * Сервис получения списка действий по статусу
-     */
     @Autowired
-    private GetListByParentService<Long, WorkFlowAction> workFlowActionGetListByParentService;
+    private Converter<UserRole, UserRoleDtoPreview> userRoleDtoConverter;
 
     /**
      * Преобразовать в бизнес-объект
@@ -35,7 +36,19 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
         return new User(dto.getId(),
                 dto.getName(),
                 dto.getEmail(), dto.getPassword(),
-                dto.getRoles());
+                listDtoToVoUserRole(dto.getRoles()));
+    }
+
+    /**
+     * Метод конвертирует лист из Dto в VO
+     *
+     * @param actions лист Dto UserRole
+     * @return лист VO UserRole
+     */
+    private List<UserRole> listDtoToVoUserRole(List<UserRoleDtoPreview> actions) {
+        return actions.stream()
+                .map(dto -> userRoleDtoConverter.toModel(dto))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -48,7 +61,18 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
     public UserDtoFull toDto(User model) {
         return new UserDtoFull(model.getId(),
                 model.getName(), model.getEmail(), model.getPassword(),
-        model.getRoles());
+                listVoToDtoUserRole(model.getRoles()));
+    }
+    /**
+     * Метод конвертирует лист из VO в Dto
+     *
+     * @param actions лист VO UserRole задачи
+     * @return лист Dto UserRole задачи
+     */
+    private List<UserRoleDtoPreview> listVoToDtoUserRole(List<UserRole> actions) {
+        return actions.stream()
+                .map(model -> userRoleDtoConverter.toDto(model))
+                .collect(Collectors.toList());
     }
 
 }

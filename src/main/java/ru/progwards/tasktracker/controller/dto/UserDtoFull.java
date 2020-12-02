@@ -1,8 +1,10 @@
 package ru.progwards.tasktracker.controller.dto;
 
-import ru.progwards.tasktracker.service.vo.UserRole;
+import ru.progwards.tasktracker.controller.dto.UserRoleDtoPreview;
 import java.util.List;
-
+//  ищем пример
+//  TaskDtoFullConverter
+//  WorkFlowActionDtoPreview
 /**
  * @author Aleksandr Sidelnikov
  */
@@ -12,9 +14,9 @@ public class UserDtoFull {
     private String name;
     private String email;
     private String password;
-    private List<UserRole> roles;
+    private List<UserRoleDtoPreview> roles;
 
-    public UserDtoFull(Long id, String name, String email, String password, List<UserRole> roles) {
+    public UserDtoFull(Long id, String name, String email, String password, List<UserRoleDtoPreview> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -38,7 +40,7 @@ public class UserDtoFull {
         return password;
     }
 
-    public List<UserRole> getRoles() {
+    public List<UserRoleDtoPreview> getRoles() {
         return roles;
     }
 
