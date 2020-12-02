@@ -12,6 +12,7 @@ public class ProjectEntity {
     private Long ownerId;
     private Long created;
     private Long lastTaskCode;
+    private boolean isDeleted;
 
     public ProjectEntity(Long id, String name, String description, String prefix, Long ownerId,
                          Long created, Long lastTaskCode) {
@@ -78,5 +79,13 @@ public class ProjectEntity {
 
     public void setLastTaskCode(Long lastTaskCode) {
         this.lastTaskCode = lastTaskCode;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

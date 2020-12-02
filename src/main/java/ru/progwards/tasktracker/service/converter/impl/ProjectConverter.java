@@ -7,29 +7,20 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
-import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.service.vo.TaskType;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс, позволяющий преобразовывать сущности репозитория в бизнес-модель и обратно
+ * Конвертер ProjectEntity <-> Project
  * @author Pavel Khovaylo
  */
 @Component
 public class ProjectConverter implements Converter<ProjectEntity, Project> {
-
-    /**
-     * сервис с методом получения списка всех задач по определенному проекту
-     */
-    @Autowired
-    private GetListByProjectService<Long, Task> taskGetListByProjectService;
-
     /**
      * сервис по поиску пользователя
      */
@@ -37,7 +28,7 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
     private GetService<Long, User> userGetService;
 
     @Autowired
-    private GetService<Long, WorkFlow> workFlowGetService;
+    private GetListByProjectService<Long, TaskType> taskTypeGetListByProjectService;
 
     /**
      * метод по преобразованию сущности репозитория в бизнес-модель
@@ -51,8 +42,7 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
 
         return new Project(entity.getId(), entity.getName(), entity.getDescription(),
                 entity.getPrefix(), userGetService.get(entity.getOwnerId()), getZDTCreated(entity.getCreated()),
-                //TODO нужен сервисный метод для получения всех TaskType, относящихся к данному проекту
-                new ArrayList<>(),
+                (List<TaskType>) taskTypeGetListByProjectService.getListByProjectId(entity.getId()),
                 entity.getLastTaskCode());
     }
 

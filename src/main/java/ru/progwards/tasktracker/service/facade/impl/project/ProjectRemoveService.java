@@ -43,9 +43,13 @@ public class ProjectRemoveService implements RemoveService<Project> {
         Project project = converter.toVo(repository.get(model.getId()));
 
         // если спискок задач у проекта пустой, то удаляем проект; если какие-то задачи есть, то выводим исключение
-        if (taskGetListByProjectService.getListByProjectId(project.getId()).size() == 0)
-            repository.delete(model.getId());
-        else
+        if (taskGetListByProjectService.getListByProjectId(project.getId()).size() == 0) {
+            ProjectEntity entity = converter.toEntity(model);
+            // устанавливаем флажок, который означает, что проект удалён
+            entity.setDeleted(true);
+            repository.update(entity);
+//            repository.delete(model.getId());
+        } else
             throw new OperationIsNotPossibleException("Project with id = " + model.getId() +
                     " have tasks. Delete not possible");
     }

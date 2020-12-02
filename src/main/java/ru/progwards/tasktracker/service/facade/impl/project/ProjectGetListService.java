@@ -36,6 +36,8 @@ public class ProjectGetListService implements GetListService<Project> {
      */
     @Override
     public Collection<Project> getList() {
-        return repository.get().stream().map(e -> converter.toVo(e)).collect(Collectors.toList());
+        // получаем список, если isDeleted = false
+        return repository.get().stream().filter(e -> !e.isDeleted()).
+                map(e -> converter.toVo(e)).collect(Collectors.toList());
     }
 }
