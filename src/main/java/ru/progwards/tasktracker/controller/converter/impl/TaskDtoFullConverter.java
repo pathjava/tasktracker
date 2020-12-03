@@ -68,7 +68,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     dto.getTimeLeft(),
                     listDtoToVoRelatedTask(dto.getRelatedTasks()),
                     listDtoToVoTaskAttachment(dto.getAttachments()),
-                    task.getWorkLogs()
+                    task.getWorkLogs(),
+                    task.getNotes()
             );
         }
     }

@@ -39,6 +39,8 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
     private Converter<ProjectEntity, Project> projectConverter;
     @Autowired
     private Converter<WorkFlowActionEntity, WorkFlowAction> workFlowActionConverter;
+    @Autowired
+    private Converter<TaskNoteEntity, TaskNote> taskNoteConverter;
 
     /**
      * Метод конвертирует сущность Entity в бизнес объект
@@ -70,8 +72,21 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     checkDurationEntityNotNull(entity.getTimeLeft()),
                     listEntityToVoRelatedTask(entity.getRelatedTasks()),
                     listEntityToVoTaskAttachment(entity.getAttachments()),
-                    listEntityToVoWorkLog(entity.getWorkLogs())
+                    listEntityToVoWorkLog(entity.getWorkLogs()),
+                    listEntityToVoTaskNote(entity.getNotes())
             );
+    }
+
+    /**
+     * Метод конвертирует лист из Entity в VO
+     *
+     * @param notes лист Entity TaskNote задачи
+     * @return лист VO TaskNote задачи
+     */
+    private List<TaskNote> listEntityToVoTaskNote(List<TaskNoteEntity> notes) {
+        return notes.stream()
+                .map(entity -> taskNoteConverter.toVo(entity))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -170,8 +185,21 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     listVoToEntityRelatedTask(valueObject.getRelatedTasks()),
                     listVoToEntityTaskAttachment(valueObject.getAttachments()),
                     listVoToEntityWorkLog(valueObject.getWorkLogs()),
+                    listVoToEntityTaskNote(valueObject.getNotes()),
                     false
             );
+    }
+
+    /**
+     * Метод конвертирует лист из VO в Entity
+     *
+     * @param notes лист VO TaskNote задачи
+     * @return лист Entity TaskNote задачи
+     */
+    private List<TaskNoteEntity> listVoToEntityTaskNote(List<TaskNote> notes) {
+        return notes.stream()
+                .map(valueObject -> taskNoteConverter.toEntity(valueObject))
+                .collect(Collectors.toList());
     }
 
     /**
