@@ -5,14 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * тестирование конвертера между valueObject <-> entity
@@ -24,6 +28,20 @@ class WorkLogConverterTest {
 
     @Autowired
     private Converter<WorkLogEntity, WorkLog> converter;
+    @Autowired
+    private WorkLogConverter workLogConverter;
+
+    @Test
+    void toVo() {
+        WorkLog workLog = converter.toVo(
+                new WorkLogEntity(
+                        null, null, null, null,
+                        ZonedDateTime.now().toEpochSecond(), null
+                )
+        );
+
+        assertThat(workLog, is(notNullValue()));
+    }
 
     @Test
     void toVo_Return_Null() {
@@ -33,15 +51,47 @@ class WorkLogConverterTest {
     }
 
     @Test
-    void toVo_Return_Not_Null() {
-        WorkLog workLog = converter.toVo(
-                new WorkLogEntity(
-                        null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description"
+    void checkDurationEntityNotNull() {
+        Long seconds = Duration.ofHours(12).getSeconds();
+        Duration duration = workLogConverter.checkDurationEntityNotNull(seconds);
+
+        assertNotNull(duration);
+    }
+
+    @Test
+    void checkDurationEntityNotNull_Return_Null() {
+        Duration duration = workLogConverter.checkDurationEntityNotNull(null);
+
+        assertNull(duration);
+    }
+
+    @Test
+    void checkUpdatedEntityNotNull() {
+        Long seconds = ZonedDateTime.now().toEpochSecond();
+        ZonedDateTime zdt = workLogConverter.checkUpdatedEntityNotNull(seconds);
+
+        assertNotNull(zdt);
+    }
+
+    @Test
+    void checkUpdatedEntityNotNull_Return_Null() {
+        ZonedDateTime zdt = workLogConverter.checkUpdatedEntityNotNull(null);
+
+        assertNull(zdt);
+    }
+
+    @Test
+    void toEntity() {
+        User user = mock(User.class);
+
+        WorkLogEntity entity = converter.toEntity(
+                new WorkLog(
+                        null, 2L, null, user, ZonedDateTime.now(),
+                        null, null, null
                 )
         );
 
-        assertThat(workLog, is(notNullValue()));
+        assertThat(entity, is(notNullValue()));
     }
 
     @Test
@@ -52,14 +102,32 @@ class WorkLogConverterTest {
     }
 
     @Test
-    void toEntity_Return_Not_Null() {
-        WorkLogEntity entity = converter.toEntity(
-                new WorkLog(
-                        null, 2L, null, null, ZonedDateTime.now(),
-                        "Description", null, null
-                )
-        );
+    void checkDurationValueObjectNotNull() {
+        Duration duration = Duration.ofHours(12);
+        Long seconds = workLogConverter.checkDurationValueObjectNotNull(duration);
 
-        assertThat(entity, is(notNullValue()));
+        assertNotNull(seconds);
+    }
+
+    @Test
+    void checkDurationValueObjectNotNull_Return_Null() {
+        Long seconds = workLogConverter.checkDurationValueObjectNotNull(null);
+
+        assertNull(seconds);
+    }
+
+    @Test
+    void checkZonedDateTimeValueObjectNotNull() {
+        ZonedDateTime zdt = ZonedDateTime.now();
+        Long seconds = workLogConverter.checkZonedDateTimeValueObjectNotNull(zdt);
+
+        assertNotNull(seconds);
+    }
+
+    @Test
+    void checkZonedDateTimeValueObjectNotNull_Return_Null() {
+        Long seconds = workLogConverter.checkZonedDateTimeValueObjectNotNull(null);
+
+        assertNull(seconds);
     }
 }

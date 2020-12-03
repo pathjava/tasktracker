@@ -54,7 +54,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
      * @param duration секунды, могут быть пустыми и значение
      * @return продолжительность или пусто
      */
-    private Duration checkDurationEntityNotNull(Long duration) {
+    public Duration checkDurationEntityNotNull(Long duration) {
         return duration != null ? Duration.ofSeconds(duration) : null;
     }
 
@@ -65,7 +65,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
      * @param updated секунды, могут быть пустыми и значение
      * @return дату-время или пусто
      */
-    private ZonedDateTime checkUpdatedEntityNotNull(Long updated) {
+    public ZonedDateTime checkUpdatedEntityNotNull(Long updated) {
         return updated != null ? ZonedDateTime.ofInstant(
                 Instant.ofEpochSecond(updated), ZoneId.of("Europe/Moscow")) : null;
     }
@@ -98,7 +98,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
      * @param duration продолжительность
      * @return продолжительность в секундах или пусто
      */
-    private Long checkDurationValueObjectNotNull(Duration duration) {
+    public Long checkDurationValueObjectNotNull(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
 
@@ -109,7 +109,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
      * @param time дата-время
      * @return дата-время в секундах или пусто
      */
-    private Long checkZonedDateTimeValueObjectNotNull(ZonedDateTime time) {
+    public Long checkZonedDateTimeValueObjectNotNull(ZonedDateTime time) {
         return time != null ? time.toEpochSecond() : null;
     }
 }
