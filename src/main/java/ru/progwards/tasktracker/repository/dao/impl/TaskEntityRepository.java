@@ -31,7 +31,7 @@ public class TaskEntityRepository
     @Override
     public Collection<TaskEntity> get() {
         return jsonHandler.getMap().values().stream()
-                .filter(value -> !value.getDeleted())
+                .filter(entity -> !entity.isDeleted())
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +44,7 @@ public class TaskEntityRepository
     @Override
     public TaskEntity get(Long id) {
         TaskEntity task = jsonHandler.getMap().get(id);
-        return task == null || task.getDeleted() ? null : task;
+        return task == null || task.isDeleted() ? null : task;
     }
 
     /**
@@ -95,7 +95,7 @@ public class TaskEntityRepository
     @Override
     public Collection<TaskEntity> getByProjectId(Long projectId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getProject().getId().equals(projectId) && !entity.getDeleted())
+                .filter(entity -> entity.getProject().getId().equals(projectId) && !entity.isDeleted())
                 .collect(Collectors.toList());
     }
 
@@ -132,7 +132,7 @@ public class TaskEntityRepository
     @Override
     public TaskEntity getByCode(String code) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getCode().equals(code) && !entity.getDeleted())
+                .filter(entity -> entity.getCode().equals(code) && !entity.isDeleted())
                 .findFirst().orElse(null);
     }
 }

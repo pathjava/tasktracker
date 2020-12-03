@@ -229,7 +229,7 @@ public class TaskEntity {
         this.notes = notes;
     }
 
-    public boolean getDeleted() {
+    public boolean isDeleted() {
         return isDeleted;
     }
 
