@@ -62,7 +62,7 @@ public class TaskCreateService implements CreateService<Task> {
      * @param project_id идентификатор проекта, к которому принадлежит задача
      * @return код задачи в формате "NGR-1"
      */
-    private String generateTaskCode(Long project_id) {
+    public String generateTaskCode(Long project_id) {
         Project project = getService.get(project_id);
         Long lastTaskCode = project.getLastTaskCode() + 1;
         String taskCode = project.getPrefix() + "-" + lastTaskCode;
