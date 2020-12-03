@@ -58,7 +58,8 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
                     valueObject.getId(),
                     typeConverter.toEntity(valueObject.getRelationType()),
                     valueObject.getCurrentTaskId(),
-                    taskConverter.toEntity(valueObject.getAttachedTask())
+                    taskConverter.toEntity(valueObject.getAttachedTask()),
+                    false
             );
     }
 }

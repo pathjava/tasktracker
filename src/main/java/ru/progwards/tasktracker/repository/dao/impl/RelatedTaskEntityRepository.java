@@ -8,7 +8,6 @@ import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.RelatedTaskEntity;
 
 import java.util.Collection;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +29,9 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
      */
     @Override
     public Collection<RelatedTaskEntity> get() {
-        return jsonHandler.getMap().values();
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> !entity.isDeleted())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -41,7 +42,8 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
      */
     @Override
     public RelatedTaskEntity get(Long id) {
-        return jsonHandler.getMap().get(id);
+        RelatedTaskEntity relatedTask = jsonHandler.getMap().get(id);
+        return relatedTask == null || relatedTask.isDeleted() ? null : relatedTask;
     }
 
     /**
@@ -70,7 +72,8 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
         RelatedTaskEntity entity = jsonHandler.getMap().get(id);
         if (entity != null) {
             jsonHandler.getMap().remove(id);
-            jsonHandler.write();
+            entity.setDeleted(true);
+            create(entity);
         }
     }
 
@@ -83,7 +86,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     @Override
     public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getCurrentTaskId().equals(taskId))
+                .filter(entity -> entity.getCurrentTaskId().equals(taskId) && !entity.isDeleted())
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +99,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     @Override
     public Collection<RelatedTaskEntity> getByAttachedTaskId(Long taskId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getAttachedTask().getId().equals(taskId))
+                .filter(entity -> entity.getAttachedTask().getId().equals(taskId) && !entity.isDeleted())
                 .collect(Collectors.toList());
     }
 }
