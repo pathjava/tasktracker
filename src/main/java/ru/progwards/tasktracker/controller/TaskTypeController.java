@@ -28,6 +28,8 @@ public class TaskTypeController {
     @Autowired
     private GetService<Long, TaskType> getService;
     @Autowired
+    private GetListService<TaskType> getListService;
+    @Autowired
     private RemoveService<TaskType> removeService;
     @Autowired
     private RefreshService<TaskType> refreshService;
@@ -74,14 +76,32 @@ public class TaskTypeController {
     }
 
     /**
+     * Метод получения коллекции типов задач
+     *
+     * @return коллекция Dto типов задач
+     */
+    @GetMapping("/list")
+    public ResponseEntity<Collection<TaskTypeDtoFull>> getListTaskType() {
+        Collection<TaskTypeDtoFull> collection = getListService.getList().stream()
+                .map(taskType -> converter.toDto(taskType))
+                .collect(Collectors.toUnmodifiableList());
+
+        if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список типов задач пустой!");
+
+        return new ResponseEntity<>(collection, HttpStatus.OK);
+    }
+
+    /**
      * Метод обновления типа задачи
      *
-     * @param id идентификатор обновляемого типа задачи
+     * @param id              идентификатор обновляемого типа задачи
      * @param taskTypeDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленный тип задачи
      */
     @PutMapping("/{id}/update")
-    public ResponseEntity<TaskTypeDtoFull> updateTaskType(@PathVariable Long id, @RequestBody TaskTypeDtoFull taskTypeDtoFull) {
+    public ResponseEntity<TaskTypeDtoFull> updateTaskType(@PathVariable Long id,
+                                                          @RequestBody TaskTypeDtoFull taskTypeDtoFull) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
