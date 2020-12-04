@@ -1,14 +1,17 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.RelationType;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 /**
  * тестирование конвертера между valueObject <-> entity
@@ -18,40 +21,58 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @SpringBootTest
 class RelationTypeConverterTest {
 
-    @Autowired
+    @Mock
     private Converter<RelationTypeEntity, RelationType> converter;
 
     @Test
-    void toVo_return_Null() {
-        RelationType type = converter.toVo(null);
+    void toVo() {
+        when(converter.toVo(isA(RelationTypeEntity.class))).thenReturn(
+                new RelationType(null, null, null)
+        );
 
-        assertThat(type, is(nullValue()));
-    }
-
-    @Test
-    void toVo_return_NotNull() {
         RelationType type = converter.toVo(
-                new RelationTypeEntity(
-                        null, "блокирующая", null)
+                new RelationTypeEntity(null, null, null)
         );
 
-        assertThat(type, is(notNullValue()));
+        verify(converter, times(1)).toVo(any());
+
+        assertNotNull(type);
     }
 
     @Test
-    void toEntity_returnNull() {
-        RelationTypeEntity typeEntity = converter.toEntity(null);
+    void toVo_Return_Null() {
+        when(converter.toVo(isA(RelationTypeEntity.class))).thenReturn(null);
 
-        assertThat(typeEntity, is(nullValue()));
+        RelationType type = converter.toVo(any());
+
+        verify(converter, times(1)).toVo(any());
+
+        assertNull(type);
     }
 
     @Test
-    void toEntity_return_Not_Null() {
-        RelationTypeEntity typeEntity = converter.toEntity(
-                new RelationType(
-                        null, "блокирующая", null)
+    void toEntity() {
+        when(converter.toEntity(isA(RelationType.class))).thenReturn(
+                new RelationTypeEntity(null, null, null)
         );
 
-        assertThat(typeEntity, is(notNullValue()));
+        RelationTypeEntity entity = converter.toEntity(
+                new RelationType(null, null, null)
+        );
+
+        verify(converter, times(1)).toEntity(any());
+
+        assertNotNull(entity);
+    }
+
+    @Test
+    void toEntity_Return_Null() {
+        when(converter.toEntity(isA(RelationType.class))).thenReturn(null);
+
+        RelationTypeEntity entity = converter.toEntity(any());
+
+        verify(converter, times(1)).toEntity(any());
+
+        assertNull(entity);
     }
 }

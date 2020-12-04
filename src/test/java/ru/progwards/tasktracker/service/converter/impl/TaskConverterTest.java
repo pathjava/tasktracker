@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * тестирование конвертера между valueObject <-> entity
@@ -28,9 +28,10 @@ class TaskConverterTest {
     void toVo() {
         when(converter.toVo(isA(TaskEntity.class))).thenReturn(
                 new Task(
-                        null, null, null, null, null, null, null,
                         null, null, null, null, null, null,
-                        null, null, null, null, null, null
+                        null, null, null, null, null,
+                        null, null, null, null, null,
+                        null, null, null, null
                 )
         );
 
@@ -39,9 +40,11 @@ class TaskConverterTest {
                         null, null, null, null, null, null,
                         null, null, null, null, null,
                         null, null, null, null, null,
-                        null, null, null, null
+                        null, null, null, null, false
                 )
         );
+
+        verify(converter, times(1)).toVo(any());
 
         assertNotNull(task);
     }
@@ -52,6 +55,8 @@ class TaskConverterTest {
 
         Task task = converter.toVo(any());
 
+        verify(converter, times(1)).toVo(any());
+
         assertNull(task);
     }
 
@@ -59,9 +64,10 @@ class TaskConverterTest {
     void toEntity() {
         when(converter.toEntity(isA(Task.class))).thenReturn(
                 new TaskEntity(
-                        null, null, null, null, null, null, null,
-                        null, null, null, null, null, null, null,
-                        null, null, null, null, null, null
+                        null, null, null, null, null, null,
+                        null, null, null, null, null,
+                        null, null, null, null, null,
+                        null, null, null, null, false
                 )
         );
 
@@ -70,9 +76,11 @@ class TaskConverterTest {
                         null, null, null, null, null, null,
                         null, null, null, null, null,
                         null, null, null, null, null,
-                        null, null, null
+                        null, null, null, null
                 )
         );
+
+        verify(converter, times(1)).toEntity(any());
 
         assertNotNull(entity);
     }
@@ -82,6 +90,8 @@ class TaskConverterTest {
         when(converter.toEntity(isA(Task.class))).thenReturn(null);
 
         TaskEntity entity = converter.toEntity(any());
+
+        verify(converter, times(1)).toEntity(any());
 
         assertNull(entity);
     }

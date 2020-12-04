@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Oleg Kiselev
@@ -32,6 +32,8 @@ class TaskTypeConverterTest {
                 new TaskTypeEntity(null, null, null, null)
         );
 
+        verify(converter, times(1)).toVo(any());
+
         assertNotNull(taskType);
     }
 
@@ -40,6 +42,8 @@ class TaskTypeConverterTest {
         when(converter.toVo(isA(TaskTypeEntity.class))).thenReturn(null);
 
         TaskType taskType = converter.toVo(any());
+
+        verify(converter, times(1)).toVo(any());
 
         assertNull(taskType);
     }
@@ -54,6 +58,8 @@ class TaskTypeConverterTest {
                 new TaskType(null, null, null, null)
         );
 
+        verify(converter, times(1)).toEntity(any());
+
         assertNotNull(entity);
     }
 
@@ -62,6 +68,8 @@ class TaskTypeConverterTest {
         when(converter.toEntity(isA(TaskType.class))).thenReturn(null);
 
         TaskTypeEntity entity = converter.toEntity(any());
+
+        verify(converter, times(1)).toEntity(any());
 
         assertNull(entity);
     }

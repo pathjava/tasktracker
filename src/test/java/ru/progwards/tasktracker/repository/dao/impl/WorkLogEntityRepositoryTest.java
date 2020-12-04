@@ -1,23 +1,24 @@
 package ru.progwards.tasktracker.repository.dao.impl;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 
-import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 /**
  * тестирование методов репозитория логов
@@ -27,121 +28,99 @@ import static org.mockito.ArgumentMatchers.anyLong;
 @SpringBootTest
 class WorkLogEntityRepositoryTest {
 
-    @Autowired
+    private final List<WorkLogEntity> entities = new ArrayList<>();
+    @Mock
     private Repository<Long, WorkLogEntity> repository;
-
-    @Autowired
+    @Mock
     private RepositoryByTaskId<Long, WorkLogEntity> byTaskId;
 
-    @Autowired
-    private JsonHandler<Long, WorkLogEntity> jsonHandler;
+    {
+        for (int i = 0; i < 3; i++) {
+            entities.add(
+                    new WorkLogEntity(
+                            1L + i, 1L + i, null, null, null, "log " + (1 + i)
+                    )
+            );
+        }
+    }
 
     @Test
     void get() {
-        createEntityForTest();
+        when(repository.get(anyLong())).thenReturn(entities.get(0));
 
-        Long id = getIdCreatedEntity();
+        WorkLogEntity entity = repository.get(1L);
 
-        if (id != null) {
-            WorkLogEntity entity = repository.get(id);
+        assertNotNull(entity);
 
-            assertNotNull(entity);
+        assertThat(entity.getDescription(), equalTo("log 1"));
 
-            assertEquals("Description Log Repository", entity.getDescription());
-
-            repository.delete(id);
-        } else
-            fail();
+        verify(repository, times(1)).get(1L);
     }
 
     @Test
     void get_Return_Null() {
-        WorkLogEntity entity = repository.get(anyLong());
+        when(repository.get(anyLong())).thenReturn(null);
+
+        WorkLogEntity entity = repository.get(1L);
 
         assertNull(entity);
+
+        verify(repository, times(1)).get(1L);
     }
 
     @Test
     void create() {
-        createEntityForTest();
+        doNothing().when(repository).create(isA(WorkLogEntity.class));
 
-        Long id = getIdCreatedEntity();
+        repository.create(entities.get(0));
 
-        if (id != null) {
-            WorkLogEntity entity = repository.get(id);
-
-            assertNotNull(entity);
-
-            assertEquals("Description Log Repository", entity.getDescription());
-
-            repository.delete(id);
-        } else
-            fail();
+        verify(repository, times(1)).create(entities.get(0));
     }
 
     @Test
     void delete() {
-        createEntityForTest();
+        doNothing().when(repository).delete(anyLong());
 
-        Long id = getIdCreatedEntity();
+        repository.delete(1L);
 
-        if (id != null) {
-            repository.delete(id);
-
-            WorkLogEntity entity = repository.get(id);
-
-            assertNull(entity);
-        } else
-            fail();
-    }
-
-    private void createEntityForTest() {
-        repository.create(
-                new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description Log Repository")
-        );
-    }
-
-    private Long getIdCreatedEntity() {
-        return byTaskId.getByTaskId(2L).stream()
-                .filter(e -> e.getDescription().equals("Description Log Repository")).findFirst()
-                .map(WorkLogEntity::getId)
-                .orElse(null);
+        verify(repository, times(1)).delete(1L);
     }
 
     @Test
     void getByTaskId() {
-        jsonHandler.getMap().clear();
+        when(byTaskId.getByTaskId(anyLong())).thenReturn(entities);
 
-        repository.create(
-                new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description Log RepositoryByTaskId 1")
+        Collection<WorkLogEntity> collection = byTaskId.getByTaskId(1L);
+
+        assertThat(collection.size(), equalTo(3));
+
+        verify(byTaskId, times(1)).getByTaskId(1L);
+
+        assertThat(
+                collection.stream()
+                        .map(WorkLogEntity::getDescription)
+                        .collect(Collectors.toList()),
+                containsInAnyOrder("log 1", "log 2", "log 3")
         );
-        repository.create(
-                new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
-                        "Description Log RepositoryByTaskId 2")
-        );
-
-        Collection<WorkLogEntity> collection = byTaskId.getByTaskId(2L);
-
-        assertNotNull(collection);
-
-        assertThat(collection.size(), is(2));
-
-        List<String> actualTaskName = collection.stream()
-                .map(WorkLogEntity::getDescription)
-                .collect(Collectors.toUnmodifiableList());
-
-        assertThat(actualTaskName, containsInAnyOrder("Description Log RepositoryByTaskId 1",
-                "Description Log RepositoryByTaskId 2"));
-
-        jsonHandler.getMap().clear();
     }
 
     @Test
     void getByTaskId_Return_Empty_Collection() {
-        Collection<WorkLogEntity> collection = byTaskId.getByTaskId(anyLong());
+        when(byTaskId.getByTaskId(anyLong())).thenReturn(Collections.emptyList());
+
+        Collection<WorkLogEntity> collection = byTaskId.getByTaskId(1L);
 
         assertTrue(collection.isEmpty());
+
+        verify(byTaskId, times(1)).getByTaskId(1L);
+    }
+
+    @Test
+    void update() {
+        doNothing().when(repository).update(isA(WorkLogEntity.class));
+
+        repository.update(entities.get(0));
+
+        verify(repository, times(1)).update(entities.get(0));
     }
 }

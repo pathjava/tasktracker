@@ -1,9 +1,7 @@
 package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.GetListService;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -27,19 +25,19 @@ import static org.mockito.Mockito.*;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 public class TaskGetListServiceTest {
 
-    private final List<Task> tasks = new ArrayList<>();
+    private final List<Task> valueObjects = new ArrayList<>();
     @Mock
     private GetListService<Task> getListService;
 
     {
         for (int i = 0; i < 3; i++) {
-            tasks.add(
+            valueObjects.add(
                     new Task(
-                            1L + i, null, "testTask " + (1 + i), null, null, null,
-                            null, null, null, null, null, null, null,
+                            1L + i, null, "testTask " + (1 + i), null,
+                            null, null, null, null, null,
+                            null, null, null, null, null,
                             null, null, null, null, null, null
                     )
             );
@@ -48,7 +46,7 @@ public class TaskGetListServiceTest {
 
     @Test
     public void getList() {
-        when(getListService.getList()).thenReturn(tasks);
+        when(getListService.getList()).thenReturn(valueObjects);
 
         Collection<Task> collection = getListService.getList();
 
