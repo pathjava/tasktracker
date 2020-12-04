@@ -1,9 +1,7 @@
 package ru.progwards.tasktracker.service.facade.impl;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.*;
@@ -32,10 +30,9 @@ import static org.mockito.Mockito.*;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 class WorkLogServiceTest {
 
-    private final List<WorkLog> workLog = new ArrayList<>();
+    private final List<WorkLog> valueObjects = new ArrayList<>();
     @Mock
     private CreateService<WorkLog> createService;
     @Mock
@@ -52,7 +49,7 @@ class WorkLogServiceTest {
     {
         User user = mock(User.class);
         for (int i = 0; i < 5; i++) {
-            workLog.add(
+            valueObjects.add(
                     new WorkLog(
                             1L + i,
                             1L,
@@ -89,7 +86,7 @@ class WorkLogServiceTest {
                 null, null, null, null, null,
                 null, null, null, null,
                 Duration.ofHours(50), Duration.ofHours(0), Duration.ofHours(50),
-                null, null, null
+                null, null, null, null
         );
     }
 
@@ -97,14 +94,14 @@ class WorkLogServiceTest {
     void create() {
         doNothing().when(createService).create(isA(WorkLog.class));
 
-        createService.create(workLog.get(0));
+        createService.create(valueObjects.get(0));
 
-        verify(createService, times(1)).create(workLog.get(0));
+        verify(createService, times(1)).create(valueObjects.get(0));
     }
 
     @Test
     void logCreateEstimateChange_AUTO_REDUCE() {
-        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(0), createTestTask());
+        Task updatedTask = workLogService.logCreateEstimateChange(valueObjects.get(0), createTestTask());
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(35)));
@@ -112,7 +109,7 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_SET_TO_VALUE() {
-        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(1), createTestTask());
+        Task updatedTask = workLogService.logCreateEstimateChange(valueObjects.get(1), createTestTask());
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(40)));
@@ -120,7 +117,7 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_REDUCE_BY_VALUE() {
-        Task updatedTask = workLogService.logCreateEstimateChange(workLog.get(2), createTestTask());
+        Task updatedTask = workLogService.logCreateEstimateChange(valueObjects.get(2), createTestTask());
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(10)));
@@ -128,12 +125,12 @@ class WorkLogServiceTest {
 
     @Test
     void logCreateEstimateChange_BREAK_to_DONT_CHANGE_and_INCREASE_BY_VALUE() {
-        Task task_DONT_CHANGE = workLogService.logCreateEstimateChange(workLog.get(3), createTestTask());
+        Task task_DONT_CHANGE = workLogService.logCreateEstimateChange(valueObjects.get(3), createTestTask());
 
         assertThat(task_DONT_CHANGE.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(task_DONT_CHANGE.getTimeLeft(), equalTo(Duration.ofHours(50)));
 
-        Task task_INCREASE_BY_VALUE = workLogService.logCreateEstimateChange(workLog.get(4), createTestTask());
+        Task task_INCREASE_BY_VALUE = workLogService.logCreateEstimateChange(valueObjects.get(4), createTestTask());
 
         assertThat(task_INCREASE_BY_VALUE.getTimeSpent(), equalTo(Duration.ofHours(15)));
         assertThat(task_INCREASE_BY_VALUE.getTimeLeft(), equalTo(Duration.ofHours(50)));
@@ -141,7 +138,7 @@ class WorkLogServiceTest {
 
     @Test
     void getListByTaskId() {
-        when(getListByTaskService.getListByTaskId(anyLong())).thenReturn(workLog);
+        when(getListByTaskService.getListByTaskId(anyLong())).thenReturn(valueObjects);
 
         Collection<WorkLog> collection = getListByTaskService.getListByTaskId(1L);
 
@@ -176,7 +173,7 @@ class WorkLogServiceTest {
 
     @Test
     void get() {
-        when(getService.get(anyLong())).thenReturn(workLog.get(0));
+        when(getService.get(anyLong())).thenReturn(valueObjects.get(0));
 
         WorkLog wl = getService.get(1L);
 
@@ -200,11 +197,11 @@ class WorkLogServiceTest {
 
     @Test
     void refresh() {
-        doNothing().when(refreshService).refresh(workLog.get(0));
+        doNothing().when(refreshService).refresh(valueObjects.get(0));
 
-        refreshService.refresh(workLog.get(0));
+        refreshService.refresh(valueObjects.get(0));
 
-        verify(refreshService, times(1)).refresh(workLog.get(0));
+        verify(refreshService, times(1)).refresh(valueObjects.get(0));
     }
 
     @Test
@@ -213,7 +210,7 @@ class WorkLogServiceTest {
         task.setTimeSpent(Duration.ofHours(20));
         Duration spentEarlier = Duration.ofHours(10);
 
-        Task updatedTask = workLogService.logRefreshEstimateChange(workLog.get(0), spentEarlier, task);
+        Task updatedTask = workLogService.logRefreshEstimateChange(valueObjects.get(0), spentEarlier, task);
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(45)));
@@ -225,7 +222,7 @@ class WorkLogServiceTest {
         task.setTimeSpent(Duration.ofHours(20));
         Duration spentEarlier = Duration.ofHours(10);
 
-        Task updatedTask = workLogService.logRefreshEstimateChange(workLog.get(1), spentEarlier, task);
+        Task updatedTask = workLogService.logRefreshEstimateChange(valueObjects.get(1), spentEarlier, task);
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(40)));
@@ -238,21 +235,21 @@ class WorkLogServiceTest {
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_DONT_CHANGE = workLogService.logRefreshEstimateChange(
-                workLog.get(3), spentEarlier, task
+                valueObjects.get(3), spentEarlier, task
         );
         assertThat(updatedTask_DONT_CHANGE.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask_DONT_CHANGE.getTimeLeft(), equalTo(Duration.ofHours(50)));
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_REDUCE_BY_VALUE = workLogService.logRefreshEstimateChange(
-                workLog.get(2), spentEarlier, task
+                valueObjects.get(2), spentEarlier, task
         );
         assertThat(updatedTask_REDUCE_BY_VALUE.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask_REDUCE_BY_VALUE.getTimeLeft(), equalTo(Duration.ofHours(50)));
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_INCREASE_BY_VALUE = workLogService.logRefreshEstimateChange(
-                workLog.get(4), spentEarlier, task
+                valueObjects.get(4), spentEarlier, task
         );
         assertThat(updatedTask_INCREASE_BY_VALUE.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask_INCREASE_BY_VALUE.getTimeLeft(), equalTo(Duration.ofHours(50)));
@@ -260,11 +257,11 @@ class WorkLogServiceTest {
 
     @Test
     void remove() {
-        doNothing().when(removeService).remove(workLog.get(0));
+        doNothing().when(removeService).remove(valueObjects.get(0));
 
-        removeService.remove(workLog.get(0));
+        removeService.remove(valueObjects.get(0));
 
-        verify(removeService, times(1)).remove(workLog.get(0));
+        verify(removeService, times(1)).remove(valueObjects.get(0));
     }
 
     @Test
@@ -273,7 +270,7 @@ class WorkLogServiceTest {
         Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
 
-        Task updatedTask = workLogService.logRemoveEstimateChange(workLog.get(0), spentEarlier, task);
+        Task updatedTask = workLogService.logRemoveEstimateChange(valueObjects.get(0), spentEarlier, task);
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(10)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(40)));
@@ -285,7 +282,7 @@ class WorkLogServiceTest {
         Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
 
-        Task updatedTask = workLogService.logRemoveEstimateChange(workLog.get(1), spentEarlier, task);
+        Task updatedTask = workLogService.logRemoveEstimateChange(valueObjects.get(1), spentEarlier, task);
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(10)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(40)));
@@ -297,7 +294,7 @@ class WorkLogServiceTest {
         Task task = createTestTask();
         task.setTimeSpent(Duration.ofHours(20));
 
-        Task updatedTask = workLogService.logRemoveEstimateChange(workLog.get(4), spentEarlier, task);
+        Task updatedTask = workLogService.logRemoveEstimateChange(valueObjects.get(4), spentEarlier, task);
 
         assertThat(updatedTask.getTimeSpent(), equalTo(Duration.ofHours(10)));
         assertThat(updatedTask.getTimeLeft(), equalTo(Duration.ofHours(90)));
@@ -310,14 +307,14 @@ class WorkLogServiceTest {
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_DONT_CHANGE = workLogService.logRefreshEstimateChange(
-                workLog.get(3), spentEarlier, task
+                valueObjects.get(3), spentEarlier, task
         );
         assertThat(updatedTask_DONT_CHANGE.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask_DONT_CHANGE.getTimeLeft(), equalTo(Duration.ofHours(50)));
 
         task.setTimeSpent(Duration.ofHours(20));
         Task updatedTask_REDUCE_BY_VALUE = workLogService.logRefreshEstimateChange(
-                workLog.get(2), spentEarlier, task
+                valueObjects.get(2), spentEarlier, task
         );
         assertThat(updatedTask_REDUCE_BY_VALUE.getTimeSpent(), equalTo(Duration.ofHours(25)));
         assertThat(updatedTask_REDUCE_BY_VALUE.getTimeLeft(), equalTo(Duration.ofHours(50)));

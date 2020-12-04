@@ -1,9 +1,7 @@
 package ru.progwards.tasktracker.service.facade.impl.task;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -18,7 +16,6 @@ import static org.mockito.Mockito.*;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 public class TaskUpdateOneFieldServiceTest {
 
     private final UpdateOneValue oneValue;

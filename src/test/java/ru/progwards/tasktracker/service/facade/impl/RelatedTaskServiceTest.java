@@ -1,9 +1,7 @@
 package ru.progwards.tasktracker.service.facade.impl;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
@@ -27,10 +25,9 @@ import static org.mockito.Mockito.*;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 class RelatedTaskServiceTest {
 
-    private final List<RelatedTask> relatedTasks = new ArrayList<>();
+    private final List<RelatedTask> valueObjects = new ArrayList<>();
     @Mock
     private CreateService<RelatedTask> createService;
     @Mock
@@ -46,7 +43,7 @@ class RelatedTaskServiceTest {
 
     {
         for (int i = 0; i < 3; i++) {
-            relatedTasks.add(new RelatedTask(
+            valueObjects.add(new RelatedTask(
                     1L + i, null, 1L + i, null
             ));
         }
@@ -56,9 +53,9 @@ class RelatedTaskServiceTest {
     void create() {
         doNothing().when(createService).create(isA(RelatedTask.class));
 
-        createService.create(relatedTasks.get(0));
+        createService.create(valueObjects.get(0));
 
-        verify(createService, times(1)).create(relatedTasks.get(0));
+        verify(createService, times(1)).create(valueObjects.get(0));
     }
 
     @Test
@@ -67,7 +64,7 @@ class RelatedTaskServiceTest {
 
     @Test
     void getListByTaskId() {
-        when(getListByTaskService.getListByTaskId(anyLong())).thenReturn(relatedTasks);
+        when(getListByTaskService.getListByTaskId(anyLong())).thenReturn(valueObjects);
 
         Collection<RelatedTask> collection = getListByTaskService.getListByTaskId(1L);
 
@@ -84,7 +81,7 @@ class RelatedTaskServiceTest {
     }
 
     @Test
-    void getListByTaskId_Return_Null() {
+    void getListByTaskId_Return_Empty_Collection() {
         when(getListByTaskService.getListByTaskId(anyLong())).thenReturn(Collections.emptyList());
 
         Collection<RelatedTask> collection = getListByTaskService.getListByTaskId(1L);
@@ -96,7 +93,7 @@ class RelatedTaskServiceTest {
 
     @Test
     void get() {
-        when(getService.get(anyLong())).thenReturn(relatedTasks.get(0));
+        when(getService.get(anyLong())).thenReturn(valueObjects.get(0));
 
         RelatedTask rt = getService.get(1L);
 
@@ -120,7 +117,7 @@ class RelatedTaskServiceTest {
 
     @Test
     void getList() {
-        when(getListService.getList()).thenReturn(relatedTasks);
+        when(getListService.getList()).thenReturn(valueObjects);
 
         Collection<RelatedTask> collection = getListService.getList();
 
@@ -151,14 +148,14 @@ class RelatedTaskServiceTest {
     void remove() {
         doNothing().when(removeService).remove(isA(RelatedTask.class));
 
-        removeService.remove(relatedTasks.get(0));
+        removeService.remove(valueObjects.get(0));
 
-        verify(removeService, times(1)).remove(relatedTasks.get(0));
+        verify(removeService, times(1)).remove(valueObjects.get(0));
     }
 
     @Test
     void getListByAttachedTaskId() {
-        when(getListByAttachedTaskId.getListByAttachedTaskId(anyLong())).thenReturn(relatedTasks);
+        when(getListByAttachedTaskId.getListByAttachedTaskId(anyLong())).thenReturn(valueObjects);
 
         Collection<RelatedTask> collection = getListByAttachedTaskId.getListByAttachedTaskId(1L);
 
@@ -175,7 +172,7 @@ class RelatedTaskServiceTest {
     }
 
     @Test
-    void getListByAttachedTaskId_Return_Null() {
+    void getListByAttachedTaskId_Return_Empty_Collection() {
         when(getListByAttachedTaskId.getListByAttachedTaskId(anyLong())).thenReturn(Collections.emptyList());
 
         Collection<RelatedTask> collection = getListByAttachedTaskId.getListByAttachedTaskId(1L);

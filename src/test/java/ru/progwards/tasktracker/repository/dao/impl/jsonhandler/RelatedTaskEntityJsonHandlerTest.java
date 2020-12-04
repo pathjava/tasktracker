@@ -55,12 +55,12 @@ class RelatedTaskEntityJsonHandlerTest {
         jsonHandler.getMap().put(
                 1L, new RelatedTaskEntity(
                         1L, new RelationTypeEntity(null, "блокирующая", null),
-                        1L, null)
+                        1L, null, false)
         );
         jsonHandler.getMap().put(
                 2L, new RelatedTaskEntity(
                         2L, new RelationTypeEntity(null, "блокирующая", null),
-                        2L, null)
+                        2L, null, false)
         );
     }
 }
