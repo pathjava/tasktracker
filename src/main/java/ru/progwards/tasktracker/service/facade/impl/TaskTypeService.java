@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class TaskTypeService implements CreateService<TaskType>, GetService<Long, TaskType>,
-        RemoveService<TaskType>, RefreshService<TaskType>, GetListByProjectService<Long, TaskType> {
+        RemoveService<TaskType>, RefreshService<TaskType>,
+        GetListByProjectService<Long, TaskType>, GetListService<TaskType> {
 
     @Autowired
     private Repository<Long, TaskTypeEntity> repository;
@@ -135,6 +136,18 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     public Collection<TaskType> getListByProjectId(Long projectId) {
         return byProjectId.getByProjectId(projectId).stream()
                 .filter(entity -> entity.getProject_id().equals(projectId))
+                .map(entity -> converter.toVo(entity))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Метод получения абсолютно всех типов задач
+     *
+     * @return коллекция типов задач
+     */
+    @Override
+    public Collection<TaskType> getList() {
+        return repository.get().stream()
                 .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());
     }

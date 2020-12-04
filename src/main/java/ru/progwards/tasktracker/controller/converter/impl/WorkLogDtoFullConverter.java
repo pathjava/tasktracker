@@ -51,12 +51,15 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
      * @return перечисление enum
      */
     private EstimateChange stringToEnum(String estimateChange) {
-        try {
-            return EstimateChange.valueOf(estimateChange.toUpperCase());
-        } catch (BadRequestException e) {
-            throw new BadRequestException(
-                    estimateChange + " не соответствует ни одному перечислению EstimateChange!");
-        }
+        if (estimateChange != null)
+            for (EstimateChange value : EstimateChange.values()) {
+                if (value.name().equalsIgnoreCase(estimateChange))
+                    return value;
+            }
+
+        throw new BadRequestException(
+                estimateChange + " не соответствует ни одному перечислению EstimateChange!"
+        );
     }
 
     /**

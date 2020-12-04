@@ -62,7 +62,6 @@ public class RelationTypeController {
      */
     @GetMapping("/list")
     public ResponseEntity<Collection<RelationTypeDtoFull>> getListRelationType() {
-
         Collection<RelationTypeDtoFull> collection = getListService.getList().stream()
                 .map(relationType -> converter.toDto(relationType))
                 .collect(Collectors.toUnmodifiableList());
@@ -70,7 +69,7 @@ public class RelationTypeController {
         if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список отношений пустой!");
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(collection, HttpStatus.OK);
     }
 
     /**
