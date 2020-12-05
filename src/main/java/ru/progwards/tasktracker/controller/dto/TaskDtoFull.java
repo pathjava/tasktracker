@@ -1,7 +1,6 @@
 package ru.progwards.tasktracker.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.progwards.tasktracker.service.vo.*;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
