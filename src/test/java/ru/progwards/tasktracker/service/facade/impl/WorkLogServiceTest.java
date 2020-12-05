@@ -25,7 +25,7 @@ import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса создания лога
+ * Тестирование сервиса создания лога (Журнала работ)
  *
  * @author Oleg Kiselev
  */

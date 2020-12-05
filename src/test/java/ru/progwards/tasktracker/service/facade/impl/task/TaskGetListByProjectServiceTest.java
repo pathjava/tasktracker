@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование получения списка задач по идентификатору проекта
+ * Тестирование получения списка задач по идентификатору проекта
  *
  * @author Oleg Kiselev
  */

@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование создания и удаления связанной задачи
+ * Тестирование методов репозитория связей задач
  *
  * @author Oleg Kiselev
  */

@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование методов репозитория логов
+ * Тестирование методов репозитория логов
  *
  * @author Oleg Kiselev
  */

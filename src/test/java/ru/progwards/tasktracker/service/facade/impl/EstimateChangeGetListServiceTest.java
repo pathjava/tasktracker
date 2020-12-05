@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * тестирование получения списка вариантов изменения значения продолжительности выполнения задачи
+ * Тестирование получения списка вариантов изменения значения продолжительности выполнения задачи
  *
  * @author Oleg Kiselev
  */

@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование конвертера между valueObject <-> entity
+ * Тестирование конвертера между valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -24,61 +24,47 @@ class TaskConverterTest {
     @Mock
     private Converter<TaskEntity, Task> converter;
 
+    private final Task valueObject = new Task(
+            null, null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null
+    );
+
+    private final TaskEntity entity = new TaskEntity(
+            null, null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null, false
+    );
+
     @Test
     void toVo() {
-        when(converter.toVo(isA(TaskEntity.class))).thenReturn(
-                new Task(
-                        null, null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null
-                )
-        );
+        when(converter.toVo(isA(TaskEntity.class))).thenReturn(valueObject);
 
-        Task task = converter.toVo(
-                new TaskEntity(
-                        null, null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null, false
-                )
-        );
+        Task vo = converter.toVo(entity);
 
         verify(converter, times(1)).toVo(any());
 
-        assertNotNull(task);
+        assertNotNull(vo);
     }
 
     @Test
     void toVo_return_Null() {
         when(converter.toVo(isA(TaskEntity.class))).thenReturn(null);
 
-        Task task = converter.toVo(any());
+        Task vo = converter.toVo(any());
 
         verify(converter, times(1)).toVo(any());
 
-        assertNull(task);
+        assertNull(vo);
     }
 
     @Test
     void toEntity() {
-        when(converter.toEntity(isA(Task.class))).thenReturn(
-                new TaskEntity(
-                        null, null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null, false
-                )
-        );
+        when(converter.toEntity(isA(Task.class))).thenReturn(entity);
 
-        TaskEntity entity = converter.toEntity(
-                new Task(
-                        null, null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null, null,
-                        null, null, null, null
-                )
-        );
+        TaskEntity entity = converter.toEntity(valueObject);
 
         verify(converter, times(1)).toEntity(any());
 

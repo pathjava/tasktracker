@@ -21,6 +21,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 /**
+ * Тестирование методов репозитория типов задач
+ *
  * @author Oleg Kiselev
  */
 @SpringBootTest

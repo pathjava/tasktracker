@@ -4,11 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
-import ru.progwards.tasktracker.service.vo.Task;
+import ru.progwards.tasktracker.controller.dto.TaskTypeDtoPreview;
+import ru.progwards.tasktracker.service.vo.TaskType;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
@@ -18,29 +19,24 @@ import static org.mockito.Mockito.*;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-class TaskDtoFullConverterTest {
+class TaskTypeDtoPreviewConverterTest {
 
     @Mock
-    private Converter<Task, TaskDtoFull> converter;
+    private Converter<TaskType, TaskTypeDtoPreview> converter;
 
-    private final Task valueObject = new Task(
-            null, null, null, null, null, null,
-            null, null, null, null, null,
-            null, null, null, null, null,
+    private final TaskType valueObject = new TaskType(
             null, null, null, null
     );
 
-    private final TaskDtoFull dtoPreview = new TaskDtoFull(
-            null, null, null, null, null, null,
-            null, null, null, null, null, null,
-            null, null, null, null, null, null
+    private final TaskTypeDtoPreview dtoPreview = new TaskTypeDtoPreview(
+            null, null
     );
 
     @Test
     void toModel() {
-        when(converter.toModel(isA(TaskDtoFull.class))).thenReturn(valueObject);
+        when(converter.toModel(isA(TaskTypeDtoPreview.class))).thenReturn(valueObject);
 
-        Task model = converter.toModel(dtoPreview);
+        TaskType model = converter.toModel(dtoPreview);
 
         assertNotNull(model);
 
@@ -49,9 +45,9 @@ class TaskDtoFullConverterTest {
 
     @Test
     void toModel_Return_Null() {
-        when(converter.toModel(isA(TaskDtoFull.class))).thenReturn(null);
+        when(converter.toModel(isA(TaskTypeDtoPreview.class))).thenReturn(null);
 
-        Task model = converter.toModel(any());
+        TaskType model = converter.toModel(any());
 
         assertNull(model);
 
@@ -60,9 +56,9 @@ class TaskDtoFullConverterTest {
 
     @Test
     void toDto() {
-        when(converter.toDto(isA(Task.class))).thenReturn(dtoPreview);
+        when(converter.toDto(isA(TaskType.class))).thenReturn(dtoPreview);
 
-        TaskDtoFull dto = converter.toDto(valueObject);
+        TaskTypeDtoPreview dto = converter.toDto(valueObject);
 
         assertNotNull(dto);
 
@@ -71,9 +67,9 @@ class TaskDtoFullConverterTest {
 
     @Test
     void toDto_Return_Null() {
-        when(converter.toDto(isA(Task.class))).thenReturn(null);
+        when(converter.toDto(isA(TaskType.class))).thenReturn(null);
 
-        TaskDtoFull dto = converter.toDto(any());
+        TaskTypeDtoPreview dto = converter.toDto(any());
 
         assertNull(dto);
 

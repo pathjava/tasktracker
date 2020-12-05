@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса типа отношения связи между задачами
+ * Тестирование сервиса типа отношения связи между задачами
  *
  * @author Oleg Kiselev
  */

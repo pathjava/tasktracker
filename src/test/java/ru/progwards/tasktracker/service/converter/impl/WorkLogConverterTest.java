@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование конвертера между valueObject <-> entity
+ * Тестирование конвертера между valueObject <-> entity
  *
  * @author Oleg Kiselev
  */

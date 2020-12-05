@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование методов работы с репозиторием
+ * Тестирование методов работы с репозиторием задач
  *
  * @author Oleg Kiselev
  */
