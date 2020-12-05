@@ -11,16 +11,18 @@ public class UserEntity {
     private String email;
     private String password;
     private List<UserRole> roles;
+    private Boolean isDeleted;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String name, String email, String password, List<UserRole> roles) {
+    public UserEntity(Long id, String name, String email, String password, List<UserRole> roles, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.isDeleted = isDeleted;
     }
 
     public Long getId() {
@@ -49,5 +51,14 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+    //  TODO - почему отсутствуют остальные сеттеры?
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
