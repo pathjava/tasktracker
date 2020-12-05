@@ -48,6 +48,6 @@ public class UserConverter implements Converter<UserEntity, User> {
      */
     @Override
     public UserEntity toEntity(User vo) {
-        return new UserEntity(vo.getId(), vo.getName(), vo.getEmail(), vo.getPassword(), vo.getRoles());
+        return new UserEntity(vo.getId(), vo.getName(), vo.getEmail(), vo.getPassword(), vo.getRoles(), false);
     }
 }

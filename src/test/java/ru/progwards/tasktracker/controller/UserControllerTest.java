@@ -49,7 +49,7 @@ public class UserControllerTest {
 
     @Test
     public void getUser() throws Exception {
-        UserEntity entity = new UserEntity(7L, "USER-7", "sidnet@mail.ru", "777", new ArrayList<UserRole>());
+        UserEntity entity = new UserEntity(7L, "USER-7", "sidnet@mail.ru", "777", new ArrayList<UserRole>(),false);
 
         repository.create(entity);
 
@@ -62,7 +62,7 @@ public class UserControllerTest {
 
     @Test
     public void createTest() throws Exception {
-        UserEntity entity = new UserEntity(5L, "USER-5", "sidnet@mail.ru", "555", new ArrayList<UserRole>());
+        UserEntity entity = new UserEntity(5L, "USER-5", "sidnet@mail.ru", "555", new ArrayList<UserRole>(), false);
 
         String json = new ObjectMapper().writeValueAsString(entity);
 
@@ -86,7 +86,7 @@ public class UserControllerTest {
 
     @Test
     public void updateTest() throws Exception {
-        UserEntity entity = new UserEntity(6L, "USER-6", "sidnet@mail.ru", "666", new ArrayList<UserRole>());
+        UserEntity entity = new UserEntity(6L, "USER-6", "sidnet@mail.ru", "666", new ArrayList<UserRole>(), false);
         repository.create(entity);
 
         String json = new ObjectMapper().writeValueAsString(entity);
@@ -113,7 +113,7 @@ public class UserControllerTest {
         Collection<UserEntity> entities = repository.get();
         String json = new ObjectMapper().writeValueAsString(entities);
 
-        UserEntity entity = new UserEntity(8L, "USER-8", "sidnet@mail.ru", "888", new ArrayList<UserRole>());
+        UserEntity entity = new UserEntity(8L, "USER-8", "sidnet@mail.ru", "888", new ArrayList<UserRole>(), false);
         repository.create(entity);
 
         mockMvc.perform(delete("/rest/user/8/delete")).andExpect(status().isOk());
@@ -123,7 +123,7 @@ public class UserControllerTest {
 
 //    @Test
 //    public void updateOneFieldTest() throws Exception {
-//        UserEntity entity = new UserEntity(8L, "USER-8", "sidnet@mail.ru", "888", new ArrayList<UserRole>());
+//        UserEntity entity = new UserEntity(8L, "USER-8", "sidnet@mail.ru", "888", new ArrayList<UserRole>(), false);
 //        repository.create(entity);
 //
 //        mockMvc.perform(post("/rest/user/8/update1field").
