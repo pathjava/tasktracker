@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование конвертера между valueObject <-> entity
+ * Тестирование конвертера между valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -26,53 +26,43 @@ class RelatedTaskConverterTest {
     @Mock
     private Converter<RelatedTaskEntity, RelatedTask> converter;
 
+    private final RelatedTask valueObject = new RelatedTask(
+            null, new RelationType(null, null, null),
+            null, null
+    );
+
+    private final RelatedTaskEntity entity = new RelatedTaskEntity(
+            null, new RelationTypeEntity(null, null, null),
+            null, null, false
+    );
+
     @Test
     void toVo() {
-        when(converter.toVo(isA(RelatedTaskEntity.class))).thenReturn(
-                new RelatedTask(
-                        null, new RelationType(null, null, null),
-                        null, null
-                )
-        );
+        when(converter.toVo(isA(RelatedTaskEntity.class))).thenReturn(valueObject);
 
-        RelatedTask task = converter.toVo(
-                new RelatedTaskEntity(
-                        null, new RelationTypeEntity(null, null, null),
-                        null, null, false
-                )
-        );
+        RelatedTask vo = converter.toVo(entity);
 
         verify(converter, times(1)).toVo(any());
 
-        assertNotNull(task);
+        assertNotNull(vo);
     }
 
     @Test
     void toVo_Return_Null() {
         when(converter.toVo(isA(RelatedTaskEntity.class))).thenReturn(null);
 
-        RelatedTask task = converter.toVo(any());
+        RelatedTask vo = converter.toVo(any());
 
         verify(converter, times(1)).toVo(any());
 
-        assertNull(task);
+        assertNull(vo);
     }
 
     @Test
     void toEntity() {
-        when(converter.toEntity(isA(RelatedTask.class))).thenReturn(
-                new RelatedTaskEntity(
-                        null, new RelationTypeEntity(null, null, null),
-                        null, null, false
-                )
-        );
+        when(converter.toEntity(isA(RelatedTask.class))).thenReturn(entity);
 
-        RelatedTaskEntity entity = converter.toEntity(
-                new RelatedTask(
-                        null, new RelationType(null, null, null),
-                        null, null
-                )
-        );
+        RelatedTaskEntity entity = converter.toEntity(valueObject);
 
         verify(converter, times(1)).toEntity(any());
 

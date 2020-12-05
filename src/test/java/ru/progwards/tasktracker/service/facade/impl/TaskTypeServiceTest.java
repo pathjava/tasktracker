@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса типов задачи
+ * Тестирование сервиса типов задачи
  *
  * @author Oleg Kiselev
  */

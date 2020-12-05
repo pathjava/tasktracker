@@ -10,7 +10,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса удаления задачи
+ * Тестирование сервиса удаления задачи
  *
  * @author Oleg Kiselev
  */

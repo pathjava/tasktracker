@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
+ * Тестирование соответствия значений EstimateChange
+ *
  * @author Oleg Kiselev
  */
 @SpringBootTest

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса получения списка задач
+ * Тестирование сервиса получения списка задач
  *
  * @author Oleg Kiselev
  */

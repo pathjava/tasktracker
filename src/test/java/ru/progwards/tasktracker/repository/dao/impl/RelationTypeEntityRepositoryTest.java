@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
+ * Тестирование методов репозитория типов связей задач
+ *
  * @author Oleg Kiselev
  */
 @SpringBootTest

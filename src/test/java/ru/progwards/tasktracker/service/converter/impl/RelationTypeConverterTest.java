@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование конвертера между valueObject <-> entity
+ * Тестирование конвертера между valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
@@ -24,41 +24,41 @@ class RelationTypeConverterTest {
     @Mock
     private Converter<RelationTypeEntity, RelationType> converter;
 
+    private final RelationType valueObject = new RelationType(
+            null, null, null
+    );
+
+    private final RelationTypeEntity entity = new RelationTypeEntity(
+            null, null, null
+    );
+
     @Test
     void toVo() {
-        when(converter.toVo(isA(RelationTypeEntity.class))).thenReturn(
-                new RelationType(null, null, null)
-        );
+        when(converter.toVo(isA(RelationTypeEntity.class))).thenReturn(valueObject);
 
-        RelationType type = converter.toVo(
-                new RelationTypeEntity(null, null, null)
-        );
+        RelationType vo = converter.toVo(entity);
 
         verify(converter, times(1)).toVo(any());
 
-        assertNotNull(type);
+        assertNotNull(vo);
     }
 
     @Test
     void toVo_Return_Null() {
         when(converter.toVo(isA(RelationTypeEntity.class))).thenReturn(null);
 
-        RelationType type = converter.toVo(any());
+        RelationType vo = converter.toVo(any());
 
         verify(converter, times(1)).toVo(any());
 
-        assertNull(type);
+        assertNull(vo);
     }
 
     @Test
     void toEntity() {
-        when(converter.toEntity(isA(RelationType.class))).thenReturn(
-                new RelationTypeEntity(null, null, null)
-        );
+        when(converter.toEntity(isA(RelationType.class))).thenReturn(entity);
 
-        RelationTypeEntity entity = converter.toEntity(
-                new RelationType(null, null, null)
-        );
+        RelationTypeEntity entity = converter.toEntity(valueObject);
 
         verify(converter, times(1)).toEntity(any());
 

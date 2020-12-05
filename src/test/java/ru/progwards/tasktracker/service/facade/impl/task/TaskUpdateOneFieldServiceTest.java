@@ -11,7 +11,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса обновления поля задачи
+ * Тестирование сервиса обновления поля задачи
  *
  * @author Oleg Kiselev
  */

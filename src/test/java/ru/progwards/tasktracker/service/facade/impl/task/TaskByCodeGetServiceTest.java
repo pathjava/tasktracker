@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 /**
+ * Тестирование сервиса получения задачи по строковому коду
+ *
  * @author Oleg Kiselev
  */
 @SpringBootTest

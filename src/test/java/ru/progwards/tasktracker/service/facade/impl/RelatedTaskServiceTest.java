@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса связанной задачи
+ * Тестирование сервиса связанной задачи
  *
  * @author Oleg Kiselev
  */

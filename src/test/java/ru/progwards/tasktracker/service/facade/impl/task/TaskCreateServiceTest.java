@@ -9,7 +9,7 @@ import ru.progwards.tasktracker.service.vo.Task;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса создания задачи
+ * Тестирование сервиса создания задачи
  *
  * @author Oleg Kiselev
  */
