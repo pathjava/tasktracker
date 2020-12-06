@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
@@ -43,7 +44,7 @@ public class RelatedTaskController {
      * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную задачу
      */
-    @PostMapping("/create")
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelatedTaskDtoFull> createRelatedTask(@RequestBody RelatedTaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("Пустой объект!");
@@ -61,7 +62,7 @@ public class RelatedTaskController {
      * @param id идентификатор задачи для которой надо получить связанные задачи
      * @return коллекция связанных задач
      */
-    @GetMapping("/{id}/list")
+    @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<RelatedTaskDtoFull>> getListRelatedTasks(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -82,7 +83,7 @@ public class RelatedTaskController {
      * @param id идентификатор удаляемой задачи
      * @return статус
      */
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping(value = "/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelatedTaskDtoFull> deleteRelatedTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");

@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
@@ -52,7 +53,7 @@ public class TaskController {
      * @param id идентификатор проекта
      * @return коллекция превью задач
      */
-    @GetMapping("/project/{id}/tasks")
+    @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<TaskDtoPreview>> getListTasks(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -73,7 +74,7 @@ public class TaskController {
      * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную задачу
      */
-    @PostMapping("/task/create")
+    @PostMapping(value = "/task/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> createTask(@RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -94,7 +95,7 @@ public class TaskController {
      * @param taskDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную задачу
      */
-    @PutMapping("/task/{id}/update")
+    @PutMapping(value = "/task/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long id, @RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -115,7 +116,7 @@ public class TaskController {
      * @param id идентификатор задачи
      * @return возвращает статус ответа
      */
-    @DeleteMapping("/task/{id}/delete")
+    @DeleteMapping(value = "/task/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Task> deleteTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -135,7 +136,7 @@ public class TaskController {
      * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную задачу
      */
-    @GetMapping("/task/{code}/getbycode")
+    @GetMapping(value = "/task/{code}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> getByCodeTask(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");
@@ -156,7 +157,7 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return статус
      */
-    @PutMapping("/task/{id}/updatefield")
+    @PutMapping(value = "/task/{id}/updatefield", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateOneValue> updateOneField(
             @PathVariable Long id, @RequestBody UpdateOneValue oneValue
     ) {
