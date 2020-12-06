@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
@@ -42,7 +43,7 @@ public class WorkLogController {
      * @param id идентификатор задачи, для которой необходимо вывести логи
      * @return коллекция логов задачи
      */
-    @GetMapping("/task/{id}/worklogs")
+    @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<WorkLogDtoFull>> getListWorkLogs(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -63,7 +64,7 @@ public class WorkLogController {
      * @param workLogDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PostMapping("/worklog/create")
+    @PostMapping(value = "/worklog/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> createWorkLog(@RequestBody WorkLogDtoFull workLogDtoFull) {
         if (workLogDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -83,7 +84,7 @@ public class WorkLogController {
      * @param workLogDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PutMapping("/worklog/{id}/update")
+    @PutMapping(value = "/worklog/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDtoFull workLogDtoFull) {
         if (workLogDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -104,7 +105,7 @@ public class WorkLogController {
      * @param id идентификатор удаляемого лога
      * @return статус ответа
      */
-    @DeleteMapping("/worklog/{id}/delete")
+    @DeleteMapping(value = "/worklog/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> deleteWorkLog(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
