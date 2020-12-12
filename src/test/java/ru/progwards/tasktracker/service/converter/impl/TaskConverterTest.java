@@ -1,70 +1,84 @@
 package ru.progwards.tasktracker.service.converter.impl;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.User;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 /**
- * тестирование конвертера между valueObject <-> entity
+ * Тестирование конвертера между valueObject <-> entity
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
 class TaskConverterTest {
 
-    @Autowired
+    @Mock
     private Converter<TaskEntity, Task> converter;
 
-    @Test
-    void toVo_return_Null() {
-        Task tempTask = converter.toVo(null);
+    private final Task valueObject = new Task(
+            null, null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null
+    );
 
-        assertThat(tempTask, is(nullValue()));
+    private final TaskEntity entity = new TaskEntity(
+            null, null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null, null,
+            null, null, null, null, false
+    );
+
+    @Test
+    void toVo() {
+        when(converter.toVo(isA(TaskEntity.class))).thenReturn(valueObject);
+
+        Task vo = converter.toVo(entity);
+
+        verify(converter, times(1)).toVo(any());
+
+        assertNotNull(vo);
     }
 
     @Test
-    void toVo_return_Not_Null() {
-//        Task tempTask = converter.toVo(
-//                new TaskEntity(null, "TT1", "Test task 1 TEST", "Description task 1",
-//                        null, null, 11L, null, null,
-//                        ZonedDateTime.now().toEpochSecond(), ZonedDateTime.now().plusDays(1).toEpochSecond(),
-//                        null,
-//                        Duration.ofDays(3).toSeconds(), Duration.ofDays(1).toSeconds(), Duration.ofDays(2).toSeconds(),
-//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false)
-//        );
-//
-//        assertThat(tempTask, is(notNullValue()));
+    void toVo_return_Null() {
+        when(converter.toVo(isA(TaskEntity.class))).thenReturn(null);
+
+        Task vo = converter.toVo(any());
+
+        verify(converter, times(1)).toVo(any());
+
+        assertNull(vo);
+    }
+
+    @Test
+    void toEntity() {
+        when(converter.toEntity(isA(Task.class))).thenReturn(entity);
+
+        TaskEntity entity = converter.toEntity(valueObject);
+
+        verify(converter, times(1)).toEntity(any());
+
+        assertNotNull(entity);
     }
 
     @Test
     void toEntity_return_Null() {
-        TaskEntity tempTaskEntity = converter.toEntity(null);
+        when(converter.toEntity(isA(Task.class))).thenReturn(null);
 
-        assertThat(tempTaskEntity, is(nullValue()));
-    }
+        TaskEntity entity = converter.toEntity(any());
 
-    @Test
-    void toEntity_return_Not_Null() {
-//        TaskEntity tempTaskEntity = converter.toEntity(
-//                new Task(null, "TT1", "Test task 1 TEST", "Description task 1",
-//                        null, null, 11L, new User(), new User(),
-//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-//                        null,
-//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-//        );
-//
-//        assertThat(tempTaskEntity, is(notNullValue()));
+        verify(converter, times(1)).toEntity(any());
+
+        assertNull(entity);
     }
 }

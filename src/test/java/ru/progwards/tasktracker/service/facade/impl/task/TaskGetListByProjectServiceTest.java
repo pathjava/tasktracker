@@ -1,92 +1,77 @@
 package ru.progwards.tasktracker.service.facade.impl.task;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.repository.dao.JsonHandler;
-import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.TaskType;
-import ru.progwards.tasktracker.service.vo.User;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 /**
- * тестирование получения списка задач по идентификатору проекта
+ * Тестирование получения списка задач по идентификатору проекта
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
 class TaskGetListByProjectServiceTest {
 
-    @Autowired
-    private GetListByProjectService<Long, Task> listByProjectService;
+    private final List<Task> valueObjects = new ArrayList<>();
+    @Mock
+    private GetListByProjectService<Long, Task> getListByProjectId;
 
-    @Autowired
-    private CreateService<Task> createService;
-
-    @Autowired
-    private JsonHandler<Long, TaskEntity> jsonHandler;
-
-    @BeforeEach
-    void before() {
-//        jsonHandler.getMap().clear();
-//
-//        createService.create(
-//                new Task(null, "TT1-1", "Test GetListByProjectService 1", "Description task 1",
-//                        null, null, 11L, new User(), new User(),
-//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-//                        null,
-//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-//        );
-//        createService.create(
-//                new Task(null, "TT1-2", "Test GetListByProjectService 2", "Description task 2",
-//                        null, null, 11L, new User(), new User(),
-//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-//                        null,
-//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-//        );
+    {
+        for (int i = 0; i < 3; i++) {
+            valueObjects.add(
+                    new Task(
+                            1L + i, null, "testTask " + (1 + i), null, null, null,
+                            null, null, null, null, null, null, null,
+                            null, null, null, null, null, null, null
+                    )
+            );
+        }
     }
 
     @Test
     void getListByProjectId() {
-        Collection<Task> collection = listByProjectService.getListByProjectId(11L);
+        when(getListByProjectId.getListByProjectId(anyLong())).thenReturn(valueObjects);
+
+        Collection<Task> collection = getListByProjectId.getListByProjectId(1L);
 
         assertNotNull(collection);
 
-        assertThat(collection.size(), is(2));
+        assertThat(collection.size(), equalTo(3));
 
-        List<String> actualTaskName = collection.stream()
-                .map(Task::getName)
-                .collect(Collectors.toUnmodifiableList());
+        verify(getListByProjectId, times(1)).getListByProjectId(1L);
 
-        assertThat(actualTaskName, containsInAnyOrder("Test GetListByProjectService 1",
-                "Test GetListByProjectService 2"));
+        assertThat(
+                collection.stream()
+                        .map(Task::getName)
+                        .collect(Collectors.toList()),
+                containsInAnyOrder("testTask 1", "testTask 2", "testTask 3")
+        );
     }
 
     @Test
     void getListByProjectId_Return_Empty_Collection() {
-        jsonHandler.getMap().clear();
+        when(getListByProjectId.getListByProjectId(anyLong())).thenReturn(Collections.emptyList());
 
-        Collection<Task> collection = listByProjectService.getListByProjectId(anyLong());
+        Collection<Task> collection = getListByProjectId.getListByProjectId(1L);
 
         assertTrue(collection.isEmpty());
+
+        verify(getListByProjectId, times(1)).getListByProjectId(1L);
     }
 }

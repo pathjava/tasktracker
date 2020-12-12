@@ -37,15 +37,14 @@ public class Task {
     private List<RelatedTask> relatedTasks;
     private List<TaskAttachment> attachments;
     private List<WorkLog> workLogs;
+    private List<TaskNote> notes;
 
     public Task(
             Long id, String code, String name, String description,
-            TaskType type, TaskPriority priority, Project project,
-            User author, User executor,
-            ZonedDateTime created, ZonedDateTime updated,
-            WorkFlowStatus status, List<WorkFlowAction> actions,
-            Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTask> relatedTasks, List<TaskAttachment> attachments, List<WorkLog> workLogs
+            TaskType type, TaskPriority priority, Project project, User author, User executor,
+            ZonedDateTime created, ZonedDateTime updated, WorkFlowStatus status, List<WorkFlowAction> actions,
+            Duration estimation, Duration timeSpent, Duration timeLeft, List<RelatedTask> relatedTasks,
+            List<TaskAttachment> attachments, List<WorkLog> workLogs, List<TaskNote> notes
     ) {
         this.id = id;
         this.code = code;
@@ -66,6 +65,7 @@ public class Task {
         this.relatedTasks = relatedTasks;
         this.attachments = attachments;
         this.workLogs = workLogs;
+        this.notes = notes;
     }
 
     public Long getId() {
@@ -218,5 +218,13 @@ public class Task {
 
     public void setWorkLogs(List<WorkLog> workLogs) {
         this.workLogs = workLogs;
+    }
+
+    public List<TaskNote> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<TaskNote> notes) {
+        this.notes = notes;
     }
 }

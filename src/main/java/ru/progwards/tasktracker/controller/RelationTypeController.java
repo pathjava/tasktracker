@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
@@ -42,7 +43,7 @@ public class RelationTypeController {
      * @param id идентификатор типа отношения
      * @return полученный по идентификатору Dto тип отношения
      */
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelationTypeDtoFull> getRelationType(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -60,9 +61,8 @@ public class RelationTypeController {
      *
      * @return коллекция Dto типов отношений
      */
-    @GetMapping("/list")
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<RelationTypeDtoFull>> getListRelationType() {
-
         Collection<RelationTypeDtoFull> collection = getListService.getList().stream()
                 .map(relationType -> converter.toDto(relationType))
                 .collect(Collectors.toUnmodifiableList());
@@ -70,7 +70,7 @@ public class RelationTypeController {
         if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список отношений пустой!");
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(collection, HttpStatus.OK);
     }
 
     /**
@@ -79,7 +79,7 @@ public class RelationTypeController {
      * @param typeDto создаваемый Dto тип отношения
      * @return созданный тип отношения
      */
-    @PostMapping("/create")
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelationTypeDtoFull> createRelationType(@RequestBody RelationTypeDtoFull typeDto) {
         if (typeDto == null)
             throw new BadRequestException("Пустой объект!");
@@ -98,7 +98,7 @@ public class RelationTypeController {
      * @param typeDto обновляемый Dto тип отношения
      * @return обновленный тип отношения
      */
-    @PutMapping("/{id}/update")
+    @PutMapping(value = "/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelationTypeDtoFull> updateRelationType(@PathVariable Long id,
                                                                   @RequestBody RelationTypeDtoFull typeDto) {
         if (id == null)
@@ -120,7 +120,7 @@ public class RelationTypeController {
      * @param id идентификатор удаляемого типа отношения
      * @return статус
      */
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping(value = "/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelationTypeDtoFull> deleteRelationType(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");

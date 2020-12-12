@@ -6,6 +6,7 @@ import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.RelationTypeEntity;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Методы для работы с БД для сущности типа отношения связанных задач
@@ -25,7 +26,8 @@ public class RelationTypeEntityRepository implements Repository<Long, RelationTy
      */
     @Override
     public Collection<RelationTypeEntity> get() {
-        return jsonHandler.getMap().values();
+        return jsonHandler.getMap().values().stream()
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**

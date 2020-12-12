@@ -1,78 +1,39 @@
 package ru.progwards.tasktracker.service.facade.impl.task;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.service.facade.*;
+import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
-import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.service.vo.TaskType;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса обновления поля задачи
+ * Тестирование сервиса обновления поля задачи
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
 public class TaskUpdateOneFieldServiceTest {
 
-    @Qualifier("taskUpdateOneFieldService")
-    @Autowired
-    private UpdateOneFieldService<Task> oneFieldService;
+    private final UpdateOneValue oneValue;
+    @Mock
+    private UpdateOneFieldService<Task> updateOneFieldService;
 
-    @Autowired
-    private RemoveService<Task> removeService;
-
-    @Autowired
-    private CreateService<Task> createService;
-
-    @Autowired
-    private GetService<Long, Task> getService;
-
-    @Autowired
-    private GetListService<Task> getListService;
-
-    @BeforeEach
-    void before() {
-//        createService.create(
-//                new Task(null, "TT1-1", "Test task 1 UpdateOneFieldService", "Description task 1",
-//                        null, null, 11L, new User(), new User(),
-//                        ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-//                        null,
-//                        Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-//                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>())
-//        );
+    {
+        oneValue = new UpdateOneValue(
+                1L, "Test task 1 UpdateOneFieldService updated", "name"
+        );
     }
 
     @Test
     public void updateOneField() {
-        Long id = getListService.getList().stream()
-                .filter(e -> e.getName().equals("Test task 1 UpdateOneFieldService")).findFirst()
-                .map(Task::getId)
-                .orElse(null);
+        doNothing().when(updateOneFieldService).updateOneField(isA(UpdateOneValue.class));
 
-        if (id != null) {
-            oneFieldService.updateOneField(
-                    new UpdateOneValue(id, "Test task 1 UpdateOneFieldService updated", "name")
-            );
-            Task task = getService.get(id);
+        updateOneFieldService.updateOneField(oneValue);
 
-            assertThat(task.getName(), equalTo("Test task 1 UpdateOneFieldService updated"));
-
-            removeService.remove(task);
-        } else
-            fail();
-
+        verify(updateOneFieldService, times(1)).updateOneField(oneValue);
     }
 }

@@ -29,7 +29,8 @@ public class TaskEntity {
     private List<RelatedTaskEntity> relatedTasks;
     private List<TaskAttachmentEntity> attachments;
     private List<WorkLogEntity> workLogs;
-    private Boolean isDeleted;
+    private List<TaskNoteEntity> notes;
+    private boolean isDeleted;
 
     public TaskEntity() {
     }
@@ -37,12 +38,11 @@ public class TaskEntity {
     public TaskEntity(
             Long id, String code, String name, String description,
             TaskTypeEntity type, TaskPriorityEntity priority, ProjectEntity project,
-            UserEntity author, UserEntity executor,
-            Long created, Long updated,
+            UserEntity author, UserEntity executor, Long created, Long updated,
             WorkFlowStatusEntity status, List<WorkFlowActionEntity> actions,
             Long estimation, Long timeSpent, Long timeLeft,
             List<RelatedTaskEntity> relatedTasks, List<TaskAttachmentEntity> attachments,
-            List<WorkLogEntity> workLogs, Boolean isDeleted
+            List<WorkLogEntity> workLogs, List<TaskNoteEntity> notes, boolean isDeleted
     ) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
@@ -65,11 +65,16 @@ public class TaskEntity {
         this.relatedTasks = relatedTasks;
         this.attachments = attachments;
         this.workLogs = workLogs;
+        this.notes = notes;
         this.isDeleted = isDeleted;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {
@@ -216,11 +221,19 @@ public class TaskEntity {
         this.workLogs = workLogs;
     }
 
-    public Boolean getDeleted() {
+    public List<TaskNoteEntity> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<TaskNoteEntity> notes) {
+        this.notes = notes;
+    }
+
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
 }

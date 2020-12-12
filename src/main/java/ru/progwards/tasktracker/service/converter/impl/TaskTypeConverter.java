@@ -18,7 +18,7 @@ import ru.progwards.tasktracker.service.vo.WorkFlow;
 public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
 
     @Autowired
-    private Repository<Long, TaskTypeEntity> taskTypeEntityRepository;
+    private Repository<Long, TaskTypeEntity> taskTypeRepository;
     @Autowired
     private Repository<Long, WorkFlowEntity> workFlowRepository;
     @Autowired
@@ -56,7 +56,7 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
         if (valueObject == null)
             return null;
         else {
-            TaskTypeEntity taskTypeEntity = taskTypeEntityRepository.get(valueObject.getId());
+            TaskTypeEntity taskTypeEntity = taskTypeRepository.get(valueObject.getId());
             return new TaskTypeEntity(
                     valueObject.getId(),
                     taskTypeEntity.getProject_id(),

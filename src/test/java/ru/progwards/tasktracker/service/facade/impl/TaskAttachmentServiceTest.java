@@ -50,7 +50,7 @@ public class TaskAttachmentServiceTest {
                 null, null, null, null, null,
                 null, null, null,
                 null, null, null,
-                null, null, null, null);
+                null, null, null, null, null);
         InputStream targetStream = new ByteArrayInputStream(dataBytes);
         content = new AttachmentContent(-12341L, targetStream);
         attachment = new TaskAttachment(-23124L, task.getId(), "test1.txt", "txt", 3L, ZonedDateTime.now(), null, content);

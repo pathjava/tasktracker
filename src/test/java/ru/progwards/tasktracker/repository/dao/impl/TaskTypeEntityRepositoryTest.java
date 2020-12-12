@@ -4,11 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.dao.RepositoryByCode;
 import ru.progwards.tasktracker.repository.dao.RepositoryByProjectId;
-import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
-import ru.progwards.tasktracker.repository.entity.TaskEntity;
-import ru.progwards.tasktracker.service.vo.UpdateOneValue;
+import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,34 +17,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 /**
- * Тестирование методов работы с репозиторием задач
+ * Тестирование методов репозитория типов задач
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
-public class TaskEntityRepositoryTest {
+class TaskTypeEntityRepositoryTest {
 
-    private final List<TaskEntity> entities = new ArrayList<>();
+    private final List<TaskTypeEntity> entities = new ArrayList<>();
     @Mock
-    private Repository<Long, TaskEntity> repository;
+    private Repository<Long, TaskTypeEntity> repository;
     @Mock
-    private RepositoryByProjectId<Long, TaskEntity> byProjectId;
-    @Mock
-    private RepositoryUpdateField<TaskEntity> updateField;
-    @Mock
-    private RepositoryByCode<String, TaskEntity> byCode;
+    private RepositoryByProjectId<Long, TaskTypeEntity> byProjectId;
 
     {
         for (int i = 0; i < 3; i++) {
             entities.add(
-                    new TaskEntity(
-                            1L + i, "TT-" + (1 + i), null, null, null,
-                            null, null, null, null, null,
-                            null, null, null, null, null,
-                            null, null, null, null, null, false
+                    new TaskTypeEntity(
+                            1L + i, null, null, "type " + (1 + i)
                     )
             );
         }
@@ -57,11 +48,11 @@ public class TaskEntityRepositoryTest {
     void get() {
         when(repository.get(anyLong())).thenReturn(entities.get(0));
 
-        TaskEntity entity = repository.get(1L);
+        TaskTypeEntity entity = repository.get(1L);
 
         assertNotNull(entity);
 
-        assertThat(entity.getCode(), equalTo("TT-1"));
+        assertThat(entity.getName(), equalTo("type 1"));
 
         verify(repository, times(1)).get(1L);
     }
@@ -70,7 +61,7 @@ public class TaskEntityRepositoryTest {
     void get_Return_Null() {
         when(repository.get(anyLong())).thenReturn(null);
 
-        TaskEntity entity = repository.get(1L);
+        TaskTypeEntity entity = repository.get(1L);
 
         assertNull(entity);
 
@@ -81,7 +72,7 @@ public class TaskEntityRepositoryTest {
     void getList() {
         when(repository.get()).thenReturn(entities);
 
-        Collection<TaskEntity> collection = repository.get();
+        Collection<TaskTypeEntity> collection = repository.get();
 
         assertThat(collection.size(), equalTo(3));
 
@@ -89,9 +80,9 @@ public class TaskEntityRepositoryTest {
 
         assertThat(
                 collection.stream()
-                        .map(TaskEntity::getCode)
+                        .map(TaskTypeEntity::getName)
                         .collect(Collectors.toList()),
-                containsInAnyOrder("TT-1", "TT-2", "TT-3")
+                containsInAnyOrder("type 1", "type 2", "type 3")
         );
     }
 
@@ -99,7 +90,7 @@ public class TaskEntityRepositoryTest {
     void getList_Return_Empty_Collection() {
         when(repository.get()).thenReturn(Collections.emptyList());
 
-        Collection<TaskEntity> collection = repository.get();
+        Collection<TaskTypeEntity> collection = repository.get();
 
         assertTrue(collection.isEmpty());
 
@@ -108,7 +99,7 @@ public class TaskEntityRepositoryTest {
 
     @Test
     void create() {
-        doNothing().when(repository).create(isA(TaskEntity.class));
+        doNothing().when(repository).create(isA(TaskTypeEntity.class));
 
         repository.create(entities.get(0));
 
@@ -117,7 +108,7 @@ public class TaskEntityRepositoryTest {
 
     @Test
     void update() {
-        doNothing().when(repository).update(isA(TaskEntity.class));
+        doNothing().when(repository).update(isA(TaskTypeEntity.class));
 
         repository.update(entities.get(0));
 
@@ -137,7 +128,7 @@ public class TaskEntityRepositoryTest {
     void getByProjectId() {
         when(byProjectId.getByProjectId(anyLong())).thenReturn(entities);
 
-        Collection<TaskEntity> collection = byProjectId.getByProjectId(1L);
+        Collection<TaskTypeEntity> collection = byProjectId.getByProjectId(1L);
 
         assertThat(collection.size(), equalTo(3));
 
@@ -145,9 +136,9 @@ public class TaskEntityRepositoryTest {
 
         assertThat(
                 collection.stream()
-                        .map(TaskEntity::getCode)
+                        .map(TaskTypeEntity::getName)
                         .collect(Collectors.toList()),
-                containsInAnyOrder("TT-1", "TT-2", "TT-3")
+                containsInAnyOrder("type 1", "type 2", "type 3")
         );
     }
 
@@ -155,47 +146,10 @@ public class TaskEntityRepositoryTest {
     void getByProjectId_Return_Empty_Collection() {
         when(byProjectId.getByProjectId(anyLong())).thenReturn(Collections.emptyList());
 
-        Collection<TaskEntity> collection = byProjectId.getByProjectId(1L);
+        Collection<TaskTypeEntity> collection = byProjectId.getByProjectId(1L);
 
         assertTrue(collection.isEmpty());
 
         verify(byProjectId, times(1)).getByProjectId(1L);
-    }
-
-    @Test
-    void updateField() {
-        doNothing().when(updateField).updateField(
-                new UpdateOneValue(
-                        1L, "Test task 1 UpdateOneFieldService updated", "name"
-                )
-        );
-
-        updateField.updateField(any());
-
-        verify(updateField, times(1)).updateField(any());
-    }
-
-    @Test
-    void getByCode() {
-        when(byCode.getByCode(anyString())).thenReturn(entities.get(0));
-
-        TaskEntity entity = byCode.getByCode("TT-1");
-
-        assertNotNull(entity);
-
-        assertThat(entity.getCode(), equalTo("TT-1"));
-
-        verify(byCode, times(1)).getByCode("TT-1");
-    }
-
-    @Test
-    void getByCode_Return_Null() {
-        when(byCode.getByCode(anyString())).thenReturn(null);
-
-        TaskEntity entity = byCode.getByCode("TT-1");
-
-        assertNull(entity);
-
-        verify(byCode, times(1)).getByCode("TT-1");
     }
 }

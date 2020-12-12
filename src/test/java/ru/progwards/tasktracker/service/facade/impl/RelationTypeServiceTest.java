@@ -1,9 +1,7 @@
 package ru.progwards.tasktracker.service.facade.impl;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.RelationType;
@@ -21,15 +19,14 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 /**
- * тестирование сервиса типа отношения связи между задачами
+ * Тестирование сервиса типа отношения связи между задачами
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 class RelationTypeServiceTest {
 
-    private final List<RelationType> relationTypes = new ArrayList<>();
+    private final List<RelationType> valueObjects = new ArrayList<>();
     @Mock
     private GetService<Long, RelationType> getService;
     @Mock
@@ -43,7 +40,7 @@ class RelationTypeServiceTest {
 
     {
         for (int i = 0; i < 3; i++) {
-            relationTypes.add(new RelationType(
+            valueObjects.add(new RelationType(
                     1L + i, "type " + (1 + i), null
             ));
         }
@@ -51,7 +48,7 @@ class RelationTypeServiceTest {
 
     @Test
     void get() {
-        when(getService.get(anyLong())).thenReturn(relationTypes.get(0));
+        when(getService.get(anyLong())).thenReturn(valueObjects.get(0));
 
         RelationType rt = getService.get(1L);
 
@@ -75,7 +72,7 @@ class RelationTypeServiceTest {
 
     @Test
     void getList() {
-        when(getListService.getList()).thenReturn(relationTypes);
+        when(getListService.getList()).thenReturn(valueObjects);
 
         Collection<RelationType> collection = getListService.getList();
 
@@ -91,7 +88,7 @@ class RelationTypeServiceTest {
     }
 
     @Test
-    void getList_Return_Null() {
+    void getList_Return_Empty_Collection() {
         when(getListService.getList()).thenReturn(Collections.emptyList());
 
         Collection<RelationType> collection = getListService.getList();
@@ -105,26 +102,26 @@ class RelationTypeServiceTest {
     void create() {
         doNothing().when(createService).create(isA(RelationType.class));
 
-        createService.create(relationTypes.get(0));
+        createService.create(valueObjects.get(0));
 
-        verify(createService, times(1)).create(relationTypes.get(0));
+        verify(createService, times(1)).create(valueObjects.get(0));
     }
 
     @Test
     void refresh() {
         doNothing().when(refreshService).refresh(isA(RelationType.class));
 
-        refreshService.refresh(relationTypes.get(0));
+        refreshService.refresh(valueObjects.get(0));
 
-        verify(refreshService, times(1)).refresh(relationTypes.get(0));
+        verify(refreshService, times(1)).refresh(valueObjects.get(0));
     }
 
     @Test
     void remove() {
         doNothing().when(removeService).remove(isA(RelationType.class));
 
-        removeService.remove(relationTypes.get(0));
+        removeService.remove(valueObjects.get(0));
 
-        verify(removeService, times(1)).remove(relationTypes.get(0));
+        verify(removeService, times(1)).remove(valueObjects.get(0));
     }
 }

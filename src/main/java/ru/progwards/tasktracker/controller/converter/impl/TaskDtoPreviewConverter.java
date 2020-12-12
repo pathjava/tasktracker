@@ -57,7 +57,8 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
                     task.getTimeLeft(),
                     task.getRelatedTasks(),
                     task.getAttachments(),
-                    task.getWorkLogs()
+                    task.getWorkLogs(),
+                    task.getNotes()
             );
         }
     }

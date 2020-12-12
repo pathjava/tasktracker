@@ -21,9 +21,15 @@ public class TaskTypeEntityRepository implements Repository<Long, TaskTypeEntity
     @Autowired
     private JsonHandler<Long, TaskTypeEntity> jsonHandler;
 
+    /**
+     * Метод получения всех типов задач
+     *
+     * @return коллекция всех TaskTypeEntity
+     */
     @Override
     public Collection<TaskTypeEntity> get() {
-        return null;
+        return jsonHandler.getMap().values().stream()
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
