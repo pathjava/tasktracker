@@ -25,7 +25,9 @@ public class AttachmentContentDtoFullConverter implements Converter<AttachmentCo
      */
     @Override
     public AttachmentContent toModel(AttachmentContentDtoFull dto) {
-        return new AttachmentContent(dto.getId(), dto.getData());
+        //return new AttachmentContent(dto.getId(), dto.getData());
+        //https://stackoverflow.com/questions/20614973/read-write-blob-data-in-chunks-with-hibernate
+        return null;
     }
 
 
@@ -37,7 +39,9 @@ public class AttachmentContentDtoFullConverter implements Converter<AttachmentCo
      */
     @Override
     public AttachmentContentDtoFull toDto(AttachmentContent model) {
-        return new AttachmentContentDtoFull(model.getId(), model.getData());
+        //https://stackoverflow.com/questions/20614973/read-write-blob-data-in-chunks-with-hibernate
+        //return new AttachmentContentDtoFull(model.getId(), model.getData());
+        return null;
     }
 
 }

@@ -1,24 +1,29 @@
 package ru.progwards.tasktracker.service.vo;
 
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 /**
  * Связка между задачами и вложениями
- * много ко многим
  *
  * @author Gregory Lobkov
  */
+@Entity
 public class TaskAttachment {
 
     /**
      * ID связки задача-вложение
      */
+    @Id
+    @SequenceGenerator(name = "TaskAttachmentSeq", sequenceName = "TaskAttachmentSeq", allocationSize = 10, initialValue = 1)
+    @GeneratedValue(generator = "TaskAttachmentSeq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     /**
      * Ссылка на задачу
      */
-    private Long taskId;
+    //@OneToOne(fetch = FetchType.LAZY, mappedBy = "attachments")
+    private Long task;
 
     /**
      * Полное имя файла-вложения
@@ -41,24 +46,21 @@ public class TaskAttachment {
     private ZonedDateTime created;
 
     /**
-     * Ссылка на вложение
-     */
-    private Long contentId;
-
-    /**
      * Вложение
      */
+    @ManyToOne(fetch = FetchType.LAZY)
     private AttachmentContent content;
 
+    public TaskAttachment() {
+    }
 
-    public TaskAttachment(Long id, Long taskId, String name, String extension, Long size, ZonedDateTime created, Long contentId, AttachmentContent content) {
+    public TaskAttachment(Long id, Long task, String name, String extension, Long size, ZonedDateTime created, AttachmentContent content) {
         this.id = id;
-        this.taskId = taskId;
+        this.task = task;
         this.name = name;
         this.extension = extension;
         this.size = size;
         this.created = created;
-        this.contentId = contentId;
         this.content = content;
     }
 
@@ -70,20 +72,12 @@ public class TaskAttachment {
         this.id = id;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public Long getTask() {
+        return task;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
-    }
-
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
+    public void setTask(Long task) {
+        this.task = task;
     }
 
     public AttachmentContent getContent() {

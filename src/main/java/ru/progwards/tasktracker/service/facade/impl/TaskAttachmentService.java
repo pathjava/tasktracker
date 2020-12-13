@@ -47,22 +47,22 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public void create(TaskAttachment taskAttachment) {
-        // сохраним содержимое, если подкреплено
-        Long contentId = taskAttachment.getContentId();
-        AttachmentContent content = taskAttachment.getContent();
-        if(contentId==null && content != null) {
-            // Если содержимое новое, добавим его в таблицу содержимого
-            if (content.getId() == null || content.getId() <= 0) {
-                attachmentContentCreateService.create(content);
-            }
-            taskAttachment.setContentId(content.getId());
-        }
-        // установим время создания
-        taskAttachment.setCreated(ZonedDateTime.now());
-        // сохраним в репозиторий
-        TaskAttachmentEntity entity = converter.toEntity(taskAttachment);
-        repository.create(entity);
-        taskAttachment.setId(entity.getId());
+//        // сохраним содержимое, если подкреплено
+//        Long contentId = taskAttachment.getContentId();
+//        AttachmentContent content = taskAttachment.getContent();
+//        if(contentId==null && content != null) {
+//            // Если содержимое новое, добавим его в таблицу содержимого
+//            if (content.getId() == null || content.getId() <= 0) {
+//                attachmentContentCreateService.create(content);
+//            }
+//            taskAttachment.setContentId(content.getId());
+//        }
+//        // установим время создания
+//        taskAttachment.setCreated(ZonedDateTime.now());
+//        // сохраним в репозиторий
+//        TaskAttachmentEntity entity = converter.toEntity(taskAttachment);
+//        repository.create(entity);
+//        taskAttachment.setId(entity.getId());
     }
 
 

@@ -3,7 +3,6 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoPreview;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
@@ -43,10 +42,10 @@ public class TaskAttachmentDtoPreviewConverter implements Converter<TaskAttachme
     @Override
     public TaskAttachment toModel(TaskAttachmentDtoPreview dto) {
         TaskAttachment saved = taskAttachmentGetService.get(dto.getId());
-        AttachmentContent attachmentContent = attachmentContentGetService.get(saved.getContentId());
+        AttachmentContent attachmentContent = attachmentContentGetService.get(saved.getContent().getId());
 
-        return new TaskAttachment(dto.getId(), saved.getTaskId(), dto.getName(), dto.getExtension(),
-                dto.getSize(), dto.getCreated(), saved.getContentId(), attachmentContent);
+        return new TaskAttachment(dto.getId(), saved.getTask(), dto.getName(), dto.getExtension(),
+                dto.getSize(), dto.getCreated(), attachmentContent);
     }
 
 

@@ -11,8 +11,11 @@ import ru.progwards.tasktracker.service.vo.AttachmentContent;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -46,14 +49,19 @@ public class TaskAttachmentServiceTest {
     TaskAttachment attachment;
 
     {
-        task = new Task(-12343L, "TESTTASK-01", "Test task 1", "",
-                null, null, null, null, null,
-                null, null, null,
-                null, null, null,
-                null, null, null, null, null);
-        InputStream targetStream = new ByteArrayInputStream(dataBytes);
-        content = new AttachmentContent(-12341L, targetStream);
-        attachment = new TaskAttachment(-23124L, task.getId(), "test1.txt", "txt", 3L, ZonedDateTime.now(), null, content);
+        try {
+            task = new Task(-12343L, "TESTTASK-01", "Test task 1", "",
+                    null, null, null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null, null, null);
+            //InputStream targetStream = new ByteArrayInputStream(dataBytes);
+            Blob targetStream = new SerialBlob(dataBytes);
+            content = new AttachmentContent(-12341L, targetStream, null);
+            attachment = new TaskAttachment(-23124L, task.getId(), "test1.txt", "txt", 3L, ZonedDateTime.now(), content);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     //@BeforeAll
@@ -154,8 +162,8 @@ public class TaskAttachmentServiceTest {
         Assertions.assertTrue(list.size() > 0, "Вложений для задачи " + task.getId() + " не найдено");
         TaskAttachment gotAttachment = (TaskAttachment) list.toArray()[0];
         Assertions.assertEquals(gotAttachment.getId(), attachment.getId(), "Идентификатор связки различается");
-        Assertions.assertNotNull(gotAttachment.getContentId(), "Идентификатор вложения не задан");
-        Assertions.assertEquals(gotAttachment.getContentId(), content.getId(), "Идентификатор вложения в связке сохранен не верно");
+        Assertions.assertNotNull(gotAttachment.getContent(), "Идентификатор вложения не задан");
+        Assertions.assertEquals(gotAttachment.getContent().getId(), content.getId(), "Идентификатор вложения в связке сохранен не верно");
         AttachmentContent gotContent = gotAttachment.getContent();
         Assertions.assertNotNull(gotContent, "Вложение не определено");
         Assertions.assertEquals(gotContent.getId(), content.getId(), "Идентификатор вложения различается");

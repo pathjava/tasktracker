@@ -43,15 +43,16 @@ public class TaskAttachmentConverter implements Converter<TaskAttachmentEntity, 
      */
     @Override
     public TaskAttachment toVo(TaskAttachmentEntity entity) {
-        String fileExtension = "";
-        int lastDotPos = entity.getName().lastIndexOf('.');
-        if (lastDotPos > 0) {
-            fileExtension = entity.getName().substring(lastDotPos + 1);
-        }
-        AttachmentContent attachmentContent = attachmentContentGetService.get(entity.getContentId()); // должно стать lazy load в будущем
-        return new TaskAttachment(entity.getId(), entity.getTaskId(), entity.getName(), fileExtension, entity.getSize(),
-                ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), UTC),
-                entity.getContentId(), attachmentContent);
+//        String fileExtension = "";
+//        int lastDotPos = entity.getName().lastIndexOf('.');
+//        if (lastDotPos > 0) {
+//            fileExtension = entity.getName().substring(lastDotPos + 1);
+//        }
+//        AttachmentContent attachmentContent = attachmentContentGetService.get(entity.getContentId()); // должно стать lazy load в будущем
+//        return new TaskAttachment(entity.getId(), entity.getTaskId(), entity.getName(), fileExtension, entity.getSize(),
+//                ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), UTC),
+//                entity.getContentId(), attachmentContent);
+        return null;
     }
 
     /**
@@ -64,8 +65,9 @@ public class TaskAttachmentConverter implements Converter<TaskAttachmentEntity, 
      */
     @Override
     public TaskAttachmentEntity toEntity(TaskAttachment vo) {
-        return new TaskAttachmentEntity(vo.getId(), vo.getTaskId(), vo.getName(), vo.getExtension(),
-                vo.getSize(), vo.getCreated().toEpochSecond(), vo.getContentId());
+//        return new TaskAttachmentEntity(vo.getId(), vo.getTask(), vo.getName(), vo.getExtension(),
+//                vo.getSize(), vo.getCreated().toEpochSecond(), vo.getContentId());
+        return null;
     }
 
 }

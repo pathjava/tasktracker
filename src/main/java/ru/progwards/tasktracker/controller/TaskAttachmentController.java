@@ -105,7 +105,7 @@ public class TaskAttachmentController {
 
         for (Long entity : ids) {
             TaskAttachment vo = getService.get(entity);
-            if(vo.getTaskId() == task_id)
+            if(vo.getTask() == task_id)
                 removeService.remove(vo);
         }
     }

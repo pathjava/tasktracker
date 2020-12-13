@@ -11,9 +11,13 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
 import ru.progwards.tasktracker.service.vo.AttachmentContent;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -36,8 +40,13 @@ public class AttachmentContentServiceTest {
     AttachmentContent content;
 
     {
-        InputStream targetStream = new ByteArrayInputStream(dataBytes);
-        content = new AttachmentContent(-23123L, targetStream);
+        try {
+            //InputStream targetStream = new ByteArrayInputStream(dataBytes);
+            Blob targetStream = new SerialBlob(dataBytes);
+            content = new AttachmentContent(-23123L, targetStream, null);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     /**
@@ -74,14 +83,15 @@ public class AttachmentContentServiceTest {
         Assertions.assertNotNull(got, "Сохранено в репо, но прочесть не смогли");
         Assertions.assertEquals(content.getId(), got.getId(), "Идентификатор сохраненного объекта не совпал");
 
-        String expectedData = null;
         try {
-            expectedData = Arrays.toString(content.getData().readAllBytes());
-            expectedData = Arrays.toString(dataBytes);
-            String gotData = Arrays.toString(got.getData().readAllBytes());
+            //String expectedData = Arrays.toString(content.getData().getBinaryStream().readAllBytes());
+            String expectedData = Arrays.toString(dataBytes);
+            String gotData = Arrays.toString(got.getData().getBinaryStream().readAllBytes());
             Assertions.assertEquals(expectedData, gotData, "Данные файлов не совпадают");
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         removeTestEntity();
     }

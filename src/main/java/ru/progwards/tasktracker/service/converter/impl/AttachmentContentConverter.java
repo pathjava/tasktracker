@@ -29,9 +29,10 @@ public class AttachmentContentConverter implements Converter<AttachmentContentEn
      */
     @Override
     public AttachmentContent toVo(AttachmentContentEntity entity) {
-        byte[] bytes = entity.getData();
-        InputStream targetStream = new ByteArrayInputStream(bytes);
-        return new AttachmentContent(entity.getId(), targetStream);
+//        byte[] bytes = entity.getData();
+//        InputStream targetStream = new ByteArrayInputStream(bytes);
+//        return new AttachmentContent(entity.getId(), targetStream);
+        return null;
     }
 
 
@@ -43,11 +44,11 @@ public class AttachmentContentConverter implements Converter<AttachmentContentEn
      */
     @Override
     public AttachmentContentEntity toEntity(AttachmentContent vo) {
-        try {
-            return new AttachmentContentEntity(vo.getId(), vo.getData().readAllBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            return new AttachmentContentEntity(vo.getId(), vo.getData().readAllBytes());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 
