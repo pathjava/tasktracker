@@ -62,23 +62,27 @@
 
         <!-- Database -->
 
-        <dependency>
+        <dependency> <!-- Hibernate -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
         </dependency>
-        <!-- Hibernate connection pool (for production use) -->
-        <dependency>
+        <dependency> <!-- Hibernate connection pool (for production use) -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
         </dependency>
-        <dependency>
+        <dependency> <!-- remote common database -->
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
-        <dependency>
+        <dependency> <!-- for local tests -->
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
+        <dependency> <!-- for local tests -->
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
 
 
     </dependencies>
