@@ -12,8 +12,8 @@ public class HibernateUtil {
     static {
         try {
             Configuration configuration = new Configuration()
-                    //.configure("hibernate-h2.cfg.xml")
-                    .configure("hibernate-mariadb.cfg.xml")
+                    .configure("hibernate-h2.cfg.xml") // собственная файловая БД, H2
+                    //.configure("hibernate-mariadb.cfg.xml") // общая БД, MariaDB
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.AccessRule.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.AttachmentContent.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.Project.class)
