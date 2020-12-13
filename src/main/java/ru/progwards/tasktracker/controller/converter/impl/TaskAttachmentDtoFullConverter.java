@@ -41,11 +41,12 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachment toModel(TaskAttachmentDtoFull dto) {
-        TaskAttachment saved = taskAttachmentGetService.get(dto.getId());
-        AttachmentContent attachmentContent = attachmentContentGetService.get(saved.getContentId());
-
-        return new TaskAttachment(dto.getId(), dto.getTaskId(), dto.getName(), dto.getExtension(),
-                dto.getSize(), dto.getCreated(), saved.getContentId(), attachmentContent);
+//        TaskAttachment saved = taskAttachmentGetService.get(dto.getId());
+//        AttachmentContent attachmentContent = attachmentContentGetService.get(dto.getContentId());
+//
+//        return new TaskAttachment(dto.getId(), dto.getTaskId(), dto.getName(), dto.getExtension(),
+//                dto.getSize(), dto.getCreated(), saved.getContentId(), attachmentContent);
+        return null;
     }
 
 
@@ -57,7 +58,7 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachmentDtoFull toDto(TaskAttachment model) {
-        return new TaskAttachmentDtoFull(model.getId(), model.getTaskId(), model.getName(), model.getExtension(),
+        return new TaskAttachmentDtoFull(model.getId(), model.getTask(), model.getName(), model.getExtension(),
                 model.getSize(), model.getCreated());
     }
 
