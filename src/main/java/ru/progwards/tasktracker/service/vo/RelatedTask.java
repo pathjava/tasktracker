@@ -1,21 +1,40 @@
 package ru.progwards.tasktracker.service.vo;
 
+import javax.persistence.*;
+
 /**
  * value object - объект бизнес логики (связанная задача)
  *
  * @author Oleg Kiselev
  */
+@Entity
+@Table(name = "related_tasks")
 public class RelatedTask {
 
+    @Id
+    @SequenceGenerator(name = "related_task_seq", sequenceName = "related_tasks_seq", allocationSize = 1)
+    @GeneratedValue(generator = "related_task_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "counter_type_id", referencedColumnName = "id")
     private RelationType relationType;
-    private Long currentTaskId;
+
+    @ManyToOne //TODO fetch - ?
+    @JoinColumn(name = "current_task_id", referencedColumnName = "id")
+    private Task currentTask;
+
+    @ManyToOne
+    @JoinColumn(name = "attached_task_id", referencedColumnName = "id")
     private Task attachedTask;
 
-    public RelatedTask(Long id, RelationType relationType, Long currentTaskId, Task attachedTask) {
+    /*boolean isDeleted;*/ //TODO
+
+    public RelatedTask(Long id, RelationType relationType, Task currentTask, Task attachedTask) {
         this.id = id;
         this.relationType = relationType;
-        this.currentTaskId = currentTaskId;
+        this.currentTask = currentTask;
         this.attachedTask = attachedTask;
     }
 
@@ -35,12 +54,12 @@ public class RelatedTask {
         this.relationType = relationType;
     }
 
-    public Long getCurrentTaskId() {
-        return currentTaskId;
+    public Task getCurrentTask() {
+        return currentTask;
     }
 
-    public void setCurrentTaskId(Long currentTaskId) {
-        this.currentTaskId = currentTaskId;
+    public void setCurrentTask(Task currentTask) {
+        this.currentTask = currentTask;
     }
 
     public Task getAttachedTask() {
