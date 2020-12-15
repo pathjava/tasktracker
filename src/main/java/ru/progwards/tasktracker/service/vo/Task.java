@@ -1,9 +1,9 @@
 package ru.progwards.tasktracker.service.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import javax.persistence.*;
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,39 +11,84 @@ import java.util.List;
  *
  * @author Oleg Kiselev
  */
+@Entity
+@Table(name = "tasks")
 public class Task {
 
+    @Id
+    @SequenceGenerator(name = "task_seq", sequenceName = "tasks_seq", allocationSize = 1)
+    @GeneratedValue(generator = "task_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
+
+    @Column(name = "code", nullable = false)
     private String code;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "description")
     private String description;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
     private TaskType type;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "priority_id", referencedColumnName = "id")
     private TaskPriority priority;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
     private Project project;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
     private User author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "executor_id", referencedColumnName = "id")
     private User executor;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+
+    @Column(name = "created", nullable = false)
     private ZonedDateTime created;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    @Column(name = "updated")
     private ZonedDateTime updated;
+
+    @OneToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
     private WorkFlowStatus status;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<WorkFlowAction> actions;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
+
+    @Column(name = "estimation")
     private Duration estimation;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
+    @Column(name = "time_spent")
     private Duration timeSpent;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
+    @Column(name = "time_left")
     private Duration timeLeft;
-    private List<RelatedTask> relatedTasks;
+
+    @OneToMany(mappedBy = "currentTask", fetch = FetchType.LAZY)
+    private List<RelatedTask> relatedTasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "attachedTask", fetch = FetchType.LAZY)
+    private List<RelatedTask> counterRelatedTasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<TaskAttachment> attachments;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<WorkLog> workLogs;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<TaskNote> notes;
+
+    /*boolean isDeleted;*/ //TODO
 
     public Task(
             Long id, String code, String name, String description,
             TaskType type, TaskPriority priority, Project project, User author, User executor,
             ZonedDateTime created, ZonedDateTime updated, WorkFlowStatus status, List<WorkFlowAction> actions,
-            Duration estimation, Duration timeSpent, Duration timeLeft, List<RelatedTask> relatedTasks,
+            Duration estimation, Duration timeSpent, Duration timeLeft,
+            List<RelatedTask> relatedTasks, List<RelatedTask> counterRelatedTasks,
             List<TaskAttachment> attachments, List<WorkLog> workLogs, List<TaskNote> notes
     ) {
         this.id = id;
@@ -63,6 +108,7 @@ public class Task {
         this.timeSpent = timeSpent;
         this.timeLeft = timeLeft;
         this.relatedTasks = relatedTasks;
+        this.counterRelatedTasks = counterRelatedTasks;
         this.attachments = attachments;
         this.workLogs = workLogs;
         this.notes = notes;
@@ -202,6 +248,14 @@ public class Task {
 
     public void setRelatedTasks(List<RelatedTask> relatedTasks) {
         this.relatedTasks = relatedTasks;
+    }
+
+    public List<RelatedTask> getCounterRelatedTasks() {
+        return counterRelatedTasks;
+    }
+
+    public void setCounterRelatedTasks(List<RelatedTask> counterRelatedTasks) {
+        this.counterRelatedTasks = counterRelatedTasks;
     }
 
     public List<TaskAttachment> getAttachments() {

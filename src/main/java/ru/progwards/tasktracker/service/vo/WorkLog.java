@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.service.vo;
 
 import ru.progwards.tasktracker.util.types.EstimateChange;
 
+import javax.persistence.*;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
@@ -10,24 +11,47 @@ import java.time.ZonedDateTime;
  *
  * @author Oleg Kiselev
  */
+@Entity
+@Table(name = "work_logs")
 public class WorkLog {
 
+    @Id
+    @SequenceGenerator(name = "work_log_seq", sequenceName = "work_logs_seq", allocationSize = 1)
+    @GeneratedValue(generator = "work_log_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
-    private Long taskId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    private Task task;
+
+    @Column(name = "spent")
     private Duration spent;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User worker;
+
+    @Column(name = "when", nullable = false)
     private ZonedDateTime when;
+
+    @Column(name = "description")
     private String description;
+
+    //TODO - enum - ?
+    @Column(name = "estimate_change", nullable = false)
     private EstimateChange estimateChange;
+
+    @Column(name = "estimate_value")
     private Duration estimateValue;
 
     public WorkLog(
-            Long id, Long taskId, Duration spent, User worker,
+            Long id, Task task, Duration spent, User worker,
             ZonedDateTime when, String description,
             EstimateChange estimateChange, Duration estimateValue
     ) {
         this.id = id;
-        this.taskId = taskId;
+        this.task = task;
         this.spent = spent;
         this.worker = worker;
         this.when = when;
@@ -44,12 +68,12 @@ public class WorkLog {
         this.id = id;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public Duration getSpent() {
