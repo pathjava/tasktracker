@@ -41,15 +41,18 @@ public class WorkFlow {
      */
     List<WorkFlowStatus> statuses;
 
+    List<TaskType> taskTypes;
+
     public WorkFlow() { }
 
-    public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses) {
+    public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses, List<TaskType> taskTypes) {
         this.id = id;
         this.name = name;
         this.pattern = pattern;
         this.start_status_id = start_status_id;
         this.startStatus = startStatus;
         this.statuses = statuses;
+        this.taskTypes = taskTypes;
     }
 
     public List<WorkFlowStatus> getStatuses() {
@@ -100,4 +103,11 @@ public class WorkFlow {
         this.startStatus = startStatus;
     }
 
+    public List<TaskType> getTaskTypes() {
+        return taskTypes;
+    }
+
+    public void setTaskTypes(List<TaskType> taskTypes) {
+        this.taskTypes = taskTypes;
+    }
 }
