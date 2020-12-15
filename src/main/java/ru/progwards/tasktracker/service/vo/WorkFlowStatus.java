@@ -38,19 +38,19 @@ public class WorkFlowStatus {
      */
     Boolean alwaysAllow;
 
-    Task task;
+    List<Task> tasks;
 
 
     public WorkFlowStatus() { }
 
-    public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean alwaysAllow, Task task) {
+    public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean alwaysAllow, List<Task> tasks) {
         this.id = id;
         this.workflow_id = workflow_id;
         this.name = name;
         this.state = state;
         this.actions = actions;
         this.alwaysAllow = alwaysAllow;
-        this.task = task;
+        this.tasks = tasks;
     }
 
 
@@ -102,11 +102,11 @@ public class WorkFlowStatus {
         this.alwaysAllow = alwaysAllow;
     }
 
-    public Task getTask() {
-        return task;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
