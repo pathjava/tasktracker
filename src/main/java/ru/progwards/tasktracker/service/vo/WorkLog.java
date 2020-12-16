@@ -25,24 +25,19 @@ public class WorkLog {
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
 
-    @Column(name = "spent")
     private Duration spent;
 
     @ManyToOne //TODO - fetch - ?
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User worker;
 
-    @Column(name = "when", nullable = false)
+    @Column(nullable = false)
     private ZonedDateTime when;
-
-    @Column(name = "description")
     private String description;
 
     //TODO - enum - ?
-    @Column(name = "estimate_change", nullable = false)
+    @Column(nullable = false)
     private EstimateChange estimateChange;
-
-    @Column(name = "estimate_value")
     private Duration estimateValue;
 
     public WorkLog(

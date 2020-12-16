@@ -27,7 +27,7 @@ public class TaskType {
     @JoinColumn(name = "work_flow_id", referencedColumnName = "id")
     private WorkFlow workFlow;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "type")

@@ -86,7 +86,7 @@ public class RelatedTaskEntityRepository implements Repository<Long, RelatedTask
     @Override
     public Collection<RelatedTaskEntity> getByTaskId(Long taskId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getCurrentTask().equals(taskId) && !entity.isDeleted())
+                .filter(entity -> entity.getCurrentTask().getId().equals(taskId) && !entity.isDeleted())
                 .collect(Collectors.toList());
     }
 

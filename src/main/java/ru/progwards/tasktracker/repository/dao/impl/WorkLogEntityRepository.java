@@ -83,7 +83,7 @@ public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity>,
     @Override
     public Collection<WorkLogEntity> getByTaskId(Long taskId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getTask().equals(taskId))
+                .filter(entity -> entity.getTask().getId().equals(taskId))
                 .collect(Collectors.toList());
     }
 }

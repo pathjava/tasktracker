@@ -23,11 +23,10 @@ public class Task {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "code", nullable = false)
+    @Column(nullable = false)
     private String code;
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
-    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -50,22 +49,19 @@ public class Task {
     @JoinColumn(name = "executor_id", referencedColumnName = "id")
     private User executor;
 
-    @Column(name = "created", nullable = false)
+    @Column(nullable = false)
     private ZonedDateTime created;
-    @Column(name = "updated")
     private ZonedDateTime updated;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
     private WorkFlowStatus status;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<WorkFlowAction> actions;
 
-    @Column(name = "estimation")
     private Duration estimation;
-    @Column(name = "time_spent")
     private Duration timeSpent;
-    @Column(name = "time_left")
     private Duration timeLeft;
 
     @OneToMany(mappedBy = "currentTask", fetch = FetchType.LAZY)

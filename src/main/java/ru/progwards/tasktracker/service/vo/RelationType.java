@@ -18,10 +18,10 @@ public class RelationType {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "counter_id", referencedColumnName = "id")
     private RelationType counterRelation;
 
