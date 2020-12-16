@@ -8,11 +8,11 @@ import javax.persistence.*;
  * @author Oleg Kiselev
  */
 @Entity
-@Table(name = "related_tasks")
+@Table(name = "related_task")
 public class RelatedTask {
 
     @Id
-    @SequenceGenerator(name = "related_task_seq", sequenceName = "related_tasks_seq", allocationSize = 1)
+    @SequenceGenerator(name = "related_task_seq", sequenceName = "related_task_seq", allocationSize = 1)
     @GeneratedValue(generator = "related_task_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;

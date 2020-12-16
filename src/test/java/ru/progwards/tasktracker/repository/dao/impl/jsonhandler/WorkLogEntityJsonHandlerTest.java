@@ -54,11 +54,11 @@ class WorkLogEntityJsonHandlerTest {
 
     private void createEntitiesForTest() {
         jsonHandler.getMap().put(
-                1L, new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
+                1L, new WorkLogEntity(null, null, null, null, ZonedDateTime.now().toEpochSecond(),
                         "Description Log 1")
         );
         jsonHandler.getMap().put(
-                2L, new WorkLogEntity(null, 2L, null, null, ZonedDateTime.now().toEpochSecond(),
+                2L, new WorkLogEntity(null, null, null, null, ZonedDateTime.now().toEpochSecond(),
                         "Description Log 2")
         );
     }

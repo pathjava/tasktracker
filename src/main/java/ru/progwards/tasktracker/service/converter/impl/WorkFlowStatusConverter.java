@@ -37,9 +37,10 @@ public class WorkFlowStatusConverter implements Converter<WorkFlowStatusEntity, 
      */
     @Override
     public WorkFlowStatus toVo(WorkFlowStatusEntity entity) {
-        List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(entity.getId()); // должно стать lazy load в будущем
-        return new WorkFlowStatus(entity.getId(), entity.getWorkflow_id(), entity.getName(),
-                WorkFlowState.valueOf(entity.getState()), listByParentId, entity.getAlwaysAllow());
+//        List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(entity.getId()); // должно стать lazy load в будущем
+//        return new WorkFlowStatus(entity.getId(), entity.getWorkflow_id(), entity.getName(),
+//                WorkFlowState.valueOf(entity.getState()), listByParentId, entity.getAlwaysAllow());
+        return null;
     }
 
 

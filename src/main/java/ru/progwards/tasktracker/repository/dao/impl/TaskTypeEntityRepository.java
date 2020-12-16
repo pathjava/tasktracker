@@ -89,7 +89,7 @@ public class TaskTypeEntityRepository implements Repository<Long, TaskTypeEntity
     @Override
     public Collection<TaskTypeEntity> getByProjectId(Long projectId) {
         return jsonHandler.getMap().values().stream()
-                .filter(entity -> entity.getProject_id().equals(projectId))
+                .filter(entity -> entity.getProject().equals(projectId))
                 .collect(Collectors.toList());
     }
 }

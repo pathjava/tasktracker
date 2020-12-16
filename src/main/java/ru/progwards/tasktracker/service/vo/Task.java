@@ -12,11 +12,11 @@ import java.util.List;
  * @author Oleg Kiselev
  */
 @Entity
-@Table(name = "tasks")
+@Table(name = "task")
 public class Task {
 
     @Id
-    @SequenceGenerator(name = "task_seq", sequenceName = "tasks_seq", allocationSize = 1)
+    @SequenceGenerator(name = "task_seq", sequenceName = "task_seq", allocationSize = 1)
     @GeneratedValue(generator = "task_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
@@ -53,7 +53,7 @@ public class Task {
     @Column(name = "updated")
     private ZonedDateTime updated;
 
-    @OneToMany(mappedBy = "tasks", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private WorkFlowStatus status;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)

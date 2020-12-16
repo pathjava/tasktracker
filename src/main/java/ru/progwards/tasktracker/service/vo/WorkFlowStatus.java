@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.service.vo;
 
 import ru.progwards.tasktracker.util.types.WorkFlowState;
 
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -9,8 +10,14 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
+@Entity
+@Table(name = "workflow_status")
 public class WorkFlowStatus {
 
+    @Id
+    @SequenceGenerator(name = "workflow_status_seq", sequenceName = "workflow_status_seq", allocationSize = 1)
+    @GeneratedValue(generator = "workflow_status_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     Long id;
 
     /**
@@ -38,6 +45,7 @@ public class WorkFlowStatus {
      */
     Boolean alwaysAllow;
 
+    @OneToMany(mappedBy = "status")
     List<Task> tasks;
 
 
