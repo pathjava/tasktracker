@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 public class WorkLog {
 
     @Id
-    @SequenceGenerator(name = "work_log_seq", sequenceName = "work_logs_seq", allocationSize = 1)
+    @SequenceGenerator(name = "work_log_seq", sequenceName = "work_log_seq", allocationSize = 1)
     @GeneratedValue(generator = "work_log_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;

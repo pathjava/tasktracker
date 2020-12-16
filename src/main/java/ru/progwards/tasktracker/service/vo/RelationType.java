@@ -21,7 +21,7 @@ public class RelationType {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "counter_id", referencedColumnName = "id")
     private RelationType counterRelation;
 
