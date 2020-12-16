@@ -70,7 +70,7 @@ public class Task {
     private List<RelatedTask> relatedTasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "attachedTask", fetch = FetchType.LAZY)
-    private List<RelatedTask> counterRelatedTasks = new ArrayList<>();
+    private List<RelatedTask> relatedTasksAttached = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<TaskAttachment> attachments;
@@ -88,7 +88,7 @@ public class Task {
             TaskType type, TaskPriority priority, Project project, User author, User executor,
             ZonedDateTime created, ZonedDateTime updated, WorkFlowStatus status, List<WorkFlowAction> actions,
             Duration estimation, Duration timeSpent, Duration timeLeft,
-            List<RelatedTask> relatedTasks, List<RelatedTask> counterRelatedTasks,
+            List<RelatedTask> relatedTasks, List<RelatedTask> relatedTasksAttached,
             List<TaskAttachment> attachments, List<WorkLog> workLogs, List<TaskNote> notes
     ) {
         this.id = id;
@@ -108,7 +108,7 @@ public class Task {
         this.timeSpent = timeSpent;
         this.timeLeft = timeLeft;
         this.relatedTasks = relatedTasks;
-        this.counterRelatedTasks = counterRelatedTasks;
+        this.relatedTasksAttached = relatedTasksAttached;
         this.attachments = attachments;
         this.workLogs = workLogs;
         this.notes = notes;
@@ -250,12 +250,12 @@ public class Task {
         this.relatedTasks = relatedTasks;
     }
 
-    public List<RelatedTask> getCounterRelatedTasks() {
-        return counterRelatedTasks;
+    public List<RelatedTask> getRelatedTasksAttached() {
+        return relatedTasksAttached;
     }
 
-    public void setCounterRelatedTasks(List<RelatedTask> counterRelatedTasks) {
-        this.counterRelatedTasks = counterRelatedTasks;
+    public void setRelatedTasksAttached(List<RelatedTask> counterRelatedTasks) {
+        this.relatedTasksAttached = counterRelatedTasks;
     }
 
     public List<TaskAttachment> getAttachments() {

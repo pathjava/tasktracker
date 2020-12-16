@@ -27,7 +27,7 @@ class RelatedTaskConverterTest {
     private Converter<RelatedTaskEntity, RelatedTask> converter;
 
     private final RelatedTask valueObject = new RelatedTask(
-            null, new RelationType(null, null, null),
+            null, new RelationType(null, null, null, null),
             null, null
     );
 

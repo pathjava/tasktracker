@@ -25,7 +25,7 @@ class RelationTypeDtoFullConverterTest {
     private Converter<RelationType, RelationTypeDtoFull> converter;
 
     private final RelationType valueObject = new RelationType(
-            null, null, null
+            null, null, null, null
     );
 
     private final RelationTypeDtoFull dtoPreview = new RelationTypeDtoFull(

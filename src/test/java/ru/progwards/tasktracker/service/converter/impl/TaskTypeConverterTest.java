@@ -25,7 +25,7 @@ class TaskTypeConverterTest {
     private Converter<TaskTypeEntity, TaskType> converter;
 
     private final TaskType valueObject = new TaskType(
-            null, null, null, null
+            null, null, null, null, null
     );
 
     private final TaskTypeEntity entity = new TaskTypeEntity(

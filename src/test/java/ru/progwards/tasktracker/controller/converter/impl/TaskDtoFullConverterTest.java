@@ -27,7 +27,7 @@ class TaskDtoFullConverterTest {
             null, null, null, null, null, null,
             null, null, null, null, null,
             null, null, null, null, null,
-            null, null, null, null
+            null, null, null, null, null
     );
 
     private final TaskDtoFull dtoPreview = new TaskDtoFull(

@@ -28,7 +28,7 @@ public class WorkLog {
     @Column(name = "spent")
     private Duration spent;
 
-    @ManyToOne
+    @ManyToOne //TODO - fetch - ?
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User worker;
 

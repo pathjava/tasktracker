@@ -11,7 +11,7 @@ public class RelatedTaskEntity {
 
     private Long id;
     private RelationTypeEntity relationTypeEntity;
-    private Long currentTaskId;
+    private TaskEntity currentTask;
     private TaskEntity attachedTask;
     private boolean isDeleted;
 
@@ -19,14 +19,14 @@ public class RelatedTaskEntity {
     }
 
     public RelatedTaskEntity(
-            Long id, RelationTypeEntity relationTypeEntity, Long currentTaskId,
+            Long id, RelationTypeEntity relationTypeEntity, TaskEntity currentTask,
             TaskEntity attachedTask, boolean isDeleted
     ) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
         this.id = id;
         this.relationTypeEntity = relationTypeEntity;
-        this.currentTaskId = currentTaskId;
+        this.currentTask = currentTask;
         this.attachedTask = attachedTask;
         this.isDeleted = isDeleted;
     }
@@ -47,12 +47,12 @@ public class RelatedTaskEntity {
         this.relationTypeEntity = relationTypeEntity;
     }
 
-    public Long getCurrentTaskId() {
-        return currentTaskId;
+    public TaskEntity getCurrentTask() {
+        return currentTask;
     }
 
-    public void setCurrentTaskId(Long currentTaskId) {
-        this.currentTaskId = currentTaskId;
+    public void setCurrentTask(TaskEntity currentTask) {
+        this.currentTask = currentTask;
     }
 
     public TaskEntity getAttachedTask() {

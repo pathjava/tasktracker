@@ -10,7 +10,6 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
-import ru.progwards.tasktracker.service.vo.Task;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -35,8 +34,6 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     private Converter<RelatedTaskEntity, RelatedTask> converter;
     @Autowired
     private GetService<Long, RelationType> typeGetService;
-    @Autowired
-    private GetService<Long, Task> taskGetService;
 
     /**
      * Метод создания связанной задачи
@@ -50,14 +47,13 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      */
     @Override
     public void create(RelatedTask model) {
-        Long currentTaskId = model.getCurrentTaskId();
-        Long attachedTaskId = model.getAttachedTask().getId();
 
-        if (checkExistTypeAndLink(currentTaskId, attachedTaskId, model.getRelationType().getId())) {
+        if (checkExistTypeAndLink(model.getCurrentTask().getId(), model.getAttachedTask().getId(), model.getRelationType().getId())) {
             if (model.getRelationType().getCounterRelation() != null) {
                 RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
-                Task task = taskGetService.get(currentTaskId);
-                RelatedTask counter = new RelatedTask(null, counterType, attachedTaskId, task);
+                RelatedTask counter = new RelatedTask(
+                        null, counterType, model.getAttachedTask(), model.getCurrentTask()
+                );
 
                 RelatedTaskEntity entity = converter.toEntity(counter);
                 repository.create(entity);
@@ -82,7 +78,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
         Collection<RelatedTask> collection = getListByTaskId(currentTaskId);
         for (RelatedTask relatedTask : collection) {
             if (relatedTask.getRelationType().getId().equals(relationTypeId)
-                    && relatedTask.getCurrentTaskId().equals(attachedTaskId))
+                    && relatedTask.getCurrentTask().getId().equals(attachedTaskId))
                 return false;
         }
         return true;
@@ -133,11 +129,11 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public void remove(RelatedTask model) {
         if (model.getRelationType().getCounterRelation() != null) {
-            Collection<RelatedTask> collection = getListByAttachedTaskId(model.getCurrentTaskId());
+            Collection<RelatedTask> collection = getListByAttachedTaskId(model.getCurrentTask().getId());
             if (!collection.isEmpty()) {
                 collection.stream()
-                        .filter(relatedTask -> model.getCurrentTaskId().equals(relatedTask.getAttachedTask().getId())
-                                && model.getAttachedTask().getId().equals(relatedTask.getCurrentTaskId()))
+                        .filter(relatedTask -> model.getCurrentTask().getId().equals(relatedTask.getAttachedTask().getId())
+                                && model.getAttachedTask().getId().equals(relatedTask.getCurrentTask().getId()))
                         .forEach(relatedTask -> repository.delete(relatedTask.getId()));
             }
         }

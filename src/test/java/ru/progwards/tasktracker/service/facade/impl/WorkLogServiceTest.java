@@ -52,7 +52,7 @@ class WorkLogServiceTest {
             valueObjects.add(
                     new WorkLog(
                             1L + i,
-                            1L,
+                            null,
                             Duration.ofHours(15),
                             user,
                             ZonedDateTime.now(),
@@ -86,7 +86,7 @@ class WorkLogServiceTest {
                 null, null, null, null, null,
                 null, null, null, null,
                 Duration.ofHours(50), Duration.ofHours(0), Duration.ofHours(50),
-                null, null, null, null
+                null, null, null, null, null
         );
     }
 

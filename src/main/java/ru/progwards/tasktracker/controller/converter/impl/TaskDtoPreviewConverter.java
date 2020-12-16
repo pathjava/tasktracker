@@ -56,6 +56,7 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
                     task.getTimeSpent(),
                     task.getTimeLeft(),
                     task.getRelatedTasks(),
+                    task.getRelatedTasksAttached(),
                     task.getAttachments(),
                     task.getWorkLogs(),
                     task.getNotes()

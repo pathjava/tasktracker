@@ -33,7 +33,8 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
             return new RelationType(
                     dto.getId(),
                     dto.getName(),
-                    relationType.getCounterRelation()
+                    relationType.getCounterRelation(),
+                    relationType.getRelatedTasks()
             );
         }
     }

@@ -69,6 +69,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
                 false,
                 null,
                 null,
+                null,
                 null
         );
     }
@@ -135,7 +136,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Override
     public Collection<TaskType> getListByProjectId(Long projectId) {
         return byProjectId.getByProjectId(projectId).stream()
-                .filter(entity -> entity.getProject_id().equals(projectId))
+                .filter(entity -> entity.getProject().getId().equals(projectId))
                 .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());
     }

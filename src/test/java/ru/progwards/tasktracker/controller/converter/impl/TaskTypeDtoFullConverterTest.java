@@ -25,7 +25,7 @@ class TaskTypeDtoFullConverterTest {
     private Converter<TaskType, TaskTypeDtoFull> converter;
 
     private final TaskType valueObject = new TaskType(
-            null, null, null, null
+            null, null, null, null, null
     );
 
     private final TaskTypeDtoFull dtoPreview = new TaskTypeDtoFull(

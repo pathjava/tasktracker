@@ -36,7 +36,7 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
             WorkLog workLog = workLogGetService.get(dto.getId());
             return new WorkLog(
                     dto.getId(),
-                    workLog.getTaskId(),
+                    workLog.getTask(),
                     dto.getSpent(),
                     userUserDtoConverter.toModel(dto.getWorker()),
                     dto.getWhen(),

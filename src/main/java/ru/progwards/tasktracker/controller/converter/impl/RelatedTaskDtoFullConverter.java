@@ -6,6 +6,7 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.controller.dto.RelationTypeDtoPreview;
 import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
 import ru.progwards.tasktracker.service.vo.Task;
@@ -22,6 +23,8 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
     private Converter<RelationType, RelationTypeDtoPreview> typeDtoConverter;
     @Autowired
     private Converter<Task, TaskDtoPreview> taskDtoConverter;
+    @Autowired
+    private GetService<Long, Task> getService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -33,13 +36,15 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
     public RelatedTask toModel(RelatedTaskDtoFull dto) {
         if (dto == null)
             return null;
-        else
+        else {
+            Task currentTask = getService.get(dto.getCurrentTaskId());
             return new RelatedTask(
                     dto.getId(),
                     typeDtoConverter.toModel(dto.getRelationType()),
-                    dto.getCurrentTaskId(),
+                    currentTask,
                     taskDtoConverter.toModel(dto.getAttachedTask())
             );
+        }
     }
 
     /**
@@ -56,7 +61,7 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
             return new RelatedTaskDtoFull(
                     model.getId(),
                     typeDtoConverter.toDto(model.getRelationType()),
-                    model.getCurrentTaskId(),
+                    model.getCurrentTask().getId(),
                     taskDtoConverter.toDto(model.getAttachedTask())
             );
     }

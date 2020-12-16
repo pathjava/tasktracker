@@ -25,7 +25,7 @@ class TaskTypeDtoPreviewConverterTest {
     private Converter<TaskType, TaskTypeDtoPreview> converter;
 
     private final TaskType valueObject = new TaskType(
-            null, null, null, null
+            null, null, null, null, null
     );
 
     private final TaskTypeDtoPreview dtoPreview = new TaskTypeDtoPreview(

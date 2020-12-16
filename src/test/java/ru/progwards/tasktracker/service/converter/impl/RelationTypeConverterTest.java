@@ -25,7 +25,7 @@ class RelationTypeConverterTest {
     private Converter<RelationTypeEntity, RelationType> converter;
 
     private final RelationType valueObject = new RelationType(
-            null, null, null
+            null, null, null, null
     );
 
     private final RelationTypeEntity entity = new RelationTypeEntity(
