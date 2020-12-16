@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.Entity;
  *
  * @author Gregory Lobkov
  */
+@Data
 @Entity
 public class WorkFlowAction {
 

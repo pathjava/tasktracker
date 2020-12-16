@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.ZonedDateTime;
