@@ -22,7 +22,6 @@
     </properties>
 
     <dependencies>
-
         <dependency><!-- Spring MVC -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -52,7 +51,6 @@
         </dependency>
 
         <!-- Database -->
-
         <dependency> <!-- Hibernate -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -65,7 +63,6 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
-
         <dependency> <!-- for local tests -->
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -75,8 +72,11 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-
-
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
