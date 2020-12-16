@@ -46,6 +46,11 @@ public class ProjectCreateService implements CreateService<Project> {
      */
     @Override
     public void create(Project model) {
+        // если значение prefix пустое, то создание нового проекта невозможно
+        if (filterString(model.getPrefix()) == null)
+            throw new OperationIsNotPossibleException("Create not possible");
+
+
         // получаем список проектов, чтобы искать в них одинаковые prefix
         Collection<ProjectEntity> projectEntities = repository.get();
 
@@ -60,6 +65,7 @@ public class ProjectCreateService implements CreateService<Project> {
                 }
             }
         }
+
 
         if (isExist)
             throw new OperationIsNotPossibleException("Create not possible");
@@ -94,5 +100,34 @@ public class ProjectCreateService implements CreateService<Project> {
         model.setLastTaskCode(0L);
 
         repository.create(converter.toEntity(model));
+    }
+
+    /**
+     * метод фильтрует строку (prefix проекта) под нужный шаблон
+     * @param str входящий prefix
+     * @return отфильтрованный prefix, либо null, если нет возможности выдать корректный результат
+     */
+    private static String filterString(String str) {
+        String digits = "0123456789";
+
+        boolean isCorrect = false;
+
+        // если первые символы строки содержат одну из цифр, то перебирать строку, пока не дойдем до буквы
+        for (int i = 0; i < str.length(); i++) {
+            if (!digits.contains(str.substring(i,i+1))) {
+                str = str.substring(i);
+                isCorrect = true;
+            }
+        }
+
+        // если в строке есть символ алфавита, то убрать все имеющиеся пробелы
+        if (isCorrect)
+            str = str.replace(" ", "");
+
+        // если длина строки > 1, то возвращаем результат
+        if (str.length() > 1)
+            return str.toUpperCase();
+
+        return null;
     }
 }

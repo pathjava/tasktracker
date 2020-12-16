@@ -1,5 +1,8 @@
 package ru.progwards.tasktracker.service.vo;
 
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -7,6 +10,8 @@ import java.util.List;
  * Класс Project - бизнес-модель проекта
  * @author Pavel Khovaylo
  */
+@Entity
+@Table(name = "project")
 public class Project  {
     /**
      * идентификатор проекта
@@ -53,6 +58,13 @@ public class Project  {
         this.lastTaskCode = lastTaskCode;
     }
 
+    public Project() {
+    }
+
+    @Id
+    @SequenceGenerator(name = "PROJECTSEQ", sequenceName = "projectseq", allocationSize = 5)
+    @GeneratedValue(generator = "PROJECTSEQ", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
     public Long getId() {
         return id;
     }
@@ -61,6 +73,8 @@ public class Project  {
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -69,6 +83,8 @@ public class Project  {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "description", nullable = true, length = 800)
     public String getDescription() {
         return description;
     }
@@ -77,6 +93,8 @@ public class Project  {
         this.description = description;
     }
 
+    @Basic
+    @Column(name = "prefix", nullable = false, length = 10)
     public String getPrefix() {
         return prefix;
     }
@@ -85,6 +103,8 @@ public class Project  {
         this.prefix = prefix;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner", referencedColumnName = "id")
     public User getOwner() {
         return owner;
     }
@@ -93,6 +113,8 @@ public class Project  {
         this.owner = owner;
     }
 
+    @Column(name = "created", columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Type(type = "java.time.ZonedDateTime")
     public ZonedDateTime getCreated() {
         return created;
     }
@@ -101,6 +123,7 @@ public class Project  {
         this.created = created;
     }
 
+    @OneToMany(mappedBy = "project_id", fetch = FetchType.LAZY)
     public List<TaskType> getTaskTypes() {
         return taskTypes;
     }
@@ -109,6 +132,8 @@ public class Project  {
         this.taskTypes = taskTypes;
     }
 
+    @Basic
+    @Column(name = "last_task_code", nullable = false)
     public Long getLastTaskCode() {
         return lastTaskCode;
     }
