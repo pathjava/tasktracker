@@ -1,9 +1,14 @@
 package ru.progwards.tasktracker.controller.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.RelationTypeDtoFull;
+import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.vo.RelatedTask;
 import ru.progwards.tasktracker.service.vo.RelationType;
+
+import java.util.List;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -12,6 +17,9 @@ import ru.progwards.tasktracker.service.vo.RelationType;
  */
 @Component
 public class RelationTypeDtoFullConverter implements Converter<RelationType, RelationTypeDtoFull> {
+
+    @Autowired
+    private GetService<Long, RelationType> getService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -23,12 +31,15 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
     public RelationType toModel(RelationTypeDtoFull dto) {
         if (dto == null)
             return null;
-        else
+        else {
+            List<RelatedTask> relatedTasks = getService.get(dto.getId()).getRelatedTasks();
             return new RelationType(
                     dto.getId(),
                     dto.getName(),
-                    toModel(dto.getCounterRelation())
+                    toModel(dto.getCounterRelation()),
+                    relatedTasks
             );
+        }
     }
 
     /**

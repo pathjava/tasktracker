@@ -28,7 +28,7 @@ class TaskConverterTest {
             null, null, null, null, null, null,
             null, null, null, null, null,
             null, null, null, null, null,
-            null, null, null, null
+            null, null, null, null, null
     );
 
     private final TaskEntity entity = new TaskEntity(

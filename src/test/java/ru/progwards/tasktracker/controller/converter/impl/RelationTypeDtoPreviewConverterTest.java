@@ -25,7 +25,7 @@ class RelationTypeDtoPreviewConverterTest {
     private Converter<RelationType, RelationTypeDtoPreview> converter;
 
     private final RelationType valueObject = new RelationType(
-            null, null, null
+            null, null, null, null
     );
 
     private final RelationTypeDtoPreview dtoPreview = new RelationTypeDtoPreview(

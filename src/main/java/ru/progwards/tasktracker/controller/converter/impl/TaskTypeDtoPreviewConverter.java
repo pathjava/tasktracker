@@ -32,9 +32,10 @@ public class TaskTypeDtoPreviewConverter implements Converter<TaskType, TaskType
             TaskType taskType = taskTypeGetService.get(dto.getId());
             return new TaskType(
                     dto.getId(),
-                    taskType.getProject_id(),
+                    taskType.getProject(),
                     taskType.getWorkFlow(),
-                    dto.getName()
+                    dto.getName(),
+                    taskType.getTasks()
             );
         }
     }

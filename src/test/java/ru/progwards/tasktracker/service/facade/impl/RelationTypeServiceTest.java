@@ -41,7 +41,7 @@ class RelationTypeServiceTest {
     {
         for (int i = 0; i < 3; i++) {
             valueObjects.add(new RelationType(
-                    1L + i, "type " + (1 + i), null
+                    1L + i, "type " + (1 + i), null, null
             ));
         }
     }

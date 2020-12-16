@@ -37,7 +37,7 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
             return new RelatedTask(
                     entity.getId(),
                     typeConverter.toVo(entity.getRelationTypeEntity()),
-                    entity.getCurrentTaskId(),
+                    taskConverter.toVo(entity.getCurrentTask()),
                     taskConverter.toVo(entity.getAttachedTask())
             );
         }
@@ -57,7 +57,7 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
             return new RelatedTaskEntity(
                     valueObject.getId(),
                     typeConverter.toEntity(valueObject.getRelationType()),
-                    valueObject.getCurrentTaskId(),
+                    taskConverter.toEntity(valueObject.getCurrentTask()),
                     taskConverter.toEntity(valueObject.getAttachedTask()),
                     false
             );

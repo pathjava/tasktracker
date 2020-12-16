@@ -2,9 +2,11 @@ package ru.progwards.tasktracker.service.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.repository.entity.UserEntity;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 
@@ -23,6 +25,8 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
 
     @Autowired
     private Converter<UserEntity, User> userConverter;
+    @Autowired
+    private Converter<TaskEntity, Task> taskConverter;
 
     /**
      * Метод конвертирует сущность Entity в бизнес объект
@@ -37,7 +41,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
         else
             return new WorkLog(
                     entity.getId(),
-                    entity.getTaskId(),
+                    taskConverter.toVo(entity.getTask()),
                     checkDurationEntityNotNull(entity.getSpent()),
                     userConverter.toVo(entity.getWorker()),
                     checkUpdatedEntityNotNull(entity.getWhen()),
@@ -83,7 +87,7 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
         else
             return new WorkLogEntity(
                     valueObject.getId(),
-                    valueObject.getTaskId(),
+                    taskConverter.toEntity(valueObject.getTask()),
                     checkDurationValueObjectNotNull(valueObject.getSpent()),
                     userConverter.toEntity(valueObject.getWorker()),
                     checkZonedDateTimeValueObjectNotNull(valueObject.getWhen()),

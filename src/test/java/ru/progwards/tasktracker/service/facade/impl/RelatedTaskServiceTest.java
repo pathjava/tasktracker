@@ -44,7 +44,7 @@ class RelatedTaskServiceTest {
     {
         for (int i = 0; i < 3; i++) {
             valueObjects.add(new RelatedTask(
-                    1L + i, null, 1L + i, null
+                    1L + i, null, null, null
             ));
         }
     }

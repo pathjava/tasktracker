@@ -36,9 +36,10 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
             TaskType taskType = taskTypeGetService.get(dto.getId());
             return new TaskType(
                     dto.getId(),
-                    taskType.getProject_id(),
+                    taskType.getProject(),
                     workFlowDtoConverter.toModel(dto.getWorkFlow()),
-                    dto.getName()
+                    dto.getName(),
+                    taskType.getTasks()
             );
         }
     }

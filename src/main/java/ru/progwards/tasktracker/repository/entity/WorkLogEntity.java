@@ -10,7 +10,7 @@ import java.util.Random;
 public class WorkLogEntity {
 
     private Long id;
-    private Long taskId;
+    private TaskEntity task;
     private Long spent;
     private UserEntity worker;
     private Long when;
@@ -20,13 +20,13 @@ public class WorkLogEntity {
     }
 
     public WorkLogEntity(
-            Long id, Long taskId, Long spent,
+            Long id, TaskEntity task, Long spent,
             UserEntity worker, Long when, String description
     ) {
         if (id == null) //TODO - for testing generate id
             id = new Random().nextLong();
         this.id = id;
-        this.taskId = taskId;
+        this.task = task;
         this.spent = spent;
         this.worker = worker;
         this.when = when;
@@ -37,12 +37,12 @@ public class WorkLogEntity {
         return id;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public TaskEntity getTask() {
+        return task;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setTask(TaskEntity task) {
+        this.task = task;
     }
 
     public Long getSpent() {

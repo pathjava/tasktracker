@@ -87,7 +87,7 @@ class WorkLogConverterTest {
 
         WorkLogEntity entity = converter.toEntity(
                 new WorkLog(
-                        null, 2L, null, user, ZonedDateTime.now(),
+                        null, null, null, user, ZonedDateTime.now(),
                         null, null, null
                 )
         );

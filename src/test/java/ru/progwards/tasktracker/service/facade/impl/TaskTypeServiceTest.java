@@ -48,9 +48,9 @@ class TaskTypeServiceTest {
         for (int i = 0; i < 3; i++) {
             valueObjects.add(
                     new TaskType(
-                            1L + i, 10L, new WorkFlow(
-                            1L + i, "flow " + (1 + i), false, null, null, null
-                    ), "taskType " + (1 + i)
+                            1L + i, null, new WorkFlow(
+                            1L + i, "flow " + (1 + i), false, null, null, null, null
+                    ), "taskType " + (1 + i), null
                     )
             );
         }

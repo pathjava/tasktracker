@@ -71,6 +71,7 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
                     checkDurationEntityNotNull(entity.getTimeSpent()),
                     checkDurationEntityNotNull(entity.getTimeLeft()),
                     listEntityToVoRelatedTask(entity.getRelatedTasks()),
+                    null, //TODO - check
                     listEntityToVoTaskAttachment(entity.getAttachments()),
                     listEntityToVoWorkLog(entity.getWorkLogs()),
                     listEntityToVoTaskNote(entity.getNotes())

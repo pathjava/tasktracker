@@ -28,7 +28,7 @@ class TaskDtoPreviewConverterTest {
             null, null, null, null, null, null,
             null, null, null, null, null,
             null, null, null, null, null,
-            null, null, null, null
+            null, null, null, null, null
     );
 
     private final TaskDtoPreview dtoPreview = new TaskDtoPreview(

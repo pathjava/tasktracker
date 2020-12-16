@@ -38,7 +38,7 @@ class WorkLogEntityRepositoryTest {
         for (int i = 0; i < 3; i++) {
             entities.add(
                     new WorkLogEntity(
-                            1L + i, 1L + i, null, null, null, "log " + (1 + i)
+                            1L + i, null, null, null, null, "log " + (1 + i)
                     )
             );
         }

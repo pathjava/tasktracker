@@ -43,7 +43,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      */
     @Override
     public void create(WorkLog model) {
-        Task task = taskGetService.get(model.getTaskId());
+        Task task = taskGetService.get(model.getTask().getId());
         task = logCreateEstimateChange(model, task);
         refreshService.refresh(task);
 
@@ -95,7 +95,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
     @Override
     public Collection<WorkLog> getListByTaskId(Long taskId) {
         return byTaskId.getByTaskId(taskId).stream()
-                .filter(logEntity -> logEntity.getTaskId().equals(taskId))
+                .filter(logEntity -> logEntity.getTask().getId().equals(taskId))
                 .map(logEntity -> converter.toVo(logEntity))
                 .collect(Collectors.toList());
     }
@@ -118,7 +118,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      */
     @Override
     public void refresh(WorkLog model) {
-        Task task = taskGetService.get(model.getTaskId());
+        Task task = taskGetService.get(model.getTask().getId());
         Duration spent = workLogGetService.get(model.getId()).getSpent();
         task = logRefreshEstimateChange(model, spent, task);
         refreshService.refresh(task);
@@ -162,7 +162,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetListByTaskServ
      */
     @Override
     public void remove(WorkLog model) {
-        Task task = taskGetService.get(model.getTaskId());
+        Task task = taskGetService.get(model.getTask().getId());
         Duration spent = workLogGetService.get(model.getId()).getSpent();
         task = logRemoveEstimateChange(model, spent, task);
         refreshService.refresh(task);

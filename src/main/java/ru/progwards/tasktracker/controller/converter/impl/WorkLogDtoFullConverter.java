@@ -6,6 +6,8 @@ import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.UserDtoPreview;
 import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
+import ru.progwards.tasktracker.service.facade.GetService;
+import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 import ru.progwards.tasktracker.util.types.EstimateChange;
@@ -20,6 +22,8 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
 
     @Autowired
     private Converter<User, UserDtoPreview> userDtoConverter;
+    @Autowired
+    private GetService<Long, Task> getService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -31,10 +35,11 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
     public WorkLog toModel(WorkLogDtoFull dto) {
         if (dto == null)
             return null;
-        else
+        else {
+            Task task = getService.get(dto.getTaskId());
             return new WorkLog(
                     dto.getId(),
-                    dto.getTaskId(),
+                    task,
                     dto.getSpent(),
                     userDtoConverter.toModel(dto.getWorker()),
                     dto.getWhen(),
@@ -42,6 +47,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
                     stringToEnum(dto.getEstimateChange()),
                     dto.getEstimateValue()
             );
+        }
     }
 
     /**
@@ -75,7 +81,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
         else
             return new WorkLogDtoFull(
                     model.getId(),
-                    model.getTaskId(),
+                    model.getTask().getId(),
                     model.getSpent(),
                     userDtoConverter.toDto(model.getWorker()),
                     model.getWhen(),

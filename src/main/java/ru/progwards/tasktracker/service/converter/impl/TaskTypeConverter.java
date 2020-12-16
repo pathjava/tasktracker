@@ -3,9 +3,11 @@ package ru.progwards.tasktracker.service.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.dao.Repository;
+import ru.progwards.tasktracker.repository.entity.ProjectEntity;
 import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
 import ru.progwards.tasktracker.repository.entity.WorkFlowEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.TaskType;
 import ru.progwards.tasktracker.service.vo.WorkFlow;
 
@@ -20,7 +22,7 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
     @Autowired
     private Repository<Long, TaskTypeEntity> taskTypeRepository;
     @Autowired
-    private Repository<Long, WorkFlowEntity> workFlowRepository;
+    private Converter<ProjectEntity, Project> projectConverter;
     @Autowired
     private Converter<WorkFlowEntity, WorkFlow> workFlowConverter;
 
@@ -35,12 +37,12 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
         if (entity == null)
             return null;
         else {
-            WorkFlow workFlow = workFlowConverter.toVo(workFlowRepository.get(entity.getWorkFlow_id()));
             return new TaskType(
                     entity.getId(),
-                    entity.getProject_id(),
-                    workFlow,
-                    entity.getName()
+                    projectConverter.toVo(entity.getProject()),
+                    workFlowConverter.toVo(entity.getWorkFlow()),
+                    entity.getName(),
+                    null //TODO - check
             );
         }
     }
@@ -59,8 +61,8 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
             TaskTypeEntity taskTypeEntity = taskTypeRepository.get(valueObject.getId());
             return new TaskTypeEntity(
                     valueObject.getId(),
-                    taskTypeEntity.getProject_id(),
-                    valueObject.getWorkFlow().getId(),
+                    projectConverter.toEntity(valueObject.getProject()),
+                    workFlowConverter.toEntity(valueObject.getWorkFlow()),
                     valueObject.getName()
             );
         }

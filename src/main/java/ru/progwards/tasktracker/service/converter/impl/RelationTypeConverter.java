@@ -27,7 +27,8 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
             return new RelationType(
                     entity.getId(),
                     entity.getName(),
-                    toVo(entity.getCounterRelation())
+                    toVo(entity.getCounterRelation()),
+                    null //TODO - check
             );
     }
 
