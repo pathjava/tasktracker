@@ -1,10 +1,13 @@
 package ru.progwards.tasktracker.service.vo;
 
+import javax.persistence.Entity;
+
 /**
  * Действия над задачей, переводящие её из одного состояния WorkFlowStatus в другое
  *
  * @author Gregory Lobkov
  */
+@Entity
 public class WorkFlowAction {
 
     Long id;

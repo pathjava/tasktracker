@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
  * @author Oleg Kiselev
  */
 @Entity
-@Table(name = "work_logs")
+@Table(name = "work_log")
 public class WorkLog {
 
     @Id

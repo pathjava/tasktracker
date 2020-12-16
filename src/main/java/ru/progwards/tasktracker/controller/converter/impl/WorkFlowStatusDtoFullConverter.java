@@ -39,7 +39,8 @@ public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus,
     public WorkFlowStatus toModel(WorkFlowStatusDtoFull dto) {
         List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(dto.getId()); // должно стать lazy load в будущем
         return new WorkFlowStatus(dto.getId(), dto.getWorkflow_id(), dto.getName(),
-                dto.getState(), listByParentId, dto.getAlwaysAllow());
+                dto.getState(), listByParentId, dto.getAlwaysAllow()
+                , null); //TODO не NULL, а что?
     }
 
 

@@ -9,11 +9,11 @@ import java.util.List;
  * @author Oleg Kiselev
  */
 @Entity
-@Table(name = "relation_types")
+@Table(name = "relation_type")
 public class RelationType {
 
     @Id
-    @SequenceGenerator(name = "relation_type_seq", sequenceName = "relation_types_seq", allocationSize = 1)
+    @SequenceGenerator(name = "relation_type_seq", sequenceName = "relation_type_seq", allocationSize = 1)
     @GeneratedValue(generator = "relation_type_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;

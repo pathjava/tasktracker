@@ -10,11 +10,11 @@ import java.util.List;
  * @author Oleg Kiselev
  */
 @Entity
-@Table(name = "task_types")
+@Table(name = "task_type")
 public class TaskType {
 
     @Id
-    @SequenceGenerator(name = "task_type_seq", sequenceName = "task_types_seq", allocationSize = 1)
+    @SequenceGenerator(name = "task_type_seq", sequenceName = "task_type_seq", allocationSize = 1)
     @GeneratedValue(generator = "task_type_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;

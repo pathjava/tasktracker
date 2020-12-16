@@ -49,7 +49,7 @@ class TaskTypeServiceTest {
             valueObjects.add(
                     new TaskType(
                             1L + i, null, new WorkFlow(
-                            1L + i, "flow " + (1 + i), false, null, null, null, null
+                            1L + i, "flow " + (1 + i), false, null, null, null
                     ), "taskType " + (1 + i), null
                     )
             );
@@ -75,7 +75,6 @@ class TaskTypeServiceTest {
         assertNull(wf.getId());
         assertThat(wf.getName(), equalTo("flow 1 - TaskType BUG"));
         assertFalse(wf.isPattern());
-        assertNull(wf.getStart_status_id());
         assertNull(wf.getStartStatus());
         assertNull(wf.getStatuses());
     }

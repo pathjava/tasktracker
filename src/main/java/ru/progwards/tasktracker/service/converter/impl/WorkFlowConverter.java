@@ -45,10 +45,11 @@ public class WorkFlowConverter implements Converter<WorkFlowEntity, WorkFlow> {
      */
     @Override
     public WorkFlow toVo(WorkFlowEntity entity) {
-        WorkFlowStatus workFlowStatus = statusGetService.get(entity.getStart_status_id());
-        List<WorkFlowStatus> statuses = new ArrayList(statusGetListByParentService.getListByParentId(entity.getId()));
-        return new WorkFlow(entity.getId(), entity.getName(), entity.isPattern(),
-                entity.getStart_status_id(), workFlowStatus, statuses);
+//        WorkFlowStatus workFlowStatus = statusGetService.get(entity.getStart_status_id());
+//        List<WorkFlowStatus> statuses = new ArrayList(statusGetListByParentService.getListByParentId(entity.getId()));
+//        return new WorkFlow(entity.getId(), entity.getName(), entity.isPattern(),
+//                entity.getStart_status_id(), workFlowStatus, statuses);
+        return null;
     }
 
 
@@ -60,7 +61,8 @@ public class WorkFlowConverter implements Converter<WorkFlowEntity, WorkFlow> {
      */
     @Override
     public WorkFlowEntity toEntity(WorkFlow vo) {
-        return new WorkFlowEntity(vo.getId(), vo.getName(), vo.isPattern(), vo.getStart_status_id());
+//        return new WorkFlowEntity(vo.getId(), vo.getName(), vo.isPattern(), vo.getStart_status_id());
+        return null;
     }
 
 }

@@ -74,21 +74,21 @@ public class ProjectCreateService implements CreateService<Project> {
             model.setId(new Random().nextLong());
         //создаем список TaskType проекта
         List<TaskType> taskTypeList = new ArrayList<>(List.of(
-                new TaskType(null, model.getId(),
+                new TaskType(null, model,
                         //TODO сделал так исключительно чтобы протестировать
 //                            new WorkFlow(null, "name", false, 0L, null, null),
                         null,
-                        "EPIC"),
-                new TaskType(null, model.getId(),
+                        "EPIC", null),
+                new TaskType(null, model,
                         //TODO сделал так исключительно чтобы протестировать
 //                            new WorkFlow(null, "name", false, 0L, null, null),
                         null,
-                        "TASK"),
-                new TaskType(null, model.getId(),
+                        "TASK", null),
+                new TaskType(null, model,
                         //TODO сделал так исключительно чтобы протестировать
 //                            new WorkFlow(null, "name", false, 0L, null, null),
                         null,
-                        "BUG")
+                        "BUG", null)
             )
         );
 

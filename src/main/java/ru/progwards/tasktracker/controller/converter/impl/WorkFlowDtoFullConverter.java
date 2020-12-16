@@ -46,8 +46,8 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
     public WorkFlow toModel(WorkFlowDtoFull dto) {
         WorkFlowStatus startStatus = statusGetService.get(dto.getStart_status_id()); // должно стать lazy load в будущем
         List<WorkFlowStatus> statuses = new ArrayList(statusGetListByParentService.getListByParentId(dto.getId()));
-        return new WorkFlow(dto.getId(), dto.getName(), dto.isPattern(),
-                dto.getStart_status_id(), startStatus, statuses);
+        return new WorkFlow(dto.getId(), dto.getName(), dto.isPattern(), startStatus, statuses,
+                null); //TODO не NULL, а что?
     }
 
     /**
@@ -58,7 +58,7 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
      */
     @Override
     public WorkFlowDtoFull toDto(WorkFlow model) {
-        return new WorkFlowDtoFull(model.getId(), model.getName(), model.isPattern(), model.getStart_status_id());
+        return new WorkFlowDtoFull(model.getId(), model.getName(), model.isPattern(), null);
     }
 
 

@@ -1,5 +1,8 @@
 package ru.progwards.tasktracker.service.vo;
 
+import org.springframework.context.annotation.Lazy;
+
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -8,13 +11,20 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
+@Entity
+@Table(name = "workflow")
 public class WorkFlow {
 
+    @Id
+    @SequenceGenerator(name = "workflow_seq", sequenceName = "workflow_seq", allocationSize = 1)
+    @GeneratedValue(generator = "workflow_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     Long id;
 
     /**
      * Ноименование
      */
+    @Column(name = "name", nullable = false)
     String name;
 
     /**
@@ -24,32 +34,34 @@ public class WorkFlow {
      * от шаблона, на основе которого будет все создаваться,
      * иначе его нельзя будет настраивать индивидуально
      */
+    @Column(name = "pattern", nullable = false)
     boolean pattern;
-
-    /**
-     * С какого статуса начинать движение задачи, идентификатор
-     */
-    Long start_status_id;
 
     /**
      * С какого статуса начинать движение задачи
      */
+    @Lazy
+    @ManyToOne
+    @JoinColumn(name = "start_status_id", referencedColumnName = "id")
     WorkFlowStatus startStatus;
 
     /**
      * Статусы, возможные по бизнес-процессу
      */
+    @Lazy
+    @OneToMany(mappedBy = "workflow", fetch = FetchType.LAZY)
     List<WorkFlowStatus> statuses;
 
+    @Lazy
+    @OneToMany(mappedBy = "workflow", fetch = FetchType.LAZY)
     List<TaskType> taskTypes;
 
     public WorkFlow() { }
 
-    public WorkFlow(Long id, String name, boolean pattern, Long start_status_id, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses, List<TaskType> taskTypes) {
+    public WorkFlow(Long id, String name, boolean pattern, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses, List<TaskType> taskTypes) {
         this.id = id;
         this.name = name;
         this.pattern = pattern;
-        this.start_status_id = start_status_id;
         this.startStatus = startStatus;
         this.statuses = statuses;
         this.taskTypes = taskTypes;
@@ -85,14 +97,6 @@ public class WorkFlow {
 
     public void setPattern(boolean pattern) {
         this.pattern = pattern;
-    }
-
-    public Long getStart_status_id() {
-        return start_status_id;
-    }
-
-    public void setStart_status_id(Long start_status_id) {
-        this.start_status_id = start_status_id;
     }
 
     public WorkFlowStatus getStartStatus() {
