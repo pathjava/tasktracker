@@ -14,6 +14,7 @@ public class HibernateUtil {
             Configuration configuration = new Configuration()
                     .configure("hibernate-h2.cfg.xml") // собственная файловая БД, H2
                     //.configure("hibernate-mariadb.cfg.xml") // общая БД, MariaDB
+                    //.configure("hibernate-postgres.cfg.xml") // собственная файловая БД
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.AccessRule.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.AttachmentContent.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.Project.class)
