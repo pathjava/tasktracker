@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +14,10 @@ import java.util.List;
  *
  * @author Oleg Kiselev
  */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "task_type")
 public class TaskType {
@@ -16,7 +25,6 @@ public class TaskType {
     @Id
     @SequenceGenerator(name = "task_type_seq", sequenceName = "task_type_seq", allocationSize = 1)
     @GeneratedValue(generator = "task_type_seq", strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,51 +41,4 @@ public class TaskType {
     @OneToMany(mappedBy = "type")
     private List<Task> tasks = new ArrayList<>();
 
-    public TaskType(Long id, Project project, WorkFlow workFlow, String name, List<Task> tasks) {
-        this.id = id;
-        this.project = project;
-        this.workFlow = workFlow;
-        this.name = name;
-        this.tasks = tasks;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public WorkFlow getWorkFlow() {
-        return workFlow;
-    }
-
-    public void setWorkFlow(WorkFlow workFlow) {
-        this.workFlow = workFlow;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
 }
