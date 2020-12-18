@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskNoteDtoFull;
 import ru.progwards.tasktracker.controller.dto.TaskNoteDtoPreview;
+import ru.progwards.tasktracker.controller.dto.TaskNoteDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.controller.exception.NotFoundException;
 import ru.progwards.tasktracker.service.facade.*;
@@ -33,9 +33,9 @@ public class TaskNoteController {
     @Autowired
     private RefreshService<TaskNote> refreshService;
     @Autowired
-    private Converter<TaskNote, TaskNoteDtoPreview> dtoPreviewConverter;
+    private Converter<TaskNote, TaskNoteDtoFull> dtoPreviewConverter;
     @Autowired
-    private Converter<TaskNote, TaskNoteDtoFull> dtoFullConverter;
+    private Converter<TaskNote, TaskNoteDtoPreview> dtoFullConverter;
     @Autowired
     private GetListByTaskService<Long, TaskNote> listByTaskService;
 
@@ -45,12 +45,12 @@ public class TaskNoteController {
      * @param id идентификатор задачи
      * @return коллекция комментариев
      */
-    @GetMapping("/task/{task_id}/tasknotes")
-    public ResponseEntity<Collection<TaskNoteDtoPreview>> getListTaskNotes(@PathVariable Long id) {
+    @GetMapping("/task/{id}/tasknotes")
+    public ResponseEntity<Collection<TaskNoteDtoFull>> getListTaskNotes(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<TaskNoteDtoPreview> taskNotes = listByTaskService.getListByTaskId(id).stream()
+        Collection<TaskNoteDtoFull> taskNotes = listByTaskService.getListByTaskId(id).stream()
                 .map(tasknote -> dtoPreviewConverter.toDto(tasknote))
                 .collect(Collectors.toList());
 
@@ -67,13 +67,13 @@ public class TaskNoteController {
      * @return возвращает созданный комментарий
      */
     @PostMapping("/tasknote/create")
-    public ResponseEntity<TaskNoteDtoFull> createTaskNote(@RequestBody TaskNoteDtoFull taskNoteDtoFull) {
+    public ResponseEntity<TaskNoteDtoPreview> createTaskNote(@RequestBody TaskNoteDtoPreview taskNoteDtoFull) {
         if (taskNoteDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
         TaskNote taskNote = dtoFullConverter.toModel(taskNoteDtoFull);
         createService.create(taskNote);
-        TaskNoteDtoFull createdTaskNote = dtoFullConverter.toDto(taskNote);
+        TaskNoteDtoPreview createdTaskNote = dtoFullConverter.toDto(taskNote);
 
         return new ResponseEntity<>(createdTaskNote, HttpStatus.OK);
     }
@@ -86,7 +86,7 @@ public class TaskNoteController {
      * @return возвращает обновленный комментарий
      */
     @PutMapping("/tasknote/{id}/update")
-    public ResponseEntity<TaskNoteDtoPreview> updateTaskNote(@PathVariable Long id, @RequestBody TaskNoteDtoPreview taskNoteDtoPreview) {
+    public ResponseEntity<TaskNoteDtoFull> updateTaskNote(@PathVariable Long id, @RequestBody TaskNoteDtoFull taskNoteDtoPreview) {
         if (taskNoteDtoPreview == null)
             throw new BadRequestException("Пустой объект!");
 
@@ -95,7 +95,7 @@ public class TaskNoteController {
 
         TaskNote taskNote = dtoPreviewConverter.toModel(taskNoteDtoPreview);
         refreshService.refresh(taskNote);
-        TaskNoteDtoPreview updatedTaskNote = dtoPreviewConverter.toDto(taskNote);
+        TaskNoteDtoFull updatedTaskNote = dtoPreviewConverter.toDto(taskNote);
 
         return new ResponseEntity<>(updatedTaskNote, HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 /**
@@ -8,12 +9,26 @@ import java.time.ZonedDateTime;
  * @author Konstantin Kishkin
  */
 
+@Entity
+@Table(name="tasknote")
 public class TaskNote {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    private Long task_id;
+
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name="task_id")
+    private Long task;
+
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name="user_id")
     private User author;
+
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name="user_id")
     private User updater;
+
     private String comment;
     private ZonedDateTime created;
     private ZonedDateTime updated;
@@ -23,11 +38,13 @@ public class TaskNote {
     }
 
     public TaskNote(Long id, Long task_id, User author, String comment) {
+        ZonedDateTime date = ZonedDateTime.now();
         this.id = id;
-        this.task_id = task_id;
+        this.task = task_id;
         this.author = author;
         this.comment = comment;
-        this.created = ZonedDateTime.now();
+        this.created = date;
+        this.updated = date;
     }
 
     public Long getId() {
@@ -46,12 +63,12 @@ public class TaskNote {
         this.comment = comment;
     }
 
-    public Long getTask_id() {
-        return task_id;
+    public Long getTask() {
+        return task;
     }
 
-    public void setTask_id(Long task_id) {
-        this.task_id = task_id;
+    public void setTask(Long task) {
+        this.task = task;
     }
 
     public User getAuthor() {
