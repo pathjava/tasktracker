@@ -8,6 +8,7 @@ import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.AccessRule;
 import ru.progwards.tasktracker.service.vo.UserRole;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +23,14 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
     public UserRole toModel(UserRoleDtoFull dto) {
         if (dto == null)
             return null;
-        HashMap<Long, AccessRule> ruleMap = new HashMap<>();
+//        HashMap<Long, AccessRule> ruleMap = new HashMap<>();
+        List<AccessRule> rules = new ArrayList<>();
         List<Long> ruleIds = dto.getAccessRules();
         for (Long ruleId : ruleIds) {
             AccessRule rule = accessRuleGetService.get(ruleId);
-            ruleMap.put(ruleId, rule);
+            rules.add(rule);
         }
-        return new UserRole(dto.getId(), dto.getName(), dto.getSystemRole(), ruleMap);
+        return new UserRole(dto.getId(), dto.getName(), dto.getSystemRole(), rules);
     }
 
     @Override
@@ -36,6 +38,7 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
         if (model == null)
             return null;
         return new UserRoleDtoFull(model.getId(), model.getName(), model.getSystemRole(),
-                model.getAccessRules().values().stream().map(AccessRule::getId).collect(Collectors.toList()));
+//                model.getAccessRules().values().stream().map(AccessRule::getId).collect(Collectors.toList()));
+                model.getAccessRules().stream().map(AccessRule::getId).collect(Collectors.toList()));
     }
 }
