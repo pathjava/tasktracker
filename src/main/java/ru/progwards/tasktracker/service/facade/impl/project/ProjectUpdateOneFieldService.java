@@ -6,12 +6,11 @@ import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleExcep
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.TaskType;
 import ru.progwards.tasktracker.service.vo.UpdateOneValue;
 
 /**

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByParentId;
 import ru.progwards.tasktracker.repository.entity.WorkFlowActionEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.WorkFlowAction;
 

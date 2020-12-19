@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.impl.TaskNoteRepository;
 import ru.progwards.tasktracker.repository.entity.TaskNoteEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.converter.impl.TaskNoteConverter;
+import ru.progwards.tasktracker.repository.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.impl.TaskNoteConverter;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.TaskNote;
 

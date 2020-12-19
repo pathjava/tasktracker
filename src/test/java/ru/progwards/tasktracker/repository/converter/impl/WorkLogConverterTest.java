@@ -1,10 +1,10 @@
-package ru.progwards.tasktracker.service.converter.impl;
+package ru.progwards.tasktracker.repository.converter.impl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.entity.WorkLogEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.vo.User;
 import ru.progwards.tasktracker.service.vo.WorkLog;
 

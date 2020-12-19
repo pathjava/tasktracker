@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByParentId;
 import ru.progwards.tasktracker.repository.entity.AttachmentContentEntity;
 import ru.progwards.tasktracker.repository.entity.TaskAttachmentEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;

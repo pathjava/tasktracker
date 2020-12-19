@@ -1,9 +1,9 @@
-package ru.progwards.tasktracker.service.converter.impl;
+package ru.progwards.tasktracker.repository.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetListByProjectService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
@@ -13,7 +13,6 @@ import ru.progwards.tasktracker.service.vo.User;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 /**
  * Конвертер ProjectEntity <-> Project

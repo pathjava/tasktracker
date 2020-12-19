@@ -6,7 +6,7 @@ import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleExcep
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.dao.RepositoryByProjectId;
 import ru.progwards.tasktracker.repository.entity.TaskTypeEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.facade.*;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskType;

@@ -1,16 +1,12 @@
-package ru.progwards.tasktracker.service.converter.impl;
+package ru.progwards.tasktracker.repository.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.AccessRuleEntity;
 import ru.progwards.tasktracker.repository.entity.UserRoleEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.vo.AccessRule;
 import ru.progwards.tasktracker.service.vo.UserRole;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class UserRoleConverter implements Converter<UserRoleEntity, UserRole> {

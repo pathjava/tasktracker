@@ -5,13 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.Repository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
-import ru.progwards.tasktracker.service.facade.GetListByProjectService;
-import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.TaskType;
-import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.util.ArrayList;
 import java.util.Collection;

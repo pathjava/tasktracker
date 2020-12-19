@@ -1,8 +1,8 @@
-package ru.progwards.tasktracker.service.converter.impl;
+package ru.progwards.tasktracker.repository.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.AttachmentContentEntity;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 
 

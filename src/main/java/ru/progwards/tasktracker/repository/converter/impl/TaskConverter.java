@@ -1,9 +1,9 @@
-package ru.progwards.tasktracker.service.converter.impl;
+package ru.progwards.tasktracker.repository.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.*;
-import ru.progwards.tasktracker.service.converter.Converter;
+import ru.progwards.tasktracker.repository.converter.Converter;
 import ru.progwards.tasktracker.service.vo.*;
 
 import java.time.Duration;

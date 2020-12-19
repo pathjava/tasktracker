@@ -8,10 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.repository.dao.JsonHandler;
 import ru.progwards.tasktracker.repository.dao.impl.ProjectEntityRepository;
 import ru.progwards.tasktracker.repository.entity.ProjectEntity;
-import ru.progwards.tasktracker.service.converter.impl.ProjectConverter;
+import ru.progwards.tasktracker.repository.converter.impl.ProjectConverter;
 import ru.progwards.tasktracker.service.vo.Project;
 import ru.progwards.tasktracker.service.vo.User;
-import ru.progwards.tasktracker.service.vo.WorkFlow;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
