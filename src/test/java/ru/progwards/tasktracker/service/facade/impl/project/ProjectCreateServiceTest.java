@@ -44,7 +44,7 @@ public class ProjectCreateServiceTest {
         User user = new User();
         user.setId(1L);
 
-        Project model = new Project(1L, "name", "desc", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), 0L);
+        Project model = new Project(1L, "name", "desc", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), new ArrayList<>(), 0L);
         projectCreateService.create(model);
 
         ProjectEntity entity = repository.get(model.getId());

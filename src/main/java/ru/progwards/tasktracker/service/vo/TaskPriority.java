@@ -1,50 +1,45 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.List;
+
 /**
  * Класс TaskPriority - бизнес-модель
  * @author Pavel Khovaylo
  */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Entity
+@Table(name = "task_priority")
 public class TaskPriority {
     /**
      * идентификатор
      */
+    @Id
+    @SequenceGenerator(name = "TASK_PRIORITY_SEQ", sequenceName = "task_priority_seq", allocationSize = 1)
+    @GeneratedValue(generator = "TASK_PRIORITY_SEQ", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
     private Long id;
     /**
      * имя
      */
+    @Basic
+    @Column(name = "name", nullable = false, length = 40)
     private String name;
     /**
      * числовой приоритет
      */
+    @Basic
+    @Column(name = "value", nullable = false)
     private Integer value;
-
-    public TaskPriority(Long id, String name, Integer value) {
-        this.id = id;
-        this.name = name;
-        this.value = value;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
+    /**
+     * список задач с данным приоритетом
+     */
+    @OneToMany(mappedBy = "priority_id", fetch = FetchType.LAZY)
+    private List<Task> tasks;
 }

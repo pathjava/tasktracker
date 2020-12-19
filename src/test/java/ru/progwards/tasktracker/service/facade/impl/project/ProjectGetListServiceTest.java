@@ -37,8 +37,8 @@ public class ProjectGetListServiceTest {
         user.setId(1L);
 
         List<Project> projectList = List.of(
-                new Project(1L, "name1", "desc1", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), 0L),
-                new Project(2L, "name2", "desc2", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), 0L)
+                new Project(1L, "name1", "desc1", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), new ArrayList<>(), 0L),
+                new Project(2L, "name2", "desc2", "prefix", user, ZonedDateTime.now(), new ArrayList<>(), new ArrayList<>(), 0L)
         );
 
         Mockito.when(projectGetListService.getList()).thenReturn(projectList);

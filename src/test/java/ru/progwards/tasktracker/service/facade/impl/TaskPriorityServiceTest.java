@@ -56,7 +56,7 @@ public class TaskPriorityServiceTest {
     public void createTest() {
         Mockito.when(taskPriorityJsonHandler.getMap()).thenReturn(new ConcurrentHashMap<>());
 
-        TaskPriority model = new TaskPriority(1L, "name", 1);
+        TaskPriority model = new TaskPriority(1L, "name", 1, new ArrayList<>());
         taskPriorityService.create(model);
 
         TaskPriorityEntity entity = repository.get(model.getId());
@@ -68,8 +68,8 @@ public class TaskPriorityServiceTest {
     @Test
     public void getListTest() {
         List<TaskPriority> taskPriorityList = List.of(
-                new TaskPriority(1L, "name1", 1),
-                new TaskPriority(2L, "name2", 2)
+                new TaskPriority(1L, "name1", 1, new ArrayList<>()),
+                new TaskPriority(2L, "name2", 2, new ArrayList<>())
         );
 
         Mockito.when(taskPriorityGetListService.getList()).thenReturn(taskPriorityList);

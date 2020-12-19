@@ -19,7 +19,7 @@ public class TaskPriorityDtoFullConverter implements Converter<TaskPriority, Tas
      */
     @Override
     public TaskPriority toModel(TaskPriorityDtoFull dto) {
-        return new TaskPriority(dto.getId(), dto.getName(), dto.getValue());
+        return new TaskPriority(dto.getId(), dto.getName(), dto.getValue(), null);
     }
 
     /**
