@@ -1,9 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.progwards.tasktracker.util.types.EstimateChange;
 
 import javax.persistence.*;
@@ -19,32 +16,38 @@ import java.time.ZonedDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "work_log")
 public class WorkLog {
 
     @Id
-    @SequenceGenerator(name = "work_log_seq", sequenceName = "work_log_seq", allocationSize = 1)
-    @GeneratedValue(generator = "work_log_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "WorkLogSeq", sequenceName = "work_log_seq", allocationSize = 1)
+    @GeneratedValue(generator = "WorkLogSeq", strategy = GenerationType.SEQUENCE)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Include
     private Task task;
 
     private Duration spent;
 
     @ManyToOne //TODO - fetch - ?
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Include
     private User worker;
 
     @Column(nullable = false)
     private ZonedDateTime when;
+
     private String description;
 
     //TODO - enum - ?
     @Column(nullable = false)
     private EstimateChange estimateChange;
+
     private Duration estimateValue;
 
 }

@@ -1,9 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,17 +15,20 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "task_type")
 public class TaskType {
 
     @Id
-    @SequenceGenerator(name = "task_type_seq", sequenceName = "task_type_seq", allocationSize = 1)
-    @GeneratedValue(generator = "task_type_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "TaskTypeSeq", sequenceName = "task_type_seq", allocationSize = 1)
+    @GeneratedValue(generator = "TaskTypeSeq", strategy = GenerationType.SEQUENCE)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Include
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +36,7 @@ public class TaskType {
     private WorkFlow workFlow;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @OneToMany(mappedBy = "type")

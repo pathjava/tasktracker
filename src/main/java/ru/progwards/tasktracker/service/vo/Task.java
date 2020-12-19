@@ -17,19 +17,25 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "task")
 public class Task {
 
     @Id
-    @SequenceGenerator(name = "task_seq", sequenceName = "task_seq", allocationSize = 1)
-    @GeneratedValue(generator = "task_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "TaskSeq", sequenceName = "task_seq", allocationSize = 1)
+    @GeneratedValue(generator = "TaskSeq", strategy = GenerationType.SEQUENCE)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Include
     private String code;
+
     @Column(nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
+
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -42,10 +48,12 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
+    @EqualsAndHashCode.Include
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+    @EqualsAndHashCode.Include
     private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)

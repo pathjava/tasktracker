@@ -1,9 +1,6 @@
 package ru.progwards.tasktracker.service.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,16 +14,19 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "relation_type")
 public class RelationType {
 
     @Id
-    @SequenceGenerator(name = "relation_type_seq", sequenceName = "relation_type_seq", allocationSize = 1)
-    @GeneratedValue(generator = "relation_type_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "RelationTypeSeq", sequenceName = "relation_type_seq", allocationSize = 1)
+    @GeneratedValue(generator = "RelationTypeSeq", strategy = GenerationType.SEQUENCE)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
