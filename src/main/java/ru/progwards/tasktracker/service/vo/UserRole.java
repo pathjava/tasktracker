@@ -31,7 +31,7 @@ public class UserRole {
     @Column(name = "system_role")
     private SystemRole systemRole;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "user_role")
     List<AccessRule> accessRules; //full:List<AccessRuleDtoFull>
 
     //@ManyToMany
