@@ -83,7 +83,7 @@ class WorkLogServiceTest {
     public Task createTestTask() {
         return new Task(
                 1L, null, null, null,
-                null, null, null, null, null,
+                null, null, null, null,
                 null, null, null, null,
                 Duration.ofHours(50), Duration.ofHours(0), Duration.ofHours(50),
                 null, null, null, null, null

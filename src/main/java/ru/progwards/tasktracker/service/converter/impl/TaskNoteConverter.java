@@ -24,15 +24,15 @@ public class TaskNoteConverter implements Converter<TaskNoteEntity, TaskNote> {
      */
     @Override
     public TaskNote toVo(TaskNoteEntity entity) {
-        if (entity == null)
+//        if (entity == null)
             return null;
-        else
-            return new TaskNote(
-                    entity.getId(),
-                    entity.getTask_id(),
-                    entity.getAuthor(),
-                    entity.getComment()
-            );
+//        else
+//            return new TaskNote(
+//                    entity.getId(),
+//                    entity.getTask_id(),
+//                    entity.getAuthor(),
+//                    entity.getComment()
+//            );
     }
 
     /**
@@ -58,18 +58,18 @@ public class TaskNoteConverter implements Converter<TaskNoteEntity, TaskNote> {
      */
     @Override
     public TaskNoteEntity toEntity(TaskNote valueObject) {
-        if (valueObject == null)
+//        if (valueObject == null)
             return null;
-        else
-            return new TaskNoteEntity(
-                    valueObject.getId(),
-                    valueObject.getTask(),
-                    valueObject.getAuthor(),
-                    valueObject.getUpdater(),
-                    checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),
-                    checkZonedDateTimeValueObjectNotNull(valueObject.getUpdated()),
-                    valueObject.getComment()
-            );
+//        else
+//            return new TaskNoteEntity(
+//                    valueObject.getId(),
+//                    valueObject.getTask(),
+//                    valueObject.getAuthor(),
+//                    valueObject.getUpdater(),
+//                    checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),
+//                    checkZonedDateTimeValueObjectNotNull(valueObject.getUpdated()),
+//                    valueObject.getComment()
+//            );
     }
 
     /**

@@ -49,23 +49,23 @@ public class Project  {
      * владелец (создатель) проекта
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
     /**
      * время создания проекта
      */
-    @Column(name = "created", columnDefinition= "TIMESTAMP WITH TIME ZONE")
-    @Type(type = "java.time.ZonedDateTime")
+    @Column(name = "created")//, columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    //@Type(type = "java.time.ZonedDateTime")
     private ZonedDateTime created;
     /**
      * список задач проекта
      */
-    @OneToMany(mappedBy = "project_id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<Task> tasks;
     /**
      * список типов задач, относящихся к данному проекту
      */
-    @OneToMany(mappedBy = "project_id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<TaskType> taskTypes;
     /**
      * хранит код последней добавленной задачи к данному проекту

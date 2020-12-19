@@ -37,10 +37,11 @@ public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus,
      */
     @Override
     public WorkFlowStatus toModel(WorkFlowStatusDtoFull dto) {
-        List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(dto.getId()); // должно стать lazy load в будущем
-        return new WorkFlowStatus(dto.getId(), dto.getWorkflow_id(), dto.getName(),
-                dto.getState(), listByParentId, dto.getAlwaysAllow()
-                , null); //TODO не NULL, а что?
+//        List<WorkFlowAction> listByParentId = (List)workFlowActionGetListByParentService.getListByParentId(dto.getId()); // должно стать lazy load в будущем
+//        return new WorkFlowStatus(dto.getId(), dto.getWorkflow_id(), dto.getName(),
+//                dto.getState(), listByParentId, dto.getAlwaysAllow()
+//                , null); //TODO не NULL, а что?
+        return null;
     }
 
 
@@ -52,7 +53,8 @@ public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus,
      */
     @Override
     public WorkFlowStatusDtoFull toDto(WorkFlowStatus model) {
-        return new WorkFlowStatusDtoFull(model.getId(), model.getWorkflow_id(), model.getName(), model.getState(), model.getAlwaysAllow(), new ArrayList<WorkFlowAction>());
+//        return new WorkFlowStatusDtoFull(model.getId(), model.getWorkflow_id(), model.getName(), model.getState(), model.getAlwaysAllow(), new ArrayList<WorkFlowAction>());
+        return null;
     }
 
 }

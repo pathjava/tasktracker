@@ -61,7 +61,7 @@ public class WorkFlowStatus {
     Boolean alwaysAllow;
 
     @Lazy
-    @OneToMany(mappedBy = "parentStatus", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "status", fetch = FetchType.LAZY)
     List<Task> tasks;
 
     @Lazy

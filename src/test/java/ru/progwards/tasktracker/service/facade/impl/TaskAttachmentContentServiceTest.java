@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
  * Тестирование бизнес-сущности и репозитория
  */
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
+//@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class TaskAttachmentContentServiceTest {
 
     @Autowired

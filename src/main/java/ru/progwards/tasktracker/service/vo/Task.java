@@ -68,8 +68,8 @@ public class Task {
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     private WorkFlowStatus status;
 
-    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    private List<WorkFlowAction> actions;
+//    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+//    private List<WorkFlowAction> actions;
 
     private Duration estimation;
     private Duration timeSpent;

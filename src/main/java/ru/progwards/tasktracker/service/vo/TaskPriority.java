@@ -40,6 +40,6 @@ public class TaskPriority {
     /**
      * список задач с данным приоритетом
      */
-    @OneToMany(mappedBy = "priority_id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "priority", fetch = FetchType.LAZY)
     private List<Task> tasks;
 }

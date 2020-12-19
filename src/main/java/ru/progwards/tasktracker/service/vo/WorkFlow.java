@@ -59,7 +59,7 @@ public class WorkFlow {
     List<WorkFlowStatus> statuses;
 
     @Lazy
-    @OneToMany(mappedBy = "workflow", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "workFlow", fetch = FetchType.LAZY)
     List<TaskType> taskTypes;
 
 }

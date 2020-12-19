@@ -23,7 +23,7 @@ public class TaskCreateServiceTest {
     {
         task = new Task(
                 1L, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null,
+                null, null, null, null, null, null,
                 null, null, null, null, null, null
         );
     }

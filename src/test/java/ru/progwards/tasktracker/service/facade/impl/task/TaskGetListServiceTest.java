@@ -37,7 +37,7 @@ public class TaskGetListServiceTest {
                     new Task(
                             1L + i, null, "testTask " + (1 + i), null,
                             null, null, null, null, null,
-                            null, null, null, null, null, null,
+                            null, null, null, null, null,
                             null, null, null, null, null, null
                     )
             );

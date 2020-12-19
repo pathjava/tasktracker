@@ -34,9 +34,10 @@ public class WorkFlowActionConverter implements Converter<WorkFlowActionEntity, 
      */
     @Override
     public WorkFlowAction toVo(WorkFlowActionEntity entity) {
-        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(entity.getNext_status_id()); // должно стать lazy load в будущем
-        return new WorkFlowAction(entity.getId(), entity.getParentStatus_id(), entity.getName(),
-                entity.getNext_status_id(), workFlowStatus);
+//        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(entity.getNext_status_id()); // должно стать lazy load в будущем
+//        return new WorkFlowAction(entity.getId(), entity.getParentStatus_id(), entity.getName(),
+//                entity.getNext_status_id(), workFlowStatus);
+        return null;
     }
 
 
@@ -48,7 +49,8 @@ public class WorkFlowActionConverter implements Converter<WorkFlowActionEntity, 
      */
     @Override
     public WorkFlowActionEntity toEntity(WorkFlowAction vo) {
-        return new WorkFlowActionEntity(vo.getId(), vo.getParentStatus_id(), vo.getName(), vo.getStatus_id());
+//        return new WorkFlowActionEntity(vo.getId(), vo.getParentStatus_id(), vo.getName(), vo.getStatus_id());
+        return null;
     }
 
 }

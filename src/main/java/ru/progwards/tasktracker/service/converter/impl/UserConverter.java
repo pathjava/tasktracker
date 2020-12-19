@@ -32,12 +32,13 @@ public class UserConverter implements Converter<UserEntity, User> {
         if (entity == null)
             return null;
 //        UserStatus userStatus = userStatusGetService.get(entity.getStart_status_id()); // должно стать lazy load в будущем
-        return new User(
-                entity.getId(),
-                entity.getName(),
-                entity.getEmail(),
-                entity.getPassword(),
-                entity.getRoles());
+//        return new User(
+//                entity.getId(),
+//                entity.getName(),
+//                entity.getEmail(),
+//                entity.getPassword(),
+//                entity.getRoles());
+        return null;
     }
 
     /**
@@ -48,6 +49,7 @@ public class UserConverter implements Converter<UserEntity, User> {
      */
     @Override
     public UserEntity toEntity(User vo) {
-        return new UserEntity(vo.getId(), vo.getName(), vo.getEmail(), vo.getPassword(), vo.getRoles(), false);
+//        return new UserEntity(vo.getId(), vo.getName(), vo.getEmail(), vo.getPassword(), vo.getRoles(), false);
+        return null;
     }
 }

@@ -52,7 +52,8 @@ public class WorkFlowStatusConverter implements Converter<WorkFlowStatusEntity, 
      */
     @Override
     public WorkFlowStatusEntity toEntity(WorkFlowStatus vo) {
-        return new WorkFlowStatusEntity(vo.getId(), vo.getWorkflow_id(), vo.getName(), vo.getState().toString(), vo.getAlwaysAllow());
+//        return new WorkFlowStatusEntity(vo.getId(), vo.getWorkflow_id(), vo.getName(), vo.getState().toString(), vo.getAlwaysAllow());
+        return null;
     }
 
 }

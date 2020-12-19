@@ -21,12 +21,13 @@ public class UserDtoPreviewConverter implements Converter<User, UserDtoPreview> 
 
     @Override
     public User toModel(UserDtoPreview dto) {
-        User user = userGetService.get(dto.getId());
-        return new User(dto.getId(),
-                dto.getName(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getRoles());
+//        User user = userGetService.get(dto.getId());
+//        return new User(dto.getId(),
+//                dto.getName(),
+//                user.getEmail(),
+//                user.getPassword(),
+//                user.getRoles());
+        return null;
     }
 
     @Override

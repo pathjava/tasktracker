@@ -26,11 +26,12 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
      */
     @Override
     public User toModel(UserDtoFull dto) {
-        return new User(dto.getId(),
-                dto.getName(),
-                dto.getEmail(),
-                dto.getPassword(),
-                listDtoToVoUserRole(dto.getRoles()));
+//        return new User(dto.getId(),
+//                dto.getName(),
+//                dto.getEmail(),
+//                dto.getPassword(),
+//                listDtoToVoUserRole(dto.getRoles()));
+        return null;
     }
     /**
      * Метод конвертирует лист из Dto в VO
@@ -49,11 +50,12 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
      */
     @Override
     public UserDtoFull toDto(User model) {
-        return new UserDtoFull(model.getId(),
-                model.getName(),
-                model.getEmail(),
-                model.getPassword(),
-                listVoToDtoUserRole(model.getRoles()));
+//        return new UserDtoFull(model.getId(),
+//                model.getName(),
+//                model.getEmail(),
+//                model.getPassword(),
+//                listVoToDtoUserRole(model.getRoles()));
+        return null;
     }
     /**
      * Метод конвертирует лист из VO в Dto

@@ -34,9 +34,10 @@ public class WorkFlowActionDtoFullConverter implements Converter<WorkFlowAction,
      */
     @Override
     public WorkFlowAction toModel(WorkFlowActionDtoFull dto) {
-        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(dto.getNextStatus_id()); // должно стать lazy load в будущем
-        return new WorkFlowAction(dto.getId(), dto.getParentStatus_id(), dto.getName(),
-                dto.getNextStatus_id(), workFlowStatus);
+//        WorkFlowStatus workFlowStatus = workFlowStatusGetService.get(dto.getNextStatus_id()); // должно стать lazy load в будущем
+//        return new WorkFlowAction(dto.getId(), dto.getParentStatus_id(), dto.getName(),
+//                dto.getNextStatus_id(), workFlowStatus);
+        return null;
     }
 
 
@@ -48,7 +49,8 @@ public class WorkFlowActionDtoFullConverter implements Converter<WorkFlowAction,
      */
     @Override
     public WorkFlowActionDtoFull toDto(WorkFlowAction model) {
-        return new WorkFlowActionDtoFull(model.getId(), model.getParentStatus_id(), model.getName(), model.getStatus_id());
+//        return new WorkFlowActionDtoFull(model.getId(), model.getParentStatus_id(), model.getName(), model.getStatus_id());
+        return null;
     }
 
 }

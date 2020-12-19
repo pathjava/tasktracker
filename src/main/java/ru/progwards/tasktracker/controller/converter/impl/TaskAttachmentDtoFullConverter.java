@@ -58,8 +58,9 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachmentDtoFull toDto(TaskAttachment model) {
-        return new TaskAttachmentDtoFull(model.getId(), model.getTask(), model.getName(), model.getExtension(),
-                model.getSize(), model.getCreated());
+//        return new TaskAttachmentDtoFull(model.getId(), model.getTask(), model.getName(), model.getExtension(),
+//                model.getSize(), model.getCreated());
+        return null;
     }
 
 }

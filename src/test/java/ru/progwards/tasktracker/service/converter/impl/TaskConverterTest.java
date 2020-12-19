@@ -26,7 +26,7 @@ class TaskConverterTest {
 
     private final Task valueObject = new Task(
             null, null, null, null, null, null,
-            null, null, null, null, null,
+            null, null, null, null,
             null, null, null, null, null,
             null, null, null, null, null
     );

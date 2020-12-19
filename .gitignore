@@ -19,3 +19,4 @@ IgnoreLexer.java~
 *.json
 src/main/resources/data/*.json
 src/main/resources/*.json
+/lib/

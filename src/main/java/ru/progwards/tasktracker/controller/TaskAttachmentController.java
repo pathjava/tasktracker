@@ -100,14 +100,14 @@ public class TaskAttachmentController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteList(@PathVariable("task_id") Long task_id,
                            @RequestBody Collection<Long> ids) {
-        if (task_id == null)
-            throw new BadRequestException("Task_id is not set");
-
-        for (Long entity : ids) {
-            TaskAttachment vo = getService.get(entity);
-            if(vo.getTask() == task_id)
-                removeService.remove(vo);
-        }
+//        if (task_id == null)
+//            throw new BadRequestException("Task_id is not set");
+//
+//        for (Long entity : ids) {
+//            TaskAttachment vo = getService.get(entity);
+//            if(vo.getTask() == task_id)
+//                removeService.remove(vo);
+//        }
     }
 
 }
