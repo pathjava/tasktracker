@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.List;
@@ -12,12 +17,17 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class AttachmentContent {
+@Table(name = "task_attachment_content")
+public class TaskAttachmentContent {
 
     @Id
-    @SequenceGenerator(name = "AttachmentContentSeq", sequenceName = "AttachmentContentSeq", allocationSize = 10, initialValue = 1)
-    @GeneratedValue(generator = "AttachmentContentSeq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "task_attachment_content_seq", sequenceName = "task_attachment_content_seq", allocationSize = 10, initialValue = 1)
+    @GeneratedValue(generator = "task_attachment_content_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     /**
@@ -30,33 +40,8 @@ public class AttachmentContent {
      * Обратная ссылка на связку вложения
      * В таблице колонки создаться не должно
      */
-    @OneToMany(mappedBy = "content")
+    @Lazy
+    @OneToMany(mappedBy = "content", fetch = FetchType.LAZY)
     List<TaskAttachment> taskAttachment;
-
-
-    public AttachmentContent() {
-    }
-
-    public AttachmentContent(Long id, Blob data, List<TaskAttachment> taskAttachment) {
-        this.id = id;
-        this.data = data;
-        this.taskAttachment = taskAttachment;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Blob getData() {
-        return data;
-    }
-
-    public void setData(Blob data) {
-        this.data = data;
-    }
 
 }

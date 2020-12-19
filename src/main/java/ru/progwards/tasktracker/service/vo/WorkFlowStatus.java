@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import ru.progwards.tasktracker.util.types.WorkFlowState;
 
 import javax.persistence.*;
@@ -10,6 +14,9 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "workflow_status")
 public class WorkFlowStatus {
@@ -23,98 +30,47 @@ public class WorkFlowStatus {
     /**
      * Родительский WF
      */
-    Long workflow_id;
+    @Lazy
+    @ManyToOne
+    @JoinColumn(name = "workflow_id", referencedColumnName = "id")
+    WorkFlow workflow;
 
     /**
      * Наименование
      */
+    @Column(name = "name", nullable = false)
     String name;
 
     /**
      * Состояние задачи
      */
+    @Column(name = "state", nullable = false)
     WorkFlowState state;
 
     /**
      * Действия, в которые могут быть применены к задаче с данным статусом
      */
+    @Lazy
+    @OneToMany(mappedBy = "parentStatus", fetch = FetchType.LAZY)
     List<WorkFlowAction> actions;
 
     /**
      * На данный статус задачу можно переводить из любого состояния
      */
+    @Column(name = "always_allow", nullable = false)
     Boolean alwaysAllow;
 
-    @OneToMany(mappedBy = "status")
+    @Lazy
+    @OneToMany(mappedBy = "parentStatus", fetch = FetchType.LAZY)
     List<Task> tasks;
 
+    @Lazy
+    @OneToMany(mappedBy = "startStatus", fetch = FetchType.LAZY)
+    List<WorkFlow> startingWorkflows;
 
-    public WorkFlowStatus() { }
-
-    public WorkFlowStatus(Long id, Long workflow_id, String name, WorkFlowState state, List<WorkFlowAction> actions, Boolean alwaysAllow, List<Task> tasks) {
-        this.id = id;
-        this.workflow_id = workflow_id;
-        this.name = name;
-        this.state = state;
-        this.actions = actions;
-        this.alwaysAllow = alwaysAllow;
-        this.tasks = tasks;
-    }
+    @Lazy
+    @OneToMany(mappedBy = "nextStatus", fetch = FetchType.LAZY)
+    List<WorkFlowAction> nextedActions;
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getWorkflow_id() {
-        return workflow_id;
-    }
-
-    public void setWorkflow_id(Long workflow_id) {
-        this.workflow_id = workflow_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public WorkFlowState getState() {
-        return state;
-    }
-
-    public void setState(WorkFlowState state) {
-        this.state = state;
-    }
-
-    public List<WorkFlowAction> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<WorkFlowAction> actions) {
-        this.actions = actions;
-    }
-
-    public Boolean getAlwaysAllow() {
-        return alwaysAllow;
-    }
-
-    public void setAlwaysAllow(Boolean alwaysAllow) {
-        this.alwaysAllow = alwaysAllow;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
 }

@@ -10,10 +10,9 @@ import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,9 +32,9 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
     @Autowired
     private Converter<TaskAttachmentEntity, TaskAttachment> converter;
     @Autowired
-    private CreateService<AttachmentContent> attachmentContentCreateService;
+    private CreateService<TaskAttachmentContent> attachmentContentCreateService;
     @Autowired
-    private RemoveService<AttachmentContent> attachmentContentRemoveService;
+    private RemoveService<TaskAttachmentContent> attachmentContentRemoveService;
 
 
     /**
@@ -73,7 +72,7 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      */
     @Override
     public void remove(TaskAttachment taskAttachment) {
-        AttachmentContent content = taskAttachment.getContent();
+        TaskAttachmentContent content = taskAttachment.getContent();
         repository.delete(taskAttachment.getId());
         // содержимое удаляем ПОСЛЕ удаления TaskAttachment
         attachmentContentRemoveService.remove(content);

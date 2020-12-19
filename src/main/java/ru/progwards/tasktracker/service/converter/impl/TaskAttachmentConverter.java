@@ -5,13 +5,8 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.TaskAttachmentEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
-
-import java.time.Instant;
-import java.time.ZonedDateTime;
-
-import static java.time.ZoneOffset.UTC;
 
 /**
  * Преобразование valueObject <-> entity
@@ -28,7 +23,7 @@ public class TaskAttachmentConverter implements Converter<TaskAttachmentEntity, 
      * Сервис получения содержимого файла
      */
     @Autowired
-    private GetService<Long, AttachmentContent> attachmentContentGetService;
+    private GetService<Long, TaskAttachmentContent> attachmentContentGetService;
 
 
     /**
