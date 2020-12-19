@@ -63,7 +63,7 @@ public class TaskNoteConverter implements Converter<TaskNoteEntity, TaskNote> {
         else
             return new TaskNoteEntity(
                     valueObject.getId(),
-                    valueObject.getTask_id(),
+                    valueObject.getTask(),
                     valueObject.getAuthor(),
                     valueObject.getUpdater(),
                     checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),

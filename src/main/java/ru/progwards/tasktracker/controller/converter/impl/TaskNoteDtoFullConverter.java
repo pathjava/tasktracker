@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskNoteDtoFull;
+import ru.progwards.tasktracker.controller.dto.TaskNoteDtoPreview;
 import ru.progwards.tasktracker.service.vo.TaskNote;
 
 /**
@@ -10,14 +10,14 @@ import ru.progwards.tasktracker.service.vo.TaskNote;
  * @author Konstantin Kishkin
  */
 @Component
-public class TaskNoteDtoFullConverter implements Converter<TaskNote, TaskNoteDtoFull> {
+public class TaskNoteDtoFullConverter implements Converter<TaskNote, TaskNoteDtoPreview> {
     /**
      * метод конвертирует объект TaskNoteDto в объект TaskNote
      * @param dto объект TaskNoteDto, который конвертируется в модель
      * @return бизнес-модель TaskNote
      */
     @Override
-    public TaskNote toModel(TaskNoteDtoFull dto) {
+    public TaskNote toModel(TaskNoteDtoPreview dto) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class TaskNoteDtoFullConverter implements Converter<TaskNote, TaskNoteDto
      * @return объект TaskNoteDto
      */
     @Override
-    public TaskNoteDtoFull toDto(TaskNote model) {
+    public TaskNoteDtoPreview toDto(TaskNote model) {
         return null;
     }
 }

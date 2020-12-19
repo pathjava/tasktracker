@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.repository.entity;
 import ru.progwards.tasktracker.service.vo.User;
 
 /**
- * value object - объект бизнес логики (задача)
+ * value object - объект бизнес логики (комментарий)
  *
  * @author Konstantin Kishkin
  */

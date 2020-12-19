@@ -2,37 +2,21 @@ package ru.progwards.tasktracker.controller.dto;
 
 import ru.progwards.tasktracker.service.vo.User;
 
-import java.time.ZonedDateTime;
-
 /**
- * DtoPreview для TaskNote
+ * DtoFull для TaskNote
  * @author Konstantin Kishkin
  */
+
 public class TaskNoteDtoPreview {
 
-    private Long id;
     private User author;
     private User updater;
-    private ZonedDateTime created;
-    private ZonedDateTime updated;
     private String comment;
 
-
-    public TaskNoteDtoPreview(Long id, User author, User updater, ZonedDateTime created, ZonedDateTime updated, String comment) {
-        this.id = id;
+    public TaskNoteDtoPreview(User author, User updater, String comment) {
         this.author = author;
         this.updater = updater;
-        this.created = created;
-        this.updated = updated;
         this.comment = comment;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public User getAuthor() {
@@ -51,22 +35,6 @@ public class TaskNoteDtoPreview {
         this.updater = updater;
     }
 
-    public ZonedDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(ZonedDateTime created) {
-        this.created = created;
-    }
-
-    public ZonedDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(ZonedDateTime updated) {
-        this.updated = updated;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -75,4 +43,3 @@ public class TaskNoteDtoPreview {
         this.comment = comment;
     }
 }
-
