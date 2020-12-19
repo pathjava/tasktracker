@@ -10,7 +10,7 @@ import ru.progwards.tasktracker.service.converter.Converter;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 
 import java.util.Collection;
 
@@ -20,14 +20,14 @@ import java.util.Collection;
  * @author Gregory Lobkov
  */
 @Service
-public class AttachmentContentService implements CreateService<AttachmentContent>, RemoveService<AttachmentContent>, GetService<Long, AttachmentContent> {
+public class AttachmentContentService implements CreateService<TaskAttachmentContent>, RemoveService<TaskAttachmentContent>, GetService<Long, TaskAttachmentContent> {
 
     @Autowired
     private Repository<Long, AttachmentContentEntity> repository;
     @Autowired
     private RepositoryByParentId<Long, TaskAttachmentEntity> taskAttachmentRepositoryByParentId;
     @Autowired
-    private Converter<AttachmentContentEntity, AttachmentContent> attachmentContentConverter;
+    private Converter<AttachmentContentEntity, TaskAttachmentContent> attachmentContentConverter;
 
 
     /**
@@ -36,7 +36,7 @@ public class AttachmentContentService implements CreateService<AttachmentContent
      * @param attachment вложение
      */
     @Override
-    public void create(AttachmentContent attachment) {
+    public void create(TaskAttachmentContent attachment) {
         AttachmentContentEntity entity = attachmentContentConverter.toEntity(attachment);
         repository.create(entity);
         attachment.setId(entity.getId()); // переложим идентификатор в бизнес-объект
@@ -49,7 +49,7 @@ public class AttachmentContentService implements CreateService<AttachmentContent
      * @param attachment вложение
      */
     @Override
-    public void remove(AttachmentContent attachment) {
+    public void remove(TaskAttachmentContent attachment) {
         Long id = attachment.getId();
         // проверить, имеются ли TaskAttachment, в которых TaskAttachment.content_id = AttachmentContent.id
         Collection<TaskAttachmentEntity> taskAttachmentEntities = taskAttachmentRepositoryByParentId.getByParentId(id);
@@ -67,7 +67,7 @@ public class AttachmentContentService implements CreateService<AttachmentContent
      * @return описание файла-вложения вместе с содержимым
      */
     @Override
-    public AttachmentContent get(Long id) {
+    public TaskAttachmentContent get(Long id) {
         return attachmentContentConverter.toVo(repository.get(id));
     }
 

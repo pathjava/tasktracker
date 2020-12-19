@@ -9,13 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -26,24 +23,24 @@ import java.util.NoSuchElementException;
  */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
-public class AttachmentContentServiceTest {
+public class TaskAttachmentContentServiceTest {
 
     @Autowired
-    CreateService<AttachmentContent> createService;
+    CreateService<TaskAttachmentContent> createService;
     @Autowired
-    RemoveService<AttachmentContent> removeService;
+    RemoveService<TaskAttachmentContent> removeService;
     @Autowired
-    GetService<Long, AttachmentContent> getService;
+    GetService<Long, TaskAttachmentContent> getService;
 
     // инициализация тестового экземпляра бизнес-объекта
     byte[] dataBytes = {1, 2, 3};
-    AttachmentContent content;
+    TaskAttachmentContent content;
 
     {
         try {
             //InputStream targetStream = new ByteArrayInputStream(dataBytes);
             Blob targetStream = new SerialBlob(dataBytes);
-            content = new AttachmentContent(-23123L, targetStream, null);
+            content = new TaskAttachmentContent(-23123L, targetStream, null);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -79,7 +76,7 @@ public class AttachmentContentServiceTest {
     public void create() {
         removeTestEntity();
         createService.create(content);
-        AttachmentContent got = getService.get(content.getId());
+        TaskAttachmentContent got = getService.get(content.getId());
         Assertions.assertNotNull(got, "Сохранено в репо, но прочесть не смогли");
         Assertions.assertEquals(content.getId(), got.getId(), "Идентификатор сохраненного объекта не совпал");
 

@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 
 @Service
 public class HibernateUtil {
@@ -16,7 +17,7 @@ public class HibernateUtil {
                     //.configure("hibernate-mariadb.cfg.xml") // общая БД, MariaDB
                     //.configure("hibernate-postgres.cfg.xml") // собственная файловая БД
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.AccessRule.class)
-                    .addAnnotatedClass(ru.progwards.tasktracker.service.vo.AttachmentContent.class)
+                    .addAnnotatedClass(TaskAttachmentContent.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.Project.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.RelatedTask.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.service.vo.RelationType.class)

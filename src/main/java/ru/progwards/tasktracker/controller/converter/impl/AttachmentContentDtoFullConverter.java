@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.controller.converter.impl;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.AttachmentContentDtoFull;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 
 
 /**
@@ -14,7 +14,7 @@ import ru.progwards.tasktracker.service.vo.AttachmentContent;
  * @author Gregory Lobkov
  */
 @Component
-public class AttachmentContentDtoFullConverter implements Converter<AttachmentContent, AttachmentContentDtoFull> {
+public class AttachmentContentDtoFullConverter implements Converter<TaskAttachmentContent, AttachmentContentDtoFull> {
 
 
     /**
@@ -24,7 +24,7 @@ public class AttachmentContentDtoFullConverter implements Converter<AttachmentCo
      * @return бизнес-объект
      */
     @Override
-    public AttachmentContent toModel(AttachmentContentDtoFull dto) {
+    public TaskAttachmentContent toModel(AttachmentContentDtoFull dto) {
         //return new AttachmentContent(dto.getId(), dto.getData());
         //https://stackoverflow.com/questions/20614973/read-write-blob-data-in-chunks-with-hibernate
         return null;
@@ -38,7 +38,7 @@ public class AttachmentContentDtoFullConverter implements Converter<AttachmentCo
      * @return сущность dto
      */
     @Override
-    public AttachmentContentDtoFull toDto(AttachmentContent model) {
+    public AttachmentContentDtoFull toDto(TaskAttachmentContent model) {
         //https://stackoverflow.com/questions/20614973/read-write-blob-data-in-chunks-with-hibernate
         //return new AttachmentContentDtoFull(model.getId(), model.getData());
         return null;

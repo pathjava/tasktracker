@@ -7,13 +7,11 @@ import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetListByTaskService;
 import ru.progwards.tasktracker.service.facade.GetService;
 import ru.progwards.tasktracker.service.facade.RemoveService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.vo.Task;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
@@ -36,7 +34,7 @@ public class TaskAttachmentServiceTest {
     @Autowired
     GetListByTaskService<Long, TaskAttachment> getListByTaskService;
     @Autowired
-    RemoveService<AttachmentContent> removeAttachmentContentService;
+    RemoveService<TaskAttachmentContent> removeAttachmentContentService;
     @Autowired
     CreateService<Task> createTaskService;
     @Autowired
@@ -45,7 +43,7 @@ public class TaskAttachmentServiceTest {
     // инициализация тестового экземпляра бизнес-объекта
     Task task;
     byte[] dataBytes = {65, 67, 66};
-    AttachmentContent content;
+    TaskAttachmentContent content;
     TaskAttachment attachment;
 
     {
@@ -57,7 +55,7 @@ public class TaskAttachmentServiceTest {
                     null, null, null, null, null, null);
             //InputStream targetStream = new ByteArrayInputStream(dataBytes);
             Blob targetStream = new SerialBlob(dataBytes);
-            content = new AttachmentContent(-12341L, targetStream, null);
+            content = new TaskAttachmentContent(-12341L, targetStream, null);
             attachment = new TaskAttachment(-23124L, task.getId(), "test1.txt", "txt", 3L, ZonedDateTime.now(), content);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -164,7 +162,7 @@ public class TaskAttachmentServiceTest {
         Assertions.assertEquals(gotAttachment.getId(), attachment.getId(), "Идентификатор связки различается");
         Assertions.assertNotNull(gotAttachment.getContent(), "Идентификатор вложения не задан");
         Assertions.assertEquals(gotAttachment.getContent().getId(), content.getId(), "Идентификатор вложения в связке сохранен не верно");
-        AttachmentContent gotContent = gotAttachment.getContent();
+        TaskAttachmentContent gotContent = gotAttachment.getContent();
         Assertions.assertNotNull(gotContent, "Вложение не определено");
         Assertions.assertEquals(gotContent.getId(), content.getId(), "Идентификатор вложения различается");
     }

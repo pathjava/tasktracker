@@ -1,8 +1,11 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 /**
  * Действия над задачей, переводящие её из одного состояния WorkFlowStatus в другое
@@ -10,9 +13,16 @@ import javax.persistence.Entity;
  * @author Gregory Lobkov
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "workflow_action")
 public class WorkFlowAction {
 
+    @Id
+    @SequenceGenerator(name = "workflow_action_seq", sequenceName = "workflow_action_seq", allocationSize = 1)
+    @GeneratedValue(generator = "workflow_action_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     Long id;
 
     /**
@@ -20,72 +30,23 @@ public class WorkFlowAction {
      *
      * Статус задач, к которым применимо данное действие
      */
-    Long parentStatus_id;
+    @Lazy
+    @ManyToOne
+    @JoinColumn(name = "parent_status_id", referencedColumnName = "id")
+    WorkFlowStatus parentStatus; //deprecated
 
     /**
      * Наименование действия
      */
+    @Column(name = "name", nullable = false)
     String name;
-
-    /**
-     * Идентификатор статуса, в который переводится задача после применения действия
-     */
-    Long status_id;
 
     /**
      * Статус, в который переводится задача после применения действия
      */
+    @Lazy
+    @ManyToOne
+    @JoinColumn(name = "next_status_id", referencedColumnName = "id")
     WorkFlowStatus nextStatus;
-
-    public WorkFlowAction() { }
-
-    public WorkFlowAction(Long id, Long parentStatus_id, String name, Long status_id, WorkFlowStatus nextStatus) {
-        this.id = id;
-        this.parentStatus_id = parentStatus_id;
-        this.name = name;
-        this.status_id = status_id;
-        this.nextStatus = nextStatus;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getParentStatus_id() {
-        return parentStatus_id;
-    }
-
-    public void setParentStatus_id(Long parentStatus_id) {
-        this.parentStatus_id = parentStatus_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getStatus_id() {
-        return status_id;
-    }
-
-    public void setStatus_id(Long status_id) {
-        this.status_id = status_id;
-    }
-
-    public WorkFlowStatus getNextStatus() {
-        return nextStatus;
-    }
-
-    public void setNextStatus(WorkFlowStatus nextStatus) {
-        this.nextStatus = nextStatus;
-    }
 
 }

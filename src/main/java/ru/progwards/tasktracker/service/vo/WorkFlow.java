@@ -1,5 +1,8 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "workflow")
 public class WorkFlow {
@@ -56,62 +62,4 @@ public class WorkFlow {
     @OneToMany(mappedBy = "workflow", fetch = FetchType.LAZY)
     List<TaskType> taskTypes;
 
-    public WorkFlow() { }
-
-    public WorkFlow(Long id, String name, boolean pattern, WorkFlowStatus startStatus, List<WorkFlowStatus> statuses, List<TaskType> taskTypes) {
-        this.id = id;
-        this.name = name;
-        this.pattern = pattern;
-        this.startStatus = startStatus;
-        this.statuses = statuses;
-        this.taskTypes = taskTypes;
-    }
-
-    public List<WorkFlowStatus> getStatuses() {
-        return statuses;
-    }
-
-    public void setStatuses(List<WorkFlowStatus> statuses) {
-        this.statuses = statuses;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isPattern() {
-        return pattern;
-    }
-
-    public void setPattern(boolean pattern) {
-        this.pattern = pattern;
-    }
-
-    public WorkFlowStatus getStartStatus() {
-        return startStatus;
-    }
-
-    public void setStartStatus(WorkFlowStatus startStatus) {
-        this.startStatus = startStatus;
-    }
-
-    public List<TaskType> getTaskTypes() {
-        return taskTypes;
-    }
-
-    public void setTaskTypes(List<TaskType> taskTypes) {
-        this.taskTypes = taskTypes;
-    }
 }

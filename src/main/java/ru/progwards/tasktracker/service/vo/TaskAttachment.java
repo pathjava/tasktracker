@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.service.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
@@ -8,116 +13,60 @@ import java.time.ZonedDateTime;
  *
  * @author Gregory Lobkov
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "task_attachment")
 public class TaskAttachment {
 
     /**
      * ID связки задача-вложение
      */
     @Id
-    @SequenceGenerator(name = "TaskAttachmentSeq", sequenceName = "TaskAttachmentSeq", allocationSize = 10, initialValue = 1)
-    @GeneratedValue(generator = "TaskAttachmentSeq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "task_attachment_seq", sequenceName = "task_attachment_seq", allocationSize = 10, initialValue = 1)
+    @GeneratedValue(generator = "task_attachment_seq", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     /**
      * Ссылка на задачу
      */
-    //@OneToOne(fetch = FetchType.LAZY, mappedBy = "attachments")
-    private Long task;
+    @Lazy
+    @ManyToOne
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    private Task task;
 
     /**
      * Полное имя файла-вложения
      */
+    @Column(name = "name", nullable = false)
     private String name;
 
     /**
      * Расширение файла
      */
+    @Column(name = "extension")
     private String extension;
 
     /**
      * Размер в байтах
      */
+    @Column(name = "size")
     private Long size;
 
     /**
      * Дата создания
      */
+    @Column(name = "created")
     private ZonedDateTime created;
 
     /**
      * Вложение
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    private AttachmentContent content;
-
-    public TaskAttachment() {
-    }
-
-    public TaskAttachment(Long id, Long task, String name, String extension, Long size, ZonedDateTime created, AttachmentContent content) {
-        this.id = id;
-        this.task = task;
-        this.name = name;
-        this.extension = extension;
-        this.size = size;
-        this.created = created;
-        this.content = content;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getTask() {
-        return task;
-    }
-
-    public void setTask(Long task) {
-        this.task = task;
-    }
-
-    public AttachmentContent getContent() {
-        return content;
-    }
-
-    public void setContent(AttachmentContent content) {
-        this.content = content;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
-
-    public ZonedDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(ZonedDateTime created) {
-        this.created = created;
-    }
+    @Lazy
+    @ManyToOne
+    @JoinColumn(name = "content_id", referencedColumnName = "id")
+    private TaskAttachmentContent content;
 
 }

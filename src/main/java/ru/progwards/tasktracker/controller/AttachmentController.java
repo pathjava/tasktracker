@@ -12,7 +12,7 @@ import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.controller.exception.BadRequestException;
 import ru.progwards.tasktracker.service.facade.CreateService;
 import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,11 +31,11 @@ public class AttachmentController {
     @Autowired
     GetService<Long, TaskAttachment> getService;
     @Autowired
-    CreateService<AttachmentContent> createContentService;
+    CreateService<TaskAttachmentContent> createContentService;
     @Autowired
     Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
     @Autowired
-    Converter<AttachmentContent, AttachmentContentDtoFull> dtoContentConverter;
+    Converter<TaskAttachmentContent, AttachmentContentDtoFull> dtoContentConverter;
 
 
     /**
@@ -83,7 +83,7 @@ public class AttachmentController {
 
         try {
             content = new AttachmentContentDtoFull(0L, file.getInputStream());
-            AttachmentContent model = dtoContentConverter.toModel(content);
+            TaskAttachmentContent model = dtoContentConverter.toModel(content);
             createContentService.create(model);
             content.setId(model.getId());
         } catch (IOException e) {

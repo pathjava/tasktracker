@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import ru.progwards.tasktracker.controller.converter.Converter;
 import ru.progwards.tasktracker.controller.dto.TaskAttachmentDtoFull;
 import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.vo.TaskAttachment;
 
 
@@ -24,7 +24,7 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      * Сервис получения содержимого файла
      */
     @Autowired
-    private GetService<Long, AttachmentContent> attachmentContentGetService;
+    private GetService<Long, TaskAttachmentContent> attachmentContentGetService;
 
     /**
      * Сервис получения связи задача - вложение

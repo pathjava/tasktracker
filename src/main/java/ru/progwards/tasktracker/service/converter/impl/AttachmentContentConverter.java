@@ -3,11 +3,7 @@ package ru.progwards.tasktracker.service.converter.impl;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.entity.AttachmentContentEntity;
 import ru.progwards.tasktracker.service.converter.Converter;
-import ru.progwards.tasktracker.service.vo.AttachmentContent;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import ru.progwards.tasktracker.service.vo.TaskAttachmentContent;
 
 
 /**
@@ -18,7 +14,7 @@ import java.io.InputStream;
  * @author Gregory Lobkov
  */
 @Component
-public class AttachmentContentConverter implements Converter<AttachmentContentEntity, AttachmentContent> {
+public class AttachmentContentConverter implements Converter<AttachmentContentEntity, TaskAttachmentContent> {
 
 
     /**
@@ -28,7 +24,7 @@ public class AttachmentContentConverter implements Converter<AttachmentContentEn
      * @return бизнес-объект
      */
     @Override
-    public AttachmentContent toVo(AttachmentContentEntity entity) {
+    public TaskAttachmentContent toVo(AttachmentContentEntity entity) {
 //        byte[] bytes = entity.getData();
 //        InputStream targetStream = new ByteArrayInputStream(bytes);
 //        return new AttachmentContent(entity.getId(), targetStream);
@@ -43,7 +39,7 @@ public class AttachmentContentConverter implements Converter<AttachmentContentEn
      * @return сущность репозитория
      */
     @Override
-    public AttachmentContentEntity toEntity(AttachmentContent vo) {
+    public AttachmentContentEntity toEntity(TaskAttachmentContent vo) {
 //        try {
 //            return new AttachmentContentEntity(vo.getId(), vo.getData().readAllBytes());
 //        } catch (IOException e) {
