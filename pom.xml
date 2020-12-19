@@ -44,11 +44,11 @@
             <artifactId>gson</artifactId>
         </dependency>
 
-        <dependency><!-- Павел, постарайся убить зависимость com.fasterxml.jackson.core - решить как-то по другому -->
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.11.3</version>
-        </dependency>
+<!--        <dependency>&lt;!&ndash; Павел, постарайся убить зависимость com.fasterxml.jackson.core - решить как-то по другому &ndash;&gt;-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-annotations</artifactId>-->
+<!--            <version>2.11.3</version>-->
+<!--        </dependency>-->
 
         <!-- Database -->
         <dependency> <!-- Hibernate -->

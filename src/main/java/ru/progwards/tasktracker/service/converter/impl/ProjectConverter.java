@@ -37,13 +37,13 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
      */
     @Override
     public Project toVo(ProjectEntity entity) {
-        if (entity == null)
+//        if (entity == null)
             return null;
 
-        return new Project(entity.getId(), entity.getName(), entity.getDescription(),
-                entity.getPrefix(), userGetService.get(entity.getOwnerId()), getZDTCreated(entity.getCreated()),
-                (List<TaskType>) taskTypeGetListByProjectService.getListByProjectId(entity.getId()),
-                entity.getLastTaskCode());
+//        return new Project(entity.getId(), entity.getName(), entity.getDescription(),
+//                entity.getPrefix(), userGetService.get(entity.getOwnerId()), getZDTCreated(entity.getCreated()),
+//                (List<TaskType>) taskTypeGetListByProjectService.getListByProjectId(entity.getId()),
+//                entity.getLastTaskCode());
     }
 
     /**
@@ -53,12 +53,12 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
      */
     @Override
     public ProjectEntity toEntity(Project valueObject) {
-        if (valueObject == null)
+//        if (valueObject == null)
             return null;
 
-        return new ProjectEntity(valueObject.getId(), valueObject.getName(), valueObject.getDescription(),
-                valueObject.getPrefix(), valueObject.getOwner().getId(), getLongCreated(valueObject.getCreated()),
-                valueObject.getLastTaskCode());
+//        return new ProjectEntity(valueObject.getId(), valueObject.getName(), valueObject.getDescription(),
+//                valueObject.getPrefix(), valueObject.getOwner().getId(), getLongCreated(valueObject.getCreated()),
+//                valueObject.getLastTaskCode());
     }
 
     /**

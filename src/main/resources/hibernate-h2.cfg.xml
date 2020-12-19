@@ -19,6 +19,8 @@
 <!--        create: создает схему, уничтожая предыдущие данные.-->
 <!--        create-drop: удалить схему при явном закрытии SessionFactory, обычно при остановке приложения.-->
 <!--        none: ничего не делает со схемой, не вносит изменений в базу данных-->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">validate</property>
+
+
     </session-factory>
 </hibernate-configuration>

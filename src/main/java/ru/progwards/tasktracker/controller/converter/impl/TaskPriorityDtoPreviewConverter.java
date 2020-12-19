@@ -32,7 +32,7 @@ public class TaskPriorityDtoPreviewConverter implements Converter<TaskPriority, 
         TaskPriority model = taskPriorityGetService.get(dto.getId());
 
         if (model != null)
-            return new TaskPriority(dto.getId(), dto.getName(), model.getValue());
+            return new TaskPriority(dto.getId(), dto.getName(), model.getValue(), model.getTasks());
 
         return null;
     }
