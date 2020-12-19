@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "UserRole")
+@Table(name = "user_role")
 @AllArgsConstructor
 @Data
 public class UserRole {
     @Id
-    @SequenceGenerator(name = "USERROLESEQ", sequenceName = "userroleseq", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(generator = "USERROLESEQ", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_role_seq", sequenceName = "user_role_seq", allocationSize = 1)
+    @GeneratedValue(generator = "user_role_seq", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     @EqualsAndHashCode.Exclude
     private Long id;
@@ -31,53 +31,15 @@ public class UserRole {
     @Column(name = "system_role")
     private SystemRole systemRole;
 
-    @OneToMany(mappedBy = "user_role")
-    List<AccessRule> accessRules; //full:List<AccessRuleDtoFull>
+    @OneToMany(mappedBy = "userRole")
+    List<AccessRule> accessRules;
 
-    //@ManyToMany
-    List<User> users; //noDto
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_role_user",
+            joinColumns = { @JoinColumn(name = "user_role_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    List<User> users;
 
-//    public UserRole(Long id, String name, SystemRole systemRole, Map<Long, AccessRule> accessRules) {
-//        this.id = id;
-//        this.name = name;
-//        this.systemRole = systemRole;
-//        this.accessRules = accessRules;
-//    }
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public SystemRole getSystemRole() {
-//        return systemRole;
-//    }
-//
-//    public void setSystemRole(SystemRole systemRole) {
-//        this.systemRole = systemRole;
-//    }
-//
-//    public Map<Long, AccessRule> getAccessRules() {
-//        return accessRules;
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        UserRole userRole = (UserRole) o;
-//        return Objects.equals(id, userRole.id);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 }

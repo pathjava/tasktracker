@@ -33,31 +33,33 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-//    private List<UserRole> roles;
+    @Lazy
+    @ManyToMany(mappedBy = "users")
+    private List<UserRole> roles;
 
     @Lazy
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    List<Project> projectsOwner;
+    private List<Project> projectsOwner;
 
     @Lazy
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    List<Task> tasksAuthor;
+    private List<Task> tasksAuthor;
 
     @Lazy
     @OneToMany(mappedBy = "executor", fetch = FetchType.LAZY)
-    List<Task> tasksExecutor;
+    private List<Task> tasksExecutor;
 
     @Lazy
     @OneToMany(mappedBy = "worker", fetch = FetchType.LAZY)
-    List<WorkLog> workLogs;
+    private List<WorkLog> workLogs;
 
     @Lazy
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    List<TaskNote> taskNotesAuthor;
+    private List<TaskNote> taskNotesAuthor;
 
     @Lazy
     @OneToMany(mappedBy = "updater", fetch = FetchType.LAZY)
-    List<TaskNote> taskNotesUpdater;
+    private List<TaskNote> taskNotesUpdater;
 
 
 }

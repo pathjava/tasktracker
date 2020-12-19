@@ -21,16 +21,15 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
 
     @Override
     public UserRole toModel(UserRoleDtoFull dto) {
-        if (dto == null)
+//        if (dto == null)
             return null;
-//        HashMap<Long, AccessRule> ruleMap = new HashMap<>();
-        List<AccessRule> rules = new ArrayList<>();
-        List<Long> ruleIds = dto.getAccessRules();
-        for (Long ruleId : ruleIds) {
-            AccessRule rule = accessRuleGetService.get(ruleId);
-            rules.add(rule);
-        }
-        return new UserRole(dto.getId(), dto.getName(), dto.getSystemRole(), rules);
+//        List<AccessRule> rules = new ArrayList<>();
+//        List<Long> ruleIds = dto.getAccessRules();
+//        for (Long ruleId : ruleIds) {
+//            AccessRule rule = accessRuleGetService.get(ruleId);
+//            rules.add(rule);
+//        }
+//        return new UserRole(dto.getId(), dto.getName(), dto.getSystemRole(), rules);
     }
 
     @Override

@@ -9,10 +9,11 @@ import ru.progwards.tasktracker.service.vo.AccessRule;
 public class AccessRuleConverter implements Converter<AccessRuleEntity, AccessRule> {
     @Override
     public AccessRule toVo(AccessRuleEntity entity) {
-        if (entity == null)
-            return null;
-        return new AccessRule(entity.getId(), entity.getObjectName(), entity.getPropertyName(), entity.getObjectId(),
-                entity.getAccessType());
+//        if (entity == null)
+//            return null;
+//        return new AccessRule(entity.getId(), entity.getObjectName(), entity.getPropertyName(), entity.getObjectId(),
+//                entity.getAccessType());
+        return null;
     }
 
     @Override

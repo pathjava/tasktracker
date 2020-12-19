@@ -9,10 +9,11 @@ import ru.progwards.tasktracker.service.vo.AccessRule;
 public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessRuleDtoFull> {
     @Override
     public AccessRule toModel(AccessRuleDtoFull dto) {
-        if (dto == null)
-            return null;
-        return new AccessRule(dto.getId(), dto.getObjectName(), dto.getPropertyName(), dto.getObjectId(),
-                dto.getAccessType());
+//        if (dto == null)
+//            return null;
+//        return new AccessRule(dto.getId(), dto.getObjectName(), dto.getPropertyName(), dto.getObjectId(),
+//                dto.getAccessType());
+        return null;
     }
 
     @Override
