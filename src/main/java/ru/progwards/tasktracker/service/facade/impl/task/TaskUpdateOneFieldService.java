@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.facade.impl.task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.controller.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
 import ru.progwards.tasktracker.repository.entity.TaskEntity;
 import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
@@ -28,6 +29,8 @@ public class TaskUpdateOneFieldService implements UpdateOneFieldService<Task> {
      */
     @Override
     public void updateOneField(UpdateOneValue oneValue) {
+        if (oneValue.getFieldName().equals("code"))
+            throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
         repository.updateField(oneValue);
     }
 }

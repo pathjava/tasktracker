@@ -9,17 +9,17 @@
         <property name="connection.url">jdbc:mariadb://gri.myqnapcloud.com:33516/tt?serverTimezone=UTC</property>
         <property name="connection.username">ttapi</property>
         <property name="connection.password">tg2rDr3u</property>
-<!--        <property name="hibernate.default_schema">tt</property>-->
+        <!--        <property name="hibernate.default_schema">tt</property>-->
         <property name="connection.pool_size">1</property>
         <property name="hibernate.jdbc.time_zone">Europe/Moscow</property>
 
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-<!--        validate: проверяет схему, не вносит изменений в базу данных.-->
-<!--        update: обновить схему.-->
-<!--        create: создает схему, уничтожая предыдущие данные.-->
-<!--        create-drop: удалить схему при явном закрытии SessionFactory, обычно при остановке приложения.-->
-<!--        none: ничего не делает со схемой, не вносит изменений в базу данных-->
+        <!--        validate: проверяет схему, не вносит изменений в базу данных.-->
+        <!--        update: обновить схему.-->
+        <!--        create: создает схему, уничтожая предыдущие данные.-->
+        <!--        create-drop: удалить схему при явном закрытии SessionFactory, обычно при остановке приложения.-->
+        <!--        none: ничего не делает со схемой, не вносит изменений в базу данных-->
         <property name="hbm2ddl.auto">validate</property>
     </session-factory>
 </hibernate-configuration>

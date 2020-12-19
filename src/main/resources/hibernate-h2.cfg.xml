@@ -14,13 +14,11 @@
 
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-<!--        validate: проверяет схему, не вносит изменений в базу данных.-->
-<!--        update: обновить схему.-->
-<!--        create: создает схему, уничтожая предыдущие данные.-->
-<!--        create-drop: удалить схему при явном закрытии SessionFactory, обычно при остановке приложения.-->
-<!--        none: ничего не делает со схемой, не вносит изменений в базу данных-->
-        <property name="hbm2ddl.auto">validate</property>
-
-
+        <!--        validate: проверяет схему, не вносит изменений в базу данных.-->
+        <!--        update: обновить схему.-->
+        <!--        create: создает схему, уничтожая предыдущие данные.-->
+        <!--        create-drop: удалить схему при явном закрытии SessionFactory, обычно при остановке приложения.-->
+        <!--        none: ничего не делает со схемой, не вносит изменений в базу данных-->
+        <property name="hbm2ddl.auto">update</property>
     </session-factory>
 </hibernate-configuration>
