@@ -44,7 +44,7 @@ public class WorkLog {
 
     private String description;
 
-    //TODO - enum - ?
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstimateChange estimateChange;
 
