@@ -36,19 +36,20 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
      */
     @Override
     public WorkLog toVo(WorkLogEntity entity) {
-        if (entity == null)
-            return null;
-        else
-            return new WorkLog(
-                    entity.getId(),
-                    taskConverter.toVo(entity.getTask()),
-                    checkDurationEntityNotNull(entity.getSpent()),
-                    userConverter.toVo(entity.getWorker()),
-                    checkUpdatedEntityNotNull(entity.getWhen()),
-                    entity.getDescription(),
-                    null,
-                    null
-            );
+//        if (entity == null)
+//            return null;
+//        else
+//            return new WorkLog(
+//                    entity.getId(),
+//                    taskConverter.toVo(entity.getTask()),
+//                    checkDurationEntityNotNull(entity.getSpent()),
+//                    userConverter.toVo(entity.getWorker()),
+//                    checkUpdatedEntityNotNull(entity.getWhen()),
+//                    entity.getDescription(),
+//                    null,
+//                    null
+//            );
+        return null;
     }
 
     /**
@@ -82,17 +83,18 @@ public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
      */
     @Override
     public WorkLogEntity toEntity(WorkLog valueObject) {
-        if (valueObject == null)
-            return null;
-        else
-            return new WorkLogEntity(
-                    valueObject.getId(),
-                    taskConverter.toEntity(valueObject.getTask()),
-                    checkDurationValueObjectNotNull(valueObject.getSpent()),
-                    userConverter.toEntity(valueObject.getWorker()),
-                    checkZonedDateTimeValueObjectNotNull(valueObject.getWhen()),
-                    valueObject.getDescription()
-            );
+//        if (valueObject == null)
+//            return null;
+//        else
+//            return new WorkLogEntity(
+//                    valueObject.getId(),
+//                    taskConverter.toEntity(valueObject.getTask()),
+//                    checkDurationValueObjectNotNull(valueObject.getSpent()),
+//                    userConverter.toEntity(valueObject.getWorker()),
+//                    checkZonedDateTimeValueObjectNotNull(valueObject.getWhen()),
+//                    valueObject.getDescription()
+//            );
+        return null;
     }
 
     /**

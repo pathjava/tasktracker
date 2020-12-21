@@ -31,16 +31,17 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
      */
     @Override
     public RelatedTask toVo(RelatedTaskEntity entity) {
-        if (entity == null)
-            return null;
-        else {
-            return new RelatedTask(
-                    entity.getId(),
-                    typeConverter.toVo(entity.getRelationTypeEntity()),
-                    taskConverter.toVo(entity.getCurrentTask()),
-                    taskConverter.toVo(entity.getAttachedTask())
-            );
-        }
+//        if (entity == null)
+//            return null;
+//        else {
+//            return new RelatedTask(
+//                    entity.getId(),
+//                    typeConverter.toVo(entity.getRelationTypeEntity()),
+//                    taskConverter.toVo(entity.getCurrentTask()),
+//                    taskConverter.toVo(entity.getAttachedTask())
+//            );
+//        }
+        return null;
     }
 
     /**
@@ -51,15 +52,16 @@ public class RelatedTaskConverter implements Converter<RelatedTaskEntity, Relate
      */
     @Override
     public RelatedTaskEntity toEntity(RelatedTask valueObject) {
-        if (valueObject == null)
-            return null;
-        else
-            return new RelatedTaskEntity(
-                    valueObject.getId(),
-                    typeConverter.toEntity(valueObject.getRelationType()),
-                    taskConverter.toEntity(valueObject.getCurrentTask()),
-                    taskConverter.toEntity(valueObject.getAttachedTask()),
-                    false
-            );
+//        if (valueObject == null)
+//            return null;
+//        else
+//            return new RelatedTaskEntity(
+//                    valueObject.getId(),
+//                    typeConverter.toEntity(valueObject.getRelationType()),
+//                    taskConverter.toEntity(valueObject.getCurrentTask()),
+//                    taskConverter.toEntity(valueObject.getAttachedTask()),
+//                    false
+//            );
+        return null;
     }
 }

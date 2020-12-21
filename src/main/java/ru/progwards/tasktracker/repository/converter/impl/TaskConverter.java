@@ -50,32 +50,33 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      */
     @Override
     public Task toVo(TaskEntity entity) {
-        if (entity == null)
-            return null;
-        else
-            return new Task(
-                    entity.getId(),
-                    entity.getCode(),
-                    entity.getName(),
-                    entity.getDescription(),
-                    taskTypeConverter.toVo(entity.getType()),
-                    taskPriorityConverter.toVo(entity.getPriority()),
-                    projectConverter.toVo(entity.getProject()),
-                    userConverter.toVo(entity.getAuthor()),
-                    userConverter.toVo(entity.getExecutor()),
-                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), ZoneId.of("Europe/Moscow")),
-                    checkUpdatedEntityNotNull(entity.getUpdated()),
-                    workFlowStatusConverter.toVo(entity.getStatus()),
-                    //listEntityToVoWorkFlowAction(entity.getActions()),
-                    checkDurationEntityNotNull(entity.getEstimation()),
-                    checkDurationEntityNotNull(entity.getTimeSpent()),
-                    checkDurationEntityNotNull(entity.getTimeLeft()),
-                    listEntityToVoRelatedTask(entity.getRelatedTasks()),
-                    null, //TODO - check
-                    listEntityToVoTaskAttachment(entity.getAttachments()),
-                    listEntityToVoWorkLog(entity.getWorkLogs()),
-                    listEntityToVoTaskNote(entity.getNotes())
-            );
+//        if (entity == null)
+//            return null;
+//        else
+//            return new Task(
+//                    entity.getId(),
+//                    entity.getCode(),
+//                    entity.getName(),
+//                    entity.getDescription(),
+//                    taskTypeConverter.toVo(entity.getType()),
+//                    taskPriorityConverter.toVo(entity.getPriority()),
+//                    projectConverter.toVo(entity.getProject()),
+//                    userConverter.toVo(entity.getAuthor()),
+//                    userConverter.toVo(entity.getExecutor()),
+//                    ZonedDateTime.ofInstant(Instant.ofEpochSecond(entity.getCreated()), ZoneId.of("Europe/Moscow")),
+//                    checkUpdatedEntityNotNull(entity.getUpdated()),
+//                    workFlowStatusConverter.toVo(entity.getStatus()),
+//                    //listEntityToVoWorkFlowAction(entity.getActions()),
+//                    checkDurationEntityNotNull(entity.getEstimation()),
+//                    checkDurationEntityNotNull(entity.getTimeSpent()),
+//                    checkDurationEntityNotNull(entity.getTimeLeft()),
+//                    listEntityToVoRelatedTask(entity.getRelatedTasks()),
+//                    null, //TODO - check
+//                    listEntityToVoTaskAttachment(entity.getAttachments()),
+//                    listEntityToVoWorkLog(entity.getWorkLogs()),
+//                    listEntityToVoTaskNote(entity.getNotes())
+//            );
+        return null;
     }
 
     /**
@@ -163,32 +164,33 @@ public class TaskConverter implements Converter<TaskEntity, Task> {
      */
     @Override
     public TaskEntity toEntity(Task valueObject) {
-        if (valueObject == null)
-            return null;
-        else
-            return new TaskEntity(
-                    valueObject.getId(),
-                    valueObject.getCode(),
-                    valueObject.getName(),
-                    valueObject.getDescription(),
-                    taskTypeConverter.toEntity(valueObject.getType()),
-                    taskPriorityConverter.toEntity(valueObject.getPriority()),
-                    projectConverter.toEntity(valueObject.getProject()),
-                    userConverter.toEntity(valueObject.getAuthor()),
-                    userConverter.toEntity(valueObject.getExecutor()),
-                    checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),
-                    checkZonedDateTimeValueObjectNotNull(valueObject.getUpdated()),
-                    workFlowStatusConverter.toEntity(valueObject.getStatus()),
-                    null,//listVoToEntityWorkFlowAction(valueObject.getActions()),
-                    checkDurationValueObjectNotNull(valueObject.getEstimation()),
-                    checkDurationValueObjectNotNull(valueObject.getTimeSpent()),
-                    checkDurationValueObjectNotNull(valueObject.getTimeLeft()),
-                    listVoToEntityRelatedTask(valueObject.getRelatedTasks()),
-                    listVoToEntityTaskAttachment(valueObject.getAttachments()),
-                    listVoToEntityWorkLog(valueObject.getWorkLogs()),
-                    listVoToEntityTaskNote(valueObject.getNotes()),
-                    false
-            );
+//        if (valueObject == null)
+//            return null;
+//        else
+//            return new TaskEntity(
+//                    valueObject.getId(),
+//                    valueObject.getCode(),
+//                    valueObject.getName(),
+//                    valueObject.getDescription(),
+//                    taskTypeConverter.toEntity(valueObject.getType()),
+//                    taskPriorityConverter.toEntity(valueObject.getPriority()),
+//                    projectConverter.toEntity(valueObject.getProject()),
+//                    userConverter.toEntity(valueObject.getAuthor()),
+//                    userConverter.toEntity(valueObject.getExecutor()),
+//                    checkZonedDateTimeValueObjectNotNull(valueObject.getCreated()),
+//                    checkZonedDateTimeValueObjectNotNull(valueObject.getUpdated()),
+//                    workFlowStatusConverter.toEntity(valueObject.getStatus()),
+//                    null,//listVoToEntityWorkFlowAction(valueObject.getActions()),
+//                    checkDurationValueObjectNotNull(valueObject.getEstimation()),
+//                    checkDurationValueObjectNotNull(valueObject.getTimeSpent()),
+//                    checkDurationValueObjectNotNull(valueObject.getTimeLeft()),
+//                    listVoToEntityRelatedTask(valueObject.getRelatedTasks()),
+//                    listVoToEntityTaskAttachment(valueObject.getAttachments()),
+//                    listVoToEntityWorkLog(valueObject.getWorkLogs()),
+//                    listVoToEntityTaskNote(valueObject.getNotes()),
+//                    false
+//            );
+        return null;
     }
 
     /**

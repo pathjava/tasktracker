@@ -18,10 +18,11 @@ public class AccessRuleConverter implements Converter<AccessRuleEntity, AccessRu
 
     @Override
     public AccessRuleEntity toEntity(AccessRule valueObject) {
-        if (valueObject == null)
-            return null;
-        return new AccessRuleEntity(valueObject.getId(), valueObject.getObjectName(), valueObject.getPropertyName(), valueObject.getObjectId(),
-                valueObject.getAccessType());
+//        if (valueObject == null)
+//            return null;
+//        return new AccessRuleEntity(valueObject.getId(), valueObject.getObjectName(), valueObject.getPropertyName(), valueObject.getObjectId(),
+//                valueObject.getAccessType());
+        return null;
     }
     //
 }

@@ -34,17 +34,18 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
      */
     @Override
     public TaskType toVo(TaskTypeEntity entity) {
-        if (entity == null)
-            return null;
-        else {
-            return new TaskType(
-                    entity.getId(),
-                    projectConverter.toVo(entity.getProject()),
-                    workFlowConverter.toVo(entity.getWorkFlow()),
-                    entity.getName(),
-                    null //TODO - check
-            );
-        }
+//        if (entity == null)
+//            return null;
+//        else {
+//            return new TaskType(
+//                    entity.getId(),
+//                    projectConverter.toVo(entity.getProject()),
+//                    workFlowConverter.toVo(entity.getWorkFlow()),
+//                    entity.getName(),
+//                    null //TODO - check
+//            );
+//        }
+        return null;
     }
 
     /**
@@ -55,16 +56,17 @@ public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
      */
     @Override
     public TaskTypeEntity toEntity(TaskType valueObject) {
-        if (valueObject == null)
-            return null;
-        else {
-            TaskTypeEntity taskTypeEntity = taskTypeRepository.get(valueObject.getId());
-            return new TaskTypeEntity(
-                    valueObject.getId(),
-                    projectConverter.toEntity(valueObject.getProject()),
-                    workFlowConverter.toEntity(valueObject.getWorkFlow()),
-                    valueObject.getName()
-            );
-        }
+//        if (valueObject == null)
+//            return null;
+//        else {
+//            TaskTypeEntity taskTypeEntity = taskTypeRepository.get(valueObject.getId());
+//            return new TaskTypeEntity(
+//                    valueObject.getId(),
+//                    projectConverter.toEntity(valueObject.getProject()),
+//                    workFlowConverter.toEntity(valueObject.getWorkFlow()),
+//                    valueObject.getName()
+//            );
+//        }
+        return null;
     }
 }

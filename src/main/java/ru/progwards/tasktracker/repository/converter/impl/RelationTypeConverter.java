@@ -21,15 +21,16 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
      */
     @Override
     public RelationType toVo(RelationTypeEntity entity) {
-        if (entity == null)
-            return null;
-        else
-            return new RelationType(
-                    entity.getId(),
-                    entity.getName(),
-                    toVo(entity.getCounterRelation()),
-                    null //TODO - check
-            );
+//        if (entity == null)
+//            return null;
+//        else
+//            return new RelationType(
+//                    entity.getId(),
+//                    entity.getName(),
+//                    toVo(entity.getCounterRelation()),
+//                    null //TODO - check
+//            );
+        return null;
     }
 
     /**
@@ -40,13 +41,14 @@ public class RelationTypeConverter implements Converter<RelationTypeEntity, Rela
      */
     @Override
     public RelationTypeEntity toEntity(RelationType valueObject) {
-        if (valueObject == null)
-            return null;
-        else
-            return new RelationTypeEntity(
-                    valueObject.getId(),
-                    valueObject.getName(),
-                    toEntity(valueObject.getCounterRelation())
-            );
+//        if (valueObject == null)
+//            return null;
+//        else
+//            return new RelationTypeEntity(
+//                    valueObject.getId(),
+//                    valueObject.getName(),
+//                    toEntity(valueObject.getCounterRelation())
+//            );
+        return null;
     }
 }
