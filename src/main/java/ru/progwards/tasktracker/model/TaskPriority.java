@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Класс TaskPriority - бизнес-модель
+ * TaskPriority - бизнес-модель
  * @author Pavel Khovaylo
  */
 @Getter

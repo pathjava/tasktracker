@@ -44,8 +44,8 @@ public class ProjectCreateService implements CreateService<Project> {
     @Override
     public void create(Project model) {
         // если значение prefix пустое, то создание нового проекта невозможно
-        if (filterString(model.getPrefix()) == null)
-            throw new OperationIsNotPossibleException("Create not possible");
+        if ("".equals(filterString(model.getPrefix())))
+            throw new OperationIsNotPossibleException("Index is incorrect");
 
 
         // получаем список проектов, чтобы искать в них одинаковые prefix
@@ -102,29 +102,47 @@ public class ProjectCreateService implements CreateService<Project> {
     /**
      * метод фильтрует строку (prefix проекта) под нужный шаблон
      * @param str входящий prefix
-     * @return отфильтрованный prefix, либо null, если нет возможности выдать корректный результат
+     * @return отфильтрованный prefix, либо "", если нет возможности выдать корректный результат
      */
     private static String filterString(String str) {
-        String digits = "0123456789";
+        String result = "";
 
-        boolean isCorrect = false;
+        char[] chars = str.toCharArray();
 
-        // если первые символы строки содержат одну из цифр, то перебирать строку, пока не дойдем до буквы
+        // если символ строки не является буквой алфавита, то перебирать строку, пока не дойдем до буквы
         for (int i = 0; i < str.length(); i++) {
-            if (!digits.contains(str.substring(i,i+1))) {
-                str = str.substring(i);
-                isCorrect = true;
+            char ch = chars[i];
+            if (Character.isAlphabetic(ch)) {
+                result = getCorrectPrefix(str.substring(i));
+                break;
             }
         }
 
-        // если в строке есть символ алфавита, то убрать все имеющиеся пробелы
-        if (isCorrect)
-            str = str.replace(" ", "");
+        return result.length() == 1 ? "" : result;
+    }
 
-        // если длина строки > 1, то возвращаем результат
-        if (str.length() > 1)
-            return str.toUpperCase();
+    /**
+     * метод фильтрует переданную строку, убирая из неё все символы кроме букв и цифр
+     * @param str строка, для которой будет производиться фильтрация
+     * @return корретная строка, состоящая из букв и цифр
+     */
+    private static String getCorrectPrefix(String str) {
+        StringBuilder result = new StringBuilder();
 
-        return null;
+        char[] chars = str.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            char ch = chars[i];
+            if (Character.isLetterOrDigit(ch))
+                result.append(ch);
+        }
+
+        return result.toString().toUpperCase();
+    }
+
+    public static void main(String[] args) {
+        String str = ":023;']h;  ::&$%;;";
+        System.out.println(filterString(str));
+
     }
 }

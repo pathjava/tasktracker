@@ -53,8 +53,7 @@ public class Project  {
     /**
      * время создания проекта
      */
-    @Column(name = "created")//, columnDefinition= "TIMESTAMP WITH TIME ZONE")
-    //@Type(type = "java.time.ZonedDateTime")
+    @Column(name = "created")
     private ZonedDateTime created;
     /**
      * список задач проекта
