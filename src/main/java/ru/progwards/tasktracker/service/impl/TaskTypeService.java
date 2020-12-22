@@ -4,16 +4,17 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.model.WorkFlow;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryByProjectId;
+import ru.progwards.tasktracker.repository.TaskTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -25,11 +26,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskTypeService implements CreateService<TaskType>, GetService<Long, TaskType>,
         RemoveService<TaskType>, RefreshService<TaskType>,
-        GetListByProjectService<Long, TaskType>, GetListService<TaskType> {
+        GetListService<TaskType> {
 
-    private final @NonNull Repository<Long, TaskType> repository;
+    //private final @NonNull Repository<Long, TaskType> repository;
+    private TaskTypeRepository repository;
     private final @NonNull GetListService<Task> getListService;
-    private final @NonNull RepositoryByProjectId<Long, TaskType> byProjectId;
+    //private final @NonNull RepositoryByProjectId<Long, TaskType> byProjectId;
     private final @NonNull CopyService<WorkFlow> copyService;
 
     /**
@@ -46,7 +48,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
             model.setWorkFlow(copyWorkFlow);
         }
 
-        repository.create(model);
+        //repository.create(model);
+        repository.save(model);
     }
 
     /**
@@ -75,7 +78,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Override
     public TaskType get(Long id) {
-        return repository.get(id);
+        //return repository.get(id);
+        return repository.findById(id).orElseThrow(()->new NotFoundException("TaskType id="+id+" not found"));
     }
 
     /**
@@ -88,7 +92,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     public void remove(TaskType model) {
         if (checkingOtherDependenciesTaskType(model.getId()))
             throw new OperationIsNotPossibleException("Удаление невозможно, данный тип задачи используется!");
-        repository.delete(model.getId());
+        //repository.delete(model.getId());
+        repository.delete(model);
     }
 
     /**
@@ -117,7 +122,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
             model.setWorkFlow(copyWorkFlow);
         }
 
-        repository.update(model);
+        //repository.update(model);
+        repository.save(model);
     }
 
     /**
@@ -126,12 +132,12 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      * @param projectId идентификатор проекта, для которого получаем типы задач
      * @return коллекция типов задач
      */
-    @Override
+/*    @Override
     public Collection<TaskType> getListByProjectId(Long projectId) {
         return byProjectId.getByProjectId(projectId).stream()
                 .filter(entity -> entity.getProject().getId().equals(projectId))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     /**
      * Метод получения абсолютно всех типов задач
@@ -139,7 +145,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      * @return коллекция типов задач
      */
     @Override
-    public Collection<TaskType> getList() {
-        return new ArrayList<>(repository.get());
+    public List<TaskType> getList() {
+        //return new ArrayList<>(repository.get());
+        return repository.findAll();
     }
 }

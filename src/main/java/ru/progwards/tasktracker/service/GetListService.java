@@ -1,6 +1,6 @@
 package ru.progwards.tasktracker.service;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Получить все бизнес-объекты из хранилища
@@ -9,6 +9,6 @@ import java.util.Collection;
  */
 public interface GetListService<M> {
 
-    Collection<M> getList();
+    List<M> getList();
 
 }

@@ -9,6 +9,7 @@ import ru.progwards.tasktracker.service.GetListService;
 import ru.progwards.tasktracker.model.Project;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +35,7 @@ public class ProjectGetListService implements GetListService<Project> {
      * @return список всех проектов из репозитория
      */
     @Override
-    public Collection<Project> getList() {
+    public List<Project> getList() {
         // получаем список, если isDeleted = false
         return repository.get().stream().filter(e -> !e.isDeleted()).
                 map(e -> converter.toVo(e)).collect(Collectors.toList());

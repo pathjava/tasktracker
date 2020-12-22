@@ -5,6 +5,7 @@ import ru.progwards.tasktracker.service.GetListService;
 import ru.progwards.tasktracker.model.types.EstimateChange;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,9 +24,10 @@ public class EstimateChangeGetListService implements GetListService<String> {
      * @return коллекцию строковых значений
      */
     @Override
-    public Collection<String> getList() {
+    public List<String> getList() {
         return Stream.of(EstimateChange.values())
                 .map(EstimateChange::name)
                 .collect(Collectors.toList());
     }
+
 }

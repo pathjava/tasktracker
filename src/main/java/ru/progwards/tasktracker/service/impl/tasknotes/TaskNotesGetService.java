@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.impl.tasknotes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskNoteEntity;
 import ru.progwards.tasktracker.repository.deprecated.impl.TaskNoteRepository;
 import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.TaskNote;
@@ -16,7 +17,7 @@ import ru.progwards.tasktracker.model.TaskNote;
 @Service
 public class TaskNotesGetService implements GetService<Long, TaskNote> {
 
-    private Repository<Long, TaskNote> tnRepository;
+    private Repository<Long, TaskNoteEntity> tnRepository;
 //    private Converter<TaskNoteEntity, TaskNote> converterTN;
 
     @Autowired

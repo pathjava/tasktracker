@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<WorkFlow>, GetService<Long, WorkFlow>, RefreshService<WorkFlow>, GetListService<WorkFlow>, CopyService<WorkFlow> {
 
-    @Autowired
+    //@Autowired
     private Repository<Long, WorkFlowEntity> workFlowRepository;
     @Autowired
     private Converter<WorkFlowEntity, WorkFlow> workFlowConverter;
@@ -82,7 +82,7 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
      * @return список Workflow
      */
     @Override
-    public Collection<WorkFlow> getList() {
+    public List<WorkFlow> getList() {
         // получили список сущностей
         Collection<WorkFlowEntity> WorkFlowEntities = workFlowRepository.get();
         List<WorkFlow> WorkFlows = new ArrayList<>(WorkFlowEntities.size());

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.deprecated.RepositoryByTaskId;
 import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskNoteEntity;
 import ru.progwards.tasktracker.service.GetListByTaskService;
 import ru.progwards.tasktracker.model.TaskNote;
 
@@ -17,11 +18,11 @@ import java.util.Collection;
 @Service
 public class TaskNotesGetListByTaskService implements GetListByTaskService<Long, TaskNote> {
 
-    private RepositoryByTaskId<Long, TaskNote> repository;
-    private Converter<TaskNote, TaskNote> converter;
+    private RepositoryByTaskId<Long, TaskNoteEntity> repository;
+    private Converter<TaskNoteEntity, TaskNote> converter;
 
     @Autowired
-    public void setRepository(RepositoryByTaskId<Long, TaskNote> repository) {
+    public void setRepository(RepositoryByTaskId<Long, TaskNoteEntity> repository) {
         this.repository = repository;
     }
 

@@ -12,6 +12,7 @@ import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -114,7 +115,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
      * @return коллекция всех связей задач
      */
     @Override
-    public Collection<RelatedTask> getList() {
+    public List<RelatedTask> getList() {
         return repository.get().stream()
                 .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());

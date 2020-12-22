@@ -8,6 +8,7 @@ import java.util.Collection;
  * @param <T> тип идентификатора (Long)
  * @param <M> бизнес-объект в списке
  */
+@Deprecated
 public interface GetListByAttachedTaskId<T, M> {
 
     Collection<M> getListByAttachedTaskId(T taskId);

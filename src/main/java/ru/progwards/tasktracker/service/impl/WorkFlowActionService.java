@@ -21,11 +21,11 @@ import java.util.List;
 @Service
 public class WorkFlowActionService implements CreateService<WorkFlowAction>, RemoveService<WorkFlowAction>, GetListService<WorkFlowAction>, GetService<Long, WorkFlowAction>, RefreshService<WorkFlowAction>, GetListByParentService<Long, WorkFlowAction> {
 
-    @Autowired
+    //@Autowired
     private Repository<Long, WorkFlowActionEntity> workFlowActionRepository;
     @Autowired
     private Converter<WorkFlowActionEntity, WorkFlowAction> workFlowActionConverter;
-    @Autowired
+    //@Autowired
     private RepositoryByParentId<Long, WorkFlowActionEntity> workFlowActionEntityRepositoryByParentId;
 
 
@@ -100,7 +100,7 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
      * @return
      */
     @Override
-    public Collection<WorkFlowAction> getList() {
+    public List<WorkFlowAction> getList() {
         // получили список сущностей
         Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionRepository.get();
         List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());

@@ -2,11 +2,9 @@ package ru.progwards.tasktracker.repository.deprecated.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.entity.AttachmentContentEntity;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
+import ru.progwards.tasktracker.repository.deprecated.RepositoryByParentId;
+import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowStatusEntity;
 
 import java.io.*;
 import java.util.*;
@@ -20,19 +18,15 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author Gregory Lobkov
  */
-@Transactional(readOnly = true)
 @org.springframework.stereotype.Repository
-public class AttachmentContentRepository implements Repository<Long, AttachmentContentEntity> {
-
-//    @Autowired
-//    private TaskTypeRepository<?, Long> repository;
+public class WorkFlowStatusEntityRepository implements Repository<Long, WorkFlowStatusEntity>, RepositoryByParentId<Long, WorkFlowStatusEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "src/main/resources/data/attachmentContent.json";
+    private String fileName = "src/main/resources/data/WorkFlowStatus.json";
 
-    public AttachmentContentRepository() throws IOException {
+    public WorkFlowStatusEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();
@@ -66,7 +60,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      * @param entity добавляемый объект
      */
     @Override
-    public void create(AttachmentContentEntity entity) {
+    public void create(WorkFlowStatusEntity entity) {
         if (entity.getId() == null)
             entity.setId(new Random().nextLong());
         String newLine = json.toJson(entity);
@@ -97,7 +91,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      * @throws NoSuchElementException если не смог найти объект в хранилище
      */
     @Override
-    public void update(AttachmentContentEntity entity) {
+    public void update(WorkFlowStatusEntity entity) {
         update(entity, false, true);
     }
 
@@ -112,10 +106,10 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      *                                    - метод не добавит объект даже если {@code addIfNotFound = true}
      * @throws NoSuchElementException если не смог найти объект в хранилище (когда {@code throwIfNotFound = true})
      */
-    private void update(AttachmentContentEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
+    private void update(WorkFlowStatusEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            AttachmentContentEntity instance = new AttachmentContentEntity();
+            WorkFlowStatusEntity instance = new WorkFlowStatusEntity();
             Long id = entity.getId();
             String newLine = json.toJson(entity);
             boolean found = false;
@@ -130,7 +124,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
                 String line = bufferedReader.readLine();
                 while (line != null) {
                     if (!found) {
-                        instance = json.fromJson(line, AttachmentContentEntity.class);
+                        instance = json.fromJson(line, WorkFlowStatusEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             line = newLine;
                             found = true;
@@ -159,7 +153,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
 
             // лочим чтение и подменяем на обновленный файл
             replaceFile(file, file2);
-
+            
         } finally {
             lockWrite.unlock();
         }
@@ -188,7 +182,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
     public void delete(Long id, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            AttachmentContentEntity instance = new AttachmentContentEntity();
+            WorkFlowStatusEntity instance = new WorkFlowStatusEntity();
             boolean found = false;
             // предпологается создать клон основного файла, а только потом лочить чтение, чтобы переименовать файлы
             File file2 = new File(fileName + "_tmp");
@@ -202,7 +196,7 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
                     if (found) {
                         printWriter.println(line);
                     } else {
-                        instance = json.fromJson(line, AttachmentContentEntity.class);
+                        instance = json.fromJson(line, WorkFlowStatusEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             found = true;
                         } else {
@@ -256,16 +250,16 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      *
      * @return список всех POJO-объектов из хранилища
      */
-    public Collection<AttachmentContentEntity> get() {
-        List<AttachmentContentEntity> result = new ArrayList<>();
+    public Collection<WorkFlowStatusEntity> get() {
+        List<WorkFlowStatusEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    AttachmentContentEntity instance = new AttachmentContentEntity();
-                    instance = json.fromJson(line, AttachmentContentEntity.class);
+                    WorkFlowStatusEntity instance = new WorkFlowStatusEntity();
+                    instance = json.fromJson(line, WorkFlowStatusEntity.class);
                     result.add(instance);
                     line = bufferedReader.readLine();
                 }
@@ -285,15 +279,15 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
      * @return POJO-объект
      */
     @Override
-    public AttachmentContentEntity get(Long id) {
+    public WorkFlowStatusEntity get(Long id) {
         lockRead.readLock().lock();
         try {
-            AttachmentContentEntity instance = new AttachmentContentEntity();
+            WorkFlowStatusEntity instance = new WorkFlowStatusEntity();
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    instance = json.fromJson(line, AttachmentContentEntity.class);
+                    instance = json.fromJson(line, WorkFlowStatusEntity.class);
                     if (id.compareTo(instance.getId())==0) return instance;
                     line = bufferedReader.readLine();
                 }
@@ -304,6 +298,37 @@ public class AttachmentContentRepository implements Repository<Long, AttachmentC
             lockRead.readLock().unlock();
         }
         throw new NoSuchElementException("Cannot find id='" + id + "'");
+    }
+
+    /**
+     * Получить список сущностей по идентификатору родителя
+     *
+     * @param parentId идентификатор родителя
+     * @return спиок сущностей
+     */
+    @Override
+    public Collection<WorkFlowStatusEntity> getByParentId(Long parentId) {
+        List<WorkFlowStatusEntity> result = new ArrayList<>();
+        lockRead.readLock().lock();
+        try {
+            try (FileReader fileReader = new FileReader(file);
+                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                String line = bufferedReader.readLine();
+                while (line != null) {
+                    WorkFlowStatusEntity instance = new WorkFlowStatusEntity();
+                    instance = json.fromJson(line, WorkFlowStatusEntity.class);
+                    if(instance.getWorkflow_id().equals(parentId)) {
+                        result.add(instance);
+                    }
+                    line = bufferedReader.readLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            lockRead.readLock().unlock();
+        }
+        return result;
     }
 
 }

@@ -2,12 +2,14 @@ package ru.progwards.tasktracker.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.model.TaskType;
 
 /**
  * @author Oleg Kiselev
  */
+@Repository
 @NoRepositoryBean
 @Transactional(readOnly = true)
 public interface TaskTypeRepository extends JpaRepository<TaskType, Long> {

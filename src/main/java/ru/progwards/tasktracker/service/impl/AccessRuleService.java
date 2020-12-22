@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
+import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.AccessRule;
 
@@ -13,7 +14,7 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
         RefreshService<AccessRule>, RemoveService<AccessRule> {
 
     @Autowired
-    private Repository<Long, AccessRule> accessRuleRepository;
+    private Repository<Long, AccessRuleEntity> accessRuleRepository;
 //    @Autowired
 //    private Converter<AccessRule, AccessRule> accessRuleConverter;
 

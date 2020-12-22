@@ -11,6 +11,7 @@ import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskPriority;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +51,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      * @return список TaskPriority
      */
     @Override
-    public Collection<TaskPriority> getList() {
+    public List<TaskPriority> getList() {
         return repository.get().stream().map(e -> converter.toVo(e)).collect(Collectors.toList());
     }
 

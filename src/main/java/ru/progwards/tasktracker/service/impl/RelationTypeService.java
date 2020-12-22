@@ -11,6 +11,7 @@ import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -24,7 +25,7 @@ public class RelationTypeService implements GetService<Long, RelationType>,
         CreateService<RelationType>, RemoveService<RelationType>,
         RefreshService<RelationType>, GetListService<RelationType> {
 
-    @Autowired
+
     private Repository<Long, RelationTypeEntity> repository;
     @Autowired
     private Converter<RelationTypeEntity, RelationType> converter;
@@ -48,7 +49,7 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      * @return коллекция типов отношений
      */
     @Override
-    public Collection<RelationType> getList() {
+    public List<RelationType> getList() {
         return repository.get().stream()
                 .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());

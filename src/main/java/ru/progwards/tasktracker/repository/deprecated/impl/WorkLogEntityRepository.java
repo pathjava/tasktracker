@@ -1,29 +1,28 @@
 package ru.progwards.tasktracker.repository.deprecated.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.repository.deprecated.JsonHandler;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
 import ru.progwards.tasktracker.repository.deprecated.RepositoryByTaskId;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
-import ru.progwards.tasktracker.model.WorkLog;
+import ru.progwards.tasktracker.repository.deprecated.entity.WorkLogEntity;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Методы работы сущности с базой данных
  *
  * @author Oleg Kiselev
  */
-@Transactional(readOnly = true)
 @org.springframework.stereotype.Repository
-public class WorkLogRepository implements Repository<Long, WorkLog>,
-        RepositoryByTaskId<Long, WorkLog> {
+public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity>,
+        RepositoryByTaskId<Long, WorkLogEntity> {
 
-//    @Autowired
-//    private TaskTypeRepository<WorkLog, Long> repository;
+    @Autowired
+    private JsonHandler<Long, WorkLogEntity> jsonHandler;
 
     @Override
-    public Collection<WorkLog> get() {
+    public Collection<WorkLogEntity> get() {
         return null;
     }
 
@@ -34,9 +33,8 @@ public class WorkLogRepository implements Repository<Long, WorkLog>,
      * @return найденный лог
      */
     @Override
-    public WorkLog get(Long id) {
-//        return jsonHandler.getMap().get(id);
-        return null;
+    public WorkLogEntity get(Long id) {
+        return jsonHandler.getMap().get(id);
     }
 
     /**
@@ -45,10 +43,10 @@ public class WorkLogRepository implements Repository<Long, WorkLog>,
      * @param entity новая сущность
      */
     @Override
-    public void create(WorkLog entity) {
-//        WorkLog logEntity = jsonHandler.getMap().put(entity.getId(), entity);
-//        if (logEntity == null)
-//            jsonHandler.write();
+    public void create(WorkLogEntity entity) {
+        WorkLogEntity logEntity = jsonHandler.getMap().put(entity.getId(), entity);
+        if (logEntity == null)
+            jsonHandler.write();
     }
 
     /**
@@ -57,9 +55,9 @@ public class WorkLogRepository implements Repository<Long, WorkLog>,
      * @param entity обновленная сущность
      */
     @Override
-    public void update(WorkLog entity) {
-//        jsonHandler.getMap().remove(entity.getId());
-//        create(entity);
+    public void update(WorkLogEntity entity) {
+        jsonHandler.getMap().remove(entity.getId());
+        create(entity);
     }
 
     /**
@@ -69,11 +67,11 @@ public class WorkLogRepository implements Repository<Long, WorkLog>,
      */
     @Override
     public void delete(Long id) {
-//        WorkLog entity = get(id);
-//        if (entity != null) {
-//            jsonHandler.getMap().remove(id);
-//            jsonHandler.write();
-//        }
+        WorkLogEntity entity = get(id);
+        if (entity != null) {
+            jsonHandler.getMap().remove(id);
+            jsonHandler.write();
+        }
     }
 
     /**
@@ -83,10 +81,9 @@ public class WorkLogRepository implements Repository<Long, WorkLog>,
      * @return коллекция логов
      */
     @Override
-    public Collection<WorkLog> getByTaskId(Long taskId) {
-//        return jsonHandler.getMap().values().stream()
-//                .filter(entity -> entity.getTask().getId().equals(taskId))
-//                .collect(Collectors.toList());
-        return null;
+    public Collection<WorkLogEntity> getByTaskId(Long taskId) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getTask().getId().equals(taskId))
+                .collect(Collectors.toList());
     }
 }

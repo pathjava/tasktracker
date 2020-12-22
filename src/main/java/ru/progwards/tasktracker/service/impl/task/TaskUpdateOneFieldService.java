@@ -18,8 +18,8 @@ import ru.progwards.tasktracker.model.UpdateOneValue;
 @Service
 public class TaskUpdateOneFieldService implements UpdateOneFieldService<Task> {
 
-    @Qualifier("taskRepository")
-    @Autowired
+    //@Qualifier("taskRepository")
+    //@Autowired
     private RepositoryUpdateField<TaskEntity> repository;
 
     /**

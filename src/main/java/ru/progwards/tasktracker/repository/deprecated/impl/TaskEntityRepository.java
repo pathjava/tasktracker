@@ -1,32 +1,26 @@
 package ru.progwards.tasktracker.repository.deprecated.impl;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryByCode;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryByProjectId;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryUpdateField;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
-import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.repository.deprecated.*;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskEntity;
 import ru.progwards.tasktracker.model.UpdateOneValue;
 
 import java.lang.reflect.Field;
+import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Методы работы сущности с базой данных
  *
  * @author Oleg Kiselev
  */
-@Transactional(readOnly = true)
 @org.springframework.stereotype.Repository
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class TaskRepository implements Repository<Long, Task>, RepositoryByProjectId<Long, Task>,
-        RepositoryUpdateField<Task>, RepositoryByCode<String, Task> {
+public class TaskEntityRepository implements Repository<Long, TaskEntity>, RepositoryByProjectId<Long, TaskEntity>,
+        RepositoryUpdateField<TaskEntity>, RepositoryByCode<String, TaskEntity> {
 
-//    private final @NonNull TaskTypeRepository<Task, Long> repository;
+    @Autowired
+    private JsonHandler<Long, TaskEntity> jsonHandler;
 
     /**
      * Метод получения коллекции всех задач без привязки к какому-либо проекту
@@ -34,11 +28,10 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      * @return возвращаем коллекцию всех задач, не помеченных как удаленные
      */
     @Override
-    public Collection<Task> get() {
-//        return jsonHandler.getMap().values().stream()
-//                .filter(entity -> !entity.isDeleted())
-//                .collect(Collectors.toList());
-        return null;
+    public Collection<TaskEntity> get() {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> !entity.isDeleted())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -48,10 +41,9 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      * @return возвращаем задачу, полученную по идентификатору
      */
     @Override
-    public Task get(Long id) {
-//        Task task = jsonHandler.getMap().get(id);
-//        return task == null || task.isDeleted() ? null : task;
-        return null;
+    public TaskEntity get(Long id) {
+        TaskEntity task = jsonHandler.getMap().get(id);
+        return task == null || task.isDeleted() ? null : task;
     }
 
     /**
@@ -60,10 +52,10 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      * @param entity записываемая в БД сущность
      */
     @Override
-    public void create(Task entity) {
-//        Task task = jsonHandler.getMap().put(entity.getId(), entity);
-//        if (task == null)
-//            jsonHandler.write();
+    public void create(TaskEntity entity) {
+        TaskEntity task = jsonHandler.getMap().put(entity.getId(), entity);
+        if (task == null)
+            jsonHandler.write();
     }
 
     /**
@@ -72,10 +64,10 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      * @param entity сущность обновляемой задачи
      */
     @Override
-    public void update(Task entity) {
-//        jsonHandler.getMap().remove(entity.getId());
-//        entity.setUpdated(ZonedDateTime.now().toEpochSecond());
-//        create(entity);
+    public void update(TaskEntity entity) {
+        jsonHandler.getMap().remove(entity.getId());
+        entity.setUpdated(ZonedDateTime.now().toEpochSecond());
+        create(entity);
     }
 
     /**
@@ -85,12 +77,12 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      */
     @Override
     public void delete(Long id) {
-//        Task task = get(id);
-//        if (task != null) {
-//            jsonHandler.getMap().remove(id);
-//            task.setDeleted(true);
-//            create(task);
-//        }
+        TaskEntity task = get(id);
+        if (task != null) {
+            jsonHandler.getMap().remove(id);
+            task.setDeleted(true);
+            create(task);
+        }
     }
 
     /**
@@ -100,11 +92,10 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      * @return возвращаем коллекцию всех задач проекта, не помеченных как удаленные
      */
     @Override
-    public Collection<Task> getByProjectId(Long projectId) {
-//        return jsonHandler.getMap().values().stream()
-//                .filter(entity -> entity.getProject().getId().equals(projectId) && !entity.isDeleted())
-//                .collect(Collectors.toList());
-        return null;
+    public Collection<TaskEntity> getByProjectId(Long projectId) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getProject().getId().equals(projectId) && !entity.isDeleted())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -114,7 +105,7 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      */
     @Override
     public void updateField(UpdateOneValue oneValue) {
-        Task entity = get(oneValue.getId());
+        TaskEntity entity = get(oneValue.getId());
         String field = oneValue.getFieldName();
 
         for (Field declaredField : entity.getClass().getDeclaredFields()) {
@@ -138,11 +129,10 @@ public class TaskRepository implements Repository<Long, Task>, RepositoryByProje
      * @return возвращает сущность из БД
      */
     @Override
-    public Task getByCode(String code) {
-//        return jsonHandler.getMap().values().stream()
-//                .filter(entity -> entity.getCode().equals(code) && !entity.isDeleted())
-//                .findFirst().orElse(null);
-        return null;
+    public TaskEntity getByCode(String code) {
+        return jsonHandler.getMap().values().stream()
+                .filter(entity -> entity.getCode().equals(code) && !entity.isDeleted())
+                .findFirst().orElse(null);
     }
 }
 

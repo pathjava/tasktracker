@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
 import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskNoteEntity;
 import ru.progwards.tasktracker.service.CreateService;
 import ru.progwards.tasktracker.model.TaskNote;
 
@@ -18,13 +19,13 @@ import java.util.Random;
 @Service
 public class TaskNotesCreateService implements CreateService<TaskNote> {
 
-    private Repository<Long, TaskNote> tnRepository;
-    private Converter<TaskNote, TaskNote> converterTN;
+    private Repository<Long, TaskNoteEntity> tnRepository;
+    private Converter<TaskNoteEntity, TaskNote> converterTN;
 
     @Autowired
     public void setTaskNotesRepository(
-            Repository<Long, TaskNote> tnRepository,
-            Converter<TaskNote, TaskNote> converterTN
+            Repository<Long, TaskNoteEntity> tnRepository,
+            Converter<TaskNoteEntity, TaskNote> converterTN
     ) {
         this.tnRepository = tnRepository;
         this.converterTN = converterTN;

@@ -9,10 +9,12 @@ import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.TaskType;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -36,10 +38,12 @@ public class TaskTypeController {
     private RemoveService<TaskType> removeService;
     @Autowired
     private RefreshService<TaskType> refreshService;
-    @Autowired
-    private GetListByProjectService<Long, TaskType> byProjectService;
+//    @Autowired
+//    private GetListByProjectService<Long, TaskType> byProjectService;
     @Autowired
     private Converter<TaskType, TaskTypeDtoFull> converter;
+    @Autowired
+    private GetService<Long, Project> getProjectService;
 
     /**
      * Метод создания типа задачи
@@ -149,14 +153,18 @@ public class TaskTypeController {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<TaskTypeDtoFull> collection = byProjectService.getListByProjectId(id).stream()
+//        Collection<TaskTypeDtoFull> collection = byProjectService.getListByProjectId(id).stream()
+//                .map(taskType -> converter.toDto(taskType))
+//                .collect(Collectors.toList());
+        Project project = getProjectService.get(id);
+        List<TaskTypeDtoFull> list = project.getTaskTypes().stream()
                 .map(taskType -> converter.toDto(taskType))
                 .collect(Collectors.toList());
 
-        if (collection.isEmpty())
+        if (list.isEmpty())
             throw new NotFoundException("Список типов задач пустой!");
 
-        return new ResponseEntity<>(collection, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }

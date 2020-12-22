@@ -9,6 +9,7 @@ import ru.progwards.tasktracker.service.GetListService;
 import ru.progwards.tasktracker.model.Task;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +31,7 @@ public class TaskGetListService implements GetListService<Task> {
      * @return коллекцию задач (может иметь пустое значение)
      */
     @Override
-    public Collection<Task> getList() {
+    public List<Task> getList() {
         return repository.get().stream()
                 .map(entity -> converter.toVo(entity))
                 .collect(Collectors.toList());

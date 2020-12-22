@@ -75,7 +75,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      * @return список User
      */
     @Override
-    public Collection<User> getList() {
+    public List<User> getList() {
         // получили список сущностей
         Collection<UserEntity> UserEntities = userRepository.get();
         List<User> Users = new ArrayList<>(UserEntities.size());

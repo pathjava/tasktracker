@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.impl.tasknotes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskNoteEntity;
 import ru.progwards.tasktracker.repository.deprecated.impl.TaskNoteRepository;
 import ru.progwards.tasktracker.service.RemoveService;
 import ru.progwards.tasktracker.model.TaskNote;
@@ -15,12 +16,8 @@ import ru.progwards.tasktracker.model.TaskNote;
 @Service
 public class TaskNotesDeleteService implements RemoveService<TaskNote> {
 
-    private Repository<Long, TaskNote> tnRepository;
-
     @Autowired
-    public void setTnRepository(TaskNoteRepository tnRepository) {
-        this.tnRepository = tnRepository;
-    }
+    private Repository<Long, TaskNoteEntity> tnRepository;
 
     /**
      * @param taskN  value object - комментарий, который необходимо удалить

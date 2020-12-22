@@ -10,6 +10,7 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, GetListService<WorkFlowStatus>, RefreshService<WorkFlowStatus>, GetListByParentService<Long, WorkFlowStatus> {
 
-    @Autowired
+    //@Autowired
     private Repository<Long, WorkFlowStatusEntity> workFlowStatusRepository;
     @Autowired
     private Converter<WorkFlowStatusEntity, WorkFlowStatus> workFlowStatusConverter;
-    @Autowired
+    //@Autowired
     private RepositoryByParentId<Long, WorkFlowStatusEntity> workFlowStatusEntityRepositoryByParentId;
 
 
@@ -96,7 +97,7 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
      * @return список статусов
      */
     @Override
-    public Collection<WorkFlowStatus> getList() {
+    public List<WorkFlowStatus> getList() {
         return workFlowStatusRepository.get().stream()
                 .map(workFlowEntity -> workFlowStatusConverter.toVo(workFlowEntity))
                 .collect(Collectors.toList());

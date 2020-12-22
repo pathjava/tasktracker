@@ -1,24 +1,23 @@
 package ru.progwards.tasktracker.repository.deprecated.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.repository.deprecated.JsonHandler;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
-import ru.progwards.tasktracker.model.RelationType;
+import ru.progwards.tasktracker.repository.deprecated.entity.RelationTypeEntity;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Методы для работы с БД для сущности типа отношения связанных задач
  *
  * @author Oleg Kiselev
  */
-@Transactional(readOnly = true)
 @org.springframework.stereotype.Repository
-public class RelationTypeRepository implements Repository<Long, RelationType> {
+public class RelationTypeEntityRepository implements Repository<Long, RelationTypeEntity> {
 
-//    @Autowired
-//    private TaskTypeRepository<RelationType, Long> repository;
+    @Autowired
+    private JsonHandler<Long, RelationTypeEntity> jsonHandler;
 
     /**
      * Метод получения коллекции сущностей типов отношений связанных задач
@@ -26,10 +25,9 @@ public class RelationTypeRepository implements Repository<Long, RelationType> {
      * @return коллекция сущностей
      */
     @Override
-    public Collection<RelationType> get() {
-//        return jsonHandler.getMap().values().stream()
-//                .collect(Collectors.toUnmodifiableList());
-        return null;
+    public Collection<RelationTypeEntity> get() {
+        return jsonHandler.getMap().values().stream()
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -39,9 +37,8 @@ public class RelationTypeRepository implements Repository<Long, RelationType> {
      * @return полученная из БД сущность
      */
     @Override
-    public RelationType get(Long id) {
-//        return jsonHandler.getMap().get(id);
-        return null;
+    public RelationTypeEntity get(Long id) {
+        return jsonHandler.getMap().get(id);
     }
 
     /**
@@ -50,10 +47,10 @@ public class RelationTypeRepository implements Repository<Long, RelationType> {
      * @param entity новая сущность
      */
     @Override
-    public void create(RelationType entity) {
-//        RelationType typeEntity = jsonHandler.getMap().put(entity.getId(), entity);
-//        if (typeEntity == null)
-//            jsonHandler.write();
+    public void create(RelationTypeEntity entity) {
+        RelationTypeEntity typeEntity = jsonHandler.getMap().put(entity.getId(), entity);
+        if (typeEntity == null)
+            jsonHandler.write();
     }
 
     /**
@@ -62,9 +59,9 @@ public class RelationTypeRepository implements Repository<Long, RelationType> {
      * @param entity измененная сущность
      */
     @Override
-    public void update(RelationType entity) {
-//        jsonHandler.getMap().remove(entity.getId());
-//        create(entity);
+    public void update(RelationTypeEntity entity) {
+        jsonHandler.getMap().remove(entity.getId());
+        create(entity);
     }
 
     /**
@@ -74,10 +71,10 @@ public class RelationTypeRepository implements Repository<Long, RelationType> {
      */
     @Override
     public void delete(Long id) {
-//        RelationType entity = get(id);
-//        if (entity != null) {
-//            jsonHandler.getMap().remove(entity.getId());
-//            jsonHandler.write();
-//        }
+        RelationTypeEntity entity = get(id);
+        if (entity != null) {
+            jsonHandler.getMap().remove(entity.getId());
+            jsonHandler.write();
+        }
     }
 }

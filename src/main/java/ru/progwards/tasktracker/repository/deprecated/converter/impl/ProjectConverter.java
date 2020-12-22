@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.repository.deprecated.entity.ProjectEntity;
 import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskTypeEntity;
 import ru.progwards.tasktracker.service.GetListByProjectService;
 import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.Project;
@@ -26,8 +27,8 @@ public class ProjectConverter implements Converter<ProjectEntity, Project> {
     @Autowired
     private GetService<Long, User> userGetService;
 
-    @Autowired
-    private GetListByProjectService<Long, TaskType> taskTypeGetListByProjectService;
+    //@Autowired
+    private GetListByProjectService<Long, TaskType> taskTypeGetListByProjectService; // внедряем гибернейт!
 
     /**
      * метод по преобразованию сущности репозитория в бизнес-модель

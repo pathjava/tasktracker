@@ -2,12 +2,9 @@ package ru.progwards.tasktracker.repository.deprecated.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
 import ru.progwards.tasktracker.repository.deprecated.RepositoryByParentId;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
-import ru.progwards.tasktracker.model.WorkFlowStatus;
+import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowActionEntity;
 
 import java.io.*;
 import java.util.*;
@@ -21,20 +18,15 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author Gregory Lobkov
  */
-@Transactional(readOnly = true)
 @org.springframework.stereotype.Repository
-public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus>,
-        RepositoryByParentId<Long, WorkFlowStatus> {
-
-//    @Autowired
-//    private TaskTypeRepository<WorkFlowStatus, Long> repository;
+public class WorkFlowActionEntityRepository implements Repository<Long, WorkFlowActionEntity>, RepositoryByParentId<Long, WorkFlowActionEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
-    private String fileName = "src/main/resources/data/WorkFlowStatus.json";
+    private String fileName = "src/main/resources/data/WorkFlowAction.json";
 
-    public WorkFlowStatusRepository() throws IOException {
+    public WorkFlowActionEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();
@@ -68,7 +60,7 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
      * @param entity добавляемый объект
      */
     @Override
-    public void create(WorkFlowStatus entity) {
+    public void create(WorkFlowActionEntity entity) {
         if (entity.getId() == null)
             entity.setId(new Random().nextLong());
         String newLine = json.toJson(entity);
@@ -99,7 +91,7 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
      * @throws NoSuchElementException если не смог найти объект в хранилище
      */
     @Override
-    public void update(WorkFlowStatus entity) {
+    public void update(WorkFlowActionEntity entity) {
         update(entity, false, true);
     }
 
@@ -114,10 +106,10 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
      *                                    - метод не добавит объект даже если {@code addIfNotFound = true}
      * @throws NoSuchElementException если не смог найти объект в хранилище (когда {@code throwIfNotFound = true})
      */
-    private void update(WorkFlowStatus entity, boolean addIfNotFound, boolean throwIfNotFound) {
+    private void update(WorkFlowActionEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            WorkFlowStatus instance = new WorkFlowStatus();
+            WorkFlowActionEntity instance = new WorkFlowActionEntity();
             Long id = entity.getId();
             String newLine = json.toJson(entity);
             boolean found = false;
@@ -132,7 +124,7 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
                 String line = bufferedReader.readLine();
                 while (line != null) {
                     if (!found) {
-                        instance = json.fromJson(line, WorkFlowStatus.class);
+                        instance = json.fromJson(line, WorkFlowActionEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             line = newLine;
                             found = true;
@@ -190,7 +182,7 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
     public void delete(Long id, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            WorkFlowStatus instance = new WorkFlowStatus();
+            WorkFlowActionEntity instance = new WorkFlowActionEntity();
             boolean found = false;
             // предпологается создать клон основного файла, а только потом лочить чтение, чтобы переименовать файлы
             File file2 = new File(fileName + "_tmp");
@@ -204,7 +196,7 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
                     if (found) {
                         printWriter.println(line);
                     } else {
-                        instance = json.fromJson(line, WorkFlowStatus.class);
+                        instance = json.fromJson(line, WorkFlowActionEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             found = true;
                         } else {
@@ -258,16 +250,16 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
      *
      * @return список всех POJO-объектов из хранилища
      */
-    public Collection<WorkFlowStatus> get() {
-        List<WorkFlowStatus> result = new ArrayList<>();
+    public Collection<WorkFlowActionEntity> get() {
+        List<WorkFlowActionEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    WorkFlowStatus instance = new WorkFlowStatus();
-                    instance = json.fromJson(line, WorkFlowStatus.class);
+                    WorkFlowActionEntity instance = new WorkFlowActionEntity();
+                    instance = json.fromJson(line, WorkFlowActionEntity.class);
                     result.add(instance);
                     line = bufferedReader.readLine();
                 }
@@ -287,15 +279,15 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
      * @return POJO-объект
      */
     @Override
-    public WorkFlowStatus get(Long id) {
+    public WorkFlowActionEntity get(Long id) {
         lockRead.readLock().lock();
         try {
-            WorkFlowStatus instance = new WorkFlowStatus();
+            WorkFlowActionEntity instance = new WorkFlowActionEntity();
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    instance = json.fromJson(line, WorkFlowStatus.class);
+                    instance = json.fromJson(line, WorkFlowActionEntity.class);
                     if (id.compareTo(instance.getId())==0) return instance;
                     line = bufferedReader.readLine();
                 }
@@ -315,17 +307,17 @@ public class WorkFlowStatusRepository implements Repository<Long, WorkFlowStatus
      * @return спиок сущностей
      */
     @Override
-    public Collection<WorkFlowStatus> getByParentId(Long parentId) {
-        List<WorkFlowStatus> result = new ArrayList<>();
+    public Collection<WorkFlowActionEntity> getByParentId(Long parentId) {
+        List<WorkFlowActionEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    WorkFlowStatus instance = new WorkFlowStatus();
-                    instance = json.fromJson(line, WorkFlowStatus.class);
-                    if(instance.getWorkflow().getId().equals(parentId)) {
+                    WorkFlowActionEntity instance = new WorkFlowActionEntity();
+                    instance = json.fromJson(line, WorkFlowActionEntity.class);
+                    if(instance.getParentStatus_id().equals(parentId)) {
                         result.add(instance);
                     }
                     line = bufferedReader.readLine();

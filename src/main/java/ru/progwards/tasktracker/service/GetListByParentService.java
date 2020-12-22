@@ -8,6 +8,7 @@ import java.util.Collection;
  * @param <T> тип идентификатора
  * @param <M> тип бизнес-объекта
  */
+@Deprecated
 public interface GetListByParentService<T, M> {
 
     Collection<M> getListByParentId(T parentId);

@@ -2,13 +2,10 @@ package ru.progwards.tasktracker.repository.deprecated.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
 import ru.progwards.tasktracker.repository.deprecated.RepositoryByParentId;
 import ru.progwards.tasktracker.repository.deprecated.RepositoryByTaskId;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
-import ru.progwards.tasktracker.model.TaskAttachment;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskAttachmentEntity;
 
 import java.io.*;
 import java.util.*;
@@ -22,20 +19,15 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author Gregory Lobkov
  */
-@Transactional(readOnly = true)
 @org.springframework.stereotype.Repository
-public class TaskAttachmentRepository implements Repository<Long, TaskAttachment>,
-        RepositoryByTaskId<Long, TaskAttachment>, RepositoryByParentId<Long, TaskAttachment> {
-
-//    @Autowired
-//    private TaskTypeRepository<TaskAttachment, Long> repository;
+public class TaskAttachmentEntityRepository implements Repository<Long, TaskAttachmentEntity>, RepositoryByTaskId<Long, TaskAttachmentEntity>, RepositoryByParentId<Long, TaskAttachmentEntity> {
 
     /**
      * Имя файла-хранилища данных
      */
     private String fileName = "src/main/resources/data/taskAttachment.json";
 
-    public TaskAttachmentRepository() throws IOException {
+    public TaskAttachmentEntityRepository() throws IOException {
         file = new File(fileName);
         if (!file.exists())
             file.createNewFile();
@@ -69,7 +61,7 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      * @param entity добавляемый объект
      */
     @Override
-    public void create(TaskAttachment entity) {
+    public void create(TaskAttachmentEntity entity) {
         if (entity.getId() == null)
             entity.setId(new Random().nextLong());
         String newLine = json.toJson(entity);
@@ -100,7 +92,7 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      * @throws NoSuchElementException если не смог найти объект в хранилище
      */
     @Override
-    public void update(TaskAttachment entity) {
+    public void update(TaskAttachmentEntity entity) {
         update(entity, false, true);
     }
 
@@ -115,10 +107,10 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      *                                    - метод не добавит объект даже если {@code addIfNotFound = true}
      * @throws NoSuchElementException если не смог найти объект в хранилище (когда {@code throwIfNotFound = true})
      */
-    private void update(TaskAttachment entity, boolean addIfNotFound, boolean throwIfNotFound) {
+    private void update(TaskAttachmentEntity entity, boolean addIfNotFound, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            TaskAttachment instance = new TaskAttachment();
+            TaskAttachmentEntity instance = new TaskAttachmentEntity();
             Long id = entity.getId();
             String newLine = json.toJson(entity);
             boolean found = false;
@@ -133,7 +125,7 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
                 String line = bufferedReader.readLine();
                 while (line != null) {
                     if (!found) {
-                        instance = json.fromJson(line, TaskAttachment.class);
+                        instance = json.fromJson(line, TaskAttachmentEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             line = newLine;
                             found = true;
@@ -191,7 +183,7 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
     public void delete(Long id, boolean throwIfNotFound) {
         lockWrite.lock();
         try {
-            TaskAttachment instance = new TaskAttachment();
+            TaskAttachmentEntity instance = new TaskAttachmentEntity();
             boolean found = false;
             // предпологается создать клон основного файла, а только потом лочить чтение, чтобы переименовать файлы
             File file2 = new File(fileName + "_tmp");
@@ -205,7 +197,7 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
                     if (found) {
                         printWriter.println(line);
                     } else {
-                        instance = json.fromJson(line, TaskAttachment.class);
+                        instance = json.fromJson(line, TaskAttachmentEntity.class);
                         if (id.compareTo(instance.getId())==0) {
                             found = true;
                         } else {
@@ -259,16 +251,16 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      *
      * @return список всех POJO-объектов из хранилища
      */
-    public Collection<TaskAttachment> get() {
-        List<TaskAttachment> result = new ArrayList<>();
+    public Collection<TaskAttachmentEntity> get() {
+        List<TaskAttachmentEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    TaskAttachment instance = new TaskAttachment();
-                    instance = json.fromJson(line, TaskAttachment.class);
+                    TaskAttachmentEntity instance = new TaskAttachmentEntity();
+                    instance = json.fromJson(line, TaskAttachmentEntity.class);
                     result.add(instance);
                     line = bufferedReader.readLine();
                 }
@@ -288,15 +280,15 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      * @return POJO-объект
      */
     @Override
-    public TaskAttachment get(Long id) {
+    public TaskAttachmentEntity get(Long id) {
         lockRead.readLock().lock();
         try {
-            TaskAttachment instance = new TaskAttachment();
+            TaskAttachmentEntity instance = new TaskAttachmentEntity();
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    instance = json.fromJson(line, TaskAttachment.class);
+                    instance = json.fromJson(line, TaskAttachmentEntity.class);
                     if (id.compareTo(instance.getId())==0) return instance;
                     line = bufferedReader.readLine();
                 }
@@ -316,17 +308,17 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      * @return спиок сущностей
      */
     @Override
-    public Collection<TaskAttachment> getByTaskId(Long taskId) {
-        List<TaskAttachment> result = new ArrayList<>();
+    public Collection<TaskAttachmentEntity> getByTaskId(Long taskId) {
+        List<TaskAttachmentEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    TaskAttachment instance = new TaskAttachment();
-                    instance = json.fromJson(line, TaskAttachment.class);
-                    if(instance.getTask().getId().equals(taskId)) {
+                    TaskAttachmentEntity instance = new TaskAttachmentEntity();
+                    instance = json.fromJson(line, TaskAttachmentEntity.class);
+                    if(instance.getTaskId().equals(taskId)) {
                         result.add(instance);
                     }
                     line = bufferedReader.readLine();
@@ -347,17 +339,17 @@ public class TaskAttachmentRepository implements Repository<Long, TaskAttachment
      * @return список сущностей репозитория
      */
     @Override
-    public Collection<TaskAttachment> getByParentId(Long parentId) {
-        List<TaskAttachment> result = new ArrayList<>();
+    public Collection<TaskAttachmentEntity> getByParentId(Long parentId) {
+        List<TaskAttachmentEntity> result = new ArrayList<>();
         lockRead.readLock().lock();
         try {
             try (FileReader fileReader = new FileReader(file);
                  BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                 String line = bufferedReader.readLine();
                 while (line != null) {
-                    TaskAttachment instance = new TaskAttachment();
-                    instance = json.fromJson(line, TaskAttachment.class);
-                    if(instance.getContent().getId().equals(parentId)) {
+                    TaskAttachmentEntity instance = new TaskAttachmentEntity();
+                    instance = json.fromJson(line, TaskAttachmentEntity.class);
+                    if(instance.getContentId().equals(parentId)) {
                         result.add(instance);
                     }
                     line = bufferedReader.readLine();

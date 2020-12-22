@@ -8,6 +8,7 @@ import java.util.Collection;
  * @param <T> тип идентификатора
  * @param <M> тип бизнес-объекта
  */
+@Deprecated
 public interface GetListByProjectService<T, M> {
 
     Collection<M> getListByProjectId(T projectId);
