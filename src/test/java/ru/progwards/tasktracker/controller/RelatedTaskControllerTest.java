@@ -6,11 +6,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.service.facade.GetListByTaskService;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.vo.RelatedTask;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.service.GetListByTaskService;
+import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.model.RelatedTask;
 
 import java.util.Collection;
 

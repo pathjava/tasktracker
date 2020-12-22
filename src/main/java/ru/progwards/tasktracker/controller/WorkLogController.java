@@ -5,12 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.WorkLogDtoFull;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.WorkLog;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.WorkLogDtoFull;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.model.WorkLog;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping("/rest")
+@RequestMapping(value = "/rest",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class WorkLogController {
 
     @Autowired
@@ -43,7 +45,7 @@ public class WorkLogController {
      * @param id идентификатор задачи, для которой необходимо вывести логи
      * @return коллекция логов задачи
      */
-    @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/task/{id}/worklogs")
     public ResponseEntity<Collection<WorkLogDtoFull>> getListWorkLogs(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -64,7 +66,7 @@ public class WorkLogController {
      * @param workLogDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PostMapping(value = "/worklog/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/worklog/create")
     public ResponseEntity<WorkLogDtoFull> createWorkLog(@RequestBody WorkLogDtoFull workLogDtoFull) {
         if (workLogDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -84,7 +86,7 @@ public class WorkLogController {
      * @param workLogDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный лог
      */
-    @PutMapping(value = "/worklog/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/worklog/{id}/update")
     public ResponseEntity<WorkLogDtoFull> updateWorkLog(@PathVariable Long id, @RequestBody WorkLogDtoFull workLogDtoFull) {
         if (workLogDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -105,7 +107,7 @@ public class WorkLogController {
      * @param id идентификатор удаляемого лога
      * @return статус ответа
      */
-    @DeleteMapping(value = "/worklog/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/worklog/{id}/delete")
     public ResponseEntity<WorkLogDtoFull> deleteWorkLog(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");

@@ -8,12 +8,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskPriorityDtoFull;
-import ru.progwards.tasktracker.repository.dao.Repository;
-import ru.progwards.tasktracker.repository.entity.TaskPriorityEntity;
-import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.TaskPriority;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
+import ru.progwards.tasktracker.repository.deprecated.Repository;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskPriorityEntity;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.model.TaskPriority;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.ProjectDtoFull;
-import ru.progwards.tasktracker.controller.dto.ProjectDtoPreview;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.dao.RepositoryUpdateField;
-import ru.progwards.tasktracker.repository.entity.ProjectEntity;
-import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.Project;
-import ru.progwards.tasktracker.service.vo.UpdateOneValue;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.ProjectDtoFull;
+import ru.progwards.tasktracker.dto.ProjectDtoPreview;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.repository.deprecated.RepositoryUpdateField;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.model.Project;
+import ru.progwards.tasktracker.model.UpdateOneValue;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -64,7 +63,7 @@ public class ProjectController {
      * сервисный класс для обновления одного поля проекта
      */
     @Autowired
-    private RepositoryUpdateField<ProjectEntity> projectEntityRepositoryUpdateField;
+    private RepositoryUpdateField<Project> projectEntityRepositoryUpdateField;
 
     /**
      * по запросу получаем список проектов

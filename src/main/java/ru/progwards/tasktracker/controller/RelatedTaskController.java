@@ -5,15 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelatedTaskDtoFull;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.service.facade.CreateService;
-import ru.progwards.tasktracker.service.facade.GetListByTaskService;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.facade.RemoveService;
-import ru.progwards.tasktracker.service.vo.RelatedTask;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.service.CreateService;
+import ru.progwards.tasktracker.service.GetListByTaskService;
+import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.service.RemoveService;
+import ru.progwards.tasktracker.model.RelatedTask;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -24,7 +24,9 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping("/rest/relatedtask")
+@RequestMapping(value = "/rest/relatedtask",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class RelatedTaskController {
 
     @Autowired
@@ -44,7 +46,7 @@ public class RelatedTaskController {
      * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную задачу
      */
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create")
     public ResponseEntity<RelatedTaskDtoFull> createRelatedTask(@RequestBody RelatedTaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("Пустой объект!");
@@ -62,7 +64,7 @@ public class RelatedTaskController {
      * @param id идентификатор задачи для которой надо получить связанные задачи
      * @return коллекция связанных задач
      */
-    @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/list")
     public ResponseEntity<Collection<RelatedTaskDtoFull>> getListRelatedTasks(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -83,7 +85,7 @@ public class RelatedTaskController {
      * @param id идентификатор удаляемой задачи
      * @return статус
      */
-    @DeleteMapping(value = "/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/delete")
     public ResponseEntity<RelatedTaskDtoFull> deleteRelatedTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");

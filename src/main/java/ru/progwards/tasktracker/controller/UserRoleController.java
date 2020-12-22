@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.AccessRuleDtoFull;
-import ru.progwards.tasktracker.controller.dto.UserRoleDtoFull;
-import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.AccessRule;
-import ru.progwards.tasktracker.service.vo.UserRole;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
+import ru.progwards.tasktracker.dto.UserRoleDtoFull;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.model.AccessRule;
+import ru.progwards.tasktracker.model.UserRole;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,6 +34,9 @@ public class UserRoleController {
     @Autowired
     private Converter<AccessRule, AccessRuleDtoFull> accessRuleDtoConverter;
 
+    /**
+     * @return
+     */
     @GetMapping("/rest/userRole/list")
     public ResponseEntity<List<UserRoleDtoFull>> getUserRoleList() {
         Collection<UserRole> voList = userRoleGetListService.getList();
@@ -42,6 +44,10 @@ public class UserRoleController {
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @GetMapping("/rest/userRole/{id}")
     public ResponseEntity<UserRoleDtoFull> getUserRole(@PathVariable("id") Long id) {
         if (id == null)
@@ -52,6 +58,10 @@ public class UserRoleController {
         return new ResponseEntity<>(userRoleDtoConverter.toDto(vo), HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @GetMapping("/rest/userRole/{id}/accessRules")
     public ResponseEntity<List<AccessRuleDtoFull>> getRules(@PathVariable("id") Long id) {
 //        if (id == null)
@@ -66,6 +76,10 @@ public class UserRoleController {
         return null;
     }
 
+    /**
+     * @param dto
+     * @return
+     */
     @PostMapping("/rest/userRole/create")
     public ResponseEntity<?> createUserRole(@RequestBody UserRoleDtoFull dto) {
         UserRole vo = userRoleDtoConverter.toModel(dto);
@@ -73,6 +87,10 @@ public class UserRoleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @PostMapping("/rest/userRole/{id}/delete")
     public ResponseEntity<?> deleteUserRole(@PathVariable Long id) {
         if (id == null)
@@ -85,6 +103,11 @@ public class UserRoleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @param dto
+     * @return
+     */
     @PostMapping("/rest/userRole/{id}/update")
     public ResponseEntity<?> updateUserRole(@PathVariable Long id, @RequestBody UserRoleDtoFull dto) {
         if (id == null || !id.equals(dto.getId()))
@@ -97,6 +120,11 @@ public class UserRoleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @param newRules
+     * @return
+     */
     @PostMapping("/rest/userRole/{id}/accessRules/add")
     public ResponseEntity<?> addRules(@PathVariable Long id, @RequestBody List<AccessRuleDtoFull> newRules) {
 //        if (id == null)
@@ -116,6 +144,11 @@ public class UserRoleController {
         return null;
     }
 
+    /**
+     * @param id
+     * @param ruleIds
+     * @return
+     */
     @PostMapping("/rest/userRole/{id}/accessRules/delete")
     public ResponseEntity<?> deleteRules(@PathVariable Long id, @RequestBody List<Long> ruleIds) {
 //        if (id == null)
@@ -132,6 +165,11 @@ public class UserRoleController {
         return null;
     }
 
+    /**
+     * @param id
+     * @param rulesDto
+     * @return
+     */
     @PostMapping("/rest/userRole/{id}/accessRules/update")
     public ResponseEntity<?> updateRules(@PathVariable Long id, @RequestBody List<AccessRuleDtoFull> rulesDto) {
 //        if (id == null)

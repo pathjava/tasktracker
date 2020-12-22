@@ -5,12 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.RelationTypeDtoFull;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.RelationType;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.RelationTypeDtoFull;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.model.RelationType;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping("/rest/relationtype")
+@RequestMapping(value = "/rest/relationtype",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class RelationTypeController {
 
     @Autowired
@@ -43,7 +45,7 @@ public class RelationTypeController {
      * @param id идентификатор типа отношения
      * @return полученный по идентификатору Dto тип отношения
      */
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<RelationTypeDtoFull> getRelationType(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -61,7 +63,7 @@ public class RelationTypeController {
      *
      * @return коллекция Dto типов отношений
      */
-    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/list")
     public ResponseEntity<Collection<RelationTypeDtoFull>> getListRelationType() {
         Collection<RelationTypeDtoFull> collection = getListService.getList().stream()
                 .map(relationType -> converter.toDto(relationType))
@@ -79,7 +81,7 @@ public class RelationTypeController {
      * @param typeDto создаваемый Dto тип отношения
      * @return созданный тип отношения
      */
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create")
     public ResponseEntity<RelationTypeDtoFull> createRelationType(@RequestBody RelationTypeDtoFull typeDto) {
         if (typeDto == null)
             throw new BadRequestException("Пустой объект!");
@@ -98,7 +100,7 @@ public class RelationTypeController {
      * @param typeDto обновляемый Dto тип отношения
      * @return обновленный тип отношения
      */
-    @PutMapping(value = "/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}/update")
     public ResponseEntity<RelationTypeDtoFull> updateRelationType(@PathVariable Long id,
                                                                   @RequestBody RelationTypeDtoFull typeDto) {
         if (id == null)
@@ -120,7 +122,7 @@ public class RelationTypeController {
      * @param id идентификатор удаляемого типа отношения
      * @return статус
      */
-    @DeleteMapping(value = "/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}/delete")
     public ResponseEntity<RelationTypeDtoFull> deleteRelationType(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");

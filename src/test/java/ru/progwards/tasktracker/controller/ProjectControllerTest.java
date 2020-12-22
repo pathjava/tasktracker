@@ -1,32 +1,25 @@
 package ru.progwards.tasktracker.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.ProjectDtoFull;
-import ru.progwards.tasktracker.controller.dto.UserDtoPreview;
-import ru.progwards.tasktracker.service.facade.CreateService;
-import ru.progwards.tasktracker.service.facade.GetListService;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.vo.Project;
-import ru.progwards.tasktracker.service.vo.User;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.ProjectDtoFull;
+import ru.progwards.tasktracker.dto.UserDtoPreview;
+import ru.progwards.tasktracker.service.GetListService;
+import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.model.Project;
+import ru.progwards.tasktracker.model.User;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Тест ProjectController

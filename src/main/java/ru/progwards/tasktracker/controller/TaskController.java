@@ -1,19 +1,21 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
-import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.service.facade.*;
-import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.UpdateOneValue;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.TaskDtoFull;
+import ru.progwards.tasktracker.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.model.UpdateOneValue;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -24,28 +26,22 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping("/rest")
+@RequestMapping(value = "/rest",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskController {
 
-    @Autowired
-    private GetService<Long, Task> getService;
-    @Autowired
-    private RemoveService<Task> removeService;
-    @Autowired
-    private CreateService<Task> createService;
-    @Autowired
-    private RefreshService<Task> refreshService;
-    @Autowired
-    private Converter<Task, TaskDtoPreview> dtoPreviewConverter;
-    @Autowired
-    private Converter<Task, TaskDtoFull> dtoFullConverter;
-    @Autowired
-    private GetService<String, Task> byCodeGetService;
+    private final @NonNull GetService<Long, Task> getService;
+    private final @NonNull RemoveService<Task> removeService;
+    private final @NonNull CreateService<Task> createService;
+    private final @NonNull RefreshService<Task> refreshService;
+    private final @NonNull Converter<Task, TaskDtoPreview> dtoPreviewConverter;
+    private final @NonNull Converter<Task, TaskDtoFull> dtoFullConverter;
+    private final @NonNull GetService<String, Task> byCodeGetService;
     @Qualifier("taskUpdateOneFieldService")
-    @Autowired
-    private UpdateOneFieldService<Task> oneFieldService;
-    @Autowired
-    private GetListByProjectService<Long, Task> listByProjectService;
+    private final @NonNull UpdateOneFieldService<Task> oneFieldService;
+    private final @NonNull GetListByProjectService<Long, Task> listByProjectService;
 
     /**
      * Метод получения коллекции задач по идентификатору проекта
@@ -53,13 +49,13 @@ public class TaskController {
      * @param id идентификатор проекта
      * @return коллекция превью задач
      */
-    @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/project/{id}/tasks")
     public ResponseEntity<Collection<TaskDtoPreview>> getListTasks(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
         Collection<TaskDtoPreview> tasks = listByProjectService.getListByProjectId(id).stream()
-                .map(task -> dtoPreviewConverter.toDto(task))
+                .map(dtoPreviewConverter::toDto)
                 .collect(Collectors.toUnmodifiableList());
 
         if (tasks.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
@@ -74,7 +70,7 @@ public class TaskController {
      * @param taskDtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную задачу
      */
-    @PostMapping(value = "/task/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/task/create")
     public ResponseEntity<TaskDtoFull> createTask(@RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -95,7 +91,7 @@ public class TaskController {
      * @param taskDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную задачу
      */
-    @PutMapping(value = "/task/{id}/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/task/{id}/update")
     public ResponseEntity<TaskDtoFull> updateTask(@PathVariable Long id, @RequestBody TaskDtoFull taskDtoFull) {
         if (taskDtoFull == null)
             throw new BadRequestException("Пустой объект!");
@@ -116,7 +112,7 @@ public class TaskController {
      * @param id идентификатор задачи
      * @return возвращает статус ответа
      */
-    @DeleteMapping(value = "/task/{id}/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/task/{id}/delete")
     public ResponseEntity<Task> deleteTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -136,7 +132,7 @@ public class TaskController {
      * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную задачу
      */
-    @GetMapping(value = "/task/{code}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/task/{code}/getbycode")
     public ResponseEntity<TaskDtoFull> getByCodeTask(@PathVariable String code) {
         if (code == null)
             throw new BadRequestException("Code не задан или задан неверно!");
@@ -157,7 +153,7 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return статус
      */
-    @PutMapping(value = "/task/{id}/updatefield", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/task/{id}/updatefield")
     public ResponseEntity<UpdateOneValue> updateOneField(
             @PathVariable Long id, @RequestBody UpdateOneValue oneValue
     ) {

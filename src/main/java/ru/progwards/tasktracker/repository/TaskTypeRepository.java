@@ -1,0 +1,18 @@
+package ru.progwards.tasktracker.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.model.TaskType;
+
+/**
+ * @author Oleg Kiselev
+ */
+@NoRepositoryBean
+@Transactional(readOnly = true)
+public interface TaskTypeRepository extends JpaRepository<TaskType, Long> {
+
+    // https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
+    // https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
+
+}

@@ -9,16 +9,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.controller.converter.Converter;
-import ru.progwards.tasktracker.controller.dto.TaskDtoFull;
-import ru.progwards.tasktracker.controller.dto.TaskDtoPreview;
-import ru.progwards.tasktracker.controller.exception.BadRequestException;
-import ru.progwards.tasktracker.controller.exception.NotFoundException;
-import ru.progwards.tasktracker.service.facade.GetListService;
-import ru.progwards.tasktracker.service.facade.GetService;
-import ru.progwards.tasktracker.service.facade.UpdateOneFieldService;
-import ru.progwards.tasktracker.service.vo.Task;
-import ru.progwards.tasktracker.service.vo.UpdateOneValue;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.TaskDtoFull;
+import ru.progwards.tasktracker.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.service.GetListService;
+import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.service.UpdateOneFieldService;
+import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.model.UpdateOneValue;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
