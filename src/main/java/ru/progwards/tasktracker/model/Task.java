@@ -1,6 +1,10 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -13,27 +17,23 @@ import java.util.List;
  *
  * @author Oleg Kiselev
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@DynamicUpdate
 @Table(name = "task")
 public class Task {
 
     @Id
     @SequenceGenerator(name = "TaskSeq", sequenceName = "task_seq", allocationSize = 1)
     @GeneratedValue(generator = "TaskSeq", strategy = GenerationType.SEQUENCE)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
-    @EqualsAndHashCode.Include
     private String code;
 
     @Column(nullable = false)
-    @EqualsAndHashCode.Include
     private String name;
 
     private String description;
@@ -48,12 +48,10 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
-    @EqualsAndHashCode.Include
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
-    @EqualsAndHashCode.Include
     private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -76,20 +74,23 @@ public class Task {
     private Duration timeLeft;
 
     @OneToMany(mappedBy = "currentTask", fetch = FetchType.LAZY)
+    @Where(clause = "deleted = false")
     private List<RelatedTask> relatedTasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "attachedTask", fetch = FetchType.LAZY)
     private List<RelatedTask> relatedTasksAttached = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    private List<TaskAttachment> attachments;
+    private List<TaskAttachment> attachments = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    private List<WorkLog> workLogs;
+    private List<WorkLog> workLogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    private List<TaskNote> notes;
+    private List<TaskNote> notes = new ArrayList<>();
 
-    /*boolean isDeleted;*/ //TODO
+//    @Type(type = "true_false")
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;
 
 }

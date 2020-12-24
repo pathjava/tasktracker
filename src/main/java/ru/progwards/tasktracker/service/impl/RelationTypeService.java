@@ -1,18 +1,18 @@
 package ru.progwards.tasktracker.service.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.entity.RelationTypeEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.*;
-import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
+import ru.progwards.tasktracker.repository.RelatedTaskRepository;
+import ru.progwards.tasktracker.repository.RelationTypeRepository;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -21,16 +21,14 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Service
-public class RelationTypeService implements GetService<Long, RelationType>,
-        CreateService<RelationType>, RemoveService<RelationType>,
-        RefreshService<RelationType>, GetListService<RelationType> {
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
+        RemoveService<RelationType>, RefreshService<RelationType>, GetListService<RelationType> {
 
 
-    private Repository<Long, RelationTypeEntity> repository;
-    @Autowired
-    private Converter<RelationTypeEntity, RelationType> converter;
-    @Autowired
-    private GetListService<RelatedTask> getListService;
+    private final @NonNull RelationTypeRepository relationTypeRepository;
+    private final @NonNull RelatedTaskRepository relatedTaskRepository;
 
     /**
      * Метод получения типа отношения связанных задач
@@ -40,7 +38,8 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      */
     @Override
     public RelationType get(Long id) {
-        return id == null ? null : converter.toVo(repository.get(id));
+        return relationTypeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("RelationType id=" + id + " not found"));
     }
 
     /**
@@ -50,9 +49,7 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      */
     @Override
     public List<RelationType> getList() {
-        return repository.get().stream()
-                .map(entity -> converter.toVo(entity))
-                .collect(Collectors.toList());
+        return relationTypeRepository.findAll();
     }
 
     /**
@@ -60,11 +57,11 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      *
      * @param model создаваемый тип отношения
      */
+    @Transactional
     @Override
     public void create(RelationType model) {
-        RelationTypeEntity entity = converter.toEntity(model);
-        repository.create(entity);
-        model.setId(entity.getId());
+        //TODO - make check exists and set counter type
+        relationTypeRepository.save(model);
     }
 
     /**
@@ -72,9 +69,10 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      *
      * @param model обновляемый тип отношения
      */
+    @Transactional
     @Override
     public void refresh(RelationType model) {
-        repository.update(converter.toEntity(model));
+        relationTypeRepository.save(model);
     }
 
     /**
@@ -82,15 +80,25 @@ public class RelationTypeService implements GetService<Long, RelationType>,
      *
      * @param model удаляемый тип отношения
      */
+    @Transactional
     @Override
     public void remove(RelationType model) {
-        if (checkingOtherDependenciesRelationType(model.getId()))
-            throw new OperationIsNotPossibleException("Удаление невозможно, данный RelationType используется!");
-        repository.delete(model.getId());
+        if (relatedTaskRepository.existsRelatedTaskByRelationType(model))
+            throw new OperationIsNotPossibleException(
+                    "Удаление RelationType id=" + model.getId() + " невозможно, данный RelationType используется!"
+            );
+
+        relationTypeRepository.delete(model);
+
+        /* old version */
+//        if (checkingOtherDependenciesRelationType(model.getId()))
+//            throw new OperationIsNotPossibleException("Удаление невозможно, данный RelationType используется!");
+//        repository.delete(model.getId());
     }
 
-    public boolean checkingOtherDependenciesRelationType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
-        return getListService.getList().stream()
-                .anyMatch(relatedTask -> relatedTask.getRelationType().getId().equals(id));
-    }
+    /* old version */
+//    public boolean checkingOtherDependenciesRelationType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
+//        return getListService.getList().stream()
+//                .anyMatch(relatedTask -> relatedTask.getRelationType().getId().equals(id));
+//    }
 }

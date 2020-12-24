@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -9,19 +12,17 @@ import javax.persistence.*;
  *
  * @author Oleg Kiselev
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@DynamicUpdate
 @Table(name = "related_task")
 public class RelatedTask {
 
     @Id
     @SequenceGenerator(name = "RelatedTaskSeq", sequenceName = "related_task_seq", allocationSize = 1)
     @GeneratedValue(generator = "RelatedTaskSeq", strategy = GenerationType.SEQUENCE)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne
@@ -30,13 +31,14 @@ public class RelatedTask {
 
     @ManyToOne //TODO fetch - ?
     @JoinColumn(name = "current_task_id", referencedColumnName = "id")
-    @EqualsAndHashCode.Include
     private Task currentTask;
 
     @ManyToOne
     @JoinColumn(name = "attached_task_id", referencedColumnName = "id")
     private Task attachedTask;
 
-    /*boolean isDeleted;*/ //TODO
+//    @Type(type = "true_false")
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;
 
 }

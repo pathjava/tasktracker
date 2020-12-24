@@ -1,8 +1,11 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,11 +13,9 @@ import java.util.List;
  *
  * @author Oleg Kiselev
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "relation_type")
 public class RelationType {
@@ -22,11 +23,9 @@ public class RelationType {
     @Id
     @SequenceGenerator(name = "RelationTypeSeq", sequenceName = "relation_type_seq", allocationSize = 1)
     @GeneratedValue(generator = "RelationTypeSeq", strategy = GenerationType.SEQUENCE)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
-    @EqualsAndHashCode.Include
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -34,6 +33,6 @@ public class RelationType {
     private RelationType counterRelation;
 
     @OneToMany(mappedBy = "relationType", fetch = FetchType.LAZY)
-    private List<RelatedTask> relatedTasks;
+    private List<RelatedTask> relatedTasks = new ArrayList<>();
 
 }
