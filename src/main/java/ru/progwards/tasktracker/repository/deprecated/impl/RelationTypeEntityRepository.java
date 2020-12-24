@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @org.springframework.stereotype.Repository
+@Deprecated
 public class RelationTypeEntityRepository implements Repository<Long, RelationTypeEntity> {
 
     @Autowired

@@ -11,6 +11,7 @@ import ru.progwards.tasktracker.model.RelationType;
  * @author Oleg Kiselev
  */
 @Component
+@Deprecated
 public class RelationTypeConverter implements Converter<RelationTypeEntity, RelationType> {
 
     /**

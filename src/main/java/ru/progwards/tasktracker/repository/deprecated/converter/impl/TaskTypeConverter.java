@@ -17,6 +17,7 @@ import ru.progwards.tasktracker.model.WorkFlow;
  * @author Oleg Kiselev
  */
 @Component
+@Deprecated
 public class TaskTypeConverter implements Converter<TaskTypeEntity, TaskType> {
 
     @Autowired

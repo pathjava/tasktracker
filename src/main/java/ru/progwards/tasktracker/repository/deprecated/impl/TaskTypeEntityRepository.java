@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @org.springframework.stereotype.Repository
+@Deprecated
 public class TaskTypeEntityRepository implements Repository<Long, TaskTypeEntity>,
         RepositoryByProjectId<Long, TaskTypeEntity> {
 

@@ -18,6 +18,7 @@ import java.util.Collection;
  * @author Oleg Kiselev
  */
 @Service
+@Deprecated
 public class TaskRemoveService implements RemoveService<Task> {
 
     @Autowired

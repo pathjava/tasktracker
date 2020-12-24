@@ -14,6 +14,7 @@ import ru.progwards.tasktracker.model.Task;
  * @author Oleg Kiselev
  */
 @Service
+@Deprecated
 public class TaskGetService implements GetService<Long, Task> {
 
     @Autowired

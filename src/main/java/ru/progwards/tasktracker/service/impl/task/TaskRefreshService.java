@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
  * @author Oleg Kiselev
  */
 @Service
+@Deprecated
 public class TaskRefreshService implements RefreshService<Task> {
 
     @Autowired

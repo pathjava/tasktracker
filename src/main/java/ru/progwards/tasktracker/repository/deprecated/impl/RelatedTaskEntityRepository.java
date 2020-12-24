@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @org.springframework.stereotype.Repository
+@Deprecated
 public class RelatedTaskEntityRepository implements Repository<Long, RelatedTaskEntity>,
         RepositoryByTaskId<Long, RelatedTaskEntity>, RepositoryByAttachedTaskId<Long, RelatedTaskEntity> {
 

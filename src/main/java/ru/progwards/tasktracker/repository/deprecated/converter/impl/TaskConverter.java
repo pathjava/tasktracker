@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Component
+@Deprecated
 public class TaskConverter implements Converter<TaskEntity, Task> {
 
     @Autowired

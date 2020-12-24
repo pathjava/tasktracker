@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @org.springframework.stereotype.Repository
+@Deprecated
 public class WorkLogEntityRepository implements Repository<Long, WorkLogEntity>,
         RepositoryByTaskId<Long, WorkLogEntity> {
 

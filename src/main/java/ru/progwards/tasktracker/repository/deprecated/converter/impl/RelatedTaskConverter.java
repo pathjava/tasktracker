@@ -16,6 +16,7 @@ import ru.progwards.tasktracker.model.Task;
  * @author Oleg Kiselev
  */
 @Component
+@Deprecated
 public class RelatedTaskConverter implements Converter<RelatedTaskEntity, RelatedTask> {
 
     @Autowired

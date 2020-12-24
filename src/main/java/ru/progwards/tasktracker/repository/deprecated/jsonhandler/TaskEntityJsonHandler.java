@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Repository
+@Deprecated
 public class TaskEntityJsonHandler implements JsonHandler<Long, TaskEntity> {
 
     public final Map<Long, TaskEntity> tasks = new ConcurrentHashMap<>();

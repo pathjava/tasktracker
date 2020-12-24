@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Service
+@Deprecated
 public class TaskGetListService implements GetListService<Task> {
 
     @Autowired

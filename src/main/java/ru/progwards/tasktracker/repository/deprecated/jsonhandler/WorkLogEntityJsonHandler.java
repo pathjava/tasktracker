@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Repository
+@Deprecated
 public class WorkLogEntityJsonHandler implements JsonHandler<Long, WorkLogEntity> {
 
     public final Map<Long, WorkLogEntity> logs = new ConcurrentHashMap<>();

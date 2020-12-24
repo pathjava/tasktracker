@@ -8,6 +8,7 @@ import java.util.Random;
  *
  * @author Oleg Kiselev
  */
+@Deprecated
 public class TaskEntity {
 
     private Long id;

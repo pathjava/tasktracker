@@ -16,6 +16,7 @@ import ru.progwards.tasktracker.model.UpdateOneValue;
  * @author Oleg Kiselev
  */
 @Service
+@Deprecated
 public class TaskUpdateOneFieldService implements UpdateOneFieldService<Task> {
 
     //@Qualifier("taskRepository")

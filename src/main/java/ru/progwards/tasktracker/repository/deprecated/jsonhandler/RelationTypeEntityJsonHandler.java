@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Repository
+@Deprecated
 public class RelationTypeEntityJsonHandler implements JsonHandler<Long, RelationTypeEntity> {
 
     public final Map<Long, RelationTypeEntity> relationType = new ConcurrentHashMap<>();

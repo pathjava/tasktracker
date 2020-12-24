@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
  * @author Oleg Kiselev
  */
 @Component
+@Deprecated
 public class WorkLogConverter implements Converter<WorkLogEntity, WorkLog> {
 
     @Autowired

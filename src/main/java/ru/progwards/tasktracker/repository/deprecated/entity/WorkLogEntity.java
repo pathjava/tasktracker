@@ -7,6 +7,7 @@ import java.util.Random;
  *
  * @author Oleg Kiselev
  */
+@Deprecated
 public class WorkLogEntity {
 
     private Long id;
