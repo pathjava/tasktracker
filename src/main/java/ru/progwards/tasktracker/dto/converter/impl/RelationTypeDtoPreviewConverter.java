@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -13,10 +15,10 @@ import ru.progwards.tasktracker.model.RelationType;
  * @author Oleg Kiselev
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelationTypeDtoPreviewConverter implements Converter<RelationType, RelationTypeDtoPreview> {
 
-    @Autowired
-    private GetService<Long, RelationType> getService;
+    private final @NonNull GetService<Long, RelationType> getService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

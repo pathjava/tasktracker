@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -16,26 +18,18 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 
-    @Autowired
-    private Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
-    @Autowired
-    private Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
-    @Autowired
-    private Converter<User, UserDtoPreview> userDtoConverter;
-    @Autowired
-    private Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> workFlowStatusDtoConverter;
-    @Autowired
-    private Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoConverter;
-    @Autowired
-    private Converter<TaskAttachment, TaskAttachmentDtoPreview> taskAttachmentDtoConverter;
-    @Autowired
-    private Converter<WorkFlowAction, WorkFlowActionDtoPreview> workFlowActionDtoConverter;
-    @Autowired
-    private Converter<Project, ProjectDtoPreview> projectDtoConverter;
-    @Autowired
-    private GetService<Long, Task> taskGetService;
+    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
+    private final @NonNull Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
+    private final @NonNull Converter<User, UserDtoPreview> userDtoConverter;
+    private final @NonNull Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> workFlowStatusDtoConverter;
+    private final @NonNull Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoConverter;
+    private final @NonNull Converter<TaskAttachment, TaskAttachmentDtoPreview> taskAttachmentDtoConverter;
+    private final @NonNull Converter<WorkFlowAction, WorkFlowActionDtoPreview> workFlowActionDtoConverter;
+    private final @NonNull Converter<Project, ProjectDtoPreview> projectDtoConverter;
+    private final @NonNull GetService<Long, Task> taskGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -70,7 +64,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     task.getRelatedTasksAttached(),
                     listDtoToVoTaskAttachment(dto.getAttachments()),
                     task.getWorkLogs(),
-                    task.getNotes()
+                    task.getNotes(),
+                    false //TODO - check!!!
             );
         }
     }

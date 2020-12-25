@@ -49,7 +49,7 @@ public class WorkLogController {
      * @param id идентификатор
      * @return возвращает WorkLogDtoFull
      */
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/worklog/{id}")
     public ResponseEntity<WorkLogDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -97,16 +97,11 @@ public class WorkLogController {
         if (workLogDto == null)
             throw new BadRequestException("WorkLogDtoFull == null");
 
-        workLogCreateService.create(converter.toModel(workLogDto));
+        WorkLog workLog = converter.toModel(workLogDto);
+        workLogCreateService.create(workLog);
+        WorkLogDtoFull createdWorkLog = converter.toDto(workLog);
 
-        return new ResponseEntity<>(workLogDto, HttpStatus.OK);
-
-        /* old version */
-//        WorkLog workLog = converter.toModel(workLogDto);
-//        workLogCreateService.create(workLog);
-//        WorkLogDtoFull createdWorkLog = converter.toDto(workLog);
-//
-//        return new ResponseEntity<>(createdWorkLog, HttpStatus.OK);
+        return new ResponseEntity<>(createdWorkLog, HttpStatus.OK);
     }
 
     /**
@@ -123,16 +118,11 @@ public class WorkLogController {
         if (!id.equals(workLogDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        workLogRefreshService.refresh(converter.toModel(workLogDto));
+        WorkLog workLog = converter.toModel(workLogDto);
+        workLogRefreshService.refresh(workLog);
+        WorkLogDtoFull updatedWorkLog = converter.toDto(workLog);
 
-        return new ResponseEntity<>(workLogDto, HttpStatus.OK);
-
-        /* old version */
-//        WorkLog workLog = converter.toModel(workLogDto);
-//        workLogRefreshService.refresh(workLog);
-//        WorkLogDtoFull updatedWorkLog = converter.toDto(workLog);
-//
-//        return new ResponseEntity<>(updatedWorkLog, HttpStatus.OK);
+        return new ResponseEntity<>(updatedWorkLog, HttpStatus.OK);
     }
 
     /**

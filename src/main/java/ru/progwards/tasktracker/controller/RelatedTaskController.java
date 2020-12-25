@@ -51,16 +51,11 @@ public class RelatedTaskController {
         if (relatedTaskDto == null)
             throw new BadRequestException("RelatedTaskDtoFull == null");
 
-        relatedTaskCreateService.create(converter.toModel(relatedTaskDto));
+        RelatedTask relatedTask = converter.toModel(relatedTaskDto);
+        relatedTaskCreateService.create(relatedTask);
+        RelatedTaskDtoFull createdRelatedTask = converter.toDto(relatedTask);
 
-        return new ResponseEntity<>(relatedTaskDto, HttpStatus.OK);
-
-        /* old version */
-//        RelatedTask relatedTask = converter.toModel(relatedTaskDto);
-//        createService.create(relatedTask);
-//        RelatedTaskDtoFull createdRelatedTask = converter.toDto(relatedTask);
-//
-//        return new ResponseEntity<>(createdRelatedTask, HttpStatus.OK);
+        return new ResponseEntity<>(createdRelatedTask, HttpStatus.OK);
     }
 
     /**

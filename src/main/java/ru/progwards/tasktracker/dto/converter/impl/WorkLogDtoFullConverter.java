@@ -1,16 +1,18 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.exception.BadRequestException;
-import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.model.WorkLog;
 import ru.progwards.tasktracker.model.types.EstimateChange;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -18,12 +20,11 @@ import ru.progwards.tasktracker.model.types.EstimateChange;
  * @author Oleg Kiselev
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFull> {
 
-    @Autowired
-    private Converter<User, UserDtoPreview> userDtoConverter;
-    @Autowired
-    private GetService<Long, Task> getService;
+    private final @NonNull Converter<User, UserDtoPreview> userDtoConverter;
+    private final @NonNull GetService<Long, Task> getService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

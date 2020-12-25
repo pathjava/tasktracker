@@ -16,7 +16,7 @@ import java.util.List;
 
 
 /**
- * Бизнес-логика типа отношения связанных задач
+ * Бизнес-логика типа отношения связанных задач RelationType
  *
  * @author Oleg Kiselev
  */
@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
         RemoveService<RelationType>, RefreshService<RelationType>, GetListService<RelationType> {
-
 
     private final @NonNull RelationTypeRepository relationTypeRepository;
     private final @NonNull RelatedTaskRepository relatedTaskRepository;

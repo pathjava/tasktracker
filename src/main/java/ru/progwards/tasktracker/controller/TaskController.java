@@ -42,7 +42,6 @@ public class TaskController {
     private final @NonNull Converter<Task, TaskDtoPreview> dtoPreviewConverter;
     private final @NonNull Converter<Task, TaskDtoFull> dtoFullConverter;
     private final @NonNull GetService<String, Task> byCodeGetService;
-    @Qualifier("taskUpdateOneFieldService")
     private final @NonNull UpdateOneFieldService<Task> updateOneFieldService;
     private final @NonNull GetService<Long, Project> projectGetService;
 
@@ -54,7 +53,7 @@ public class TaskController {
      * @param id идентификатор
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/task/{id}")
     public ResponseEntity<TaskDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -112,7 +111,7 @@ public class TaskController {
      *
      * @return лист TaskDtoPreview
      */
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/task/list")
     public ResponseEntity<List<TaskDtoPreview>> getList() {
 
         List<TaskDtoPreview> list = taskGetListService.getList().stream()
@@ -136,16 +135,11 @@ public class TaskController {
         if (taskDto == null)
             throw new BadRequestException("TaskDtoFull == null");
 
-        taskCreateService.create(dtoFullConverter.toModel(taskDto));
+        Task task = dtoFullConverter.toModel(taskDto);
+        taskCreateService.create(task);
+        TaskDtoFull createdTask = dtoFullConverter.toDto(task);
 
-        return new ResponseEntity<>(taskDto, HttpStatus.OK);
-
-        /* old version */
-//        Task task = dtoFullConverter.toModel(taskDto);
-//        taskCreateService.create(task);
-//        TaskDtoFull createdTask = dtoFullConverter.toDto(task);
-//
-//        return new ResponseEntity<>(createdTask, HttpStatus.OK);
+        return new ResponseEntity<>(createdTask, HttpStatus.OK);
     }
 
     /**
@@ -163,16 +157,11 @@ public class TaskController {
         if (!id.equals(taskDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        taskRefreshService.refresh(dtoFullConverter.toModel(taskDto));
+        Task task = dtoFullConverter.toModel(taskDto);
+        taskRefreshService.refresh(task);
+        TaskDtoFull updatedTask = dtoFullConverter.toDto(task);
 
-        return new ResponseEntity<>(taskDto, HttpStatus.OK);
-
-        /* old version */
-//        Task task = dtoFullConverter.toModel(taskDto);
-//        taskRefreshService.refresh(task);
-//        TaskDtoFull updatedTask = dtoFullConverter.toDto(task);
-//
-//        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
     /**

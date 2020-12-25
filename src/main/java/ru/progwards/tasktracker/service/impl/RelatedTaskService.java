@@ -18,7 +18,7 @@ import ru.progwards.tasktracker.service.RemoveService;
 import java.util.List;
 
 /**
- * Бизнес-логика связанной задачи
+ * Бизнес-логика связанной задачи (RelatedTask)
  *
  * @author Oleg Kiselev
  */
@@ -32,7 +32,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     private final @NonNull RelationTypeRepository relationTypeRepository;
 
     /**
-     * Метод создания связанной задачи
+     * Метод создания связанной задачи RelatedTask
      * Первоначально в методе проверяется наличие между двумя задачами Task связей RelatedTask одного типа RelationType,
      * и если есть связь такого типа RelationType как в пришедшей RelatedTask в параметре метода create,
      * новая связь не добавляется.

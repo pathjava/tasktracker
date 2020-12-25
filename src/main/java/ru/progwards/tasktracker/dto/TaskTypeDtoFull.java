@@ -12,7 +12,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class TaskTypeDtoFull {
 
-    private final Long id;
+    private Long id;
     private ProjectDtoPreview project;
     private WorkFlowDtoPreview workFlow;
     private String name;

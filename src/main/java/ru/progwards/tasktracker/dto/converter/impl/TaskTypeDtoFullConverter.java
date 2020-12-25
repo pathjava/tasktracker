@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.ProjectDtoPreview;
@@ -17,14 +19,12 @@ import ru.progwards.tasktracker.model.WorkFlow;
  * @author Oleg Kiselev
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDtoFull> {
 
-    @Autowired
-    private Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
-    @Autowired
-    private Converter<Project, ProjectDtoPreview> projectDtoPreviewConverter;
-    @Autowired
-    private GetService<Long, TaskType> taskTypeGetService;
+    private final @NonNull Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
+    private final @NonNull Converter<Project, ProjectDtoPreview> projectDtoPreviewConverter;
+    private final @NonNull GetService<Long, TaskType> taskTypeGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -38,6 +38,7 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
             return null;
         else {
             TaskType taskType = taskTypeGetService.get(dto.getId());
+            /* old version */
             /*return new TaskType(
                     dto.getId(),
                     taskType.getProject(),
@@ -45,9 +46,9 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
                     dto.getName(),
                     taskType.getTasks()
             );*/
-            taskType.setName(dto.getName());
             taskType.setWorkFlow(workFlowDtoConverter.toModel(dto.getWorkFlow()));
             taskType.setProject(projectDtoPreviewConverter.toModel(dto.getProject()));
+            taskType.setName(dto.getName());
             return taskType;
         }
     }

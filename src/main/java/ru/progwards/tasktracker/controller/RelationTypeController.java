@@ -80,16 +80,11 @@ public class RelationTypeController {
         if (relationTypeDto == null)
             throw new BadRequestException("RelationTypeDtoFull == null");
 
-        relationTypeCreateService.create(converter.toModel(relationTypeDto));
+        RelationType relationType = converter.toModel(relationTypeDto);
+        relationTypeCreateService.create(relationType);
+        RelationTypeDtoFull createdRelationType = converter.toDto(relationType);
 
-        return new ResponseEntity<>(relationTypeDto, HttpStatus.OK);
-
-        /* old version */
-//        RelationType relationType = converter.toModel(relationTypeDto);
-//        relationTypeCreateService.create(relationType);
-//        RelationTypeDtoFull createdRelationType = converter.toDto(relationType);
-//
-//        return new ResponseEntity<>(createdRelationType, HttpStatus.OK);
+        return new ResponseEntity<>(createdRelationType, HttpStatus.OK);
     }
 
     /**
@@ -108,16 +103,11 @@ public class RelationTypeController {
         if (!id.equals(relationTypeDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        relationTypeRefreshService.refresh(converter.toModel(relationTypeDto));
+        RelationType relationType = converter.toModel(relationTypeDto);
+        relationTypeRefreshService.refresh(relationType);
+        RelationTypeDtoFull updatedRelationType = converter.toDto(relationType);
 
-        return new ResponseEntity<>(relationTypeDto, HttpStatus.OK);
-
-        /* old version */
-//        RelationType relationType = converter.toModel(relationTypeDto);
-//        relationTypeRefreshService.refresh(relationType);
-//        RelationTypeDtoFull updatedRelationType = converter.toDto(relationType);
-//
-//        return new ResponseEntity<>(updatedRelationType, HttpStatus.OK);
+        return new ResponseEntity<>(updatedRelationType, HttpStatus.OK);
     }
 
     /**

@@ -1,15 +1,17 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.dto.RelationTypeDtoPreview;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
-import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
 import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -17,14 +19,12 @@ import ru.progwards.tasktracker.model.Task;
  * @author Oleg Kiselev
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, RelatedTaskDtoFull> {
 
-    @Autowired
-    private Converter<RelationType, RelationTypeDtoPreview> typeDtoConverter;
-    @Autowired
-    private Converter<Task, TaskDtoPreview> taskDtoConverter;
-    @Autowired
-    private GetService<Long, Task> getService;
+    private final @NonNull Converter<RelationType, RelationTypeDtoPreview> typeDtoConverter;
+    private final @NonNull Converter<Task, TaskDtoPreview> taskDtoConverter;
+    private final @NonNull GetService<Long, Task> taskGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -37,12 +37,13 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
         if (dto == null)
             return null;
         else {
-            Task currentTask = getService.get(dto.getCurrentTaskId());
+            Task currentTask = taskGetService.get(dto.getCurrentTaskId());
             return new RelatedTask(
                     dto.getId(),
                     typeDtoConverter.toModel(dto.getRelationType()),
                     currentTask,
-                    taskDtoConverter.toModel(dto.getAttachedTask())
+                    taskDtoConverter.toModel(dto.getAttachedTask()),
+                    false //TODO - check!!!
             );
         }
     }

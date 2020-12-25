@@ -1,29 +1,18 @@
 package ru.progwards.tasktracker.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * Объект, содержащий краткие данные об отношениях связанных задач
  *
  * @author Oleg Kiselev
  */
+@Data
+@AllArgsConstructor
 public class RelationTypeDtoPreview {
 
-    private final Long id;
+    private Long id;
     private String name;
 
-    public RelationTypeDtoPreview(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -19,7 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
- * Бизнес-логика создания задачи
+ * Бизнес-логика создания задачи (Task)
  *
  * @author Oleg Kiselev
  */
@@ -34,7 +34,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     private final @NonNull RelatedTaskRepository relatedTaskRepository;
 
     /**
-     * Метод создает задачу
+     * Метод создает задачу  (Task)
      * 1) создается текстовый код задачи на основе префикса проекта
      * 2) устанавливается время создания задачи
      * 3) устанавливается статус WorkFlowStatus
@@ -75,7 +75,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * Метод получения всех задач без привязки к какому-либо проекту
+     * Метод получения всех задач (Task) без привязки к какому-либо проекту
      *
      * @return коллекцию задач (может иметь пустое значение)
      */
@@ -85,7 +85,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * Метод получения задачи по идентификатору
+     * Метод получения задачи (Task) по идентификатору
      *
      * @param id идентификатор по которому необходимо получить задачу
      * @return найденную задачу или пусто
@@ -97,7 +97,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * Метод обновления задачи
+     * Метод обновления задачи (Task)
      *
      * @param model value object - объект бизнес логики (задача), который необходимо обновить
      */
@@ -113,7 +113,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * Метод удаления задачи
+     * Метод удаления задачи (Task)
      * Предварительно в методе deleteRelatedTasks(Long id) проверяем наличие
      * связей на задачи и если они есть, удаляем встречные (входящие)
      *
@@ -129,7 +129,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * Метод удаления связанных RelatedTask удаляемой задачи Task
+     * Метод удаления связанных RelatedTask удаляемой задачи (Task)
      *
      * @param model задача Task
      */
@@ -148,16 +148,13 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * Метод обновления поля задачи
+     * Метод обновления поля задачи (Task)
      *
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      */
     @Transactional
     @Override
     public void updateOneField(UpdateOneValue oneValue) {
-        if (oneValue.getFieldName().equals("code"))
-            throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
-
         Task task = taskRepository.findById(oneValue.getId())
                 .orElseThrow(() -> new NotFoundException("Task id=" + oneValue.getId() + " not found"));
 

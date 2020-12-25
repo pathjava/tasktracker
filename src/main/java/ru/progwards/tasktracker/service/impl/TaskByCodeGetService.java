@@ -11,7 +11,7 @@ import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.service.GetService;
 
 /**
- * Бизнес-логика получения задачи по коду
+ * Бизнес-логика получения задачи (Task) по коду
  *
  * @author Oleg Kiselev
  */
@@ -23,7 +23,7 @@ public class TaskByCodeGetService implements GetService<String, Task> {
     private final @NonNull TaskRepository taskRepository;
 
     /**
-     * Метод получения задачи по текстовому коду задачи
+     * Метод получения задачи (Task) по текстовому коду задачи
      *
      * @param code строковое значение кода задачи, создаваемое на основе префикса проекта задачи
      * @return найденную задачу или пусто

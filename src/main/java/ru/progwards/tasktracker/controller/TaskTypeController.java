@@ -53,16 +53,11 @@ public class TaskTypeController {
         if (taskTypeDto == null)
             throw new BadRequestException("TaskTypeDtoFull == null");
 
-        taskTypeCreateService.create(converter.toModel(taskTypeDto));
+        TaskType taskType = converter.toModel(taskTypeDto);
+        taskTypeCreateService.create(taskType);
+        TaskTypeDtoFull createdTaskType = converter.toDto(taskType);
 
-        return new ResponseEntity<>(taskTypeDto, HttpStatus.OK);
-
-        /* old version */
-//        TaskType taskType = converter.toModel(taskTypeDto);
-//        taskTypeCreateService.create(taskType);
-//        TaskTypeDtoFull createdTaskType = converter.toDto(taskType);
-//
-//        return new ResponseEntity<>(createdTaskType, HttpStatus.OK);
+        return new ResponseEntity<>(createdTaskType, HttpStatus.OK);
     }
 
     /**
@@ -140,16 +135,11 @@ public class TaskTypeController {
         if (!id.equals(taskTypeDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        taskTypeRefreshService.refresh(converter.toModel(taskTypeDto));
+        TaskType taskType = converter.toModel(taskTypeDto);
+        taskTypeRefreshService.refresh(taskType);
+        TaskTypeDtoFull updatedTaskType = converter.toDto(taskType);
 
-        return new ResponseEntity<>(taskTypeDto, HttpStatus.OK);
-
-        /* old version */
-//        TaskType taskType = converter.toModel(taskTypeDto);
-//        taskTypeRefreshService.refresh(taskType);
-//        TaskTypeDtoFull updatedTaskType = converter.toDto(taskType);
-//
-//        return new ResponseEntity<>(updatedTaskType, HttpStatus.OK);
+        return new ResponseEntity<>(updatedTaskType, HttpStatus.OK);
     }
 
     /**
