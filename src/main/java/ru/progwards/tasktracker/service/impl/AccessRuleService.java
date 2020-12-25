@@ -1,50 +1,51 @@
 package ru.progwards.tasktracker.service.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
+//import ru.progwards.tasktracker.repository.deprecated.Repository;
+import ru.progwards.tasktracker.repository.AccessRuleRepository;
+//import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.AccessRule;
 
 import java.util.List;
 
+/**
+ * @author Artem Dikov
+ */
+
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccessRuleService implements CreateService<AccessRule>, GetListService<AccessRule>, GetService<Long, AccessRule>,
         RefreshService<AccessRule>, RemoveService<AccessRule> {
 
-    @Autowired
-    private Repository<Long, AccessRuleEntity> accessRuleRepository;
-//    @Autowired
-//    private Converter<AccessRule, AccessRule> accessRuleConverter;
-
+    @NonNull
+    private final AccessRuleRepository accessRuleRepository;
 
     @Override
     public void create(AccessRule model) {
-//        accessRuleRepository.create(accessRuleConverter.toEntity(model));
+        accessRuleRepository.save(model);
     }
 
     @Override
     public List<AccessRule> getList() {
-//        return accessRuleRepository.get().stream()
-//                .map(entity -> accessRuleConverter.toVo(entity))
-//                .collect(Collectors.toList());
-        return null;
+        return accessRuleRepository.findAll();
     }
 
     @Override
     public AccessRule get(Long id) {
-//        return accessRuleConverter.toVo(accessRuleRepository.get(id));
-        return null;
+        return accessRuleRepository.findById(id).get();
     }
 
     @Override
     public void refresh(AccessRule model) {
-//        accessRuleRepository.update(accessRuleConverter.toEntity(model));
+        accessRuleRepository.save(model);
     }
 
     @Override
     public void remove(AccessRule model) {
-        accessRuleRepository.delete(model.getId());
+        accessRuleRepository.deleteById(model.getId());
     }
 }
