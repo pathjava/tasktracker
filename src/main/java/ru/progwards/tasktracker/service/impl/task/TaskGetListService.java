@@ -19,22 +19,23 @@ import java.util.stream.Collectors;
  */
 @Service
 @Deprecated
-public class TaskGetListService implements GetListService<Task> {
+public class TaskGetListService /*implements GetListService<Task>*/ {
 
-    @Autowired
-    private Repository<Long, TaskEntity> repository;
-    @Autowired
-    private Converter<TaskEntity, Task> converter;
-
-    /**
-     * Метод получения всех задач без привязки к какому-либо проекту
-     *
-     * @return коллекцию задач (может иметь пустое значение)
-     */
-    @Override
-    public List<Task> getList() {
-        return repository.get().stream()
-                .map(entity -> converter.toVo(entity))
-                .collect(Collectors.toList());
-    }
+////    @Autowired
+//    private Repository<Long, TaskEntity> repository;
+////    @Autowired
+//    private Converter<TaskEntity, Task> converter;
+//
+//    /**
+//     * Метод получения всех задач без привязки к какому-либо проекту
+//     *
+//     * @return коллекцию задач (может иметь пустое значение)
+//     */
+//    @Override
+//    public List<Task> getList() {
+//        return repository.get().stream()
+//                .map(entity -> converter.toVo(entity))
+//                .collect(Collectors.toList());
+//        return null;
+//    }
 }

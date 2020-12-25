@@ -18,25 +18,25 @@ import java.time.ZonedDateTime;
  */
 @Service
 @Deprecated
-public class TaskRefreshService implements RefreshService<Task> {
+public class TaskRefreshService /*implements RefreshService<Task>*/ {
 
-    @Autowired
-    private Repository<Long, TaskEntity> repository;
-    @Autowired
-    private Converter<TaskEntity, Task> converter;
-
-    /**
-     * Метод обновления задачи
-     *
-     * @param model  value object - объект бизнес логики (задача), который необходимо обновить
-     */
-    @Override
-    public void refresh(Task model) {
-        if (model.getTimeLeft().isNegative())
-            model.setTimeLeft(Duration.ZERO);
-
-        model.setUpdated(ZonedDateTime.now());
-
-        repository.update(converter.toEntity(model));
-    }
+////    @Autowired
+//    private Repository<Long, TaskEntity> repository;
+////    @Autowired
+//    private Converter<TaskEntity, Task> converter;
+//
+//    /**
+//     * Метод обновления задачи
+//     *
+//     * @param model  value object - объект бизнес логики (задача), который необходимо обновить
+//     */
+//    @Override
+//    public void refresh(Task model) {
+//        if (model.getTimeLeft().isNegative())
+//            model.setTimeLeft(Duration.ZERO);
+//
+//        model.setUpdated(ZonedDateTime.now());
+//
+//        repository.update(converter.toEntity(model));
+//    }
 }

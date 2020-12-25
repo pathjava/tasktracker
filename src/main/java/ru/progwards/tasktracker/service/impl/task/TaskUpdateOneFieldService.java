@@ -17,21 +17,21 @@ import ru.progwards.tasktracker.model.UpdateOneValue;
  */
 @Service
 @Deprecated
-public class TaskUpdateOneFieldService implements UpdateOneFieldService<Task> {
+public class TaskUpdateOneFieldService /*implements UpdateOneFieldService<Task>*/ {
 
     //@Qualifier("taskRepository")
     //@Autowired
-    private RepositoryUpdateField<TaskEntity> repository;
-
-    /**
-     * Метод обновления поля задачи
-     *
-     * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
-     */
-    @Override
-    public void updateOneField(UpdateOneValue oneValue) {
-        if (oneValue.getFieldName().equals("code"))
-            throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
-        repository.updateField(oneValue);
-    }
+//    private RepositoryUpdateField<TaskEntity> repository;
+//
+//    /**
+//     * Метод обновления поля задачи
+//     *
+//     * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
+//     */
+//    @Override
+//    public void updateOneField(UpdateOneValue oneValue) {
+//        if (oneValue.getFieldName().equals("code"))
+//            throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
+//        repository.updateField(oneValue);
+//    }
 }

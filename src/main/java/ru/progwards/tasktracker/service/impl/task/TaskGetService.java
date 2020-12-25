@@ -15,21 +15,22 @@ import ru.progwards.tasktracker.model.Task;
  */
 @Service
 @Deprecated
-public class TaskGetService implements GetService<Long, Task> {
+public class TaskGetService /*implements GetService<Long, Task>*/ {
 
-    @Autowired
-    private Repository<Long, TaskEntity> repository;
-    @Autowired
-    private Converter<TaskEntity, Task> converter;
-
-    /**
-     * Метод получения задачи по идентификатору
-     *
-     * @param id идентификатор по которому необходимо получить задачу
-     * @return найденную задачу или пусто
-     */
-    @Override
-    public Task get(Long id) {
-        return id == null ? null : converter.toVo(repository.get(id));
-    }
+////    @Autowired
+//    private Repository<Long, TaskEntity> repository;
+////    @Autowired
+//    private Converter<TaskEntity, Task> converter;
+//
+//    /**
+//     * Метод получения задачи по идентификатору
+//     *
+//     * @param id идентификатор по которому необходимо получить задачу
+//     * @return найденную задачу или пусто
+//     */
+//    @Override
+//    public Task get(Long id) {
+//        return id == null ? null : converter.toVo(repository.get(id));
+//        return null;
+//    }
 }
