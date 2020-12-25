@@ -1,22 +1,24 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.RelationTypeDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.RelationType;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Контроллер для работы с типами отношений связанных задач
+ * Контроллер для работы с типами отношений (RelationType) связанных задач (RelatedTask)
  *
  * @author Oleg Kiselev
  */
@@ -24,114 +26,113 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/rest/relationtype",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelationTypeController {
 
-    @Autowired
-    private GetService<Long, RelationType> getService;
-    @Autowired
-    private CreateService<RelationType> createService;
-    @Autowired
-    private RemoveService<RelationType> removeService;
-    @Autowired
-    private RefreshService<RelationType> refreshService;
-    @Autowired
-    private GetListService<RelationType> getListService;
-    @Autowired
-    private Converter<RelationType, RelationTypeDtoFull> converter;
+    private final @NonNull GetService<Long, RelationType> relationTypeGetService;
+    private final @NonNull CreateService<RelationType> relationTypeCreateService;
+    private final @NonNull RemoveService<RelationType> relationTypeRemoveService;
+    private final @NonNull RefreshService<RelationType> relationTypeRefreshService;
+    private final @NonNull GetListService<RelationType> relationTypeGetListService;
+    private final @NonNull Converter<RelationType, RelationTypeDtoFull> converter;
 
     /**
-     * Метод получения типа отношения связанных задач
+     * Метод получения типа отношения (RelationType) связанных задач (RelatedTask)
      *
      * @param id идентификатор типа отношения
-     * @return полученный по идентификатору Dto тип отношения
+     * @return полученный по идентификатору RelationTypeDtoFull
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RelationTypeDtoFull> getRelationType(@PathVariable Long id) {
+    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        RelationTypeDtoFull typeDto = converter.toDto(getService.get(id));
-
-        if (typeDto == null) //TODO - пустой тип или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Тип отношения с id: " + id + " не найден!");
+        RelationTypeDtoFull typeDto = converter.toDto(relationTypeGetService.get(id));
 
         return new ResponseEntity<>(typeDto, HttpStatus.OK);
     }
 
     /**
-     * Метод получения коллекции типов отношений связанных задач
+     * Метод получения коллекции типов отношений (RelationType) связанных задач (RelatedTask)
      *
-     * @return коллекция Dto типов отношений
+     * @return лист RelationTypeDtoFull
      */
     @GetMapping(value = "/list")
-    public ResponseEntity<Collection<RelationTypeDtoFull>> getListRelationType() {
-        Collection<RelationTypeDtoFull> collection = getListService.getList().stream()
-                .map(relationType -> converter.toDto(relationType))
-                .collect(Collectors.toUnmodifiableList());
+    public ResponseEntity<List<RelationTypeDtoFull>> getList() {
+        List<RelationTypeDtoFull> list = relationTypeGetListService.getList().stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
 
-        if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список отношений пустой!");
+        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список RelationTypeDtoFull пустой!");
 
-        return new ResponseEntity<>(collection, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
-     * Метод создания типа отношения связанных задач
+     * Метод создания типа отношения (RelationType) связанных задач (RelatedTask)
      *
-     * @param typeDto создаваемый Dto тип отношения
-     * @return созданный тип отношения
+     * @param relationTypeDto создаваемый Dto тип отношения
+     * @return созданный RelationTypeDtoFull
      */
     @PostMapping(value = "/create")
-    public ResponseEntity<RelationTypeDtoFull> createRelationType(@RequestBody RelationTypeDtoFull typeDto) {
-        if (typeDto == null)
-            throw new BadRequestException("Пустой объект!");
+    public ResponseEntity<RelationTypeDtoFull> create(@RequestBody RelationTypeDtoFull relationTypeDto) {
+        if (relationTypeDto == null)
+            throw new BadRequestException("RelationTypeDtoFull == null");
 
-        RelationType relationType = converter.toModel(typeDto);
-        createService.create(relationType);
-        RelationTypeDtoFull createdRelationType = converter.toDto(relationType);
+        relationTypeCreateService.create(converter.toModel(relationTypeDto));
 
-        return new ResponseEntity<>(createdRelationType, HttpStatus.OK);
+        return new ResponseEntity<>(relationTypeDto, HttpStatus.OK);
+
+        /* old version */
+//        RelationType relationType = converter.toModel(relationTypeDto);
+//        relationTypeCreateService.create(relationType);
+//        RelationTypeDtoFull createdRelationType = converter.toDto(relationType);
+//
+//        return new ResponseEntity<>(createdRelationType, HttpStatus.OK);
     }
 
     /**
-     * Метод обновления типа отношения связанных задач
+     * Метод обновления типа отношения (RelationType) связанных задач (RelatedTask)
      *
-     * @param id      идентификатор обновляемого типа отношения
-     * @param typeDto обновляемый Dto тип отношения
-     * @return обновленный тип отношения
+     * @param id              идентификатор обновляемого типа отношения
+     * @param relationTypeDto обновляемый Dto тип отношения
+     * @return обновленный RelationTypeDtoFull
      */
     @PutMapping(value = "/{id}/update")
-    public ResponseEntity<RelationTypeDtoFull> updateRelationType(@PathVariable Long id,
-                                                                  @RequestBody RelationTypeDtoFull typeDto) {
+    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable Long id,
+                                                      @RequestBody RelationTypeDtoFull relationTypeDto) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        if (!id.equals(typeDto.getId()))
+        if (!id.equals(relationTypeDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        RelationType relationType = converter.toModel(typeDto);
-        refreshService.refresh(relationType);
-        RelationTypeDtoFull updatedRelationType = converter.toDto(relationType);
+        relationTypeRefreshService.refresh(converter.toModel(relationTypeDto));
 
-        return new ResponseEntity<>(updatedRelationType, HttpStatus.OK);
+        return new ResponseEntity<>(relationTypeDto, HttpStatus.OK);
+
+        /* old version */
+//        RelationType relationType = converter.toModel(relationTypeDto);
+//        relationTypeRefreshService.refresh(relationType);
+//        RelationTypeDtoFull updatedRelationType = converter.toDto(relationType);
+//
+//        return new ResponseEntity<>(updatedRelationType, HttpStatus.OK);
     }
 
     /**
-     * Метод удаления типа отношения связанных задач
+     * Метод удаления типа отношения (RelationType) связанных задач (RelatedTask)
      *
      * @param id идентификатор удаляемого типа отношения
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelationTypeDtoFull> deleteRelationType(@PathVariable Long id) {
+    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        RelationType relationType = getService.get(id);
-        if (relationType != null)
-            removeService.remove(relationType);
-        else
-            throw new NotFoundException("Тип отношения с id: " + id + " не найден!");
+        RelationType relationType = relationTypeGetService.get(id);
+        relationTypeRemoveService.remove(relationType);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

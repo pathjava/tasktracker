@@ -1,24 +1,25 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.TaskType;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Контроллер для работы с типами задач
+ * Контроллер для работы с типами задач (TaskType)
  *
  * @author Oleg Kiselev
  */
@@ -26,145 +27,146 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/rest/tasktype",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskTypeController {
 
-    @Autowired
-    private CreateService<TaskType> createService;
-    @Autowired
-    private GetService<Long, TaskType> getService;
-    @Autowired
-    private GetListService<TaskType> getListService;
-    @Autowired
-    private RemoveService<TaskType> removeService;
-    @Autowired
-    private RefreshService<TaskType> refreshService;
+    private final @NonNull CreateService<TaskType> taskTypeCreateService;
+    private final @NonNull GetService<Long, TaskType> taskTypeGetService;
+    private final @NonNull GetListService<TaskType> taskTypeGetListService;
+    private final @NonNull RemoveService<TaskType> taskTypeRemoveService;
+    private final @NonNull RefreshService<TaskType> taskTypeRefreshService;
+    private final @NonNull Converter<TaskType, TaskTypeDtoFull> converter;
+    private final @NonNull GetService<Long, Project> projectGetService;
+
 //    @Autowired
 //    private GetListByProjectService<Long, TaskType> byProjectService;
-    @Autowired
-    private Converter<TaskType, TaskTypeDtoFull> converter;
-    @Autowired
-    private GetService<Long, Project> getProjectService;
+
 
     /**
-     * Метод создания типа задачи
+     * Метод создания типа задачи (TaskType)
      *
-     * @param taskTypeDtoFull сущность, приходящая в запросе из пользовательского интерфейса
-     * @return возвращает созданный тип задачи
+     * @param taskTypeDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает созданный TaskTypeDtoFull
      */
     @PostMapping(value = "/create")
-    public ResponseEntity<TaskTypeDtoFull> createTaskType(@RequestBody TaskTypeDtoFull taskTypeDtoFull) {
-        if (taskTypeDtoFull == null)
-            throw new BadRequestException("Пустой объект!");
+    public ResponseEntity<TaskTypeDtoFull> create(@RequestBody TaskTypeDtoFull taskTypeDto) {
+        if (taskTypeDto == null)
+            throw new BadRequestException("TaskTypeDtoFull == null");
 
-        TaskType taskType = converter.toModel(taskTypeDtoFull);
-        createService.create(taskType);
-        TaskTypeDtoFull createdTaskType = converter.toDto(taskType);
+        taskTypeCreateService.create(converter.toModel(taskTypeDto));
 
-        return new ResponseEntity<>(createdTaskType, HttpStatus.OK);
+        return new ResponseEntity<>(taskTypeDto, HttpStatus.OK);
+
+        /* old version */
+//        TaskType taskType = converter.toModel(taskTypeDto);
+//        taskTypeCreateService.create(taskType);
+//        TaskTypeDtoFull createdTaskType = converter.toDto(taskType);
+//
+//        return new ResponseEntity<>(createdTaskType, HttpStatus.OK);
     }
 
     /**
-     * Метод получения типа задачи
+     * Метод получения типа задачи (TaskType)
      *
      * @param id идентификатор типа задачи
-     * @return возвращает тип задачи
+     * @return возвращает TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity<TaskTypeDtoFull> getTaskType(@PathVariable Long id) {
+    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        TaskTypeDtoFull taskType = converter.toDto(getService.get(id));
-
-        if (taskType == null) //TODO - пустой тип или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Тип задачи с id: " + id + " не найден!");
+        TaskTypeDtoFull taskType = converter.toDto(taskTypeGetService.get(id));
 
         return new ResponseEntity<>(taskType, HttpStatus.OK);
     }
 
     /**
-     * Метод получения коллекции типов задач
+     * Метод получения коллекции всех типов задач (TaskType)
      *
-     * @return коллекция Dto типов задач
+     * @return лист TaskTypeDtoFull
      */
     @GetMapping(value = "/list")
-    public ResponseEntity<Collection<TaskTypeDtoFull>> getListTaskType() {
-        Collection<TaskTypeDtoFull> collection = getListService.getList().stream()
-                .map(taskType -> converter.toDto(taskType))
-                .collect(Collectors.toUnmodifiableList());
+    public ResponseEntity<List<TaskTypeDtoFull>> getList() {
+        List<TaskTypeDtoFull> list = taskTypeGetListService.getList().stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
 
-        if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список типов задач пустой!");
+        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список TaskTypeDtoFull пустой!");
 
-        return new ResponseEntity<>(collection, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
-     * Метод обновления типа задачи
+     * Метод получения коллекции типов задач по идентификатору проекта (TaskType)
      *
-     * @param id              идентификатор обновляемого типа задачи
-     * @param taskTypeDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
-     * @return возвращает обновленный тип задачи
+     * @param id идентификатор проекта по которому необходимо получить все типы задач данного проекта
+     * @return возвращает лист TaskTypeDtoFull
      */
-    @PutMapping(value = "/{id}/update")
-    public ResponseEntity<TaskTypeDtoFull> updateTaskType(@PathVariable Long id,
-                                                          @RequestBody TaskTypeDtoFull taskTypeDtoFull) {
+    @GetMapping(value = "/{id}/list") //TODO - у данного метода не реализован метод в сервисе
+    public ResponseEntity<List<TaskTypeDtoFull>> getListByProject(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        if (!id.equals(taskTypeDtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+        Project project = projectGetService.get(id);
+        List<TaskTypeDtoFull> list = project.getTaskTypes().stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
 
-        TaskType taskType = converter.toModel(taskTypeDtoFull);
-        refreshService.refresh(taskType);
-        TaskTypeDtoFull updatedTaskType = converter.toDto(taskType);
+        /* old version */
+//        Collection<TaskTypeDtoFull> collection = byProjectService.getListByProjectId(id).stream()
+//                .map(taskType -> converter.toDto(taskType))
+//                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(updatedTaskType, HttpStatus.OK);
+        if (list.isEmpty())
+            throw new NotFoundException("Список TaskTypeDtoFull пустой!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
-     * Метод удаления типа задачи
+     * Метод обновления типа задачи (TaskType)
+     *
+     * @param id          идентификатор обновляемого типа задачи
+     * @param taskTypeDto обновляемая сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает обновленный TaskTypeDtoFull
+     */
+    @PutMapping(value = "/{id}/update")
+    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable Long id, @RequestBody TaskTypeDtoFull taskTypeDto) {
+        if (id == null)
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+
+        if (!id.equals(taskTypeDto.getId()))
+            throw new BadRequestException("Данная операция недопустима!");
+
+        taskTypeRefreshService.refresh(converter.toModel(taskTypeDto));
+
+        return new ResponseEntity<>(taskTypeDto, HttpStatus.OK);
+
+        /* old version */
+//        TaskType taskType = converter.toModel(taskTypeDto);
+//        taskTypeRefreshService.refresh(taskType);
+//        TaskTypeDtoFull updatedTaskType = converter.toDto(taskType);
+//
+//        return new ResponseEntity<>(updatedTaskType, HttpStatus.OK);
+    }
+
+    /**
+     * Метод удаления типа задачи (TaskType)
      *
      * @param id идентификатор удаляемого типа задачи
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<TaskTypeDtoFull> deleteTaskType(@PathVariable Long id) {
+    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        TaskType taskType = getService.get(id);
-        if (taskType != null)
-            removeService.remove(taskType);
-        else
-            throw new NotFoundException("Тип задачи с id: " + id + " не найден!");
+        TaskType taskType = taskTypeGetService.get(id);
+        taskTypeRemoveService.remove(taskType);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    /**
-     * Метод получения коллекции типов задач по идентификатору проекта
-     *
-     * @param id идентификатор проекта по которому необходимо получить все типы задач данного проекта
-     * @return возвращает коллекцию типов задач
-     */
-    @GetMapping(value = "/{id}/list") //TODO - у данного метода не реализован метод в сервисе
-    public ResponseEntity<Collection<TaskTypeDtoFull>> getListTaskType(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
-
-//        Collection<TaskTypeDtoFull> collection = byProjectService.getListByProjectId(id).stream()
-//                .map(taskType -> converter.toDto(taskType))
-//                .collect(Collectors.toList());
-        Project project = getProjectService.get(id);
-        List<TaskTypeDtoFull> list = project.getTaskTypes().stream()
-                .map(taskType -> converter.toDto(taskType))
-                .collect(Collectors.toList());
-
-        if (list.isEmpty())
-            throw new NotFoundException("Список типов задач пустой!");
-
-        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }

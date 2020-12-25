@@ -1,25 +1,27 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.RelatedTask;
+import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.service.CreateService;
-import ru.progwards.tasktracker.service.GetListByTaskService;
 import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.service.RemoveService;
-import ru.progwards.tasktracker.model.RelatedTask;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Контроллер для работы со связанными задачами
+ * Контроллер для работы со связанными задачами (RelatedTask)
  *
  * @author Oleg Kiselev
  */
@@ -27,74 +29,80 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/rest/relatedtask",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelatedTaskController {
 
-    @Autowired
-    private RemoveService<RelatedTask> removeService;
-    @Autowired
-    private GetListByTaskService<Long, RelatedTask> listByTaskService;
-    @Autowired
-    private CreateService<RelatedTask> createService;
-    @Autowired
-    private Converter<RelatedTask, RelatedTaskDtoFull> converter;
-    @Autowired
-    private GetService<Long, RelatedTask> getService;
+    private final @NonNull CreateService<RelatedTask> relatedTaskCreateService;
+    private final @NonNull GetService<Long, RelatedTask> relatedTaskGetService;
+    private final @NonNull RemoveService<RelatedTask> relatedTaskRemoveService;
+    private final @NonNull GetService<Long, Task> taskGetService;
+    private final @NonNull Converter<RelatedTask, RelatedTaskDtoFull> converter;
+
+//    private GetListByTaskService<Long, RelatedTask> listByTaskService;
 
     /**
-     * Метод создания связанной задачи
+     * Метод создания связанной задачи (RelatedTask)
      *
-     * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
-     * @return возвращает созданную задачу
+     * @param relatedTaskDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает созданную RelatedTaskDtoFull
      */
     @PostMapping(value = "/create")
-    public ResponseEntity<RelatedTaskDtoFull> createRelatedTask(@RequestBody RelatedTaskDtoFull taskDto) {
-        if (taskDto == null)
-            throw new BadRequestException("Пустой объект!");
+    public ResponseEntity<RelatedTaskDtoFull> create(@RequestBody RelatedTaskDtoFull relatedTaskDto) {
+        if (relatedTaskDto == null)
+            throw new BadRequestException("RelatedTaskDtoFull == null");
 
-        RelatedTask relatedTask = converter.toModel(taskDto);
-        createService.create(relatedTask);
-        RelatedTaskDtoFull createdRelatedTask = converter.toDto(relatedTask);
+        relatedTaskCreateService.create(converter.toModel(relatedTaskDto));
 
-        return new ResponseEntity<>(createdRelatedTask, HttpStatus.OK);
+        return new ResponseEntity<>(relatedTaskDto, HttpStatus.OK);
+
+        /* old version */
+//        RelatedTask relatedTask = converter.toModel(relatedTaskDto);
+//        createService.create(relatedTask);
+//        RelatedTaskDtoFull createdRelatedTask = converter.toDto(relatedTask);
+//
+//        return new ResponseEntity<>(createdRelatedTask, HttpStatus.OK);
     }
 
     /**
-     * Метод получения коллекции связанных задач по идентификатору задачи
+     * Метод получения коллекции связанных задач (RelatedTask) по идентификатору задачи (Task)
      *
      * @param id идентификатор задачи для которой надо получить связанные задачи
-     * @return коллекция связанных задач
+     * @return лист RelatedTaskDtoFull
      */
     @GetMapping(value = "/{id}/list")
-    public ResponseEntity<Collection<RelatedTaskDtoFull>> getListRelatedTasks(@PathVariable Long id) {
+    public ResponseEntity<List<RelatedTaskDtoFull>> getList(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<RelatedTaskDtoFull> collection = listByTaskService.getListByTaskId(id).stream()
-                .map(relatedTask -> converter.toDto(relatedTask))
+        Task task = taskGetService.get(id);
+        List<RelatedTaskDtoFull> list = task.getRelatedTasks().stream()
+                .map(converter::toDto)
                 .collect(Collectors.toList());
 
-        if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список задач пустой!");
+        /* old version */
+//        Collection<RelatedTaskDtoFull> collection = listByTaskService.getListByTaskId(id).stream()
+//                .map(relatedTask -> converter.toDto(relatedTask))
+//                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(collection, HttpStatus.OK);
+        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список RelatedTaskDtoFull пустой!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
-     * Метод удаления связанной задачи
+     * Метод удаления связанной задачи (RelatedTask)
      *
      * @param id идентификатор удаляемой задачи
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelatedTaskDtoFull> deleteRelatedTask(@PathVariable Long id) {
+    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        RelatedTask relatedTask = getService.get(id);
-        if (relatedTask != null)
-            removeService.remove(relatedTask);
-        else
-            throw new NotFoundException("Связанная задача с id: " + id + " не найдена!");
+        RelatedTask relatedTask = relatedTaskGetService.get(id);
+        relatedTaskRemoveService.remove(relatedTask);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
