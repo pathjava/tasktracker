@@ -20,7 +20,7 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
     /**
      * Метод проверки существуют ли в Task уже RelatedTask с типом RelationType
      *
-     * @param currentTask текущая Task
+     * @param currentTask  текущая Task
      * @param attachedTask встречная (прикрепленная) Task
      * @param relationType тип связи между задачами
      * @return true - если связь типа relationType между currentTask и attachedTask существует,
@@ -33,7 +33,7 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
     /**
      * Метод получения встречной RelatedTask
      *
-     * @param attachedTask attachedTask задача Task на которую указывает RelatedTask
+     * @param attachedTask    attachedTask задача Task на которую указывает RelatedTask
      * @param counterRelation RelationType встречной RelatedTask
      * @return встречная RelatedTask
      */
@@ -64,5 +64,11 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
      */
     boolean existsRelatedTaskByRelationType(RelationType relationType);
 
+    /**
+     * Метод получения всех RelatedTask конкретной Task
+     *
+     * @param currentTask Task у которой надо получить все её RelatedTask
+     * @return лист RelatedTask
+     */
     List<RelatedTask> findAllByCurrentTask(Task currentTask);
 }

@@ -38,7 +38,7 @@ public class RelatedTask {
     private Task attachedTask;
 
 //    @Type(type = "true_false")
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "boolean default false")
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
 
 }

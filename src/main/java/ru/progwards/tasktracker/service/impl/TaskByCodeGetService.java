@@ -1,12 +1,14 @@
-package ru.progwards.tasktracker.service.impl.task;
+package ru.progwards.tasktracker.service.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryByCode;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.GetService;
+import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.repository.TaskRepository;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Бизнес-логика получения задачи по коду
@@ -14,12 +16,11 @@ import ru.progwards.tasktracker.model.Task;
  * @author Oleg Kiselev
  */
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskByCodeGetService implements GetService<String, Task> {
 
-    @Autowired
-    private RepositoryByCode<String, TaskEntity> repositoryByCode;
-    @Autowired
-    private Converter<TaskEntity, Task> converter;
+    private final @NonNull TaskRepository taskRepository;
 
     /**
      * Метод получения задачи по текстовому коду задачи
@@ -29,6 +30,7 @@ public class TaskByCodeGetService implements GetService<String, Task> {
      */
     @Override
     public Task get(String code) {
-        return code == null ? null : converter.toVo(repositoryByCode.getByCode(code));
+        return taskRepository.findByCodeAndDeletedFalse(code)
+                .orElseThrow(() -> new NotFoundException("Task code=" + code + " not found"));
     }
 }

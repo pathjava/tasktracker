@@ -25,7 +25,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     boolean existsTaskByType(TaskType type);
 
     /**
-     * Метод получения Task если её поле deleted имеет значение false
+     * Метод получения Task по идентификатору если её поле deleted имеет значение false
      *
      * @param id идентификатор запрашиваемой Task
      * @return Task
@@ -39,4 +39,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      */
     List<Task> findAllByDeletedFalse();
 
+    /**
+     * Метод получения Task по коду если её поле deleted имеет значение false
+     *
+     * @param code текстовый код запрашиваемой Task
+     * @return Task
+     */
+    Optional<Task> findByCodeAndDeletedFalse(String code);
 }
