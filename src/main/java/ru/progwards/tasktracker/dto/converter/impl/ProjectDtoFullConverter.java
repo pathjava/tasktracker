@@ -42,12 +42,12 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
         if (model == null) {
             return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                     userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(),
-                    null, null, null);
+                    null, null, null, false);
         }
 
         return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                 userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(), model.getTasks(),
-                model.getTaskTypes(), model.getLastTaskCode());
+                model.getTaskTypes(), model.getLastTaskCode(), model.isDeleted());
     }
 
     /**

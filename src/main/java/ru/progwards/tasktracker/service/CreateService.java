@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Создание бизнес-объекта
  *
@@ -7,6 +9,7 @@ package ru.progwards.tasktracker.service;
  */
 public interface CreateService<M> {
 
+//    @Transactional
     void create(M model);
 
 }

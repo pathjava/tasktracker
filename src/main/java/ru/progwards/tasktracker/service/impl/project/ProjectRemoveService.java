@@ -2,7 +2,9 @@ package ru.progwards.tasktracker.service.impl.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
 import ru.progwards.tasktracker.repository.deprecated.entity.ProjectEntity;
 import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
@@ -22,35 +24,25 @@ public class ProjectRemoveService implements RemoveService<Project> {
      * репозиторий с проектами
      */
     @Autowired
-    private Repository<Long, ProjectEntity> repository;
-    /**
-     * конвертер проектов
-     */
-    @Autowired
-    private Converter<ProjectEntity, Project> converter;
-    /**
-     * для получения Task, относящихся к проекту
-     */
-    @Autowired
-    private GetListByProjectService<Long, Task> taskGetListByProjectService;
+    private ProjectRepository repository;
 
     /**
      * метод по удалению проекта
      * @param model бизнес-модель проекта, которую необходимо удалить
      */
+    @Transactional
     @Override
     public void remove(Project model) {
-        Project project = converter.toVo(repository.get(model.getId()));
+        Project project = repository.findById(model.getId()).orElseThrow(() ->
+                new OperationIsNotPossibleException("Project.id = " + model.getId() + " doesn't exist"));
 
         // если спискок задач у проекта пустой, то удаляем проект; если какие-то задачи есть, то выводим исключение
-        if (taskGetListByProjectService.getListByProjectId(project.getId()).size() == 0) {
-            ProjectEntity entity = converter.toEntity(model);
+        if (project.getTasks().size() == 0) {
             // устанавливаем флажок, который означает, что проект удалён
-            entity.setDeleted(true);
-            repository.update(entity);
+            model.setDeleted(true);
+            repository.save(model);
 //            repository.delete(model.getId());
         } else
-            throw new OperationIsNotPossibleException("Project with id = " + model.getId() +
-                    " have tasks. Delete not possible");
+            throw new OperationIsNotPossibleException("Project has the tasks. Delete not possible");
     }
 }
