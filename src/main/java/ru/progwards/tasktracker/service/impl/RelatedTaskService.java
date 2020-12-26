@@ -149,7 +149,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     public void remove(RelatedTask model) {
         if (model.getRelationType().getCounterRelation() != null) {
             RelatedTask counterRelatedTask = relatedTaskRepository
-                    .getRelatedTaskByAttachedTaskAndRelationType_CounterRelation(
+                    .findRelatedTaskByAttachedTaskAndRelationType_CounterRelation(
                             model.getAttachedTask(), model.getRelationType().getCounterRelation()
                     )
                     .orElseThrow(() -> new NotFoundException("counterRelatedTask not found"));

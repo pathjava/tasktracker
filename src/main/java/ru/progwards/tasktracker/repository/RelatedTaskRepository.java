@@ -37,7 +37,7 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
      * @param counterRelation RelationType встречной RelatedTask
      * @return встречная RelatedTask
      */
-    Optional<RelatedTask> getRelatedTaskByAttachedTaskAndRelationType_CounterRelation(
+    Optional<RelatedTask> findRelatedTaskByAttachedTaskAndRelationType_CounterRelation(
             Task attachedTask, RelationType counterRelation
     );
 
