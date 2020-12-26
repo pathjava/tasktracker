@@ -2,136 +2,143 @@ package ru.progwards.tasktracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.UserDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
-import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Обработка запросов API по работе с пользователями
+ * Контроллер для работы с пользователями
  *
  * @author Aleksandr Sidelnikov
  */
 @RestController
-@RequestMapping("/rest/user")
+@RequestMapping(value = "/rest/user",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     @Autowired
-    GetService<Long, User> getService;
+    private CreateService<User> createService;
     @Autowired
-    CreateService<User> createService;
+    private GetService<Long, User> getService;
     @Autowired
-    RemoveService<User> removeService;
+    private GetListService<User> getListService;
     @Autowired
-    RefreshService<User> refreshService;
+    private RemoveService<User> removeService;
     @Autowired
-    GetListService<User> getListService;
+    private RefreshService<User> refreshService;
+//    @Autowired
+//    private GetListByProjectService<Long, User> byProjectService;
     @Autowired
-    Converter<User, UserDtoFull> dtoConverter;
+    private Converter<User, UserDtoFull> converter;
+    @Autowired
+    private GetService<Long, Project> getProjectService;
 
     /**
-     * Получить список всех пользователей
-     * GET /rest/user/list
+     * Метод создания пользователя
      *
-     * @return список пользователей
+     * @param userDtoFull сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает созданного пользователя
      */
-    @GetMapping("/list")
-    public ResponseEntity<Collection<UserDtoFull>> getList() {
-        // получили список бизнес-объектов
-        Collection<User> list = getListService.getList();
-        List<UserDtoFull> resultList = new ArrayList<>(list.size());
-        // преобразуем к dto
-        for (User entity:list) {
-            UserDtoFull dto = dtoConverter.toDto(entity);
-            resultList.add(dto);
-        }
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
+    @PostMapping(value = "/create")
+    public ResponseEntity<UserDtoFull> createUser(@RequestBody UserDtoFull userDtoFull) {
+        if (userDtoFull == null)
+            throw new BadRequestException("Пустой объект!");
+
+        User user = converter.toModel(userDtoFull);
+        createService.create(user);
+        UserDtoFull createdUser = converter.toDto(user);
+
+        return new ResponseEntity<>(createdUser, HttpStatus.OK);
     }
 
     /**
-     * Получить пользователя по id
-     * GET /rest/user/{id}
+     * Метод получения пользователя
      *
-     * @param id идентификатор объекта
-     * @return объект dto
+     * @param id идентификатор пользователя
+     * @return возвращает пользователя
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDtoFull> get(@PathVariable("id") Long id) {
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UserDtoFull> getUser(@PathVariable Long id) {
         if (id == null)
-            throw new BadRequestException("Id is not set");
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        User vo = getService.get(id);
-        UserDtoFull entity = dtoConverter.toDto(vo);
+        UserDtoFull user = converter.toDto(getService.get(id));
 
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        if (user == null) //TODO - пустой пользователь или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Пользователь с id: " + id + " не найден!");
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     /**
-     * Создаём нового пользователя
-     * POST /rest/user/create
+     * Метод получения коллекции пользователей
      *
-     * @param entity объект для создания
-     * @return объект после бизнес-логики
+     * @return коллекция Dto пользователей
      */
-    @PostMapping("/create")
-    public ResponseEntity<UserDtoFull> create(@RequestBody UserDtoFull entity) {
-        if (entity == null)
-            throw new BadRequestException("User is null");
+    @GetMapping(value = "/list")
+    public ResponseEntity<Collection<UserDtoFull>> getListUser() {
+        Collection<UserDtoFull> collection = getListService.getList().stream()
+                .map(user -> converter.toDto(user))
+                .collect(Collectors.toUnmodifiableList());
 
-        User vo = dtoConverter.toModel(entity);
-        createService.create(vo);
-        UserDtoFull result = dtoConverter.toDto(vo);
+        if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список пользователей пустой!");
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(collection, HttpStatus.OK);
     }
 
     /**
-     * Обновляем спользователей
-     * PUT /rest/user/{id}/update
+     * Метод обновления пользователя
      *
-     * @param id идентификатор изменяемого объекта
-     * @param entity измененный объект
+     * @param id              идентификатор обновляемого пользователя
+     * @param userDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
+     * @return возвращает обновленного пользователя
      */
-//    @PostMapping("/{id}/update")
-    @PutMapping("/{id}/update")
-    //  TODO            entity.setId(id); //    id в entity другой
-    public ResponseEntity<UserDtoFull> update(@PathVariable("id") Long id,
-                                              @RequestBody UserDtoFull entity) {
+    @PutMapping(value = "/{id}/update")
+    public ResponseEntity<UserDtoFull> updateUser(@PathVariable Long id,
+                                                          @RequestBody UserDtoFull userDtoFull) {
         if (id == null)
-            throw new BadRequestException("Id is not set");
-        if (entity == null)
-            throw new BadRequestException("User Id is null");
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        entity.setId(id);
-        User vo = dtoConverter.toModel(entity);
-        refreshService.refresh(vo);
-        UserDtoFull result = dtoConverter.toDto(vo);
+        if (!id.equals(userDtoFull.getId()))
+            throw new BadRequestException("Данная операция недопустима!");
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        User user = converter.toModel(userDtoFull);
+        refreshService.refresh(user);
+        UserDtoFull updatedUser = converter.toDto(user);
+
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     /**
-     * Удалить существующего пользователя
-     * DELETE /rest/user/{id}/delete
+     * Метод удаления пользователя
      *
-     * @param id идентификатор удаляемого объекта
+     * @param id идентификатор удаляемого пользователя
+     * @return возвращает статус ответа
      */
-//    @PostMapping("/delete")
-    @DeleteMapping("/{id}/delete")
-    @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
+    @DeleteMapping(value = "/{id}/delete")
+    public ResponseEntity<UserDtoFull> deleteUser(@PathVariable Long id) {
         if (id == null)
-            throw new BadRequestException("Workflow Id is not set");
+            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        User vo = getService.get(id);
-        removeService.remove(vo);
+        User user = getService.get(id);
+        if (user != null)
+            removeService.remove(user);
+        else
+            throw new NotFoundException("Пользователь с id: " + id + " не найден!");
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
