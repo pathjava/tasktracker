@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.service.impl.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
@@ -29,6 +30,7 @@ public class ProjectRemoveService implements RemoveService<Project> {
      * метод по удалению проекта
      * @param model бизнес-модель проекта, которую необходимо удалить
      */
+    @Transactional
     @Override
     public void remove(Project model) {
         Project project = repository.findById(model.getId()).orElseThrow(() ->

@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.service.impl.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.repository.ProjectRepository;
@@ -26,6 +27,7 @@ public class ProjectRefreshService implements RefreshService<Project> {
      * метод по обновлению проекта
      * @param model бизнес-модель, которую хотим обновить
      */
+    @Transactional
     @Override
     public void refresh(Project model) {
         Project project = repository.findById(model.getId()).orElseThrow(() ->

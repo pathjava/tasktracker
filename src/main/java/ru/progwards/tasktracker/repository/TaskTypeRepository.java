@@ -10,7 +10,6 @@ import ru.progwards.tasktracker.model.TaskType;
  * @author Oleg Kiselev
  */
 @Repository
-@NoRepositoryBean
 @Transactional(readOnly = true)
 public interface TaskTypeRepository extends JpaRepository<TaskType, Long> {
 

@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskPriority;
@@ -32,6 +33,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      * метот добавляет TaskPriority в репозиторий
      * @param model бизнес-модель
      */
+    @Transactional
     @Override
     public void create(TaskPriority model) {
         if (model == null)
@@ -63,6 +65,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      * метод по обновлению TaskPriority
      * @param model TaskPriority, который хотим обновить
      */
+    @Transactional
     @Override
     public void refresh(TaskPriority model) {
         if (model == null)
@@ -75,6 +78,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      * метод по удалению TaskPriority
      * @param model TaskPriority, который необходимо удалить
      */
+    @Transactional
     @Override
     public void remove(TaskPriority model) {
         TaskPriority taskPriority = repository.findById(model.getId()).
