@@ -34,7 +34,6 @@ public class ProjectCreateService implements CreateService<Project> {
      * метот добавляет проект в репозиторий
      * @param model бизнес-модель
      */
-    @Transactional
     @Override
     public void create(Project model) {
         if (model == null)

@@ -30,7 +30,6 @@ public class ProjectRemoveService implements RemoveService<Project> {
      * метод по удалению проекта
      * @param model бизнес-модель проекта, которую необходимо удалить
      */
-    @Transactional
     @Override
     public void remove(Project model) {
         Project project = repository.findById(model.getId()).orElseThrow(() ->

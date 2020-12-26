@@ -27,7 +27,6 @@ public class ProjectRefreshService implements RefreshService<Project> {
      * метод по обновлению проекта
      * @param model бизнес-модель, которую хотим обновить
      */
-    @Transactional
     @Override
     public void refresh(Project model) {
         Project project = repository.findById(model.getId()).orElseThrow(() ->
