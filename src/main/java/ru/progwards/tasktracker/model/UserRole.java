@@ -3,14 +3,20 @@ package ru.progwards.tasktracker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.progwards.tasktracker.model.types.SystemRole;
 
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * @author Artem Dikov
+ */
+
 @Entity
 @Table(name = "user_role")
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class UserRole {
     @Id

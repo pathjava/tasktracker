@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,27 +14,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Artem Dikov
+ */
+
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AccessRuleController {
 
-    @Autowired
-    private CreateService<AccessRule> accessRuleCreateService;
-    @Autowired
-    private GetListService<AccessRule> accessRuleGetListService;
-    @Autowired
-    private GetService<Long, AccessRule> accessRuleGetService;
-    @Autowired
-    private RefreshService<AccessRule> accessRuleRefreshService;
-    @Autowired
-    private RemoveService<AccessRule> accessRuleRemoveService;
+    private final CreateService<AccessRule> accessRuleCreateService;
+    private final GetListService<AccessRule> accessRuleGetListService;
+    private final GetService<Long, AccessRule> accessRuleGetService;
+    private final RefreshService<AccessRule> accessRuleRefreshService;
+    private final RemoveService<AccessRule> accessRuleRemoveService;
 
-    @Autowired
-    private Converter<AccessRule, AccessRuleDtoFull> accessRuleDtoConverter;
+    private final Converter<AccessRule, AccessRuleDtoFull> accessRuleDtoConverter;
 
     @GetMapping("/rest/accessRule/list")
     public ResponseEntity<List<AccessRuleDtoFull>> getAccessRuleList() {
-        Collection<AccessRule> voList = accessRuleGetListService.getList();
-        List<AccessRuleDtoFull> dtoList = voList.stream().map(vo -> accessRuleDtoConverter.toDto(vo)).collect(Collectors.toList());
+        List<AccessRule> voList = accessRuleGetListService.getList();
+        List<AccessRuleDtoFull> dtoList = voList.stream().map(accessRuleDtoConverter::toDto).collect(Collectors.toList());
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 

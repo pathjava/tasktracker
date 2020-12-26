@@ -18,4 +18,5 @@ public class UserRoleDtoFull {
     private String name;
     private SystemRole systemRole;
     private List<Long> accessRules;
+    private List<UserDtoPreview> userDtoPreviewList;
 }
