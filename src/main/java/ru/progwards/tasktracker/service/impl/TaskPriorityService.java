@@ -3,16 +3,12 @@ package ru.progwards.tasktracker.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskPriorityEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskPriority;
+import ru.progwards.tasktracker.repository.TaskPriorityRepository;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Сервисы для работы с TaskPriority
@@ -27,12 +23,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      * репозиторий с TaskPriorityEntity
      */
     @Autowired
-    private Repository<Long, TaskPriorityEntity> repository;
-    /**
-     * конвертер TaskPriority
-     */
-    @Autowired
-    private Converter<TaskPriorityEntity, TaskPriority> converter;
+    private TaskPriorityRepository repository;
 
     @Autowired
     private GetListService<Task> taskGetListService;
@@ -43,7 +34,10 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public void create(TaskPriority model) {
-        repository.create(converter.toEntity(model));
+        if (model == null)
+            throw new OperationIsNotPossibleException("Create TaskPriority is not possible");
+        else
+            repository.save(model);
     }
 
     /**
@@ -52,9 +46,8 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public List<TaskPriority> getList() {
-        return repository.get().stream().map(e -> converter.toVo(e)).collect(Collectors.toList());
+        return repository.findAll();
     }
-
     /**
      * метод по получению TaskPriority
      * @param id идентификатор TaskPriority, который необходимо получить
@@ -62,7 +55,8 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public TaskPriority get(Long id) {
-        return converter.toVo(repository.get(id));
+        return repository.findById(id).
+                orElseThrow(() -> new OperationIsNotPossibleException("TaskPriority.id = " + id + " doesn't exist"));
     }
 
     /**
@@ -71,7 +65,10 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public void refresh(TaskPriority model) {
-        repository.update(converter.toEntity(model));
+        if (model == null)
+            throw new OperationIsNotPossibleException("Create TaskPriority is not possible");
+
+        repository.save(model);
     }
 
     /**
@@ -80,7 +77,10 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public void remove(TaskPriority model) {
-        Collection<Task> tasks = taskGetListService.getList();
+        TaskPriority taskPriority = repository.findById(model.getId()).
+                orElseThrow(() -> new OperationIsNotPossibleException("TaskPriority.id = " + model.getId() + " doesn't exist"));
+
+        List<Task> tasks = taskPriority.getTasks();
 
         boolean isExist = false;
 
@@ -93,7 +93,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
         }
 
         if (!isExist)
-            repository.delete(model.getId());
+            repository.delete(model);
         else
             throw new OperationIsNotPossibleException("TaskPriority with id = " + model.getId() + " delete not possible");
     }

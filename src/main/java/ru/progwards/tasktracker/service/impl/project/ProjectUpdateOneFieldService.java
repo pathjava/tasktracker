@@ -17,7 +17,8 @@ import ru.progwards.tasktracker.model.UpdateOneValue;
  * Класс по обновлению поля у бизнес-модели Project
  * @author Pavel Khovaylo
  */
-@Service
+//TODO думаю НЕ нужна такая возможность в Project (можно убирать эту реализацию)
+//@Service
 public class ProjectUpdateOneFieldService implements UpdateOneFieldService<Project> {
 
     /**

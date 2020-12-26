@@ -71,4 +71,10 @@ public class Project  {
     @Basic
     @Column(name = "last_task_code", nullable = false)
     private Long lastTaskCode;
+    /**
+     * информация об удалении проекта
+     */
+    @Basic
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
 }
