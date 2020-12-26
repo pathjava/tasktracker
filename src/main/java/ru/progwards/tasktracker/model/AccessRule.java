@@ -8,6 +8,10 @@ import ru.progwards.tasktracker.model.types.AccessType;
 
 import javax.persistence.*;
 
+/**
+ * @author Artem Dikov
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
