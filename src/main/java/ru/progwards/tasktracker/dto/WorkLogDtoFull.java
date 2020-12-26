@@ -19,7 +19,7 @@ public class WorkLogDtoFull {
     private Long taskId;
     private Duration spent;
     private UserDtoPreview worker;
-    private ZonedDateTime when;
+    private ZonedDateTime start;
     private String description;
     private String estimateChange;
     private Duration estimateValue;

@@ -37,7 +37,7 @@ public class WorkLog {
     private User worker;
 
     @Column(nullable = false)
-    private ZonedDateTime when;
+    private ZonedDateTime start;
 
     private String description;
 

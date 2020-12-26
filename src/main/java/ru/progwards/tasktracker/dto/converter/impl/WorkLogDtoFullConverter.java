@@ -43,7 +43,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
                     task,
                     dto.getSpent(),
                     userDtoConverter.toModel(dto.getWorker()),
-                    dto.getWhen(),
+                    dto.getStart(),
                     dto.getDescription(),
                     stringToEnum(dto.getEstimateChange()),
                     dto.getEstimateValue()
@@ -85,7 +85,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
                     model.getTask().getId(),
                     model.getSpent(),
                     userDtoConverter.toDto(model.getWorker()),
-                    model.getWhen(),
+                    model.getStart(),
                     model.getDescription(),
                     enumToString(model.getEstimateChange()),
                     model.getEstimateValue()

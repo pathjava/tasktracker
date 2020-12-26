@@ -1,7 +1,13 @@
 package ru.progwards.tasktracker.service.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.repository.TaskTypeRepository;
+import ru.progwards.tasktracker.repository.UserRepository;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
 import ru.progwards.tasktracker.repository.deprecated.entity.UserEntity;
 import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
@@ -18,12 +24,11 @@ import java.util.List;
  * @author Aleksandr Sidelnikov
  */
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService implements CreateService<User>, RemoveService<User>, GetService<Long, User>, RefreshService<User>, GetListService<User> {
 
-    @Autowired
-    private Repository<Long, UserEntity> userRepository;
-    @Autowired
-    private Converter<UserEntity, User> userConverter;
+    private final @NonNull UserRepository userRepository;
 
     /**
      * Создание нового User
@@ -32,9 +37,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      */
     @Override
     public void create(User user) {
-        UserEntity entity = userConverter.toEntity(user);
-        userRepository.create(entity);
-        user.setId(entity.getId());
+        userRepository.save(user);
     }
 
     /**
@@ -44,7 +47,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      */
     @Override
     public void remove(User user) {
-        userRepository.delete(user.getId());
+        userRepository.delete(user);
     }
 
     /**
@@ -55,7 +58,8 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      */
     @Override
     public User get(Long id) {
-        return userConverter.toVo(userRepository.get(id));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User id=" + id + " not found"));
     }
 
 
@@ -66,7 +70,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      */
     @Override
     public void refresh(User user) {
-        userRepository.update(userConverter.toEntity(user));
+        userRepository.save(user);
     }
 
     /**
@@ -76,13 +80,6 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      */
     @Override
     public List<User> getList() {
-        // получили список сущностей
-        Collection<UserEntity> UserEntities = userRepository.get();
-        List<User> Users = new ArrayList<>(UserEntities.size());
-        // преобразуем к бизнес-объектам
-        for (UserEntity entity : UserEntities) {
-            Users.add(userConverter.toVo(entity));
-        }
-        return Users;
+        return userRepository.findAll();
     }
 }

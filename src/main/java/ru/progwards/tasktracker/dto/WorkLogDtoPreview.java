@@ -18,6 +18,6 @@ public class WorkLogDtoPreview {
     private Long id;
     private Duration spent;
     private UserDtoPreview worker;
-    private ZonedDateTime when;
+    private ZonedDateTime start;
 
 }

@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.UserDtoFull;
+import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
@@ -14,6 +15,7 @@ import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.service.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -37,12 +39,10 @@ public class UserController {
     private RemoveService<User> removeService;
     @Autowired
     private RefreshService<User> refreshService;
-//    @Autowired
-//    private GetListByProjectService<Long, User> byProjectService;
     @Autowired
     private Converter<User, UserDtoFull> converter;
     @Autowired
-    private GetService<Long, Project> getProjectService;
+    private Converter<User, UserDtoPreview> previewConverter;
 
     /**
      * Метод создания пользователя
@@ -87,15 +87,15 @@ public class UserController {
      * @return коллекция Dto пользователей
      */
     @GetMapping(value = "/list")
-    public ResponseEntity<Collection<UserDtoFull>> getListUser() {
-        Collection<UserDtoFull> collection = getListService.getList().stream()
-                .map(user -> converter.toDto(user))
+    public ResponseEntity<List<UserDtoPreview>> getListUser() {
+        List<UserDtoPreview> list = getListService.getList().stream()
+                .map(user -> previewConverter.toDto(user))
                 .collect(Collectors.toUnmodifiableList());
 
-        if (collection.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список пользователей пустой!");
 
-        return new ResponseEntity<>(collection, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
@@ -107,7 +107,7 @@ public class UserController {
      */
     @PutMapping(value = "/{id}/update")
     public ResponseEntity<UserDtoFull> updateUser(@PathVariable Long id,
-                                                          @RequestBody UserDtoFull userDtoFull) {
+                                                  @RequestBody UserDtoFull userDtoFull) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 

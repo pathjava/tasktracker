@@ -1,7 +1,10 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.dto.UserDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.service.GetService;
@@ -13,19 +16,14 @@ import ru.progwards.tasktracker.model.User;
  * @author Aleksandr Sidelnikov
  */
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserDtoPreviewConverter implements Converter<User, UserDtoPreview> {
-    @Autowired
-    private GetService<Long, User> userGetService;
+
+    private final @NonNull GetService<Long, User> userGetService;
 
     @Override
     public User toModel(UserDtoPreview dto) {
-//        User user = userGetService.get(dto.getId());
-//        return new User(dto.getId(),
-//                dto.getName(),
-//                user.getEmail(),
-//                user.getPassword(),
-//                user.getRoles());
-        return null;
+        return userGetService.get(dto.getId());
     }
 
     @Override

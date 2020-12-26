@@ -40,7 +40,7 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
                     workLog.getTask(),
                     dto.getSpent(),
                     userUserDtoConverter.toModel(dto.getWorker()),
-                    dto.getWhen(),
+                    dto.getStart(),
                     workLog.getDescription(),
                     workLog.getEstimateChange(),
                     workLog.getEstimateValue()
@@ -63,7 +63,7 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
                     model.getId(),
                     model.getSpent(),
                     userUserDtoConverter.toDto(model.getWorker()),
-                    model.getWhen()
+                    model.getStart()
             );
     }
 }
