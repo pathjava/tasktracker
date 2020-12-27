@@ -42,7 +42,6 @@ public class WorkLog {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private EstimateChange estimateChange;
 
     private Duration estimateValue;

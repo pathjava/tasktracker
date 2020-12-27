@@ -25,9 +25,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/tasktype",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/tasktype")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskTypeController {
 
@@ -46,7 +44,7 @@ public class TaskTypeController {
      * @param taskTypeDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный TaskTypeDtoFull
      */
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TaskTypeDtoFull> create(@RequestBody TaskTypeDtoFull taskTypeDto) {
         if (taskTypeDto == null)
             throw new BadRequestException("TaskTypeDtoFull == null");
@@ -64,7 +62,7 @@ public class TaskTypeController {
      * @param id идентификатор типа задачи
      * @return возвращает TaskTypeDtoFull
      */
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<TaskTypeDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -79,7 +77,7 @@ public class TaskTypeController {
      *
      * @return лист TaskTypeDtoFull
      */
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/list", produces = "application/json")
     public ResponseEntity<List<TaskTypeDtoFull>> getList() {
         List<TaskTypeDtoFull> list = taskTypeGetListService.getList().stream()
                 .map(dtoFullConverter::toDto)
@@ -97,7 +95,7 @@ public class TaskTypeController {
      * @param id идентификатор проекта по которому необходимо получить все типы задач данного проекта
      * @return возвращает лист TaskTypeDtoFull
      */
-    @GetMapping(value = "/{id}/list")
+    @GetMapping(value = "/{id}/list", produces = "application/json")
     public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -120,7 +118,7 @@ public class TaskTypeController {
      * @param taskTypeDto обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленный TaskTypeDtoFull
      */
-    @PutMapping(value = "/{id}/update")
+    @PutMapping(value = "/{id}/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TaskTypeDtoFull> update(@PathVariable Long id, @RequestBody TaskTypeDtoFull taskTypeDto) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");

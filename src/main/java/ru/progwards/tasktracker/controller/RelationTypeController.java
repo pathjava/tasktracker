@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/relationtype",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/relationtype")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelationTypeController {
 
@@ -42,7 +40,7 @@ public class RelationTypeController {
      * @param id идентификатор типа отношения
      * @return полученный по идентификатору RelationTypeDtoFull
      */
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<RelationTypeDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -57,7 +55,7 @@ public class RelationTypeController {
      *
      * @return лист RelationTypeDtoFull
      */
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/list", produces = "application/json")
     public ResponseEntity<List<RelationTypeDtoFull>> getList() {
         List<RelationTypeDtoFull> list = relationTypeGetListService.getList().stream()
                 .map(converter::toDto)
@@ -75,7 +73,7 @@ public class RelationTypeController {
      * @param relationTypeDto создаваемый Dto тип отношения
      * @return созданный RelationTypeDtoFull
      */
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<RelationTypeDtoFull> create(@RequestBody RelationTypeDtoFull relationTypeDto) {
         if (relationTypeDto == null)
             throw new BadRequestException("RelationTypeDtoFull == null");
@@ -94,7 +92,7 @@ public class RelationTypeController {
      * @param relationTypeDto обновляемый Dto тип отношения
      * @return обновленный RelationTypeDtoFull
      */
-    @PutMapping(value = "/{id}/update")
+    @PutMapping(value = "/{id}/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<RelationTypeDtoFull> update(@PathVariable Long id,
                                                       @RequestBody RelationTypeDtoFull relationTypeDto) {
         if (id == null)

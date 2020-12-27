@@ -27,9 +27,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskController {
 
@@ -50,7 +48,7 @@ public class TaskController {
      * @param id идентификатор
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/task/{id}")
+    @GetMapping(value = "/task/{id}", produces = "application/json")
     public ResponseEntity<TaskDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -63,15 +61,15 @@ public class TaskController {
     /**
      * Метод поиска задачи (Task) по текстовому коду
      *
-     * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
+     * @param id текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/task/{id}/getbycode")
-    public ResponseEntity<TaskDtoFull> getByCode(@PathVariable String code) {
-        if (code == null)
+    @GetMapping(value = "/task/{id}/getbycode", produces = "application/json")
+    public ResponseEntity<TaskDtoFull> getByCode(@PathVariable String id) {
+        if (id == null)
             throw new BadRequestException("Code не задан или задан неверно!");
 
-        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code));
+        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(id));
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -82,7 +80,7 @@ public class TaskController {
      * @param id идентификатор проекта (Project)
      * @return лист TaskDtoPreview
      */
-    @GetMapping(value = "/project/{id}/tasks")
+    @GetMapping(value = "/project/{id}/tasks", produces = "application/json")
     public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -103,7 +101,7 @@ public class TaskController {
      *
      * @return лист TaskDtoPreview
      */
-    @GetMapping(value = "/task/list")
+    @GetMapping(value = "/task/list", produces = "application/json")
     public ResponseEntity<List<TaskDtoPreview>> getList() {
 
         List<TaskDtoPreview> list = taskGetListService.getList().stream()
@@ -122,7 +120,7 @@ public class TaskController {
      * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную TaskDtoFull
      */
-    @PostMapping(value = "/task/create")
+    @PostMapping(value = "/task/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TaskDtoFull> create(@RequestBody TaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("TaskDtoFull == null");
@@ -141,7 +139,7 @@ public class TaskController {
      * @param taskDto обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную TaskDtoFull
      */
-    @PutMapping(value = "/task/{id}/update")
+    @PutMapping(value = "/task/{id}/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<TaskDtoFull> update(@PathVariable Long id, @RequestBody TaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("TaskDtoFull == null");
@@ -180,12 +178,12 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return возвращает UpdateOneValue
      */
-    @PutMapping(value = "/task/{id}/updatefield")
+    @PutMapping(value = "/task/{id}/updatefield", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable Long id, @RequestBody UpdateOneValue oneValue) {
         if (oneValue == null)
             throw new BadRequestException("Значение обновляемого поля отсутствует!");
 
-        if (oneValue.getFieldName().equals("code"))
+        if (oneValue.getFieldName().equals("id"))
             throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
 
         if (!id.equals(oneValue.getId()))

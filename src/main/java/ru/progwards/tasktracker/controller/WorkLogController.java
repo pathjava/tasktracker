@@ -27,9 +27,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WorkLogController {
 
@@ -46,7 +44,7 @@ public class WorkLogController {
      * @param id идентификатор
      * @return возвращает WorkLogDtoFull
      */
-    @GetMapping(value = "/worklog/{id}")
+    @GetMapping(value = "/worklog/{id}", produces = "application/json")
     public ResponseEntity<WorkLogDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -62,7 +60,7 @@ public class WorkLogController {
      * @param id идентификатор задачи, для которой необходимо вывести логи
      * @return лист WorkLogDtoFull
      */
-    @GetMapping(value = "/task/{id}/worklogs")
+    @GetMapping(value = "/task/{id}/worklogs", produces = "application/json")
     public ResponseEntity<List<WorkLogDtoFull>> getList(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -84,7 +82,7 @@ public class WorkLogController {
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный WorkLogDtoFull
      */
-    @PostMapping(value = "/worklog/create")
+    @PostMapping(value = "/worklog/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<WorkLogDtoFull> create(@RequestBody WorkLogDtoFull workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("WorkLogDtoFull == null");
@@ -102,7 +100,7 @@ public class WorkLogController {
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает WorkLogDtoFull
      */
-    @PutMapping(value = "/worklog/{id}/update")
+    @PutMapping(value = "/worklog/{id}/update", consumes = "application/json", produces = "application/json")
     public ResponseEntity<WorkLogDtoFull> update(@PathVariable Long id, @RequestBody WorkLogDtoFull workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("WorkLogDtoFull == null");
