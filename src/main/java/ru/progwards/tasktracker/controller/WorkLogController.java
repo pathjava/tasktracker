@@ -40,9 +40,6 @@ public class WorkLogController {
     private final @NonNull GetService<Long, Task> taskGetService;
     private final @NonNull Converter<WorkLog, WorkLogDtoFull> converter;
 
-//    @Autowired
-//    private GetListByTaskService<Long, WorkLog> listByTaskService;
-
     /**
      * Метод получения одной записи журнала работ (WorkLog)
      *
@@ -74,11 +71,6 @@ public class WorkLogController {
         List<WorkLogDtoFull> list = task.getWorkLogs().stream()
                 .map(converter::toDto)
                 .collect(Collectors.toList());
-
-        /* old version */
-//        Collection<WorkLogDtoFull> logs = listByTaskService.getListByTaskId(id).stream()
-//                .map(workLog -> converter.toDto(workLog))
-//                .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список WorkLogDtoFull пустой!");

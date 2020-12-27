@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
+import ru.progwards.tasktracker.dto.TaskTypeDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
@@ -35,12 +36,9 @@ public class TaskTypeController {
     private final @NonNull GetListService<TaskType> taskTypeGetListService;
     private final @NonNull RemoveService<TaskType> taskTypeRemoveService;
     private final @NonNull RefreshService<TaskType> taskTypeRefreshService;
-    private final @NonNull Converter<TaskType, TaskTypeDtoFull> converter;
+    private final @NonNull Converter<TaskType, TaskTypeDtoFull> dtoFullConverter;
+    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> dtoPreviewConverter;
     private final @NonNull GetService<Long, Project> projectGetService;
-
-//    @Autowired
-//    private GetListByProjectService<Long, TaskType> byProjectService;
-
 
     /**
      * Метод создания типа задачи (TaskType)
@@ -53,9 +51,9 @@ public class TaskTypeController {
         if (taskTypeDto == null)
             throw new BadRequestException("TaskTypeDtoFull == null");
 
-        TaskType taskType = converter.toModel(taskTypeDto);
+        TaskType taskType = dtoFullConverter.toModel(taskTypeDto);
         taskTypeCreateService.create(taskType);
-        TaskTypeDtoFull createdTaskType = converter.toDto(taskType);
+        TaskTypeDtoFull createdTaskType = dtoFullConverter.toDto(taskType);
 
         return new ResponseEntity<>(createdTaskType, HttpStatus.OK);
     }
@@ -71,7 +69,7 @@ public class TaskTypeController {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        TaskTypeDtoFull taskType = converter.toDto(taskTypeGetService.get(id));
+        TaskTypeDtoFull taskType = dtoFullConverter.toDto(taskTypeGetService.get(id));
 
         return new ResponseEntity<>(taskType, HttpStatus.OK);
     }
@@ -84,7 +82,7 @@ public class TaskTypeController {
     @GetMapping(value = "/list")
     public ResponseEntity<List<TaskTypeDtoFull>> getList() {
         List<TaskTypeDtoFull> list = taskTypeGetListService.getList().stream()
-                .map(converter::toDto)
+                .map(dtoFullConverter::toDto)
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
@@ -99,23 +97,18 @@ public class TaskTypeController {
      * @param id идентификатор проекта по которому необходимо получить все типы задач данного проекта
      * @return возвращает лист TaskTypeDtoFull
      */
-    @GetMapping(value = "/{id}/list") //TODO - у данного метода не реализован метод в сервисе
-    public ResponseEntity<List<TaskTypeDtoFull>> getListByProject(@PathVariable Long id) {
+    @GetMapping(value = "/{id}/list")
+    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
         Project project = projectGetService.get(id);
-        List<TaskTypeDtoFull> list = project.getTaskTypes().stream()
-                .map(converter::toDto)
+        List<TaskTypeDtoPreview> list = project.getTaskTypes().stream()
+                .map(dtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
-        /* old version */
-//        Collection<TaskTypeDtoFull> collection = byProjectService.getListByProjectId(id).stream()
-//                .map(taskType -> converter.toDto(taskType))
-//                .collect(Collectors.toList());
-
         if (list.isEmpty())
-            throw new NotFoundException("Список TaskTypeDtoFull пустой!");
+            throw new NotFoundException("Список TaskTypeDtoPreview пустой!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -135,9 +128,9 @@ public class TaskTypeController {
         if (!id.equals(taskTypeDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        TaskType taskType = converter.toModel(taskTypeDto);
+        TaskType taskType = dtoFullConverter.toModel(taskTypeDto);
         taskTypeRefreshService.refresh(taskType);
-        TaskTypeDtoFull updatedTaskType = converter.toDto(taskType);
+        TaskTypeDtoFull updatedTaskType = dtoFullConverter.toDto(taskType);
 
         return new ResponseEntity<>(updatedTaskType, HttpStatus.OK);
     }

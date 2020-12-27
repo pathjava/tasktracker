@@ -38,8 +38,6 @@ public class RelatedTaskController {
     private final @NonNull GetService<Long, Task> taskGetService;
     private final @NonNull Converter<RelatedTask, RelatedTaskDtoFull> converter;
 
-//    private GetListByTaskService<Long, RelatedTask> listByTaskService;
-
     /**
      * Метод создания связанной задачи (RelatedTask)
      *
@@ -73,11 +71,6 @@ public class RelatedTaskController {
         List<RelatedTaskDtoFull> list = task.getRelatedTasks().stream()
                 .map(converter::toDto)
                 .collect(Collectors.toList());
-
-        /* old version */
-//        Collection<RelatedTaskDtoFull> collection = listByTaskService.getListByTaskId(id).stream()
-//                .map(relatedTask -> converter.toDto(relatedTask))
-//                .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список RelatedTaskDtoFull пустой!");

@@ -88,16 +88,5 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
             );
 
         relationTypeRepository.delete(model);
-
-        /* old version */
-//        if (checkingOtherDependenciesRelationType(model.getId()))
-//            throw new OperationIsNotPossibleException("Удаление невозможно, данный RelationType используется!");
-//        repository.delete(model.getId());
     }
-
-    /* old version */
-//    public boolean checkingOtherDependenciesRelationType(Long id) {//TODO - при переходе на Hibernate подумать об оптимизации
-//        return getListService.getList().stream()
-//                .anyMatch(relatedTask -> relatedTask.getRelationType().getId().equals(id));
-//    }
 }

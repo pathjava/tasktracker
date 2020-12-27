@@ -44,8 +44,6 @@ public class TaskController {
     private final @NonNull UpdateOneFieldService<Task> updateOneFieldService;
     private final @NonNull GetService<Long, Project> projectGetService;
 
-//    private final @NonNull GetListByProjectService<Long, Task> listByProjectService;
-
     /**
      * Метод поиска задачи (Task) по идентификатору
      *
@@ -93,11 +91,6 @@ public class TaskController {
         List<TaskDtoPreview> list = project.getTasks().stream()
                 .map(dtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
-
-        /* old version */
-//        Collection<TaskDtoPreview> tasks = listByProjectService.getListByProjectId(id).stream()
-//                .map(dtoPreviewConverter::toDto)
-//                .collect(Collectors.toUnmodifiableList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список TaskDtoPreview пустой!");

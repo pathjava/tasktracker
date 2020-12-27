@@ -77,21 +77,6 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
         taskRepository.save(task);
     }
 
-    /* -- Deprecated -- */
-//    /**
-//     * Метод получения коллекции логов по идентификатору задачи
-//     *
-//     * @param taskId идентификатор задачи для которой необходимо получить логи
-//     * @return коллекция объектов лога
-//     */
-//    @Override
-//    public Collection<WorkLog> getListByTaskId(Long taskId) {
-//        return byTaskId.getByTaskId(taskId).stream()
-//                .filter(logEntity -> logEntity.getTask().getId().equals(taskId))
-//                .map(logEntity -> converter.toVo(logEntity))
-//                .collect(Collectors.toList());
-//    }
-
     /**
      * Метод получения лога по идентификатору
      *

@@ -55,18 +55,6 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
             }
             relatedTaskRepository.save(model);
         }
-
-        /* old version */
-//        if (checkExistTypeAndLink(model.getCurrentTask().getId(), model.getAttachedTask().getId(), model.getRelationType().getId())) {
-//            if (model.getRelationType().getCounterRelation() != null) {
-//                RelationType counterType = typeGetService.get(model.getRelationType().getCounterRelation().getId());
-//                RelatedTask counter = new RelatedTask(
-//                        null, counterType, model.getAttachedTask(), model.getCurrentTask()
-//                );
-//                relatedTaskRepository.save(counter);
-//            }
-//            relatedTaskRepository.save(model);
-//        }
     }
 
     /**
@@ -81,40 +69,6 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
                 model.getCurrentTask(), model.getAttachedTask(), model.getRelationType()
         );
     }
-
-    /* old version */
-//    /**
-//     * Метод проверки существования между двумя задачами связей RelatedTask одного типа RelationType
-//     *
-//     * @param currentTaskId  идентификатор задачи из которой создается связь
-//     * @param attachedTaskId идентификатор задачи на которую создается связь
-//     * @param relationTypeId тип связи создаваемой RelatedTask
-//     * @return false - если такой тип связи RelationType уже существует в текущей задаче
-//     * и true если такого типа связи RelationType нет
-//     */
-//    public boolean checkExistTypeAndLink(Long currentTaskId, Long attachedTaskId, Long relationTypeId) {
-//        Collection<RelatedTask> collection = getListByTaskId(currentTaskId);
-//        for (RelatedTask relatedTask : collection) {
-//            if (relatedTask.getRelationType().getId().equals(relationTypeId)
-//                    && relatedTask.getCurrentTask().getId().equals(attachedTaskId))
-//                return false;
-//        }
-//        return true;
-//    }
-
-    /* -- Deprecated -- */
-//    /**
-//     * Метод получения коллекции связанных задач по идентификатору задачи
-//     *
-//     * @param taskId идентификатор задачи для которой необходимо получить связанные задачи
-//     * @return коллекция связанных задач (может иметь пустое значение)
-//     */
-//    @Override
-//    public Collection<RelatedTask> getListByTaskId(Long taskId) {
-//        return byTaskId.getByTaskId(taskId).stream()
-//                .map(entity -> converter.toVo(entity))
-//                .collect(Collectors.toList());
-//    }
 
     /**
      * Метод получения связанной задачи RelatedTask по её идентификатору
@@ -159,32 +113,5 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
         }
         model.setDeleted(true);
         relatedTaskRepository.save(model);
-
-        /* old version */
-//        if (model.getRelationType().getCounterRelation() != null) {
-//            Collection<RelatedTask> collection = getListByAttachedTaskId(model.getCurrentTask().getId());
-//            if (!collection.isEmpty()) {
-//                collection.stream()
-//                        .filter(relatedTask -> model.getCurrentTask().getId().equals(relatedTask.getAttachedTask().getId())
-//                                && model.getAttachedTask().getId().equals(relatedTask.getCurrentTask().getId()))
-//                        .forEach(relatedTask -> repository.delete(relatedTask.getId()));
-//            }
-//        }
-//        model.setDeleted(true);
-//        relatedTaskRepository.save(model);
     }
-
-    /* -- Deprecated -- */
-//    /**
-//     * Метод получения всех входящих RelatedTask для определенной задачи (Task)
-//     *
-//     * @param taskId идентификатор задачи
-//     * @return коллекция value object
-//     */
-//    @Override
-//    public Collection<RelatedTask> getListByAttachedTaskId(Long taskId) {
-//        return byAttachedTaskId.getByAttachedTaskId(taskId).stream()
-//                .map(entity -> converter.toVo(entity))
-//                .collect(Collectors.toList());
-//    }
 }

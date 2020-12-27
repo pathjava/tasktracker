@@ -139,12 +139,6 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         for (RelatedTask relatedTask : list) {
             relatedTaskRepository.delete(relatedTask);
         }
-
-        /* old version */
-//        Collection<RelatedTask> collection = listByAttachedTaskId.getListByAttachedTaskId(id);
-//        if (!collection.isEmpty()){
-//            collection.forEach(relatedTask -> repositoryRelatedTask.delete(relatedTask.getId()));
-//        }
     }
 
     /**
@@ -171,46 +165,5 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
             }
         }
     }
-
-    /* old version */
-//    /**
-//     * Метод обновления определенного поля задачи новым значением
-//     *
-//     * @param oneValue объект, содержащий идентификатор и тип и значение обновляемого поля задачи
-//     */
-//    @Override
-//    public void updateField(UpdateOneValue oneValue) {
-//        TaskEntity entity = get(oneValue.getId());
-//        String field = oneValue.getFieldName();
-//
-//        for (Field declaredField : entity.getClass().getDeclaredFields()) {
-//            if (declaredField.getName().equals(field)) {
-//                declaredField.setAccessible(true);
-//                try {
-//                    declaredField.set(entity, oneValue.getNewValue());
-//                    update(entity);
-//                    break;
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
-
-    /* -- Deprecated -- */
-//    /**
-//     * Метод получения коллекции задач по идентификатору проекта
-//     *
-//     * @param projectId идентификатор проекта, для которого делается выборка задач (не помеченных как удаленные)
-//     * @return коллекция задач (может иметь пустое значение)
-//     */
-//    @Override
-//    public List<Task> getListByProjectId(Long projectId) {
-//        return repository.get().stream()
-//                .filter(taskEntity -> taskEntity.getProject().getId().equals(projectId) && !taskEntity.isDeleted())
-//                .map(taskEntity -> converter.toVo(taskEntity))
-//                .collect(Collectors.toList());
-//    }
 
 }

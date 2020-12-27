@@ -121,20 +121,6 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
         taskTypeRepository.save(model); //TODO - можно ли сделать проверку, что сущность обновилась и её стоит обновлять?
     }
 
-    /* -- Deprecated -- */
-//    /**
-//     * Метод получения коллекции типов задачи по идентификатору проекта
-//     *
-//     * @param projectId идентификатор проекта, для которого получаем типы задач
-//     * @return коллекция типов задач
-//     */
-//    @Override
-//    public List<TaskType> getListByProjectId(Long projectId) {
-//        return byProjectId.getByProjectId(projectId).stream()
-//                .filter(entity -> entity.getProject().getId().equals(projectId))
-//                .collect(Collectors.toList());
-//    }
-
     /**
      * Метод получения абсолютно всех типов задач
      *
