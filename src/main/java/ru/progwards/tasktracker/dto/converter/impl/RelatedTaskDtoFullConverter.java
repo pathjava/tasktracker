@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.dto.RelationTypeDtoPreview;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
 import ru.progwards.tasktracker.model.Task;
@@ -22,8 +22,9 @@ import ru.progwards.tasktracker.service.GetService;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, RelatedTaskDtoFull> {
 
-    private final @NonNull Converter<RelationType, RelationTypeDtoPreview> typeDtoConverter;
+    private final @NonNull Converter<RelationType, RelationTypeDtoPreview> relationTypeDtoConverter;
     private final @NonNull Converter<Task, TaskDtoPreview> taskDtoConverter;
+    private final @NonNull GetService<Long, RelatedTask> relatedTaskGetService;
     private final @NonNull GetService<Long, Task> taskGetService;
 
     /**
@@ -36,15 +37,20 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
     public RelatedTask toModel(RelatedTaskDtoFull dto) {
         if (dto == null)
             return null;
-        else {
-            Task currentTask = taskGetService.get(dto.getCurrentTaskId());
+        else if (dto.getId() == null) {
             return new RelatedTask(
-                    dto.getId(),
-                    typeDtoConverter.toModel(dto.getRelationType()),
-                    currentTask,
+                    null,
+                    relationTypeDtoConverter.toModel(dto.getRelationType()),
+                    taskGetService.get(dto.getCurrentTaskId()),
                     taskDtoConverter.toModel(dto.getAttachedTask()),
-                    false //TODO - check!!!
+                    false
             );
+        } else {
+            RelatedTask relatedTask = relatedTaskGetService.get(dto.getId());
+            relatedTask.setRelationType(relationTypeDtoConverter.toModel(dto.getRelationType()));
+            relatedTask.setCurrentTask(taskGetService.get(dto.getCurrentTaskId())); // TODO - can we change the current task?
+            relatedTask.setAttachedTask(taskDtoConverter.toModel(dto.getAttachedTask()));
+            return relatedTask;
         }
     }
 
@@ -61,7 +67,7 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
         else
             return new RelatedTaskDtoFull(
                     model.getId(),
-                    typeDtoConverter.toDto(model.getRelationType()),
+                    relationTypeDtoConverter.toDto(model.getRelationType()),
                     model.getCurrentTask().getId(),
                     taskDtoConverter.toDto(model.getAttachedTask())
             );

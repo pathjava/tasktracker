@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskTypeDtoPreview;
-import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.TaskType;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -30,18 +30,8 @@ public class TaskTypeDtoPreviewConverter implements Converter<TaskType, TaskType
     public TaskType toModel(TaskTypeDtoPreview dto) {
         if (dto == null)
             return null;
-        else {
-            TaskType taskType = taskTypeGetService.get(dto.getId());
-            /*return new TaskType(
-                    dto.getId(),
-                    taskType.getProject(),
-                    taskType.getWorkFlow(),
-                    dto.getName(),
-                    taskType.getTasks()
-            );*/
-            taskType.setName(dto.getName());
-            return taskType;
-        }
+        else
+            return taskTypeGetService.get(dto.getId());
     }
 
     /**

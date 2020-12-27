@@ -4,14 +4,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoPreview;
 import ru.progwards.tasktracker.dto.TaskTypeDtoPreview;
-import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskPriority;
 import ru.progwards.tasktracker.model.TaskType;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -23,8 +23,8 @@ import ru.progwards.tasktracker.model.TaskType;
 public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> {
 
     private final @NonNull GetService<Long, Task> taskGetService;
-    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> typeDtoConverter;
-    private final @NonNull Converter<TaskPriority, TaskPriorityDtoPreview> priorityDtoConverter;
+    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
+    private final @NonNull Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -36,33 +36,8 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
     public Task toModel(TaskDtoPreview dto) {
         if (dto == null)
             return null;
-        else {
-            Task task = taskGetService.get(dto.getId());
-            return new Task(
-                    dto.getId(),
-                    dto.getCode(),
-                    dto.getName(),
-                    task.getDescription(),
-                    task.getType(),
-                    task.getPriority(),
-                    task.getProject(),
-                    task.getAuthor(),
-                    task.getExecutor(),
-                    task.getCreated(),
-                    task.getUpdated(),
-                    task.getStatus(),
-                    //task.getActions(),
-                    task.getEstimation(),
-                    task.getTimeSpent(),
-                    task.getTimeLeft(),
-                    task.getRelatedTasks(),
-                    task.getRelatedTasksAttached(),
-                    task.getAttachments(),
-                    task.getWorkLogs(),
-                    task.getNotes(),
-                    false //TODO - check!!!
-            );
-        }
+        else
+            return taskGetService.get(dto.getId());
     }
 
     /**
@@ -80,8 +55,8 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
                     model.getId(),
                     model.getCode(),
                     model.getName(),
-                    typeDtoConverter.toDto(model.getType()),
-                    priorityDtoConverter.toDto(model.getPriority())
+                    taskTypeDtoConverter.toDto(model.getType()),
+                    taskPriorityDtoConverter.toDto(model.getPriority())
             );
     }
 }

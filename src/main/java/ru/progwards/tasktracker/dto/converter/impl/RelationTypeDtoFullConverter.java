@@ -10,6 +10,7 @@ import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,15 +34,23 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
     public RelationType toModel(RelationTypeDtoFull dto) {
         if (dto == null)
             return null;
-        else {
-            List<RelatedTask> relatedTasks = getService.get(dto.getId()).getRelatedTasks();
+        else if(dto.getId() == null) {
             return new RelationType(
-                    dto.getId(),
+                    null,
                     dto.getName(),
-                    toModel(dto.getCounterRelation()),
-                    relatedTasks
+                    checkCounterRelation(dto.getCounterRelation()),
+                    Collections.emptyList()
             );
+        } else {
+            RelationType relationType = getService.get(dto.getId());
+            relationType.setName(dto.getName());
+            relationType.setCounterRelation(toModel(dto.getCounterRelation()));
+            return relationType;
         }
+    }
+
+    private RelationType checkCounterRelation(RelationTypeDtoFull counterRelation) {
+        return counterRelation != null ? toModel(counterRelation) : null;
     }
 
     /**

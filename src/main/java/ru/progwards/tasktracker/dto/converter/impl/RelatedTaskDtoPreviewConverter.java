@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoPreview;
 import ru.progwards.tasktracker.dto.RelationTypeDtoPreview;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
 import ru.progwards.tasktracker.model.Task;
@@ -22,9 +22,9 @@ import ru.progwards.tasktracker.service.GetService;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, RelatedTaskDtoPreview> {
 
-    private final @NonNull Converter<RelationType, RelationTypeDtoPreview> typeDtoConverter;
+    private final @NonNull Converter<RelationType, RelationTypeDtoPreview> relationTypeDtoConverter;
     private final @NonNull Converter<Task, TaskDtoPreview> taskDtoConverter;
-    private final @NonNull GetService<Long, Task> taskGetService;
+    private final @NonNull GetService<Long, RelatedTask> relatedTaskGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -36,16 +36,8 @@ public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, Re
     public RelatedTask toModel(RelatedTaskDtoPreview dto) {
         if (dto == null)
             return null;
-        else {
-            Task currentTask = taskGetService.get(dto.getCurrentTaskId());
-            return new RelatedTask(
-                    dto.getId(),
-                    typeDtoConverter.toModel(dto.getRelationType()),
-                    currentTask,
-                    taskDtoConverter.toModel(dto.getAttachedTask()),
-                    false //TODO - check!!!
-            );
-        }
+        else
+            return relatedTaskGetService.get(dto.getCurrentTaskId());
     }
 
     /**
@@ -61,7 +53,7 @@ public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, Re
         else
             return new RelatedTaskDtoPreview(
                     model.getId(),
-                    typeDtoConverter.toDto(model.getRelationType()),
+                    relationTypeDtoConverter.toDto(model.getRelationType()),
                     model.getCurrentTask().getId(),
                     taskDtoConverter.toDto(model.getAttachedTask())
             );

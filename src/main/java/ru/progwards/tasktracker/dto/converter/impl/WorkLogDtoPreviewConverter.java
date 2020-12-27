@@ -4,12 +4,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.dto.WorkLogDtoPreview;
-import ru.progwards.tasktracker.service.GetService;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.model.WorkLog;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -33,19 +33,8 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
     public WorkLog toModel(WorkLogDtoPreview dto) {
         if (dto == null)
             return null;
-        else {
-            WorkLog workLog = workLogGetService.get(dto.getId());
-            return new WorkLog(
-                    dto.getId(),
-                    workLog.getTask(),
-                    dto.getSpent(),
-                    userUserDtoConverter.toModel(dto.getWorker()),
-                    dto.getStart(),
-                    workLog.getDescription(),
-                    workLog.getEstimateChange(),
-                    workLog.getEstimateValue()
-            );
-        }
+        else
+            return workLogGetService.get(dto.getId());
     }
 
     /**

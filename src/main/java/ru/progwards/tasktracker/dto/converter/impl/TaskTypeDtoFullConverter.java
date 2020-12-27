@@ -5,13 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.ProjectDtoPreview;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
 import ru.progwards.tasktracker.dto.WorkFlowDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.model.WorkFlow;
+import ru.progwards.tasktracker.service.GetService;
+
+import java.util.Collections;
 
 /**
  * Конвертеры valueObject <-> dto
@@ -23,7 +25,7 @@ import ru.progwards.tasktracker.model.WorkFlow;
 public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDtoFull> {
 
     private final @NonNull Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
-    private final @NonNull Converter<Project, ProjectDtoPreview> projectDtoPreviewConverter;
+    private final @NonNull Converter<Project, ProjectDtoPreview> projectDtoConverter;
     private final @NonNull GetService<Long, TaskType> taskTypeGetService;
 
     /**
@@ -36,18 +38,18 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
     public TaskType toModel(TaskTypeDtoFull dto) {
         if (dto == null)
             return null;
-        else {
-            TaskType taskType = taskTypeGetService.get(dto.getId());
-            /* old version */
-            /*return new TaskType(
-                    dto.getId(),
-                    taskType.getProject(),
+        else if (dto.getId() == null) {
+            return new TaskType(
+                    null,
+                    projectDtoConverter.toModel(dto.getProject()),
                     workFlowDtoConverter.toModel(dto.getWorkFlow()),
                     dto.getName(),
-                    taskType.getTasks()
-            );*/
+                    Collections.emptyList()
+            );
+        } else {
+            TaskType taskType = taskTypeGetService.get(dto.getId());
+            taskType.setProject(projectDtoConverter.toModel(dto.getProject()));
             taskType.setWorkFlow(workFlowDtoConverter.toModel(dto.getWorkFlow()));
-            taskType.setProject(projectDtoPreviewConverter.toModel(dto.getProject()));
             taskType.setName(dto.getName());
             return taskType;
         }
@@ -66,7 +68,7 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
         else
             return new TaskTypeDtoFull(
                     model.getId(),
-                    projectDtoPreviewConverter.toDto(model.getProject()),
+                    projectDtoConverter.toDto(model.getProject()),
                     workFlowDtoConverter.toDto(model.getWorkFlow()),
                     model.getName()
             );

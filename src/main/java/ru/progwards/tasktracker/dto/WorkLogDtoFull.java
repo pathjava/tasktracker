@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 public class WorkLogDtoFull {
 
     private Long id;
-    private Long taskId;
+    private TaskDtoPreview task;
     private Duration spent;
     private UserDtoPreview worker;
     private ZonedDateTime start;

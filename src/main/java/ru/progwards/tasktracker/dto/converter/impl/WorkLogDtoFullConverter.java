@@ -4,9 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.dto.WorkLogDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.User;
@@ -24,7 +25,8 @@ import ru.progwards.tasktracker.service.GetService;
 public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFull> {
 
     private final @NonNull Converter<User, UserDtoPreview> userDtoConverter;
-    private final @NonNull GetService<Long, Task> getService;
+    private final @NonNull Converter<Task, TaskDtoPreview> taskDtoConverter;
+    private final @NonNull GetService<Long, WorkLog> workLogGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
@@ -36,11 +38,10 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
     public WorkLog toModel(WorkLogDtoFull dto) {
         if (dto == null)
             return null;
-        else {
-            Task task = getService.get(dto.getTaskId());
+        else if (dto.getId() == null) {
             return new WorkLog(
-                    dto.getId(),
-                    task,
+                    null,
+                    taskDtoConverter.toModel(dto.getTask()),
                     dto.getSpent(),
                     userDtoConverter.toModel(dto.getWorker()),
                     dto.getStart(),
@@ -48,6 +49,14 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
                     stringToEnum(dto.getEstimateChange()),
                     dto.getEstimateValue()
             );
+        } else {
+            WorkLog workLog = workLogGetService.get(dto.getId());
+            workLog.setSpent(dto.getSpent());
+            workLog.setStart(dto.getStart());
+            workLog.setDescription(dto.getDescription());
+            workLog.setEstimateChange(stringToEnum(dto.getEstimateChange()));
+            workLog.setEstimateValue(dto.getEstimateValue());
+            return workLog;
         }
     }
 
@@ -82,7 +91,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
         else
             return new WorkLogDtoFull(
                     model.getId(),
-                    model.getTask().getId(),
+                    taskDtoConverter.toDto(model.getTask()),
                     model.getSpent(),
                     userDtoConverter.toDto(model.getWorker()),
                     model.getStart(),
