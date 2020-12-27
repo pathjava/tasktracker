@@ -10,10 +10,9 @@ import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.WorkLog;
 import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.repository.WorkLogRepository;
-import ru.progwards.tasktracker.service.CreateService;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.service.RefreshService;
-import ru.progwards.tasktracker.service.RemoveService;
+import ru.progwards.tasktracker.service.*;
+
+import java.util.List;
 
 /**
  * Бизнес-логика лога (Журнала работ) задачи
@@ -24,7 +23,7 @@ import ru.progwards.tasktracker.service.RemoveService;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WorkLogService implements CreateService<WorkLog>, GetService<Long, WorkLog>,
-        RefreshService<WorkLog>, RemoveService<WorkLog> {
+        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog> {
 
     private final @NonNull WorkLogRepository workLogRepository;
     private final @NonNull TaskRepository taskRepository;
@@ -187,5 +186,15 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
                 break;
         }
         taskRepository.save(task);
+    }
+
+    /**
+     * Метод получения полного списка журнала работ WorkLog
+     *
+     * @return список WorkLog
+     */
+    @Override
+    public List<WorkLog> getList() {
+        return workLogRepository.findAll();
     }
 }

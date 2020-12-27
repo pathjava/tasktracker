@@ -4,19 +4,16 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.WorkLogDtoFull;
+import ru.progwards.tasktracker.dto.WorkLogDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.WorkLog;
-import ru.progwards.tasktracker.service.CreateService;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.service.RefreshService;
-import ru.progwards.tasktracker.service.RemoveService;
+import ru.progwards.tasktracker.service.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,11 +29,13 @@ import java.util.stream.Collectors;
 public class WorkLogController {
 
     private final @NonNull GetService<Long, WorkLog> workLogGetService;
+    private final @NonNull GetListService<WorkLog> workLogGetListService;
     private final @NonNull CreateService<WorkLog> workLogCreateService;
     private final @NonNull RemoveService<WorkLog> workLogRemoveService;
     private final @NonNull RefreshService<WorkLog> workLogRefreshService;
     private final @NonNull GetService<Long, Task> taskGetService;
-    private final @NonNull Converter<WorkLog, WorkLogDtoFull> converter;
+    private final @NonNull Converter<WorkLog, WorkLogDtoFull> workLogDtoFullConverter;
+    private final @NonNull Converter<WorkLog, WorkLogDtoPreview> workLogDtoPreviewConverter;
 
     /**
      * Метод получения одной записи журнала работ (WorkLog)
@@ -49,7 +48,7 @@ public class WorkLogController {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        WorkLogDtoFull workLogDto = converter.toDto(workLogGetService.get(id));
+        WorkLogDtoFull workLogDto = workLogDtoFullConverter.toDto(workLogGetService.get(id));
 
         return new ResponseEntity<>(workLogDto, HttpStatus.OK);
     }
@@ -61,13 +60,30 @@ public class WorkLogController {
      * @return лист WorkLogDtoFull
      */
     @GetMapping(value = "/task/{id}/worklogs", produces = "application/json")
-    public ResponseEntity<List<WorkLogDtoFull>> getList(@PathVariable Long id) {
+    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
         Task task = taskGetService.get(id);
         List<WorkLogDtoFull> list = task.getWorkLogs().stream()
-                .map(converter::toDto)
+                .map(workLogDtoFullConverter::toDto)
+                .collect(Collectors.toList());
+
+        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список WorkLogDtoFull пустой!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения списка всего журнала работ (WorkLog)
+     *
+     * @return лист WorkLogDtoFull
+     */
+    @GetMapping(value = "/worklog/list", produces = "application/json")
+    public ResponseEntity<List<WorkLogDtoPreview>> getList() {
+        List<WorkLogDtoPreview> list = workLogGetListService.getList().stream()
+                .map(workLogDtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
@@ -87,9 +103,9 @@ public class WorkLogController {
         if (workLogDto == null)
             throw new BadRequestException("WorkLogDtoFull == null");
 
-        WorkLog workLog = converter.toModel(workLogDto);
+        WorkLog workLog = workLogDtoFullConverter.toModel(workLogDto);
         workLogCreateService.create(workLog);
-        WorkLogDtoFull createdWorkLog = converter.toDto(workLog);
+        WorkLogDtoFull createdWorkLog = workLogDtoFullConverter.toDto(workLog);
 
         return new ResponseEntity<>(createdWorkLog, HttpStatus.OK);
     }
@@ -108,9 +124,9 @@ public class WorkLogController {
         if (!id.equals(workLogDto.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        WorkLog workLog = converter.toModel(workLogDto);
+        WorkLog workLog = workLogDtoFullConverter.toModel(workLogDto);
         workLogRefreshService.refresh(workLog);
-        WorkLogDtoFull updatedWorkLog = converter.toDto(workLog);
+        WorkLogDtoFull updatedWorkLog = workLogDtoFullConverter.toDto(workLog);
 
         return new ResponseEntity<>(updatedWorkLog, HttpStatus.OK);
     }
