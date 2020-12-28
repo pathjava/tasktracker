@@ -14,30 +14,32 @@ import org.springframework.context.annotation.Profile;
 @ConfigurationProperties("spring.datasource")
 public class DBConfig {
 
-    private String driverClassName;
     private String url;
 
     @Profile("dev")
     @Bean
     public void databaseConnectionH2() {
+        System.out.println("");
         System.out.println("DB connection - H2");
-        System.out.println(driverClassName);
         System.out.println(url);
+        System.out.println("");
     }
 
     @Profile("test")
     @Bean
     public void databaseConnectionPostgreSQL() {
+        System.out.println("");
         System.out.println("DB Connection - PostgreSQL");
-        System.out.println(driverClassName);
         System.out.println(url);
+        System.out.println("");
     }
 
     @Profile("prod")
     @Bean
     public void databaseConnectionMariaDB() {
+        System.out.println("");
         System.out.println("DB Connection - MariaDB");
-        System.out.println(driverClassName);
         System.out.println(url);
+        System.out.println("");
     }
 }
