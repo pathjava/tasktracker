@@ -48,7 +48,7 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
         } else {
             RelatedTask relatedTask = relatedTaskGetService.get(dto.getId());
             relatedTask.setRelationType(relationTypeDtoConverter.toModel(dto.getRelationType()));
-            relatedTask.setCurrentTask(taskGetService.get(dto.getCurrentTaskId())); // TODO - can we change the current task?
+            relatedTask.setCurrentTask(taskGetService.get(dto.getCurrentTaskId()));
             relatedTask.setAttachedTask(taskDtoConverter.toModel(dto.getAttachedTask()));
             return relatedTask;
         }

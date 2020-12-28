@@ -14,6 +14,6 @@ public class RelationTypeDtoFull {
 
     private Long id;
     private String name;
-    private RelationTypeDtoFull counterRelation;
+    private Long counterRelationId;
 
 }
