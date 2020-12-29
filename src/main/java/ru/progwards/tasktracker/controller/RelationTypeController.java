@@ -46,8 +46,6 @@ public class RelationTypeController {
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(1) Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
         RelationTypeDtoFull typeDto = converter.toDto(relationTypeGetService.get(id));
 
