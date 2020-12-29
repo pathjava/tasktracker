@@ -1,6 +1,7 @@
 package ru.progwards.tasktracker.model;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "project")
 public class Project  {
@@ -25,56 +27,56 @@ public class Project  {
     @SequenceGenerator(name = "PROJECT_SEQ", sequenceName = "project_seq", allocationSize = 1)
     @GeneratedValue(generator = "PROJECT_SEQ", strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
-    private Long id;
+    Long id;
     /**
      * имя проекта
      */
     @Basic
     @Column(name = "name", nullable = false, length = 100)
-    private String name;
+    String name;
     /**
      * описание проекта
      */
     @Basic
     @Column(name = "description", nullable = true, length = 800)
-    private String description;
+    String description;
     /**
      * уникальная аббревиатура, созданная на основании имени проекта
      */
     @Basic
-    @Column(name = "prefix", nullable = false, length = 10)
-    private String prefix;
+    @Column(name = "prefix", nullable = false, length = 10, unique = true)
+    String prefix;
     /**
      * владелец (создатель) проекта
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
-    private User owner;
+    User owner;
     /**
      * время создания проекта
      */
     @Column(name = "created")
-    private ZonedDateTime created;
+    ZonedDateTime created;
     /**
      * список задач проекта
      */
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<Task> tasks;
+    List<Task> tasks;
     /**
      * список типов задач, относящихся к данному проекту
      */
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<TaskType> taskTypes;
+    List<TaskType> taskTypes;
     /**
      * хранит код последней добавленной задачи к данному проекту
      */
     @Basic
     @Column(name = "last_task_code", nullable = false)
-    private Long lastTaskCode;
+    Long lastTaskCode;
     /**
      * информация об удалении проекта
      */
     @Basic
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted;
+    boolean isDeleted;
 }

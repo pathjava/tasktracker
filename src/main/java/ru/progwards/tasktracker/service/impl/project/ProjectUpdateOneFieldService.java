@@ -18,7 +18,7 @@ import ru.progwards.tasktracker.model.UpdateOneValue;
  * @author Pavel Khovaylo
  */
 //TODO думаю НЕ нужна такая возможность в Project (можно убирать эту реализацию)
-//@Service
+@Deprecated
 public class ProjectUpdateOneFieldService implements UpdateOneFieldService<Project> {
 
     /**

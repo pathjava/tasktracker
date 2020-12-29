@@ -1,9 +1,11 @@
 package ru.progwards.tasktracker.service.impl.project;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.TaskType;
@@ -18,17 +20,17 @@ import java.util.List;
  * @author Pavel Khovaylo
  */
 @Service
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
+        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
 public class ProjectCreateService implements CreateService<Project> {
     /**
      * репозиторий с проектами
      */
-    @Autowired
-    private ProjectRepository repository;
+    ProjectRepository repository;
     /**
      * для создания TaskType
      */
-    @Autowired
-    private CreateService<TaskType> taskTypeCreateService;
+    CreateService<TaskType> taskTypeCreateService;
 
     /**
      * метот добавляет проект в репозиторий
@@ -61,12 +63,12 @@ public class ProjectCreateService implements CreateService<Project> {
         if (isExist)
             throw new OperationIsNotPossibleException("Create project is not possible");
 
-        TaskType taskType1 = new TaskType();
-        taskType1.setName("EPIC");
-        TaskType taskType2 = new TaskType();
-        taskType2.setName("TASK");
-        TaskType taskType3 = new TaskType();
-        taskType3.setName("BUG");
+//        TaskType taskType1 = new TaskType();
+//        taskType1.setName("EPIC");
+//        TaskType taskType2 = new TaskType();
+//        taskType2.setName("TASK");
+//        TaskType taskType3 = new TaskType();
+//        taskType3.setName("BUG");
 
         //создаем список TaskType проекта
         List<TaskType> taskTypeList = new ArrayList<>(List.of(

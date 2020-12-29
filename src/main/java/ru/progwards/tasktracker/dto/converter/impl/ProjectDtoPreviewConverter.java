@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -12,12 +16,13 @@ import ru.progwards.tasktracker.model.Project;
  * @author Pavel Khovaylo
  */
 @Component
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
+        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
 public class ProjectDtoPreviewConverter implements Converter<Project, ProjectDtoPreview> {
     /**
      * сервис для получения бизнес модели Project
      */
-    @Autowired
-    private GetService<Long, Project> projectGetService;
+    GetService<Long, Project> projectGetService;
 
     @Override
     public Project toModel(ProjectDtoPreview dto) {
