@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  *
  * @author Konstantin Kishkin
  */
-@Component
 public class TaskNoteRepository implements Repository<Long, TaskNoteEntity> {
 
     private JsonHandler<Long, TaskNoteEntity> jsonHandler;
