@@ -46,7 +46,7 @@ public class RelatedTaskController {
      * @param relatedTaskDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную RelatedTaskDtoFull
      */
-    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelatedTaskDtoFull> create(@RequestBody RelatedTaskDtoFull relatedTaskDto) {
         if (relatedTaskDto == null)
             throw new BadRequestException("RelatedTaskDtoFull == null");
@@ -64,7 +64,7 @@ public class RelatedTaskController {
      * @param id идентификатор задачи для которой надо получить связанные задачи
      * @return лист RelatedTaskDtoFull
      */
-    @GetMapping(value = "/{id}/list", produces = "application/json")
+    @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RelatedTaskDtoPreview>> getListByTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -85,7 +85,7 @@ public class RelatedTaskController {
      *
      * @return лист RelatedTaskDtoFull
      */
-    @GetMapping(value = "/list", produces = "application/json")
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RelatedTaskDtoPreview>> getList() {
         List<RelatedTaskDtoPreview> list = relatedTaskGetListService.getList().stream()
                 .map(relatedTaskDtoPreviewConverter::toDto)

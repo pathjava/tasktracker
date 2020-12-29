@@ -41,9 +41,11 @@ public class WorkLog {
 
     private String description;
 
+//    @Column(name = "estimate_change")
     @Enumerated(EnumType.STRING)
     private EstimateChange estimateChange;
 
+//    @Column(name = "estimate_value")
     private Duration estimateValue;
 
 }

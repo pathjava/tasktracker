@@ -1,8 +1,9 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.UserDtoFull;
@@ -10,11 +11,10 @@ import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,25 +24,17 @@ import java.util.stream.Collectors;
  * @author Aleksandr Sidelnikov
  */
 @RestController
-@RequestMapping(value = "/rest/user",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/user")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
 
-    @Autowired
-    private CreateService<User> createService;
-    @Autowired
-    private GetService<Long, User> getService;
-    @Autowired
-    private GetListService<User> getListService;
-    @Autowired
-    private RemoveService<User> removeService;
-    @Autowired
-    private RefreshService<User> refreshService;
-    @Autowired
-    private Converter<User, UserDtoFull> converter;
-    @Autowired
-    private Converter<User, UserDtoPreview> previewConverter;
+    private final @NonNull CreateService<User> createService;
+    private final @NonNull GetService<Long, User> getService;
+    private final @NonNull GetListService<User> getListService;
+    private final @NonNull RemoveService<User> removeService;
+    private final @NonNull RefreshService<User> refreshService;
+    private final @NonNull Converter<User, UserDtoFull> converter;
+    private final @NonNull Converter<User, UserDtoPreview> previewConverter;
 
     /**
      * Метод создания пользователя
@@ -51,7 +43,7 @@ public class UserController {
      * @return возвращает созданного пользователя
      */
     @PostMapping(value = "/create")
-    public ResponseEntity<UserDtoFull> createUser(@RequestBody UserDtoFull userDtoFull) {
+    public ResponseEntity<UserDtoFull> createUser(@Valid @RequestBody UserDtoFull userDtoFull) {
         if (userDtoFull == null)
             throw new BadRequestException("Пустой объект!");
 
@@ -89,7 +81,7 @@ public class UserController {
     @GetMapping(value = "/list")
     public ResponseEntity<List<UserDtoPreview>> getListUser() {
         List<UserDtoPreview> list = getListService.getList().stream()
-                .map(user -> previewConverter.toDto(user))
+                .map(previewConverter::toDto)
                 .collect(Collectors.toUnmodifiableList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
@@ -101,7 +93,7 @@ public class UserController {
     /**
      * Метод обновления пользователя
      *
-     * @param id              идентификатор обновляемого пользователя
+     * @param id          идентификатор обновляемого пользователя
      * @param userDtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленного пользователя
      */

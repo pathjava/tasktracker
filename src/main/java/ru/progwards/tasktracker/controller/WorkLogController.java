@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.WorkLogDtoFull;
@@ -43,7 +44,7 @@ public class WorkLogController {
      * @param id идентификатор
      * @return возвращает WorkLogDtoFull
      */
-    @GetMapping(value = "/worklog/{id}", produces = "application/json")
+    @GetMapping(value = "/worklog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -59,7 +60,7 @@ public class WorkLogController {
      * @param id идентификатор задачи, для которой необходимо вывести логи
      * @return лист WorkLogDtoFull
      */
-    @GetMapping(value = "/task/{id}/worklogs", produces = "application/json")
+    @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -80,7 +81,7 @@ public class WorkLogController {
      *
      * @return лист WorkLogDtoFull
      */
-    @GetMapping(value = "/worklog/list", produces = "application/json")
+    @GetMapping(value = "/worklog/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WorkLogDtoPreview>> getList() {
         List<WorkLogDtoPreview> list = workLogGetListService.getList().stream()
                 .map(workLogDtoPreviewConverter::toDto)
@@ -98,7 +99,7 @@ public class WorkLogController {
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный WorkLogDtoFull
      */
-    @PostMapping(value = "/worklog/create", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/worklog/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> create(@RequestBody WorkLogDtoFull workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("WorkLogDtoFull == null");
@@ -116,7 +117,7 @@ public class WorkLogController {
      * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает WorkLogDtoFull
      */
-    @PutMapping(value = "/worklog/{id}/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/worklog/{id}/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> update(@PathVariable Long id, @RequestBody WorkLogDtoFull workLogDto) {
         if (workLogDto == null)
             throw new BadRequestException("WorkLogDtoFull == null");

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.repository.RelatedTaskRepository;
@@ -32,6 +31,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     private final @NonNull TaskRepository taskRepository;
     private final @NonNull ProjectRepository projectRepository;
     private final @NonNull RelatedTaskRepository relatedTaskRepository;
+    private final @NonNull RelatedTaskService relatedTaskService;
 
     /**
      * Метод создает задачу  (Task)
@@ -137,7 +137,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         List<RelatedTask> list = relatedTaskRepository.findAllByCurrentTask(model);
 
         for (RelatedTask relatedTask : list) {
-            relatedTaskRepository.delete(relatedTask);
+            relatedTaskService.remove(relatedTask);
         }
     }
 

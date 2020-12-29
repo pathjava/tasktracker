@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.RelationTypeDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -14,6 +15,8 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelationType;
 import ru.progwards.tasktracker.service.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/rest/relationtype")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Validated
 public class RelationTypeController {
 
     private final @NonNull GetService<Long, RelationType> relationTypeGetService;
@@ -40,8 +44,8 @@ public class RelationTypeController {
      * @param id идентификатор типа отношения
      * @return полученный по идентификатору RelationTypeDtoFull
      */
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable Long id) {
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(1) Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
@@ -55,7 +59,7 @@ public class RelationTypeController {
      *
      * @return лист RelationTypeDtoFull
      */
-    @GetMapping(value = "/list", produces = "application/json")
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RelationTypeDtoFull>> getList() {
         List<RelationTypeDtoFull> list = relationTypeGetListService.getList().stream()
                 .map(converter::toDto)
@@ -73,8 +77,8 @@ public class RelationTypeController {
      * @param relationTypeDto создаваемый Dto тип отношения
      * @return созданный RelationTypeDtoFull
      */
-    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<RelationTypeDtoFull> create(@RequestBody RelationTypeDtoFull relationTypeDto) {
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RelationTypeDtoFull> create(@Valid @RequestBody RelationTypeDtoFull relationTypeDto) {
         if (relationTypeDto == null)
             throw new BadRequestException("RelationTypeDtoFull == null");
 
@@ -92,7 +96,7 @@ public class RelationTypeController {
      * @param relationTypeDto обновляемый Dto тип отношения
      * @return обновленный RelationTypeDtoFull
      */
-    @PutMapping(value = "/{id}/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/{id}/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RelationTypeDtoFull> update(@PathVariable Long id,
                                                       @RequestBody RelationTypeDtoFull relationTypeDto) {
         if (id == null)

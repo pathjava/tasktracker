@@ -68,7 +68,9 @@ public class Task {
     private WorkFlowStatus status;
 
     private Duration estimation;
+//    @Column(name = "time_spent")
     private Duration timeSpent;
+//    @Column(name = "time_left")
     private Duration timeLeft;
 
     @OneToMany(mappedBy = "currentTask", fetch = FetchType.LAZY)

@@ -35,6 +35,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      *
      * @param user новый User
      */
+    @Transactional
     @Override
     public void create(User user) {
         userRepository.save(user);
@@ -45,6 +46,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      *
      * @param user удаляемый User
      */
+    @Transactional
     @Override
     public void remove(User user) {
         userRepository.delete(user);
@@ -68,6 +70,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
      *
      * @param user измененный User
      */
+    @Transactional
     @Override
     public void refresh(User user) {
         userRepository.save(user);

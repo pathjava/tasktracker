@@ -48,7 +48,7 @@ public class TaskController {
      * @param id идентификатор
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/task/{id}", produces = "application/json")
+    @GetMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> get(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -64,7 +64,7 @@ public class TaskController {
      * @param id текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/task/{id}/getbycode", produces = "application/json")
+    @GetMapping(value = "/task/{id}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> getByCode(@PathVariable String id) {
         if (id == null)
             throw new BadRequestException("Code не задан или задан неверно!");
@@ -80,7 +80,7 @@ public class TaskController {
      * @param id идентификатор проекта (Project)
      * @return лист TaskDtoPreview
      */
-    @GetMapping(value = "/project/{id}/tasks", produces = "application/json")
+    @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
@@ -101,7 +101,7 @@ public class TaskController {
      *
      * @return лист TaskDtoPreview
      */
-    @GetMapping(value = "/task/list", produces = "application/json")
+    @GetMapping(value = "/task/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TaskDtoPreview>> getList() {
 
         List<TaskDtoPreview> list = taskGetListService.getList().stream()
@@ -120,7 +120,7 @@ public class TaskController {
      * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную TaskDtoFull
      */
-    @PostMapping(value = "/task/create", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/task/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> create(@RequestBody TaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("TaskDtoFull == null");
@@ -139,7 +139,7 @@ public class TaskController {
      * @param taskDto обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную TaskDtoFull
      */
-    @PutMapping(value = "/task/{id}/update", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/task/{id}/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> update(@PathVariable Long id, @RequestBody TaskDtoFull taskDto) {
         if (taskDto == null)
             throw new BadRequestException("TaskDtoFull == null");
@@ -178,7 +178,7 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return возвращает UpdateOneValue
      */
-    @PutMapping(value = "/task/{id}/updatefield", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "/task/{id}/updatefield", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable Long id, @RequestBody UpdateOneValue oneValue) {
         if (oneValue == null)
             throw new BadRequestException("Значение обновляемого поля отсутствует!");
