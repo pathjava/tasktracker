@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -9,22 +13,25 @@ import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.User;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+
 /**
  * Конвертер Project <-> ProjectDtoFull
  * @author Pavel Khovaylo
  */
 @Component
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFull> {
     /**
      * конвертер User <-> UserDtoPreview
      */
-    @Autowired
-    private Converter<User, UserDtoPreview> userDtoPreviewConverter;
+    Converter<User, UserDtoPreview> userDtoPreviewConverter;
     /**
      * сервис для получения бизнес модели
      */
-    @Autowired
-    private GetService<Long, Project> projectGetService;
+    GetService<Long, Project> projectGetService;
 
     /**
      * метод конвертирует объект ProjectDtoFull в model Project
@@ -39,11 +46,10 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
         Project model = projectGetService.get(dto.getId());
 
         //проверка на наличие этого проекта в базе данных
-        if (model == null) {
+        if (model == null)
             return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
-                    userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(),
-                    null, null, null, false);
-        }
+                    userDtoPreviewConverter.toModel(dto.getOwner()), ZonedDateTime.now(),
+                    new ArrayList<>(), new ArrayList<>(), null, false);
 
         return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                 userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(), model.getTasks(),

@@ -1,18 +1,21 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.ProjectDtoFull;
 import ru.progwards.tasktracker.dto.ProjectDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryUpdateField;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.model.UpdateOneValue;
+import ru.progwards.tasktracker.service.*;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -21,49 +24,39 @@ import java.util.stream.Collectors;
  * Контроллеры Project
  * @author Pavel Khovaylo
  */
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@RequestMapping("/rest/project/")
+@RequestMapping(value = "/rest/project/")
 public class ProjectController {
     /**
      * конвертер Project <-> ProjectDtoFull
      */
-    @Autowired
-    private Converter<Project, ProjectDtoFull> converterFull;
+    Converter<Project, ProjectDtoFull> converterFull;
     /**
      * конвертер Project <-> ProjectDtoPreview
      */
-    @Autowired
-    private Converter<Project, ProjectDtoPreview> converterPreview;
+    Converter<Project, ProjectDtoPreview> converterPreview;
     /**
      * сервисный класс для получение списка проекта
      */
-    @Autowired
-    private GetService<Long, Project> projectGetService;
+    GetService<Long, Project> projectGetService;
     /**
      * сервисный класс для получение проекта
      */
-    @Autowired
-    private GetListService<Project> projectGetListService;
+    GetListService<Project> projectGetListService;
     /**
      * сервисный класс для создания проекта
      */
-    @Autowired
-    private CreateService<Project> projectCreateService;
+    CreateService<Project> projectCreateService;
     /**
      * сервисный класс для обновления проекта
      */
-    @Autowired
-    private RefreshService<Project> projectRefreshService;
+    RefreshService<Project> projectRefreshService;
     /**
      * сервисный класс для удаления проекта
      */
-    @Autowired
-    private RemoveService<Project> projectRemoveService;
-    /**
-     * сервисный класс для обновления одного поля проекта
-     */
-    @Autowired
-    private RepositoryUpdateField<Project> projectEntityRepositoryUpdateField;
+    RemoveService<Project> projectRemoveService;
 
     /**
      * по запросу получаем список проектов
@@ -98,17 +91,17 @@ public class ProjectController {
      * @param projectDto передаем наполненный проект
      * @return созданный проект
      */
+    @Transactional
     @PostMapping("create")
     public ResponseEntity<ProjectDtoFull> create(@RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");
 
-        projectCreateService.create(converterFull.toModel(projectDto));
+        Project project = converterFull.toModel(projectDto);
+        projectCreateService.create(project);
+        ProjectDtoFull createdProject = converterFull.toDto(project);
 
-        // TODO как вернуть ProjectDtoFull, если его id генерируется в сервисном слое и в контроллере мы его не знаем
-//        ProjectDtoFull result = projectGetService.get()
-
-        return new ResponseEntity<>(projectDto, HttpStatus.OK);
+        return new ResponseEntity<>(createdProject, HttpStatus.OK);
     }
 
     /**
@@ -141,21 +134,5 @@ public class ProjectController {
             throw new NotFoundException("Not found a project with id=" + id);
 
         projectRemoveService.remove(project);
-    }
-
-    /**
-     * по запросу обновляем значение поля проекта
-     * @param id идентификатор проекта, в котором нужно обновить поле
-     * @param updateOneValue объект, содержащий информацию о поле, которое необходимо изменить и нововое значение
-     *                       данного поля
-     */
-    @PostMapping("{id}/update1field")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateOneField(@PathVariable("id") Long id, @RequestBody UpdateOneValue updateOneValue) {
-        if (updateOneValue == null)
-            throw new BadRequestException("UpdateOneValue is null");
-
-        updateOneValue.setId(id);
-        projectEntityRepositoryUpdateField.updateField(updateOneValue);
     }
 }

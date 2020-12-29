@@ -1,8 +1,11 @@
 package ru.progwards.tasktracker.service.impl;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskPriority;
@@ -16,6 +19,8 @@ import java.util.List;
  * @author Pavel Khovaylo
  */
 @Service
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TaskPriorityService implements GetListService<TaskPriority>,
         GetService<Long, TaskPriority>, CreateService<TaskPriority>,
         RefreshService<TaskPriority>, RemoveService<TaskPriority> {
@@ -23,11 +28,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
     /**
      * репозиторий с TaskPriorityEntity
      */
-    @Autowired
-    private TaskPriorityRepository repository;
-
-    @Autowired
-    private GetListService<Task> taskGetListService;
+    TaskPriorityRepository repository;
 
     /**
      * метот добавляет TaskPriority в репозиторий

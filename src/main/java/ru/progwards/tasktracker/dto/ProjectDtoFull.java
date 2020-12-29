@@ -1,92 +1,43 @@
 package ru.progwards.tasktracker.dto;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.time.ZonedDateTime;
 
 /**
  * DtoFull для проекта
  * @author Pavel Khovaylo
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProjectDtoFull {
     /**
      * идентификатор проекта
      */
-    private Long id;
+    Long id;
     /**
      * имя проекта
      */
-    private String name;
+    String name;
     /**
      * описание проекта
      */
-    private String description;
+    String description;
     /**
      * уникальная аббревиатура, созданная на основании имени проекта
      */
-    private String prefix;
+    String prefix;
     /**
      * владелец (создатель) проекта
      */
-    private UserDtoPreview owner;
+    UserDtoPreview owner;
     /**
      * время создания проекта
      */
-    private ZonedDateTime created;
-
-    public ProjectDtoFull(Long id, String name, String description, String prefix, UserDtoPreview owner,
-                          ZonedDateTime created) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.prefix = prefix;
-        this.owner = owner;
-        this.created = created;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public UserDtoPreview getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserDtoPreview owner) {
-        this.owner = owner;
-    }
-
-    public ZonedDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(ZonedDateTime created) {
-        this.created = created;
-    }
+    ZonedDateTime created;
 }

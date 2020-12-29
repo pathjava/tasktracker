@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -12,12 +16,13 @@ import ru.progwards.tasktracker.model.TaskPriority;
  * @author Pavel Khovaylo
  */
 @Component
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TaskPriorityDtoPreviewConverter implements Converter<TaskPriority, TaskPriorityDtoPreview> {
     /**
-     * сервис для получения бизнес модели TaskPriority
+     * сервис для получения TaskPriority из базы данных
      */
-    @Autowired
-    private GetService<Long, TaskPriority> taskPriorityGetService;
+    GetService<Long, TaskPriority> taskPriorityGetService;
 
     /**
      * метод конвертирует объект TaskPriorityDtoPreview в объект TaskPriority
@@ -44,6 +49,9 @@ public class TaskPriorityDtoPreviewConverter implements Converter<TaskPriority, 
      */
     @Override
     public TaskPriorityDtoPreview toDto(TaskPriority model) {
+        if (model == null)
+            return null;
+
         return new TaskPriorityDtoPreview(model.getId(), model.getName());
     }
 }

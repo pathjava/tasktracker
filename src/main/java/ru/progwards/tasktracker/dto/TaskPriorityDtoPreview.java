@@ -1,37 +1,25 @@
 package ru.progwards.tasktracker.dto;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 /**
  * DtoPreview для TaskPriority
  * @author Pavel Khovaylo
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaskPriorityDtoPreview {
     /**
      * идентификатор
      */
-    private Long id;
+    Long id;
     /**
      * имя
      */
-    private String name;
-
-    public TaskPriorityDtoPreview(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    String name;
 }
