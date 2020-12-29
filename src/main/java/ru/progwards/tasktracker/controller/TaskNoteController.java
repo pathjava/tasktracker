@@ -1,19 +1,20 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
-import ru.progwards.tasktracker.dto.TaskNoteDtoPreview;
 import ru.progwards.tasktracker.dto.TaskNoteDtoFull;
+import ru.progwards.tasktracker.dto.TaskNoteDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskNote;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -23,21 +24,22 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/rest")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskNoteController {
-    @Autowired
-    private GetService<Long, TaskNote> getService;
-    @Autowired
-    private RemoveService<TaskNote> removeService;
-    @Autowired
-    private CreateService<TaskNote> createService;
-    @Autowired
-    private RefreshService<TaskNote> refreshService;
-    @Autowired
-    private Converter<TaskNote, TaskNoteDtoFull> dtoPreviewConverter;
-    @Autowired
-    private Converter<TaskNote, TaskNoteDtoPreview> dtoFullConverter;
-    @Autowired
-    private GetListByTaskService<Long, TaskNote> listByTaskService;
+
+    private final GetService<Long, TaskNote> getService;
+
+    private final RemoveService<TaskNote> removeService;
+
+    private final CreateService<TaskNote> createService;
+
+    private final RefreshService<TaskNote> refreshService;
+
+    private final Converter<TaskNote, TaskNoteDtoFull> dtoPreviewConverter;
+
+    private final Converter<TaskNote, TaskNoteDtoPreview> dtoFullConverter;
+
+    private final GetListService<TaskNote> taskNoteGetService;
 
     /**
      * Метод получения коллекции комментариев по идентификатору задачи
@@ -46,11 +48,11 @@ public class TaskNoteController {
      * @return коллекция комментариев
      */
     @GetMapping("/task/{id}/tasknotes")
-    public ResponseEntity<Collection<TaskNoteDtoFull>> getListTaskNotes(@PathVariable Long id) {
+    public ResponseEntity<List<TaskNoteDtoFull>> getListTaskNotes(@PathVariable Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
-        Collection<TaskNoteDtoFull> taskNotes = listByTaskService.getListByTaskId(id).stream()
+        List<TaskNoteDtoFull> taskNotes = taskNoteGetService.getList().stream()
                 .map(tasknote -> dtoPreviewConverter.toDto(tasknote))
                 .collect(Collectors.toList());
 

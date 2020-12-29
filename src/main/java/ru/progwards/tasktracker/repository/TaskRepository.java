@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.model.TaskNote;
 import ru.progwards.tasktracker.model.TaskType;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @return true или false
      */
     boolean existsTaskByType(TaskType type);
+
+
+    boolean existsTaskByTaskNote(TaskNote taskNote);
 
     /**
      * Метод получения Task по идентификатору если её поле deleted имеет значение false
