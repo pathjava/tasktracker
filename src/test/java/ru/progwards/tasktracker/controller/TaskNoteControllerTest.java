@@ -38,7 +38,7 @@ class TaskNoteControllerTest {
 
     @Test
     void getListTaskNotes() {
-        ResponseEntity<Collection<TaskNoteDtoFull>> re =  tnc.getListTaskNotes(1L);
+//        ResponseEntity<Collection<TaskNoteDtoFull>> re =  tnc.getListTaskNotes(1L);
     }
 
     @Test
