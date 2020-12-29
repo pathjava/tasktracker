@@ -57,10 +57,10 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
 
     @Override
     public void remove(TaskNote model) {
-        if (taskRepository.existsTaskByTaskNote(model))
-            throw new OperationIsNotPossibleException(
-                    "Удаление невозможно, TaskNote id=" + model.getId() + " используется!"
-            );
+//        if (taskRepository.existsTaskByTaskNote(model))
+//            throw new OperationIsNotPossibleException(
+//                    "Удаление невозможно, TaskNote id=" + model.getId() + " используется!"
+//            );
         taskNoteRepository.delete(model);
     }
 }
