@@ -15,10 +15,10 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class RelationTypeDtoPreviewConverter implements Converter<RelationType, RelationTypeDtoPreview> {
 
-    private final @NonNull GetService<Long, RelationType> relationTypeGetService;
+    private final GetService<Long, RelationType> relationTypeGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

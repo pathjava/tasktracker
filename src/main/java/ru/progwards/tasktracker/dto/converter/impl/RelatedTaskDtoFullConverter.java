@@ -19,13 +19,13 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, RelatedTaskDtoFull> {
 
-    private final @NonNull Converter<RelationType, RelationTypeDtoPreview> relationTypeDtoConverter;
-    private final @NonNull Converter<Task, TaskDtoPreview> taskDtoConverter;
-    private final @NonNull GetService<Long, RelatedTask> relatedTaskGetService;
-    private final @NonNull GetService<Long, Task> taskGetService;
+    private final Converter<RelationType, RelationTypeDtoPreview> relationTypeDtoConverter;
+    private final Converter<Task, TaskDtoPreview> taskDtoConverter;
+    private final GetService<Long, RelatedTask> relatedTaskGetService;
+    private final GetService<Long, Task> taskGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

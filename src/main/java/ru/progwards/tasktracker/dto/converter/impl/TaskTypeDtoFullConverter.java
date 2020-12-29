@@ -21,12 +21,12 @@ import java.util.Collections;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDtoFull> {
 
-    private final @NonNull Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
-    private final @NonNull Converter<Project, ProjectDtoPreview> projectDtoConverter;
-    private final @NonNull GetService<Long, TaskType> taskTypeGetService;
+    private final Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
+    private final Converter<Project, ProjectDtoPreview> projectDtoConverter;
+    private final GetService<Long, TaskType> taskTypeGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

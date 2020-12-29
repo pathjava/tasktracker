@@ -19,12 +19,12 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> {
 
-    private final @NonNull GetService<Long, Task> taskGetService;
-    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
-    private final @NonNull Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
+    private final GetService<Long, Task> taskGetService;
+    private final Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
+    private final Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

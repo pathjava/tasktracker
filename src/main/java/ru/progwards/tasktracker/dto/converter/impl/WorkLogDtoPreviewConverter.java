@@ -17,11 +17,11 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDtoPreview> {
 
-    private final @NonNull GetService<Long, WorkLog> workLogGetService;
-    private final @NonNull Converter<User, UserDtoPreview> userUserDtoConverter;
+    private final GetService<Long, WorkLog> workLogGetService;
+    private final Converter<User, UserDtoPreview> userUserDtoConverter;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

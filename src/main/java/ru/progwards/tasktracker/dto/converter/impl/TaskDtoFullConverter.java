@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 
-    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
-    private final @NonNull Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
-    private final @NonNull Converter<User, UserDtoPreview> userDtoConverter;
-    private final @NonNull Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> workFlowStatusDtoConverter;
-    private final @NonNull Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoConverter;
-    private final @NonNull Converter<TaskAttachment, TaskAttachmentDtoPreview> taskAttachmentDtoConverter;
-    private final @NonNull Converter<WorkFlowAction, WorkFlowActionDtoPreview> workFlowActionDtoConverter;
-    private final @NonNull Converter<Project, ProjectDtoPreview> projectDtoConverter;
-    private final @NonNull GetService<Long, Task> taskGetService;
+    private final Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
+    private final Converter<TaskPriority, TaskPriorityDtoPreview> taskPriorityDtoConverter;
+    private final Converter<User, UserDtoPreview> userDtoConverter;
+    private final Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> workFlowStatusDtoConverter;
+    private final Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoConverter;
+    private final Converter<TaskAttachment, TaskAttachmentDtoPreview> taskAttachmentDtoConverter;
+    private final Converter<WorkFlowAction, WorkFlowActionDtoPreview> workFlowActionDtoConverter;
+    private final Converter<Project, ProjectDtoPreview> projectDtoConverter;
+    private final GetService<Long, Task> taskGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

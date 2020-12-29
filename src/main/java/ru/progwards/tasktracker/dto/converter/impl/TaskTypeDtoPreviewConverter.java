@@ -15,10 +15,10 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskTypeDtoPreviewConverter implements Converter<TaskType, TaskTypeDtoPreview> {
 
-    private final @NonNull GetService<Long, TaskType> taskTypeGetService;
+    private final GetService<Long, TaskType> taskTypeGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект

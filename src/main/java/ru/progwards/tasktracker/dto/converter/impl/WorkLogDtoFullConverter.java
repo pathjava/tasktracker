@@ -21,12 +21,12 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFull> {
 
-    private final @NonNull Converter<User, UserDtoPreview> userDtoConverter;
-    private final @NonNull Converter<Task, TaskDtoPreview> taskDtoConverter;
-    private final @NonNull GetService<Long, WorkLog> workLogGetService;
+    private final Converter<User, UserDtoPreview> userDtoConverter;
+    private final Converter<Task, TaskDtoPreview> taskDtoConverter;
+    private final GetService<Long, WorkLog> workLogGetService;
 
     /**
      * Метод конвертирует Dto сущность в бизнес объект
