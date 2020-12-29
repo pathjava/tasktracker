@@ -16,8 +16,8 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Pavel Khovaylo
  */
 @Service
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectGetService implements GetService<Long, Project> {
     /**
      * репозиторий с проектами

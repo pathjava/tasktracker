@@ -16,8 +16,8 @@ import ru.progwards.tasktracker.model.TaskPriority;
  * @author Pavel Khovaylo
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TaskPriorityDtoPreviewConverter implements Converter<TaskPriority, TaskPriorityDtoPreview> {
     /**
      * сервис для получения TaskPriority из базы данных

@@ -16,8 +16,8 @@ import ru.progwards.tasktracker.service.RemoveService;
  * @author Pavel Khovaylo
  */
 @Service
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectRemoveService implements RemoveService<Project> {
     /**
      * репозиторий с проектами

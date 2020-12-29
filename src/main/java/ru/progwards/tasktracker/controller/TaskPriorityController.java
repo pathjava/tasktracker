@@ -1,5 +1,9 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,44 +23,39 @@ import java.util.stream.Collectors;
  * Контроллеры TaskPriority
  * @author Pavel Khovaylo
  */
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping("/rest/task-priority/")
 public class TaskPriorityController {
     /**
      * конвертер TaskPriority <-> TaskPriorityDtoFull
      */
-    @Autowired
-    private Converter<TaskPriority, TaskPriorityDtoFull> converterFull;
+    Converter<TaskPriority, TaskPriorityDtoFull> converterFull;
     /**
      * конвертер TaskPriority <-> TaskPriorityDtoPreview
      */
-    @Autowired
-    private Converter<TaskPriority, TaskPriorityDtoPreview> converterPreview;
+    Converter<TaskPriority, TaskPriorityDtoPreview> converterPreview;
     /**
      * сервисный класс для получение списка TaskPriority
      */
-    @Autowired
-    private GetService<Long, TaskPriority> taskPriorityGetService;
+    GetService<Long, TaskPriority> taskPriorityGetService;
     /**
      * сервисный класс для получение TaskPriority
      */
-    @Autowired
-    private GetListService<TaskPriority> taskPriorityGetListService;
+    GetListService<TaskPriority> taskPriorityGetListService;
     /**
      * сервисный класс для создания TaskPriority
      */
-    @Autowired
-    private CreateService<TaskPriority> taskPriorityCreateService;
+    CreateService<TaskPriority> taskPriorityCreateService;
     /**
      * сервисный класс для обновления TaskPriority
      */
-    @Autowired
-    private RefreshService<TaskPriority> taskPriorityRefreshService;
+    RefreshService<TaskPriority> taskPriorityRefreshService;
     /**
      * сервисный класс для удаления TaskPriority
      */
-    @Autowired
-    private RemoveService<TaskPriority> taskPriorityRemoveService;
+    RemoveService<TaskPriority> taskPriorityRemoveService;
 
     /**
      * по запросу получаем список TaskPriorityDtoPreview
@@ -95,9 +94,11 @@ public class TaskPriorityController {
         if (taskPriorityDtoFull == null)
             throw new BadRequestException("Project is null");
 
-        taskPriorityCreateService.create(converterFull.toModel(taskPriorityDtoFull));
+        TaskPriority taskPriority = converterFull.toModel(taskPriorityDtoFull);
+        taskPriorityCreateService.create(taskPriority);
+        TaskPriorityDtoFull createdTaskPriority = converterFull.toDto(taskPriority);
 
-        return new ResponseEntity<>(taskPriorityDtoFull, HttpStatus.OK);
+        return new ResponseEntity<>(createdTaskPriority, HttpStatus.OK);
     }
 
     /**

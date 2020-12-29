@@ -16,8 +16,8 @@ import ru.progwards.tasktracker.model.Project;
  * @author Pavel Khovaylo
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectDtoPreviewConverter implements Converter<Project, ProjectDtoPreview> {
     /**
      * сервис для получения бизнес модели Project

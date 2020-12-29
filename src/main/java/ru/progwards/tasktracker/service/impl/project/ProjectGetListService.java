@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
  * @author Pavel Khovaylo
  */
 @Service
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectGetListService implements GetListService<Project> {
     /**
      * репозиторий с проектами

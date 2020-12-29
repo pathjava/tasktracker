@@ -16,8 +16,8 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Pavel Khovaylo
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TaskPriorityDtoFullConverter implements Converter<TaskPriority, TaskPriorityDtoFull> {
     /**
      * сервис для получения TaskPriority из базы данных

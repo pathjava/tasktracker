@@ -20,8 +20,8 @@ import java.util.List;
  * @author Pavel Khovaylo
  */
 @Service
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectCreateService implements CreateService<Project> {
     /**
      * репозиторий с проектами

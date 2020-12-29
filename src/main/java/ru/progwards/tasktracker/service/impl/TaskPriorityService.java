@@ -19,8 +19,8 @@ import java.util.List;
  * @author Pavel Khovaylo
  */
 @Service
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TaskPriorityService implements GetListService<TaskPriority>,
         GetService<Long, TaskPriority>, CreateService<TaskPriority>,
         RefreshService<TaskPriority>, RemoveService<TaskPriority> {

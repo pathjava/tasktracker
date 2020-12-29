@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
  * Контроллеры Project
  * @author Pavel Khovaylo
  */
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@RequestMapping("/rest/project/")
+@RequestMapping(value = "/rest/project/")
 public class ProjectController {
     /**
      * конвертер Project <-> ProjectDtoFull

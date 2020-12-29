@@ -21,8 +21,8 @@ import java.util.ArrayList;
  * @author Pavel Khovaylo
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull,
-        @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)})
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFull> {
     /**
      * конвертер User <-> UserDtoPreview
