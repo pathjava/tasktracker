@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.service.CreateService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,10 +25,6 @@ public class ProjectCreateService implements CreateService<Project> {
      * репозиторий с проектами
      */
     ProjectRepository repository;
-    /**
-     * для создания TaskType
-     */
-    CreateService<TaskType> taskTypeCreateService;
 
     /**
      * метот добавляет проект в репозиторий
@@ -41,9 +35,13 @@ public class ProjectCreateService implements CreateService<Project> {
         if (model == null)
             throw new OperationIsNotPossibleException("Create project is not possible");
 
+        String prefix = filterString(model.getPrefix());
+
         // если значение prefix пустое, то создание нового проекта невозможно
-        if ("".equals(filterString(model.getPrefix())))
+        if ("".equals(prefix))
             throw new OperationIsNotPossibleException("Index is incorrect");
+
+        model.setPrefix(prefix);
 
         // получаем список проектов, чтобы искать в них одинаковые prefix
         List<Project> projects = repository.findAll();
@@ -71,10 +69,10 @@ public class ProjectCreateService implements CreateService<Project> {
 //        taskType3.setName("BUG");
 
         //создаем список TaskType проекта
-        List<TaskType> taskTypeList = new ArrayList<>(List.of(
-                /* TODO пока что не понимаю как записать в TaskType свойство "project"
-                *   потому как изначально у model id не сгенерирован, а записывать этот model без id мы не можем */
-
+//        List<TaskType> taskTypeList = new ArrayList<>(List.of(
+//                /* TODO пока что не понимаю как записать в TaskType свойство "project"
+//                *   потому как изначально у model id не сгенерирован, а записывать этот model без id мы не можем */
+//
 //                new TaskType(null, model,
 //                        //TODO сделал так исключительно чтобы протестировать
 ////                            new WorkFlow(null, "name", false, 0L, null, null),
@@ -90,13 +88,13 @@ public class ProjectCreateService implements CreateService<Project> {
 ////                            new WorkFlow(null, "name", false, 0L, null, null),
 //                        null,
 //                        "BUG", null)
-            )
-        );
+//            )
+//        );
 
         //добавляем TaskType в базу данных
-        taskTypeList.forEach(e -> taskTypeCreateService.create(e));
+//        taskTypeList.forEach(e -> taskTypeCreateService.create(e));
 
-        model.setTaskTypes(taskTypeList);
+//        model.setTaskTypes(taskTypeList);
         // при создании LastTaskCode всегда = 0
         model.setLastTaskCode(0L);
 
