@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,12 @@ import java.util.stream.Collectors;
  * Контроллеры Project
  * @author Pavel Khovaylo
  */
+@RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RestController
-@RequestMapping(value = "/rest/project/")
+@RequestMapping(value = "/rest/project/",
+                consumes = MediaType.APPLICATION_JSON_VALUE,
+                produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProjectController {
     /**
      * конвертер Project <-> ProjectDtoFull
@@ -67,7 +70,7 @@ public class ProjectController {
 
         Collection<ProjectDtoPreview> projectDtos =
                 projectGetListService.getList().stream().
-                        map(e -> converterPreview.toDto(e)).collect(Collectors.toList());
+                        map(converterPreview::toDto).collect(Collectors.toList());
 
         return new ResponseEntity<>(projectDtos, HttpStatus.OK);
     }
@@ -93,6 +96,7 @@ public class ProjectController {
      */
     @Transactional
     @PostMapping("create")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProjectDtoFull> create(@RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");

@@ -11,6 +11,8 @@ import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.model.TaskPriority;
 import ru.progwards.tasktracker.service.GetService;
 
+import java.util.ArrayList;
+
 /**
  * Конвертер TaskPriority <-> TaskPriorityDtoFull
  * @author Pavel Khovaylo
@@ -34,10 +36,10 @@ public class TaskPriorityDtoFullConverter implements Converter<TaskPriority, Tas
         if (dto == null)
             return null;
 
-        TaskPriority model = taskPriorityGetService.get(dto.getId());
+        if (dto.getId() == null)
+            return new TaskPriority(dto.getId(), dto.getName(), dto.getValue(), new ArrayList<>());
 
-        if (model == null)
-            return new TaskPriority(dto.getId(), dto.getName(), dto.getValue(), null);
+        TaskPriority model = taskPriorityGetService.get(dto.getId());
 
         return new TaskPriority(dto.getId(), dto.getName(), dto.getValue(), model.getTasks());
     }

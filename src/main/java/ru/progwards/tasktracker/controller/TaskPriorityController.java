@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
@@ -26,7 +28,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@RequestMapping("/rest/task-priority/")
+@RequestMapping(value = "/rest/task-priority/",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class TaskPriorityController {
     /**
      * конвертер TaskPriority <-> TaskPriorityDtoFull
@@ -65,7 +69,7 @@ public class TaskPriorityController {
     public ResponseEntity<Collection<TaskPriorityDtoPreview>> get() {
         Collection<TaskPriorityDtoPreview> taskPriorityDtoPreviews =
                 taskPriorityGetListService.getList().stream().
-                        map(e -> converterPreview.toDto(e)).collect(Collectors.toList());
+                        map(converterPreview::toDto).collect(Collectors.toList());
 
         return new ResponseEntity<>(taskPriorityDtoPreviews, HttpStatus.OK);
     }
@@ -89,6 +93,7 @@ public class TaskPriorityController {
      * @param taskPriorityDtoFull передаем наполненный TaskPriorityDto
      * @return созданный TaskPriorityDto
      */
+    @Transactional
     @PostMapping("create")
     public ResponseEntity<TaskPriorityDtoFull> create(@RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
         if (taskPriorityDtoFull == null)
