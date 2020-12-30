@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.progwards.tasktracker.util.validator.annotation.EmailValid;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +19,7 @@ public class UserDtoFull {
     private String name;
     @NotEmpty
     @Email
+    @EmailValid
     private String email;
     private String password;
     private List<UserRoleDtoPreview> roles;

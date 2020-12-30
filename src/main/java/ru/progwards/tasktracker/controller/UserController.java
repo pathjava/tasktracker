@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.UserEmailValidator;
 
 import javax.validation.Valid;
 import java.util.List;
