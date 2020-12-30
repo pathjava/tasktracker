@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.exception.exceptioncontroller;
+package ru.progwards.tasktracker.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
