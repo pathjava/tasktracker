@@ -24,14 +24,14 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskService implements CreateService<Task>, GetListService<Task>, GetService<Long, Task>,
         RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task> {
 
-    private final @NonNull TaskRepository taskRepository;
-    private final @NonNull ProjectRepository projectRepository;
-    private final @NonNull RelatedTaskRepository relatedTaskRepository;
-    private final @NonNull RelatedTaskService relatedTaskService;
+    private final TaskRepository taskRepository;
+    private final ProjectRepository projectRepository;
+    private final RelatedTaskRepository relatedTaskRepository;
+    private final RelatedTaskService relatedTaskService;
 
     /**
      * Метод создает задачу  (Task)

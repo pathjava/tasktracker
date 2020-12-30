@@ -26,17 +26,17 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class WorkLogController {
 
-    private final @NonNull GetService<Long, WorkLog> workLogGetService;
-    private final @NonNull GetListService<WorkLog> workLogGetListService;
-    private final @NonNull CreateService<WorkLog> workLogCreateService;
-    private final @NonNull RemoveService<WorkLog> workLogRemoveService;
-    private final @NonNull RefreshService<WorkLog> workLogRefreshService;
-    private final @NonNull GetService<Long, Task> taskGetService;
-    private final @NonNull Converter<WorkLog, WorkLogDtoFull> workLogDtoFullConverter;
-    private final @NonNull Converter<WorkLog, WorkLogDtoPreview> workLogDtoPreviewConverter;
+    private final GetService<Long, WorkLog> workLogGetService;
+    private final GetListService<WorkLog> workLogGetListService;
+    private final CreateService<WorkLog> workLogCreateService;
+    private final RemoveService<WorkLog> workLogRemoveService;
+    private final RefreshService<WorkLog> workLogRefreshService;
+    private final GetService<Long, Task> taskGetService;
+    private final Converter<WorkLog, WorkLogDtoFull> workLogDtoFullConverter;
+    private final Converter<WorkLog, WorkLogDtoPreview> workLogDtoPreviewConverter;
 
     /**
      * Метод получения одной записи журнала работ (WorkLog)

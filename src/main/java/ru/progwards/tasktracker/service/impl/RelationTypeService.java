@@ -22,12 +22,12 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
         RemoveService<RelationType>, RefreshService<RelationType>, GetListService<RelationType> {
 
-    private final @NonNull RelationTypeRepository relationTypeRepository;
-    private final @NonNull RelatedTaskRepository relatedTaskRepository;
+    private final RelationTypeRepository relationTypeRepository;
+    private final RelatedTaskRepository relatedTaskRepository;
 
     /**
      * Метод получения типа отношения связанных задач

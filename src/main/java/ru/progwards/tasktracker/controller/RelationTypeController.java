@@ -27,16 +27,16 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest/relationtype")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @Validated
 public class RelationTypeController {
 
-    private final @NonNull GetService<Long, RelationType> relationTypeGetService;
-    private final @NonNull CreateService<RelationType> relationTypeCreateService;
-    private final @NonNull RemoveService<RelationType> relationTypeRemoveService;
-    private final @NonNull RefreshService<RelationType> relationTypeRefreshService;
-    private final @NonNull GetListService<RelationType> relationTypeGetListService;
-    private final @NonNull Converter<RelationType, RelationTypeDtoFull> converter;
+    private final GetService<Long, RelationType> relationTypeGetService;
+    private final CreateService<RelationType> relationTypeCreateService;
+    private final RemoveService<RelationType> relationTypeRemoveService;
+    private final RefreshService<RelationType> relationTypeRefreshService;
+    private final GetListService<RelationType> relationTypeGetListService;
+    private final Converter<RelationType, RelationTypeDtoFull> converter;
 
     /**
      * Метод получения типа отношения (RelationType) связанных задач (RelatedTask)

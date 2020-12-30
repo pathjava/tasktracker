@@ -21,12 +21,12 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class WorkLogService implements CreateService<WorkLog>, GetService<Long, WorkLog>,
         RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog> {
 
-    private final @NonNull WorkLogRepository workLogRepository;
-    private final @NonNull TaskRepository taskRepository;
+    private final WorkLogRepository workLogRepository;
+    private final TaskRepository taskRepository;
 
     /**
      * Метод создания лога

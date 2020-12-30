@@ -29,16 +29,16 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest/relatedtask")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class RelatedTaskController {
 
-    private final @NonNull CreateService<RelatedTask> relatedTaskCreateService;
-    private final @NonNull GetService<Long, RelatedTask> relatedTaskGetService;
-    private final @NonNull RemoveService<RelatedTask> relatedTaskRemoveService;
-    private final @NonNull GetListService<RelatedTask> relatedTaskGetListService;
-    private final @NonNull GetService<Long, Task> taskGetService;
-    private final @NonNull Converter<RelatedTask, RelatedTaskDtoFull> relatedTaskDtoFullConverter;
-    private final @NonNull Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoPreviewConverter;
+    private final CreateService<RelatedTask> relatedTaskCreateService;
+    private final GetService<Long, RelatedTask> relatedTaskGetService;
+    private final RemoveService<RelatedTask> relatedTaskRemoveService;
+    private final GetListService<RelatedTask> relatedTaskGetListService;
+    private final GetService<Long, Task> taskGetService;
+    private final Converter<RelatedTask, RelatedTaskDtoFull> relatedTaskDtoFullConverter;
+    private final Converter<RelatedTask, RelatedTaskDtoPreview> relatedTaskDtoPreviewConverter;
 
     /**
      * Метод создания связанной задачи (RelatedTask)

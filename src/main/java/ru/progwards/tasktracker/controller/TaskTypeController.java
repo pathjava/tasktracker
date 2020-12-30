@@ -26,17 +26,17 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest/tasktype")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskTypeController {
 
-    private final @NonNull CreateService<TaskType> taskTypeCreateService;
-    private final @NonNull GetService<Long, TaskType> taskTypeGetService;
-    private final @NonNull GetListService<TaskType> taskTypeGetListService;
-    private final @NonNull RemoveService<TaskType> taskTypeRemoveService;
-    private final @NonNull RefreshService<TaskType> taskTypeRefreshService;
-    private final @NonNull Converter<TaskType, TaskTypeDtoFull> dtoFullConverter;
-    private final @NonNull Converter<TaskType, TaskTypeDtoPreview> dtoPreviewConverter;
-    private final @NonNull GetService<Long, Project> projectGetService;
+    private final CreateService<TaskType> taskTypeCreateService;
+    private final GetService<Long, TaskType> taskTypeGetService;
+    private final GetListService<TaskType> taskTypeGetListService;
+    private final RemoveService<TaskType> taskTypeRemoveService;
+    private final RefreshService<TaskType> taskTypeRefreshService;
+    private final Converter<TaskType, TaskTypeDtoFull> dtoFullConverter;
+    private final Converter<TaskType, TaskTypeDtoPreview> dtoPreviewConverter;
+    private final GetService<Long, Project> projectGetService;
 
     /**
      * Метод создания типа задачи (TaskType)

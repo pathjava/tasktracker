@@ -22,13 +22,13 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskTypeService implements CreateService<TaskType>, GetService<Long, TaskType>,
         RemoveService<TaskType>, RefreshService<TaskType>, GetListService<TaskType> {
 
-    private final @NonNull TaskTypeRepository taskTypeRepository;
-    private final @NonNull TaskRepository taskRepository;
-    private final @NonNull CopyService<WorkFlow> workFlowCopyService;
+    private final TaskTypeRepository taskTypeRepository;
+    private final TaskRepository taskRepository;
+    private final CopyService<WorkFlow> workFlowCopyService;
 
     /**
      * Метод создания типа задачи

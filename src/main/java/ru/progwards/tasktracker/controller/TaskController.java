@@ -28,19 +28,19 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskController {
 
-    private final @NonNull GetService<Long, Task> taskGetService;
-    private final @NonNull GetListService<Task> taskGetListService;
-    private final @NonNull RemoveService<Task> taskRemoveService;
-    private final @NonNull CreateService<Task> taskCreateService;
-    private final @NonNull RefreshService<Task> taskRefreshService;
-    private final @NonNull Converter<Task, TaskDtoPreview> dtoPreviewConverter;
-    private final @NonNull Converter<Task, TaskDtoFull> dtoFullConverter;
-    private final @NonNull GetService<String, Task> byCodeGetService;
-    private final @NonNull UpdateOneFieldService<Task> updateOneFieldService;
-    private final @NonNull GetService<Long, Project> projectGetService;
+    private final GetService<Long, Task> taskGetService;
+    private final GetListService<Task> taskGetListService;
+    private final RemoveService<Task> taskRemoveService;
+    private final CreateService<Task> taskCreateService;
+    private final RefreshService<Task> taskRefreshService;
+    private final Converter<Task, TaskDtoPreview> dtoPreviewConverter;
+    private final Converter<Task, TaskDtoFull> dtoFullConverter;
+    private final GetService<String, Task> byCodeGetService;
+    private final UpdateOneFieldService<Task> updateOneFieldService;
+    private final GetService<Long, Project> projectGetService;
 
     /**
      * Метод поиска задачи (Task) по идентификатору

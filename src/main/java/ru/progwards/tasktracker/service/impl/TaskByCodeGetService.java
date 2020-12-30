@@ -17,10 +17,10 @@ import ru.progwards.tasktracker.service.GetService;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskByCodeGetService implements GetService<String, Task> {
 
-    private final @NonNull TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     /**
      * Метод получения задачи (Task) по текстовому коду задачи

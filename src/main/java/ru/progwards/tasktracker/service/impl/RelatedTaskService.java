@@ -24,12 +24,12 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class RelatedTaskService implements CreateService<RelatedTask>, GetService<Long, RelatedTask>,
         RemoveService<RelatedTask>, GetListService<RelatedTask> {
 
-    private final @NonNull RelatedTaskRepository relatedTaskRepository;
-    private final @NonNull RelationTypeRepository relationTypeRepository;
+    private final RelatedTaskRepository relatedTaskRepository;
+    private final RelationTypeRepository relationTypeRepository;
 
     /**
      * Метод создания связанной задачи RelatedTask
