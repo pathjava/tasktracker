@@ -18,8 +18,18 @@ public class LogDBConnection {
     @Bean
     public void databaseConnection() {
         System.out.println("");
+        System.out.println("DB Connection - " + checkDbType(url));
         System.out.println(url);
         System.out.println("");
+    }
+
+    private String checkDbType(String url) {
+        if (url.contains("h2"))
+            return "H2";
+        else if (url.contains("mariadb"))
+            return "MariaDB";
+        else
+            return "PostgreSQL";
     }
 
 }
