@@ -12,4 +12,12 @@ import ru.progwards.tasktracker.model.Project;
 @Transactional(readOnly = true)
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
+    /**
+     * Метод проверки существования prefix в БД
+     *
+     * @param prefix проверяемый префикс проекта
+     * @return true - если prefix есть в БД и false - если нет
+     */
+    boolean existsByPrefix(String prefix);
+
 }
