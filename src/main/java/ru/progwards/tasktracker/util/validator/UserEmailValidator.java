@@ -13,7 +13,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Валидатор для проверки существования email в БД при регистрации пользователя
+ * Валидатор для проверки существования email в БД при регистрации и обновлении пользователя
  *
  * @author Oleg Kiselev
  */

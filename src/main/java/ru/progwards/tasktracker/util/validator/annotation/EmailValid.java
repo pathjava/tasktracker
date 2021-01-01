@@ -7,7 +7,7 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * Аннотация для проверки существования email в БД при регистрации пользователя
+ * Аннотация для проверки существования email в БД при регистрации и обновлении пользователя
  *
  * @author Oleg Kiselev
  */

@@ -10,12 +10,12 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 
 /**
- * контроллер для обработки кастомных исключений
+ * Контроллер для обработки кастомных исключений
  *
  * @author Oleg Kiselev
  */
 @ControllerAdvice
-public class ExceptionControllerAdvice {
+public class CustomExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(BadRequestException.class)
