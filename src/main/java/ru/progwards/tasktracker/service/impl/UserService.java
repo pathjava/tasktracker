@@ -6,16 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.repository.TaskTypeRepository;
-import ru.progwards.tasktracker.repository.UserRepository;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.entity.UserEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.repository.UserRepository;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,7 +20,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UserService implements CreateService<User>, RemoveService<User>, GetService<Long, User>, RefreshService<User>, GetListService<User> {
+public class UserService implements CreateService<User>, RemoveService<User>,
+        GetService<Long, User>, RefreshService<User>, GetListService<User> {
 
     private final @NonNull UserRepository userRepository;
 

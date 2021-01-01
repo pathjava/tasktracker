@@ -56,6 +56,7 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
             User user = userGetService.get(dto.getId());
             user.setName(dto.getName());
             user.setEmail(dto.getEmail());
+            user.setPassword(dto.getPassword());
             return user;
         }
     }
