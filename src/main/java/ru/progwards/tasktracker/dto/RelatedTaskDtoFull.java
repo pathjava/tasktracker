@@ -2,6 +2,10 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.progwards.tasktracker.util.validator.verificationstage.Create;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * Объект, содержащий полные данные о связанной задаче и выводимые в пользовательском интерфейсе
@@ -12,9 +16,16 @@ import lombok.Data;
 @AllArgsConstructor
 public class RelatedTaskDtoFull {
 
+    @Null(groups = Create.class)
     private Long id;
+
+    @NotNull(groups = Create.class)
     private RelationTypeDtoPreview relationType;
+
+    @NotNull(groups = Create.class)
     private Long currentTaskId;
+
+    @NotNull(groups = Create.class)
     private TaskDtoPreview attachedTask;
 
 }

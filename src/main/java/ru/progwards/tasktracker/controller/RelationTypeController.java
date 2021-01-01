@@ -14,8 +14,10 @@ import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelationType;
 import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.verificationstage.Create;
+import ru.progwards.tasktracker.util.validator.verificationstage.Update;
 
-import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest/relationtype")
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class RelationTypeController {
 
@@ -45,7 +47,7 @@ public class RelationTypeController {
      * @return полученный по идентификатору RelationTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(1) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         RelationTypeDtoFull typeDto = converter.toDto(relationTypeGetService.get(id));
 
@@ -72,15 +74,15 @@ public class RelationTypeController {
     /**
      * Метод создания типа отношения (RelationType) связанных задач (RelatedTask)
      *
-     * @param relationTypeDto создаваемый Dto тип отношения
+     * @param dtoFull создаваемый Dto тип отношения
      * @return созданный RelationTypeDtoFull
      */
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> create(@Valid @RequestBody RelationTypeDtoFull relationTypeDto) {
-        if (relationTypeDto == null)
-            throw new BadRequestException("RelationTypeDtoFull == null");
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RelationTypeDtoFull> create(
+            @Validated(Create.class) @RequestBody RelationTypeDtoFull dtoFull) {
 
-        RelationType relationType = converter.toModel(relationTypeDto);
+        RelationType relationType = converter.toModel(dtoFull);
         relationTypeCreateService.create(relationType);
         RelationTypeDtoFull createdRelationType = converter.toDto(relationType);
 
@@ -90,20 +92,19 @@ public class RelationTypeController {
     /**
      * Метод обновления типа отношения (RelationType) связанных задач (RelatedTask)
      *
-     * @param id              идентификатор обновляемого типа отношения
-     * @param relationTypeDto обновляемый Dto тип отношения
+     * @param id      идентификатор обновляемого типа отношения
+     * @param dtoFull обновляемый Dto тип отношения
      * @return обновленный RelationTypeDtoFull
      */
-    @PutMapping(value = "/{id}/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable Long id,
-                                                      @RequestBody RelationTypeDtoFull relationTypeDto) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    @PutMapping(value = "/{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+                                                      @Validated(Update.class) @RequestBody RelationTypeDtoFull dtoFull) {
 
-        if (!id.equals(relationTypeDto.getId()))
+        if (!id.equals(dtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        RelationType relationType = converter.toModel(relationTypeDto);
+        RelationType relationType = converter.toModel(dtoFull);
         relationTypeRefreshService.refresh(relationType);
         RelationTypeDtoFull updatedRelationType = converter.toDto(relationType);
 
@@ -117,9 +118,7 @@ public class RelationTypeController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         RelationType relationType = relationTypeGetService.get(id);
         relationTypeRemoveService.remove(relationType);

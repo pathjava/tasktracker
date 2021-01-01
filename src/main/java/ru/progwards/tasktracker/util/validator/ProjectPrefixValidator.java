@@ -26,7 +26,13 @@ public class ProjectPrefixValidator implements ConstraintValidator<PrefixValid, 
     }
 
     @Override
-    public boolean isValid(String prefix, ConstraintValidatorContext constraintValidatorContext) {
-        return !projectRepository.existsByPrefix(prefix);
+    public boolean isValid(String prefix, ConstraintValidatorContext context) {
+        if (projectRepository.existsByPrefix(prefix)) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(prefix + " already exists")
+                    .addConstraintViolation();
+            return false;
+        }
+        return true;
     }
 }

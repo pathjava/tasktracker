@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
@@ -15,9 +16,16 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class WorkLogDtoPreview {
 
+    @NotNull
     private Long id;
+
+    @NotNull
     private Duration spent;
+
+    @NotNull
     private UserDtoPreview worker;
+
+    @NotNull
     private ZonedDateTime start;
 
 }

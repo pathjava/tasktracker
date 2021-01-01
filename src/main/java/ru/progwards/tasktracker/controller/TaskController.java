@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.TaskDtoFull;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
@@ -17,7 +18,12 @@ import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.UpdateOneValue;
 import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.verificationstage.Create;
+import ru.progwards.tasktracker.util.validator.verificationstage.Update;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +34,8 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest")
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class TaskController {
 
     private final GetService<Long, Task> taskGetService;
@@ -49,9 +56,7 @@ public class TaskController {
      * @return возвращает найденную TaskDtoFull
      */
     @GetMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> get(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<TaskDtoFull> get(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         TaskDtoFull task = dtoFullConverter.toDto(taskGetService.get(id));
 
@@ -61,15 +66,13 @@ public class TaskController {
     /**
      * Метод поиска задачи (Task) по текстовому коду
      *
-     * @param id текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
+     * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/task/{id}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> getByCode(@PathVariable String id) {
-        if (id == null)
-            throw new BadRequestException("Code не задан или задан неверно!");
+    @GetMapping(value = "/task/{code}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TaskDtoFull> getByCode(@NotEmpty @PathVariable String code) {
 
-        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(id));
+        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code));
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -81,9 +84,8 @@ public class TaskController {
      * @return лист TaskDtoPreview
      */
     @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<List<TaskDtoPreview>> getListByProject(
+            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         Project project = projectGetService.get(id);
         List<TaskDtoPreview> list = project.getTasks().stream()
@@ -117,15 +119,14 @@ public class TaskController {
     /**
      * Метод создания задачи (Task)
      *
-     * @param taskDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @param dtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную TaskDtoFull
      */
-    @PostMapping(value = "/task/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> create(@RequestBody TaskDtoFull taskDto) {
-        if (taskDto == null)
-            throw new BadRequestException("TaskDtoFull == null");
+    @PostMapping(value = "/task/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TaskDtoFull> create(@Validated(Create.class) @RequestBody TaskDtoFull dtoFull) {
 
-        Task task = dtoFullConverter.toModel(taskDto);
+        Task task = dtoFullConverter.toModel(dtoFull);
         taskCreateService.create(task);
         TaskDtoFull createdTask = dtoFullConverter.toDto(task);
 
@@ -136,18 +137,18 @@ public class TaskController {
      * Метод обновления задачи (Task)
      *
      * @param id      идентификатор задачи
-     * @param taskDto обновляемая сущность, приходящая в запросе из пользовательского интерфейса
+     * @param dtoFull обновляемая сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает обновленную TaskDtoFull
      */
-    @PutMapping(value = "/task/{id}/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> update(@PathVariable Long id, @RequestBody TaskDtoFull taskDto) {
-        if (taskDto == null)
-            throw new BadRequestException("TaskDtoFull == null");
+    @PutMapping(value = "/task/{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TaskDtoFull> update(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+                                              @Validated(Update.class) @RequestBody TaskDtoFull dtoFull) {
 
-        if (!id.equals(taskDto.getId()))
+        if (!id.equals(dtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        Task task = dtoFullConverter.toModel(taskDto);
+        Task task = dtoFullConverter.toModel(dtoFull);
         taskRefreshService.refresh(task);
         TaskDtoFull updatedTask = dtoFullConverter.toDto(task);
 
@@ -161,9 +162,7 @@ public class TaskController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/task/{id}/delete")
-    public ResponseEntity<TaskDtoFull> delete(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<TaskDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         Task task = taskGetService.get(id);
         taskRemoveService.remove(task);
@@ -178,10 +177,10 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return возвращает UpdateOneValue
      */
-    @PutMapping(value = "/task/{id}/updatefield", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable Long id, @RequestBody UpdateOneValue oneValue) {
-        if (oneValue == null)
-            throw new BadRequestException("Значение обновляемого поля отсутствует!");
+    @PutMapping(value = "/task/{id}/updatefield",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+                                                         @Validated(Update.class) @RequestBody UpdateOneValue oneValue) {
 
         if (oneValue.getFieldName().equals("id"))
             throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");

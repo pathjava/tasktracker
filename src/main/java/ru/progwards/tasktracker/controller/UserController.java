@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.UserDtoFull;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
@@ -13,9 +14,11 @@ import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.service.*;
-import ru.progwards.tasktracker.util.validator.UserEmailValidator;
+import ru.progwards.tasktracker.util.validator.verificationstage.Create;
+import ru.progwards.tasktracker.util.validator.verificationstage.Update;
 
-import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,16 +29,17 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest/user")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class UserController {
 
-    private final @NonNull CreateService<User> createService;
-    private final @NonNull GetService<Long, User> getService;
-    private final @NonNull GetListService<User> getListService;
-    private final @NonNull RemoveService<User> removeService;
-    private final @NonNull RefreshService<User> refreshService;
-    private final @NonNull Converter<User, UserDtoFull> converter;
-    private final @NonNull Converter<User, UserDtoPreview> previewConverter;
+    private final CreateService<User> createService;
+    private final GetService<Long, User> getService;
+    private final GetListService<User> getListService;
+    private final RemoveService<User> removeService;
+    private final RefreshService<User> refreshService;
+    private final Converter<User, UserDtoFull> converter;
+    private final Converter<User, UserDtoPreview> previewConverter;
 
     /**
      * Метод создания пользователя
@@ -44,9 +48,7 @@ public class UserController {
      * @return возвращает созданного пользователя
      */
     @PostMapping(value = "/create")
-    public ResponseEntity<UserDtoFull> createUser(@Valid @RequestBody UserDtoFull userDtoFull) {
-        if (userDtoFull == null)
-            throw new BadRequestException("Пустой объект!");
+    public ResponseEntity<UserDtoFull> createUser(@Validated(Create.class) @RequestBody UserDtoFull userDtoFull) {
 
         User user = converter.toModel(userDtoFull);
         createService.create(user);
@@ -62,14 +64,9 @@ public class UserController {
      * @return возвращает пользователя
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDtoFull> getUser(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<UserDtoFull> getUser(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         UserDtoFull user = converter.toDto(getService.get(id));
-
-        if (user == null) //TODO - пустой пользователь или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Пользователь с id: " + id + " не найден!");
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -99,10 +96,8 @@ public class UserController {
      * @return возвращает обновленного пользователя
      */
     @PutMapping(value = "/{id}/update")
-    public ResponseEntity<UserDtoFull> updateUser(@PathVariable Long id,
-                                                  @RequestBody UserDtoFull userDtoFull) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<UserDtoFull> updateUser(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+                                                  @Validated(Update.class) @RequestBody UserDtoFull userDtoFull) {
 
         if (!id.equals(userDtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
@@ -121,15 +116,10 @@ public class UserController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<UserDtoFull> deleteUser(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<UserDtoFull> deleteUser(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         User user = getService.get(id);
-        if (user != null)
-            removeService.remove(user);
-        else
-            throw new NotFoundException("Пользователь с id: " + id + " не найден!");
+        removeService.remove(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

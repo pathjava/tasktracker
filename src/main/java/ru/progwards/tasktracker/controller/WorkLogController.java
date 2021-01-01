@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.dto.WorkLogDtoPreview;
@@ -15,7 +16,11 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.WorkLog;
 import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.verificationstage.Create;
+import ru.progwards.tasktracker.util.validator.verificationstage.Update;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +31,8 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(value = "/rest")
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class WorkLogController {
 
     private final GetService<Long, WorkLog> workLogGetService;
@@ -45,9 +51,7 @@ public class WorkLogController {
      * @return возвращает WorkLogDtoFull
      */
     @GetMapping(value = "/worklog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> get(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         WorkLogDtoFull workLogDto = workLogDtoFullConverter.toDto(workLogGetService.get(id));
 
@@ -61,9 +65,7 @@ public class WorkLogController {
      * @return лист WorkLogDtoFull
      */
     @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         Task task = taskGetService.get(id);
         List<WorkLogDtoFull> list = task.getWorkLogs().stream()
@@ -96,15 +98,14 @@ public class WorkLogController {
     /**
      * Метод создания одной записи журнала работ (WorkLog)
      *
-     * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @param dtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный WorkLogDtoFull
      */
-    @PostMapping(value = "/worklog/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> create(@RequestBody WorkLogDtoFull workLogDto) {
-        if (workLogDto == null)
-            throw new BadRequestException("WorkLogDtoFull == null");
+    @PostMapping(value = "/worklog/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WorkLogDtoFull> create(@Validated(Create.class) @RequestBody WorkLogDtoFull dtoFull) {
 
-        WorkLog workLog = workLogDtoFullConverter.toModel(workLogDto);
+        WorkLog workLog = workLogDtoFullConverter.toModel(dtoFull);
         workLogCreateService.create(workLog);
         WorkLogDtoFull createdWorkLog = workLogDtoFullConverter.toDto(workLog);
 
@@ -114,18 +115,18 @@ public class WorkLogController {
     /**
      * Метод обновления одной записи журнала работ (WorkLog)
      *
-     * @param workLogDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @param dtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает WorkLogDtoFull
      */
-    @PutMapping(value = "/worklog/{id}/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> update(@PathVariable Long id, @RequestBody WorkLogDtoFull workLogDto) {
-        if (workLogDto == null)
-            throw new BadRequestException("WorkLogDtoFull == null");
+    @PutMapping(value = "/worklog/{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+                                                 @Validated(Update.class) @RequestBody WorkLogDtoFull dtoFull) {
 
-        if (!id.equals(workLogDto.getId()))
+        if (!id.equals(dtoFull.getId()))
             throw new BadRequestException("Данная операция недопустима!");
 
-        WorkLog workLog = workLogDtoFullConverter.toModel(workLogDto);
+        WorkLog workLog = workLogDtoFullConverter.toModel(dtoFull);
         workLogRefreshService.refresh(workLog);
         WorkLogDtoFull updatedWorkLog = workLogDtoFullConverter.toDto(workLog);
 
@@ -139,9 +140,7 @@ public class WorkLogController {
      * @return статус ответа
      */
     @DeleteMapping(value = "/worklog/{id}/delete")
-    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         WorkLog workLog = workLogGetService.get(id);
         workLogRemoveService.remove(workLog);

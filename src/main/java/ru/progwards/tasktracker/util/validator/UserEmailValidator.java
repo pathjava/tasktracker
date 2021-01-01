@@ -4,6 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.dto.UserDtoFull;
+import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.repository.UserRepository;
 import ru.progwards.tasktracker.util.validator.annotation.EmailValid;
 
@@ -17,7 +19,7 @@ import javax.validation.ConstraintValidatorContext;
  */
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
-public class UserEmailValidator implements ConstraintValidator<EmailValid, String> {
+public class UserEmailValidator implements ConstraintValidator<EmailValid, UserDtoFull> {
 
     private final UserRepository userRepository;
 
@@ -26,7 +28,23 @@ public class UserEmailValidator implements ConstraintValidator<EmailValid, Strin
     }
 
     @Override
-    public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
-        return !userRepository.existsByEmail(email);
+    public boolean isValid(UserDtoFull userDto, ConstraintValidatorContext context) {
+        if (userDto.getId() == null) {
+            if (userRepository.existsByEmail(userDto.getEmail())) {
+                context.disableDefaultConstraintViolation();
+                context.buildConstraintViolationWithTemplate(userDto.getEmail() + " already exists")
+                        .addConstraintViolation();
+                return false;
+            }
+        } else {
+            User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
+            if (user != null && !user.getId().equals(userDto.getId())) {
+                context.disableDefaultConstraintViolation();
+                context.buildConstraintViolationWithTemplate(userDto.getEmail() + " already exists")
+                        .addConstraintViolation();
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.model.User;
 
+import java.util.Optional;
+
 /**
  * @author Oleg Kiselev
  */
@@ -20,4 +22,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     boolean existsByEmail(String email);
 
+    /**
+     * Метод получения пользователя по адресу электронной почты
+     *
+     * @param email электронный адрес
+     * @return пользователь
+     */
+    Optional<User> findByEmail(String email);
 }

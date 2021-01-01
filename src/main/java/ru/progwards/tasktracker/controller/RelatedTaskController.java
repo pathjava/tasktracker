@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
-import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.Task;
@@ -18,7 +18,10 @@ import ru.progwards.tasktracker.service.CreateService;
 import ru.progwards.tasktracker.service.GetListService;
 import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.service.RemoveService;
+import ru.progwards.tasktracker.util.validator.verificationstage.Create;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/rest/relatedtask")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class RelatedTaskController {
 
     private final CreateService<RelatedTask> relatedTaskCreateService;
@@ -43,15 +47,15 @@ public class RelatedTaskController {
     /**
      * Метод создания связанной задачи (RelatedTask)
      *
-     * @param relatedTaskDto сущность, приходящая в запросе из пользовательского интерфейса
+     * @param dtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданную RelatedTaskDtoFull
      */
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelatedTaskDtoFull> create(@RequestBody RelatedTaskDtoFull relatedTaskDto) {
-        if (relatedTaskDto == null)
-            throw new BadRequestException("RelatedTaskDtoFull == null");
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RelatedTaskDtoFull> create(
+            @Validated(Create.class) @RequestBody RelatedTaskDtoFull dtoFull) {
 
-        RelatedTask relatedTask = relatedTaskDtoFullConverter.toModel(relatedTaskDto);
+        RelatedTask relatedTask = relatedTaskDtoFullConverter.toModel(dtoFull);
         relatedTaskCreateService.create(relatedTask);
         RelatedTaskDtoFull createdRelatedTask = relatedTaskDtoFullConverter.toDto(relatedTask);
 
@@ -65,9 +69,8 @@ public class RelatedTaskController {
      * @return лист RelatedTaskDtoFull
      */
     @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RelatedTaskDtoPreview>> getListByTask(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<List<RelatedTaskDtoPreview>> getListByTask(
+            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         Task task = taskGetService.get(id);
         List<RelatedTaskDtoPreview> list = task.getRelatedTasks().stream()
@@ -104,9 +107,7 @@ public class RelatedTaskController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable Long id) {
-        if (id == null)
-            throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
+    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
 
         RelatedTask relatedTask = relatedTaskGetService.get(id);
         relatedTaskRemoveService.remove(relatedTask);
