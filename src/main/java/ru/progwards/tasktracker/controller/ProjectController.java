@@ -96,7 +96,6 @@ public class ProjectController {
      */
     @Transactional
     @PostMapping("create")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProjectDtoFull> create(@RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");
