@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * value object - объект бизнес логики (связанная задача)
@@ -25,20 +26,23 @@ public class RelatedTask {
     @GeneratedValue(generator = "RelatedTaskSeq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "counter_type_id", referencedColumnName = "id")
     private RelationType relationType;
 
+    @NotNull
     @ManyToOne //TODO fetch - ?
     @JoinColumn(name = "current_task_id", referencedColumnName = "id")
     private Task currentTask;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "attached_task_id", referencedColumnName = "id")
     private Task attachedTask;
 
-//    @Type(type = "true_false")
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
 }

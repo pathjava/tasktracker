@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TaskType {
     @JoinColumn(name = "work_flow_id", referencedColumnName = "id")
     private WorkFlow workFlow;
 
-    @Column(nullable = false)
+    @NotNull
     private String name;
 
     @OneToMany(mappedBy = "type")

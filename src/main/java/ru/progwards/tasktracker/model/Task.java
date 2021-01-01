@@ -34,7 +34,7 @@ public class Task {
     @NotNull
     private String code;
 
-    @Column(nullable = false)
+    @NotNull
     private String name;
 
     private String description;
@@ -47,19 +47,21 @@ public class Task {
     @JoinColumn(name = "priority_id", referencedColumnName = "id")
     private TaskPriority priority;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "executor_id", referencedColumnName = "id")
     private User executor;
 
-    @Column(nullable = false)
+    @NotNull
     private ZonedDateTime created;
     private ZonedDateTime updated;
 
@@ -68,9 +70,9 @@ public class Task {
     private WorkFlowStatus status;
 
     private Duration estimation;
-//    @Column(name = "time_spent")
+    //    @Column(name = "time_spent")
     private Duration timeSpent;
-//    @Column(name = "time_left")
+    //    @Column(name = "time_left")
     private Duration timeLeft;
 
     @OneToMany(mappedBy = "currentTask", fetch = FetchType.LAZY)
@@ -89,8 +91,8 @@ public class Task {
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<TaskNote> notes = new ArrayList<>();
 
-//    @Type(type = "true_false")
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
 }
