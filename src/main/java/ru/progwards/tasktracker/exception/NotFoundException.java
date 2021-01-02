@@ -1,7 +1,7 @@
 package ru.progwards.tasktracker.exception;
 
 /**
- * исключение, используемое, когда запрашиваемый объект не найден
+ * Исключение, используемое, когда запрашиваемый объект не найден
  *
  */
 public class NotFoundException extends RuntimeException {

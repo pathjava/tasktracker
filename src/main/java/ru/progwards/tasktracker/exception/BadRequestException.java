@@ -1,7 +1,7 @@
 package ru.progwards.tasktracker.exception;
 
 /**
- * исключение, используемое при ситуациях с неверными параметрами запроса
+ * Исключение, используемое при ситуациях с неверными параметрами запроса
  *
  */
 public class BadRequestException extends RuntimeException {
