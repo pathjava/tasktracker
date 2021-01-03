@@ -18,6 +18,9 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.service.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -97,7 +100,7 @@ public class ProjectController {
     @Transactional
     @PostMapping("create")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProjectDtoFull> create(@RequestBody ProjectDtoFull projectDto) {
+    public ResponseEntity<ProjectDtoFull> create(@Valid @RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");
 
@@ -115,7 +118,7 @@ public class ProjectController {
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody ProjectDtoFull projectDto) {
+    public void update(@NotNull @Positive @PathVariable ("id") Long id, @Valid @RequestBody ProjectDtoFull projectDto) {
         if (id == null)
             throw new BadRequestException("Id is null");
 
@@ -132,7 +135,7 @@ public class ProjectController {
      */
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@NotNull @Positive @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundException("Not found a project with id=" + id);
