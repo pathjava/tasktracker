@@ -18,6 +18,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
      * @param prefix проверяемый префикс проекта
      * @return true - если prefix есть в БД и false - если нет
      */
-    boolean existsByPrefix(String prefix);
+    boolean existsProjectByPrefix(String prefix);
 
 }
