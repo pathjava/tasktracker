@@ -17,7 +17,7 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDtoPreview> {
 
     private final GetService<Long, WorkLog> workLogGetService;
@@ -31,10 +31,7 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
      */
     @Override
     public WorkLog toModel(WorkLogDtoPreview dto) {
-        if (dto == null)
-            return null;
-        else
-            return workLogGetService.get(dto.getId());
+        return workLogGetService.get(dto.getId());
     }
 
     /**
@@ -45,14 +42,11 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
      */
     @Override
     public WorkLogDtoPreview toDto(WorkLog model) {
-        if (model == null)
-            return null;
-        else
-            return new WorkLogDtoPreview(
-                    model.getId(),
-                    model.getSpent(),
-                    userUserDtoConverter.toDto(model.getWorker()),
-                    model.getStart()
-            );
+        return new WorkLogDtoPreview(
+                model.getId(),
+                model.getSpent(),
+                userUserDtoConverter.toDto(model.getWorker()),
+                model.getStart()
+        );
     }
 }

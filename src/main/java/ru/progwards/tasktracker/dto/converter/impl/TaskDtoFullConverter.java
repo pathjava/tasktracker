@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
 
     private final Converter<TaskType, TaskTypeDtoPreview> taskTypeDtoConverter;
@@ -40,9 +40,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      */
     @Override
     public Task toModel(TaskDtoFull dto) {
-        if (dto == null)
-            return null;
-        else if (dto.getId() == null) {
+        if (dto.getId() == null) {
             return new Task(
                     null,
                     dto.getCode(),
@@ -120,29 +118,26 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      */
     @Override
     public TaskDtoFull toDto(Task model) {
-        if (model == null)
-            return null;
-        else
-            return new TaskDtoFull(
-                    model.getId(),
-                    model.getCode(),
-                    model.getName(),
-                    model.getDescription(),
-                    taskTypeDtoConverter.toDto(model.getType()),
-                    taskPriorityDtoConverter.toDto(model.getPriority()),
-                    projectDtoConverter.toDto(model.getProject()),
-                    userDtoConverter.toDto(model.getAuthor()),
-                    userDtoConverter.toDto(model.getExecutor()),
-                    model.getCreated(),
-                    model.getUpdated(),
-                    workFlowStatusDtoConverter.toDto(model.getStatus()),
-                    listVoToDtoWorkFlowAction(model.getStatus().getActions()),
-                    model.getEstimation(),
-                    model.getTimeSpent(),
-                    model.getTimeLeft(),
-                    listVoToDtoRelatedTask(model.getRelatedTasks()),
-                    listVoToDtoTaskAttachment(model.getAttachments())
-            );
+        return new TaskDtoFull(
+                model.getId(),
+                model.getCode(),
+                model.getName(),
+                model.getDescription(),
+                taskTypeDtoConverter.toDto(model.getType()),
+                taskPriorityDtoConverter.toDto(model.getPriority()),
+                projectDtoConverter.toDto(model.getProject()),
+                userDtoConverter.toDto(model.getAuthor()),
+                userDtoConverter.toDto(model.getExecutor()),
+                model.getCreated(),
+                model.getUpdated(),
+                workFlowStatusDtoConverter.toDto(model.getStatus()),
+                listVoToDtoWorkFlowAction(model.getStatus().getActions()),
+                model.getEstimation(),
+                model.getTimeSpent(),
+                model.getTimeLeft(),
+                listVoToDtoRelatedTask(model.getRelatedTasks()),
+                listVoToDtoTaskAttachment(model.getAttachments())
+        );
     }
 
     /**

@@ -21,7 +21,7 @@ import java.util.Collections;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDtoFull> {
 
     private final Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
@@ -36,9 +36,7 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
      */
     @Override
     public TaskType toModel(TaskTypeDtoFull dto) {
-        if (dto == null)
-            return null;
-        else if (dto.getId() == null) {
+        if (dto.getId() == null) {
             return new TaskType(
                     null,
                     projectDtoConverter.toModel(dto.getProject()),
@@ -63,14 +61,11 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
      */
     @Override
     public TaskTypeDtoFull toDto(TaskType model) {
-        if (model == null)
-            return null;
-        else
-            return new TaskTypeDtoFull(
-                    model.getId(),
-                    projectDtoConverter.toDto(model.getProject()),
-                    workFlowDtoConverter.toDto(model.getWorkFlow()),
-                    model.getName()
-            );
+        return new TaskTypeDtoFull(
+                model.getId(),
+                projectDtoConverter.toDto(model.getProject()),
+                workFlowDtoConverter.toDto(model.getWorkFlow()),
+                model.getName()
+        );
     }
 }

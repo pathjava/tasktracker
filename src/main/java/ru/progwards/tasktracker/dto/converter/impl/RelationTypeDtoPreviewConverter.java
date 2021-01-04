@@ -15,7 +15,7 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelationTypeDtoPreviewConverter implements Converter<RelationType, RelationTypeDtoPreview> {
 
     private final GetService<Long, RelationType> relationTypeGetService;
@@ -28,10 +28,7 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
      */
     @Override
     public RelationType toModel(RelationTypeDtoPreview dto) {
-        if (dto == null)
-            return null;
-        else
-            return relationTypeGetService.get(dto.getId());
+        return relationTypeGetService.get(dto.getId());
     }
 
     /**
@@ -42,12 +39,9 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
      */
     @Override
     public RelationTypeDtoPreview toDto(RelationType model) {
-        if (model == null)
-            return null;
-        else
-            return new RelationTypeDtoPreview(
-                    model.getId(),
-                    model.getName()
-            );
+        return new RelationTypeDtoPreview(
+                model.getId(),
+                model.getName()
+        );
     }
 }

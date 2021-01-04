@@ -17,7 +17,7 @@ import java.util.Collections;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelationTypeDtoFullConverter implements Converter<RelationType, RelationTypeDtoFull> {
 
     private final GetService<Long, RelationType> relationTypeGetService;
@@ -30,9 +30,7 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
      */
     @Override
     public RelationType toModel(RelationTypeDtoFull dto) {
-        if (dto == null)
-            return null;
-        else if (dto.getId() == null) {
+        if (dto.getId() == null) {
             return new RelationType(
                     null,
                     dto.getName(),
@@ -65,14 +63,11 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
      */
     @Override
     public RelationTypeDtoFull toDto(RelationType model) {
-        if (model == null)
-            return null;
-        else
-            return new RelationTypeDtoFull(
-                    model.getId(),
-                    model.getName(),
-                    checkCounterRelationModel(model.getCounterRelation())
-            );
+        return new RelationTypeDtoFull(
+                model.getId(),
+                model.getName(),
+                checkCounterRelationModel(model.getCounterRelation())
+        );
     }
 
     /**

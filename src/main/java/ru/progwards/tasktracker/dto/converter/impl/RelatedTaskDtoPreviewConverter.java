@@ -19,7 +19,7 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, RelatedTaskDtoPreview> {
 
     private final Converter<RelationType, RelationTypeDtoPreview> relationTypeDtoConverter;
@@ -34,10 +34,7 @@ public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, Re
      */
     @Override
     public RelatedTask toModel(RelatedTaskDtoPreview dto) {
-        if (dto == null)
-            return null;
-        else
-            return relatedTaskGetService.get(dto.getCurrentTaskId());
+        return relatedTaskGetService.get(dto.getCurrentTaskId());
     }
 
     /**
@@ -48,14 +45,11 @@ public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, Re
      */
     @Override
     public RelatedTaskDtoPreview toDto(RelatedTask model) {
-        if (model == null)
-            return null;
-        else
-            return new RelatedTaskDtoPreview(
-                    model.getId(),
-                    relationTypeDtoConverter.toDto(model.getRelationType()),
-                    model.getCurrentTask().getId(),
-                    taskDtoConverter.toDto(model.getAttachedTask())
-            );
+        return new RelatedTaskDtoPreview(
+                model.getId(),
+                relationTypeDtoConverter.toDto(model.getRelationType()),
+                model.getCurrentTask().getId(),
+                taskDtoConverter.toDto(model.getAttachedTask())
+        );
     }
 }

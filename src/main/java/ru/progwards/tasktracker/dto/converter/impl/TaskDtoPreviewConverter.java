@@ -19,7 +19,7 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Oleg Kiselev
  */
 @Component
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> {
 
     private final GetService<Long, Task> taskGetService;
@@ -34,10 +34,7 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
      */
     @Override
     public Task toModel(TaskDtoPreview dto) {
-        if (dto == null)
-            return null;
-        else
-            return taskGetService.get(dto.getId());
+        return taskGetService.get(dto.getId());
     }
 
     /**
@@ -48,15 +45,12 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
      */
     @Override
     public TaskDtoPreview toDto(Task model) {
-        if (model == null)
-            return null;
-        else
-            return new TaskDtoPreview(
-                    model.getId(),
-                    model.getCode(),
-                    model.getName(),
-                    taskTypeDtoConverter.toDto(model.getType()),
-                    taskPriorityDtoConverter.toDto(model.getPriority())
-            );
+        return new TaskDtoPreview(
+                model.getId(),
+                model.getCode(),
+                model.getName(),
+                taskTypeDtoConverter.toDto(model.getType()),
+                taskPriorityDtoConverter.toDto(model.getPriority())
+        );
     }
 }
