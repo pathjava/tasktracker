@@ -30,7 +30,7 @@ public class ProjectPrefixValidator implements ConstraintValidator<PrefixValid, 
     @Override
     public boolean isValid(ProjectDtoFull projectDto, ConstraintValidatorContext context) {
         if (projectDto.getId() == null) {
-            if (projectRepository.existsProjectByPrefix(projectDto.getPrefix())) {
+            if (projectRepository.existsByPrefix(projectDto.getPrefix())) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(projectDto.getPrefix() + " already exists")
                         .addConstraintViolation();
