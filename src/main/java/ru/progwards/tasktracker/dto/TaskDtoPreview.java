@@ -3,8 +3,7 @@ package ru.progwards.tasktracker.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 /**
  * Объект, содержащий краткие данные задачи для отображения в пользовательском интерфейсе
@@ -15,10 +14,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class TaskDtoPreview {
 
+    @Min(0)
+    @Max(Long.MAX_VALUE)
     @NotNull
     private Long id;
 
     @NotEmpty
+    @Size(min = 1, max = 10)
     private String code;
 
     @NotEmpty

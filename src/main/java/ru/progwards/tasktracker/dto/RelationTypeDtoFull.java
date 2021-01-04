@@ -5,10 +5,7 @@ import lombok.Data;
 import ru.progwards.tasktracker.util.validator.verificationstage.Create;
 import ru.progwards.tasktracker.util.validator.verificationstage.Update;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * Объект, содержащий полные данные об отношениях связанных задач
@@ -19,7 +16,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class RelationTypeDtoFull {
 
-    @NotNull(groups = {Update.class})
+    @Min(value = 0, groups = Update.class)
+    @Max(value = Long.MAX_VALUE, groups = Update.class)
+    @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;
 
