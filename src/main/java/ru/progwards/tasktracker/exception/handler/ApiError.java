@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Структура тела сообщения в методах RestExceptionHandler
+ * Структура тела сообщения об ошибке
  *
  * @author Oleg Kiselev
  */

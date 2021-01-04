@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.RelationType;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
         RemoveService<RelationType>, RefreshService<RelationType>, GetListService<RelationType> {
 
@@ -53,14 +54,25 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
 
     /**
      * Метод создания типа отношения связанных задач
+     * Если model.getCounterRelation() != null, значит создается двусторонний тип отношения,
+     * поэтому получаем встречный тип, проверяем чтобы он не был уже занят другим RelationType
+     * и добавляем во встречный тип (обновляем его) создаваемый тип RelationType.
      *
      * @param model создаваемый тип отношения
      */
     @Transactional
     @Override
     public void create(RelationType model) {
-        //TODO - make check exists and set counter type
-        relationTypeRepository.save(model);
+        if (model.getCounterRelation() != null) {
+            RelationType counterRelation = get(model.getCounterRelation().getId());
+            if (counterRelation.getCounterRelation() == null) {
+                relationTypeRepository.save(model);
+                counterRelation.setCounterRelation(model);
+                relationTypeRepository.save(counterRelation);
+            } else
+                throw new BadRequestException("RelationType id=" + counterRelation.getId() + " уже используется");
+        } else
+            relationTypeRepository.save(model);
     }
 
     /**
