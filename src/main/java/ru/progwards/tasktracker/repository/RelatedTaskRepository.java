@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.model.RelatedTask;
@@ -16,6 +19,16 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> {
+
+    /**
+     * Метод установки значения поля RelatedTask deleted как true - отмечаем RelatedTask как удаленную
+     *
+     * @param deleted true - отметка, что RelatedTask удалена
+     * @param id      идентификатор RelatedTask, помечаемой как удаленная
+     */
+    @Modifying
+    @Query("UPDATE RelatedTask t SET t.deleted = :value WHERE t.id = :id")
+    void updateRelatedTaskAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
 
     /**
      * Метод проверки существуют ли в Task уже RelatedTask с типом RelationType

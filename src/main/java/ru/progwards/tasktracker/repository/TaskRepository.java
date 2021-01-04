@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.model.Task;
@@ -15,6 +18,16 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface TaskRepository extends JpaRepository<Task, Long> {
+
+    /**
+     * Метод установки значения поля Task deleted как true - отмечаем Task как удаленную
+     *
+     * @param deleted true - отметка, что Task удалена
+     * @param id      идентификатор Task, помечаемой как удаленная
+     */
+    @Modifying
+    @Query("UPDATE Task t SET t.deleted = :value WHERE t.id = :id")
+    void updateTaskAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
 
     /**
      * Метод проверки, существуют ли Task с TaskType из параметра метода
@@ -46,4 +59,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @return Task
      */
     Optional<Task> findByCodeAndDeletedFalse(String code);
+
 }

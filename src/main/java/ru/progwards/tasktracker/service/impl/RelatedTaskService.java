@@ -108,10 +108,8 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
                     )
                     .orElseThrow(() -> new NotFoundException("counterRelatedTask not found"));
 
-            counterRelatedTask.setDeleted(true);
-            relatedTaskRepository.save(counterRelatedTask);
+            relatedTaskRepository.updateRelatedTaskAsDeleted(true, counterRelatedTask.getId());
         }
-        model.setDeleted(true);
-        relatedTaskRepository.save(model);
+        relatedTaskRepository.updateRelatedTaskAsDeleted(true, model.getId());
     }
 }
