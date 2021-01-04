@@ -47,7 +47,7 @@ public class RelationTypeController {
      * @return полученный по идентификатору RelationTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         RelationTypeDtoFull typeDto = converter.toDto(relationTypeGetService.get(id));
 
@@ -98,7 +98,7 @@ public class RelationTypeController {
      */
     @PutMapping(value = "/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
                                                       @Validated(Update.class) @RequestBody RelationTypeDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -118,7 +118,7 @@ public class RelationTypeController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         RelationType relationType = relationTypeGetService.get(id);
         relationTypeRemoveService.remove(relationType);

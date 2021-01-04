@@ -70,7 +70,7 @@ public class RelatedTaskController {
      */
     @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RelatedTaskDtoPreview>> getListByTask(
-            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+            @PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         Task task = taskGetService.get(id);
         List<RelatedTaskDtoPreview> list = task.getRelatedTasks().stream()
@@ -107,7 +107,7 @@ public class RelatedTaskController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         RelatedTask relatedTask = relatedTaskGetService.get(id);
         relatedTaskRemoveService.remove(relatedTask);

@@ -51,7 +51,7 @@ public class WorkLogController {
      * @return возвращает WorkLogDtoFull
      */
     @GetMapping(value = "/worklog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         WorkLogDtoFull workLogDto = workLogDtoFullConverter.toDto(workLogGetService.get(id));
 
@@ -65,7 +65,7 @@ public class WorkLogController {
      * @return лист WorkLogDtoFull
      */
     @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         Task task = taskGetService.get(id);
         List<WorkLogDtoFull> list = task.getWorkLogs().stream()
@@ -120,7 +120,7 @@ public class WorkLogController {
      */
     @PutMapping(value = "/worklog/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
                                                  @Validated(Update.class) @RequestBody WorkLogDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -140,7 +140,7 @@ public class WorkLogController {
      * @return статус ответа
      */
     @DeleteMapping(value = "/worklog/{id}/delete")
-    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
         WorkLog workLog = workLogGetService.get(id);
         workLogRemoveService.remove(workLog);
