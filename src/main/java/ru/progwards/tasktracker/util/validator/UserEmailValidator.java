@@ -27,6 +27,13 @@ public class UserEmailValidator implements ConstraintValidator<EmailValid, UserD
     public void initialize(EmailValid emailValid) {
     }
 
+    /**
+     * Метод проверки существования Email в БД при регистрации или обновлении пользователя
+     *
+     * @param userDto UserDtoFull
+     * @param context Предоставляет контекстные данные и операции при применении заданного валидатора ограничений.
+     * @return true - если Email отсутствует в БД и false - если есть в БД
+     */
     @Override
     public boolean isValid(UserDtoFull userDto, ConstraintValidatorContext context) {
         if (userDto.getId() == null) {

@@ -27,6 +27,13 @@ public class ProjectPrefixValidator implements ConstraintValidator<PrefixValid, 
     public void initialize(PrefixValid constraintAnnotation) {
     }
 
+    /**
+     * Метод проверки существования префикса проекта при создании или редактировании проекта
+     *
+     * @param projectDto ProjectDtoFull
+     * @param context    Предоставляет контекстные данные и операции при применении заданного валидатора ограничений.
+     * @return true - если префикс проекта отсутствует в БД и false - если есть в БД
+     */
     @Override
     public boolean isValid(ProjectDtoFull projectDto, ConstraintValidatorContext context) {
         if (projectDto.getId() == null) {
