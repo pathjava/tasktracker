@@ -27,7 +27,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      */
     @Modifying
     @Query("UPDATE Task t SET t.deleted = :value WHERE t.id = :id")
-    void updateTaskAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
+    void findTaskAndMarkAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
 
     /**
      * Метод проверки, существуют ли Task с TaskType из параметра метода

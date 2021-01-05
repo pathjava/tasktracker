@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelatedTaskService implements CreateService<RelatedTask>, GetService<Long, RelatedTask>,
         RemoveService<RelatedTask>, GetListService<RelatedTask> {
 
@@ -102,14 +102,10 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public void remove(RelatedTask model) {
         if (model.getRelationType().getCounterRelation() != null) {
-            RelatedTask counterRelatedTask = relatedTaskRepository
-                    .findRelatedTaskByAttachedTaskAndRelationType_CounterRelation(
-                            model.getAttachedTask(), model.getRelationType().getCounterRelation()
-                    )
-                    .orElseThrow(() -> new NotFoundException("counterRelatedTask not found"));
-
-            relatedTaskRepository.updateRelatedTaskAsDeleted(true, counterRelatedTask.getId());
+            relatedTaskRepository.findCounterRelatedTaskAndMarkAsDeleted(
+                    true, model.getAttachedTask().getId(), model.getRelationType().getCounterRelation().getId()
+            );
         }
-        relatedTaskRepository.updateRelatedTaskAsDeleted(true, model.getId());
+        relatedTaskRepository.findRelatedTaskAndMarkAsDeleted(true, model.getId());
     }
 }

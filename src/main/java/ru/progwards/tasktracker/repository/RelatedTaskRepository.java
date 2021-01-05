@@ -21,14 +21,27 @@ import java.util.Optional;
 public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> {
 
     /**
-     * Метод установки значения поля RelatedTask deleted как true - отмечаем RelatedTask как удаленную
+     * Метод установки значения поля текущей RelatedTask deleted как true - отмечаем RelatedTask как удаленную
      *
      * @param deleted true - отметка, что RelatedTask удалена
      * @param id      идентификатор RelatedTask, помечаемой как удаленная
      */
     @Modifying
     @Query("UPDATE RelatedTask t SET t.deleted = :value WHERE t.id = :id")
-    void updateRelatedTaskAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
+    void findRelatedTaskAndMarkAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
+
+    /**
+     * Метод установки значения поля встречной RelatedTask deleted как true - отмечаем RelatedTask как удаленную
+     *
+     * @param deleted true - отметка, что RelatedTask удалена
+     * @param taskId  идентификатор attachedTask Task которой принадлежит встречная RelatedTask
+     * @param typeId  идентификатор RelationType встречной RelatedTask
+     */
+    @Modifying
+    @Query("UPDATE RelatedTask r SET r.deleted = :value WHERE r.currentTask.id = :taskId AND r.relationType.id = :typeId")
+    void findCounterRelatedTaskAndMarkAsDeleted(
+            @Param("value") boolean deleted, @Param("taskId") Long taskId, @Param("typeId") Long typeId
+    );
 
     /**
      * Метод проверки существуют ли в Task уже RelatedTask с типом RelationType
