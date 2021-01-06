@@ -42,7 +42,7 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
             return new User(
                     null,
                     dto.getName(),
-                    dto.getEmail(),
+                    dto.getEmail().toLowerCase(),
                     dto.getPassword(),
                     Collections.emptyList(),
                     Collections.emptyList(),
@@ -55,7 +55,7 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
         } else {
             User user = userGetService.get(dto.getId());
             user.setName(dto.getName());
-            user.setEmail(dto.getEmail());
+            user.setEmail(dto.getEmail().toLowerCase());
             user.setPassword(dto.getPassword());
             return user;
         }

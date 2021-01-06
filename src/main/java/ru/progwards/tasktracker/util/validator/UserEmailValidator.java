@@ -14,6 +14,8 @@ import javax.validation.ConstraintValidatorContext;
 
 /**
  * Валидатор для проверки существования email в БД при регистрации и обновлении пользователя
+ * Для корректной работы в UserDtoFullConverter в методе toModel
+ * поле email надо приводить к нижнему регистру - getEmail().toLowerCase()
  *
  * @author Oleg Kiselev
  */
@@ -37,17 +39,17 @@ public class UserEmailValidator implements ConstraintValidator<EmailValid, UserD
     @Override
     public boolean isValid(UserDtoFull userDto, ConstraintValidatorContext context) {
         if (userDto.getId() == null) {
-            if (userRepository.existsByEmail(userDto.getEmail())) {
+            if (userRepository.existsByEmail(userDto.getEmail().toLowerCase())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(userDto.getEmail() + " already exists")
+                context.buildConstraintViolationWithTemplate(userDto.getEmail().toLowerCase() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
         } else {
-            User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
+            User user = userRepository.findByEmail(userDto.getEmail().toLowerCase()).orElse(null);
             if (user != null && !user.getId().equals(userDto.getId())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(userDto.getEmail() + " already exists")
+                context.buildConstraintViolationWithTemplate(userDto.getEmail().toLowerCase() + " already exists")
                         .addConstraintViolation();
                 return false;
             }

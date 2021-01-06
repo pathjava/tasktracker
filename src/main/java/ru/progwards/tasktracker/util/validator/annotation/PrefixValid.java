@@ -8,12 +8,16 @@ import java.lang.annotation.*;
 
 /**
  * Аннотация для проверки существования prefix в БД при создании проекта
+ * Аннотация работает только на уровне класса - @Target(ElementType.TYPE)
+ * Для использования в ProjectDtoFull над классом надо прописать @PrefixValid(groups = {Create.class, Update.class}),
+ * а в ProjectController в методе create в параметрах перед @RequestBody прописать @Validated(Create.class),
+ * а в методе update перед @RequestBody прописать @Validated(Update.class)
  *
  * @author Oleg Kiselev
  */
 @Documented
 @Constraint(validatedBy = UserEmailValidator.class)
-@Target({ElementType.TYPE})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PrefixValid {
 

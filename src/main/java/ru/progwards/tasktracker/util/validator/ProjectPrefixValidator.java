@@ -14,6 +14,8 @@ import javax.validation.ConstraintValidatorContext;
 
 /**
  * Валидатор для проверки существования prefix в БД при создании и обновлении проекта
+ * Для корректной работы в ProjectDtoFullConverter в методе toModel
+ * поле prefix надо приводить к верхнему регистру - getPrefix().toUpperCase()
  *
  * @author Oleg Kiselev
  */
@@ -37,9 +39,9 @@ public class ProjectPrefixValidator implements ConstraintValidator<PrefixValid, 
     @Override
     public boolean isValid(ProjectDtoFull projectDto, ConstraintValidatorContext context) {
         if (projectDto.getId() == null) {
-            if (projectRepository.existsByPrefix(projectDto.getPrefix())) {
+            if (projectRepository.existsByPrefix(projectDto.getPrefix().toUpperCase())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(projectDto.getPrefix() + " already exists")
+                context.buildConstraintViolationWithTemplate(projectDto.getPrefix().toUpperCase() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
@@ -47,7 +49,7 @@ public class ProjectPrefixValidator implements ConstraintValidator<PrefixValid, 
             Project project = projectRepository.findByPrefix(projectDto.getPrefix()).orElse(null);
             if (project != null && !project.getId().equals(projectDto.getId())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(projectDto.getPrefix() + " already exists")
+                context.buildConstraintViolationWithTemplate(projectDto.getPrefix().toUpperCase() + " already exists")
                         .addConstraintViolation();
                 return false;
             }

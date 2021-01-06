@@ -15,6 +15,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -201,5 +204,49 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occurred"
         );
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    /* Custom handlers */
+
+    /**
+     * Метод обработки исключения NotFoundException
+     *
+     * @param ex исключение NotFoundException
+     * @return сообщение об ошибке
+     */
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
+        ApiError errors = new ApiError(
+                LocalDateTime.now(), HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), ex.getLocalizedMessage()
+        );
+        return new ResponseEntity<>(errors, errors.getStatus());
+    }
+
+    /**
+     * Метод обработки исключения BadRequestException
+     *
+     * @param ex исключение BadRequestException
+     * @return сообщение об ошибке
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
+        ApiError errors = new ApiError(
+                LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex.getLocalizedMessage()
+        );
+        return new ResponseEntity<>(errors, errors.getStatus());
+    }
+
+    /**
+     * Метод обработки исключения OperationIsNotPossibleException
+     *
+     * @param ex исключение OperationIsNotPossibleException
+     * @return сообщение об ошибке
+     */
+    @ExceptionHandler(OperationIsNotPossibleException.class)
+    public ResponseEntity<ApiError> handleOperationIsNotPossible(OperationIsNotPossibleException ex) {
+        ApiError errors = new ApiError(
+                LocalDateTime.now(), HttpStatus.NO_CONTENT, ex.getLocalizedMessage(), ex.getLocalizedMessage()
+        );
+        return new ResponseEntity<>(errors, errors.getStatus());
     }
 }
