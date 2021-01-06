@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.ProjectDtoFull;
 import ru.progwards.tasktracker.dto.ProjectDtoPreview;
@@ -17,6 +19,9 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.service.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -24,10 +29,13 @@ import java.util.stream.Collectors;
  * Контроллеры Project
  * @author Pavel Khovaylo
  */
+@Validated
+@RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RestController
-@RequestMapping(value = "/rest/project/")
+@RequestMapping(value = "/rest/project/",
+                consumes = MediaType.APPLICATION_JSON_VALUE,
+                produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProjectController {
     /**
      * конвертер Project <-> ProjectDtoFull
@@ -67,7 +75,7 @@ public class ProjectController {
 
         Collection<ProjectDtoPreview> projectDtos =
                 projectGetListService.getList().stream().
-                        map(e -> converterPreview.toDto(e)).collect(Collectors.toList());
+                        map(converterPreview::toDto).collect(Collectors.toList());
 
         return new ResponseEntity<>(projectDtos, HttpStatus.OK);
     }
@@ -78,7 +86,7 @@ public class ProjectController {
      * @return ProjectDto
      */
     @GetMapping("{id}")
-    public ResponseEntity<ProjectDtoFull> get(@PathVariable("id") Long id) {
+    public ResponseEntity<ProjectDtoFull> get(@NotNull @Positive @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundException("Not found a project with id=" + id);
@@ -93,7 +101,8 @@ public class ProjectController {
      */
     @Transactional
     @PostMapping("create")
-    public ResponseEntity<ProjectDtoFull> create(@RequestBody ProjectDtoFull projectDto) {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ProjectDtoFull> create(@Valid @NotNull @RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");
 
@@ -111,7 +120,8 @@ public class ProjectController {
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody ProjectDtoFull projectDto) {
+    public void update(@NotNull @Positive @PathVariable ("id") Long id,
+                       @Valid @NotNull @RequestBody ProjectDtoFull projectDto) {
         if (id == null)
             throw new BadRequestException("Id is null");
 
@@ -128,7 +138,7 @@ public class ProjectController {
      */
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@NotNull @Positive @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundException("Not found a project with id=" + id);
