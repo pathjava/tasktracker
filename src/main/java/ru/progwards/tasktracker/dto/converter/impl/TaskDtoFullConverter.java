@@ -93,9 +93,12 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @return лист VO файлов задачи
      */
     private List<TaskAttachment> listDtoToVoTaskAttachment(List<TaskAttachmentDtoPreview> attachments) {
-        return attachments.stream()
-                .map(taskAttachmentDtoConverter::toModel)
-                .collect(Collectors.toList());
+        if (attachments == null || attachments.isEmpty())
+            return Collections.emptyList();
+        else
+            return attachments.stream()
+                    .map(taskAttachmentDtoConverter::toModel)
+                    .collect(Collectors.toList());
     }
 
     /**
@@ -105,9 +108,12 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @return лист VO связанных задач
      */
     private List<RelatedTask> listDtoToVoRelatedTask(List<RelatedTaskDtoPreview> relatedTasks) {
-        return relatedTasks.stream()
-                .map(relatedTaskDtoConverter::toModel)
-                .collect(Collectors.toList());
+        if (relatedTasks == null || relatedTasks.isEmpty())
+            return Collections.emptyList();
+        else
+            return relatedTasks.stream()
+                    .map(relatedTaskDtoConverter::toModel)
+                    .collect(Collectors.toList());
     }
 
     /**
@@ -147,9 +153,12 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @return лист Dto WorkFlowAction задачи
      */
     private List<WorkFlowActionDtoPreview> listVoToDtoWorkFlowAction(List<WorkFlowAction> actions) {
-        return actions.stream()
-                .map(workFlowActionDtoConverter::toDto)
-                .collect(Collectors.toList());
+        if (actions == null || actions.isEmpty())
+            return Collections.emptyList();
+        else
+            return actions.stream()
+                    .map(workFlowActionDtoConverter::toDto)
+                    .collect(Collectors.toList());
     }
 
     /**
@@ -159,9 +168,12 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @return лист Dto файлов задачи
      */
     private List<TaskAttachmentDtoPreview> listVoToDtoTaskAttachment(List<TaskAttachment> attachments) {
-        return attachments.stream()
-                .map(taskAttachmentDtoConverter::toDto)
-                .collect(Collectors.toList());
+        if (attachments == null || attachments.isEmpty())
+            return Collections.emptyList();
+        else
+            return attachments.stream()
+                    .map(taskAttachmentDtoConverter::toDto)
+                    .collect(Collectors.toList());
     }
 
     /**
@@ -171,8 +183,11 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      * @return лист Dto связанных задач
      */
     private List<RelatedTaskDtoPreview> listVoToDtoRelatedTask(List<RelatedTask> relatedTasks) {
-        return relatedTasks.stream()
-                .map(relatedTaskDtoConverter::toDto)
-                .collect(Collectors.toList());
+        if (relatedTasks == null || relatedTasks.isEmpty())
+            return Collections.emptyList();
+        else
+            return relatedTasks.stream()
+                    .map(relatedTaskDtoConverter::toDto)
+                    .collect(Collectors.toList());
     }
 }

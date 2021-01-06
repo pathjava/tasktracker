@@ -71,7 +71,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         String taskCode = project.getPrefix() + "-" + lastTaskCode;
         project.setLastTaskCode(lastTaskCode);
         projectRepository.save(project);
-        return taskCode;
+        return taskCode.toUpperCase();
     }
 
     /**

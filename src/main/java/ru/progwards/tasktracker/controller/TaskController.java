@@ -72,7 +72,7 @@ public class TaskController {
     @GetMapping(value = "/task/{code}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> getByCode(@NotEmpty @PathVariable String code) {
 
-        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code));
+        TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code.toUpperCase()));
 
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
