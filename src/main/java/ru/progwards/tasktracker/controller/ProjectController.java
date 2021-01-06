@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.ProjectDtoFull;
 import ru.progwards.tasktracker.dto.ProjectDtoPreview;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * Контроллеры Project
  * @author Pavel Khovaylo
  */
+@Validated
 @RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -84,7 +86,7 @@ public class ProjectController {
      * @return ProjectDto
      */
     @GetMapping("{id}")
-    public ResponseEntity<ProjectDtoFull> get(@PathVariable("id") Long id) {
+    public ResponseEntity<ProjectDtoFull> get(@NotNull @Positive @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundException("Not found a project with id=" + id);
@@ -100,7 +102,7 @@ public class ProjectController {
     @Transactional
     @PostMapping("create")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProjectDtoFull> create(@Valid @RequestBody ProjectDtoFull projectDto) {
+    public ResponseEntity<ProjectDtoFull> create(@Valid @NotNull @RequestBody ProjectDtoFull projectDto) {
         if (projectDto == null)
             throw new BadRequestException("Project is null");
 
@@ -118,7 +120,8 @@ public class ProjectController {
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@NotNull @Positive @PathVariable ("id") Long id, @Valid @RequestBody ProjectDtoFull projectDto) {
+    public void update(@NotNull @Positive @PathVariable ("id") Long id,
+                       @Valid @NotNull @RequestBody ProjectDtoFull projectDto) {
         if (id == null)
             throw new BadRequestException("Id is null");
 

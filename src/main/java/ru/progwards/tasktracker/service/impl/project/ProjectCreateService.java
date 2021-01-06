@@ -53,13 +53,14 @@ public class ProjectCreateService implements CreateService<Project> {
         if (model == null)
             throw new OperationIsNotPossibleException("Create project is not possible");
 
-        String prefix = filterString(model.getPrefix());
+        //TODO реализовал уникальность префикса через аннотацию UniquePrefix в ProjectDtoFull
+//        String prefix = filterString(model.getPrefix());
 
         // если значение prefix пустое, то создание нового проекта невозможно
-        if ("".equals(prefix))
-            throw new OperationIsNotPossibleException("Index is incorrect");
+//        if ("".equals(prefix))
+//            throw new OperationIsNotPossibleException("Index is incorrect");
 
-        model.setPrefix(prefix);
+//        model.setPrefix(prefix);
 
         // получаем список проектов, чтобы искать в них одинаковые prefix
         List<Project> projects = repository.findAll();

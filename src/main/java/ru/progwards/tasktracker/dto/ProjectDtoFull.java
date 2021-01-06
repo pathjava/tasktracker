@@ -2,11 +2,10 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.validator.constraints.Length;
+import ru.progwards.tasktracker.util.annotation.UniquePrefix;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.ZonedDateTime;
 
 /**
@@ -24,24 +23,26 @@ public class ProjectDtoFull {
     /**
      * идентификатор проекта
      */
-    @Positive
+    @Min(0L)
+    @Max(Long.MAX_VALUE)
     Long id;
     /**
      * имя проекта
      */
     @NotNull
-    @Length(min = 1, max = 100)
+    @Size(min = 3, max = 100)
     String name;
     /**
      * описание проекта
      */
-    @Length(max = 800)
+    @Size(max = 800)
     String description;
     /**
      * уникальная аббревиатура, созданная на основании имени проекта
      */
     @NotNull
-    @Length(min = 2, max = 10)
+    @Size(min = 2, max = 10)
+    @UniquePrefix
     String prefix;
     /**
      * владелец (создатель) проекта
@@ -51,5 +52,6 @@ public class ProjectDtoFull {
     /**
      * время создания проекта
      */
+    @PastOrPresent
     ZonedDateTime created;
 }

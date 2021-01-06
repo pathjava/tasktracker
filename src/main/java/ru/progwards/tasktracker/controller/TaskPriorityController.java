@@ -18,6 +18,9 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.TaskPriority;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -80,7 +83,7 @@ public class TaskPriorityController {
      * @return TaskPriorityDto
      */
     @GetMapping("{id}")
-    public ResponseEntity<TaskPriorityDtoFull> get(@PathVariable("id") Long id) {
+    public ResponseEntity<TaskPriorityDtoFull> get(@NotNull @Positive @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);
@@ -95,7 +98,7 @@ public class TaskPriorityController {
      */
     @Transactional
     @PostMapping("create")
-    public ResponseEntity<TaskPriorityDtoFull> create(@RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
+    public ResponseEntity<TaskPriorityDtoFull> create(@Valid @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
         if (taskPriorityDtoFull == null)
             throw new BadRequestException("Project is null");
 
@@ -113,7 +116,8 @@ public class TaskPriorityController {
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
+    public void update(@NotNull @Positive @PathVariable("id") Long id,
+                       @Valid @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
         if (id == null)
             throw new BadRequestException("Id is null");
 
@@ -131,7 +135,7 @@ public class TaskPriorityController {
      */
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@NotNull @Positive @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);
