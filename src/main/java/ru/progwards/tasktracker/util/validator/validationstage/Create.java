@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.util.validator.verificationstage;
+package ru.progwards.tasktracker.util.validator.validationstage;
 
 import javax.validation.groups.Default;
 

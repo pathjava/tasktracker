@@ -2,8 +2,8 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.progwards.tasktracker.util.validator.verificationstage.Create;
-import ru.progwards.tasktracker.util.validator.verificationstage.Update;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

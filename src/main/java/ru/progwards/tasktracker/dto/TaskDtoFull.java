@@ -3,8 +3,8 @@ package ru.progwards.tasktracker.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.progwards.tasktracker.util.validator.verificationstage.Create;
-import ru.progwards.tasktracker.util.validator.verificationstage.Update;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.*;
 import java.time.Duration;

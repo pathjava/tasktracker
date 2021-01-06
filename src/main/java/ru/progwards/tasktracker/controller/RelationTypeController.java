@@ -14,8 +14,8 @@ import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelationType;
 import ru.progwards.tasktracker.service.*;
-import ru.progwards.tasktracker.util.validator.verificationstage.Create;
-import ru.progwards.tasktracker.util.validator.verificationstage.Update;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
