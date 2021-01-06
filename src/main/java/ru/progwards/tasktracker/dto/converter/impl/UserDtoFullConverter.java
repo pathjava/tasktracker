@@ -72,7 +72,8 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
         return new UserDtoFull(model.getId(),
                 model.getName(),
                 model.getEmail(),
-                "",
+                null,
+                null,
                 listVoToDtoUserRole(model.getRoles()));
     }
 

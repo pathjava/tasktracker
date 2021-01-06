@@ -1,6 +1,6 @@
 package ru.progwards.tasktracker.util.validator.annotation;
 
-import ru.progwards.tasktracker.util.validator.UserEmailValidator;
+import ru.progwards.tasktracker.util.validator.ProjectPrefixValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -16,7 +16,7 @@ import java.lang.annotation.*;
  * @author Oleg Kiselev
  */
 @Documented
-@Constraint(validatedBy = UserEmailValidator.class)
+@Constraint(validatedBy = ProjectPrefixValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PrefixValid {
