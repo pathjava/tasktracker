@@ -43,13 +43,12 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
         if (dto == null)
             return null;
 
-        Project model = projectGetService.get(dto.getId());
-
-        //проверка на наличие этого проекта в базе данных
-        if (model == null)
+        if (dto.getId() == null)
             return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                     userDtoPreviewConverter.toModel(dto.getOwner()), ZonedDateTime.now(),
                     new ArrayList<>(), new ArrayList<>(), null, false);
+
+        Project model = projectGetService.get(dto.getId());
 
         return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                 userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(), model.getTasks(),

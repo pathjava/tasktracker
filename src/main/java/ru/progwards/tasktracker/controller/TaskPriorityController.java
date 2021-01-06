@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
@@ -16,6 +18,9 @@ import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.TaskPriority;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -26,7 +31,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@RequestMapping("/rest/task-priority/")
+@RequestMapping(value = "/rest/task-priority/",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class TaskPriorityController {
     /**
      * конвертер TaskPriority <-> TaskPriorityDtoFull
@@ -65,7 +72,7 @@ public class TaskPriorityController {
     public ResponseEntity<Collection<TaskPriorityDtoPreview>> get() {
         Collection<TaskPriorityDtoPreview> taskPriorityDtoPreviews =
                 taskPriorityGetListService.getList().stream().
-                        map(e -> converterPreview.toDto(e)).collect(Collectors.toList());
+                        map(converterPreview::toDto).collect(Collectors.toList());
 
         return new ResponseEntity<>(taskPriorityDtoPreviews, HttpStatus.OK);
     }
@@ -76,7 +83,7 @@ public class TaskPriorityController {
      * @return TaskPriorityDto
      */
     @GetMapping("{id}")
-    public ResponseEntity<TaskPriorityDtoFull> get(@PathVariable("id") Long id) {
+    public ResponseEntity<TaskPriorityDtoFull> get(@NotNull @Positive @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);
@@ -89,8 +96,9 @@ public class TaskPriorityController {
      * @param taskPriorityDtoFull передаем наполненный TaskPriorityDto
      * @return созданный TaskPriorityDto
      */
+    @Transactional
     @PostMapping("create")
-    public ResponseEntity<TaskPriorityDtoFull> create(@RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
+    public ResponseEntity<TaskPriorityDtoFull> create(@Valid @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
         if (taskPriorityDtoFull == null)
             throw new BadRequestException("Project is null");
 
@@ -108,7 +116,8 @@ public class TaskPriorityController {
      */
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id, @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
+    public void update(@NotNull @Positive @PathVariable("id") Long id,
+                       @Valid @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
         if (id == null)
             throw new BadRequestException("Id is null");
 
@@ -126,7 +135,7 @@ public class TaskPriorityController {
      */
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@NotNull @Positive @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);

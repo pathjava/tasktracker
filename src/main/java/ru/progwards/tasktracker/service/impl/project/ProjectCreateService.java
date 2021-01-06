@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.dto.ProjectDtoPreview;
+import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
+import ru.progwards.tasktracker.dto.WorkFlowDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.TaskType;
@@ -28,9 +32,17 @@ public class ProjectCreateService implements CreateService<Project> {
      */
     ProjectRepository repository;
     /**
-     * для создания TaskType
+     * конвертер Project <-> ProjectDtoFull
+     */
+    Converter<Project, ProjectDtoPreview> projectDtoPreviewConverter;
+    /**
+     * сервис для сохранения в базу объектов TaskType
      */
     CreateService<TaskType> taskTypeCreateService;
+    /**
+     * конвертер TaskType <-> TaskTypeDtoFull
+     */
+    Converter<TaskType, TaskTypeDtoFull> taskTypeDtoFullConverter;
 
     /**
      * метот добавляет проект в репозиторий
@@ -41,13 +53,19 @@ public class ProjectCreateService implements CreateService<Project> {
         if (model == null)
             throw new OperationIsNotPossibleException("Create project is not possible");
 
+        //TODO реализовал уникальность префикса через аннотацию UniquePrefix в ProjectDtoFull
+//        String prefix = filterString(model.getPrefix());
+
         // если значение prefix пустое, то создание нового проекта невозможно
-        if ("".equals(filterString(model.getPrefix())))
-            throw new OperationIsNotPossibleException("Index is incorrect");
+//        if ("".equals(prefix))
+//            throw new OperationIsNotPossibleException("Index is incorrect");
+
+//        model.setPrefix(prefix);
 
         // получаем список проектов, чтобы искать в них одинаковые prefix
         List<Project> projects = repository.findAll();
 
+        //изначально повторного префикса не существует
         boolean isExist = false;
 
         //если в списке проектов уже имеется проект с данным префиксом, то создание нового проекта невозможно
@@ -63,44 +81,39 @@ public class ProjectCreateService implements CreateService<Project> {
         if (isExist)
             throw new OperationIsNotPossibleException("Create project is not possible");
 
-//        TaskType taskType1 = new TaskType();
-//        taskType1.setName("EPIC");
-//        TaskType taskType2 = new TaskType();
-//        taskType2.setName("TASK");
-//        TaskType taskType3 = new TaskType();
-//        taskType3.setName("BUG");
-
-        //создаем список TaskType проекта
-        List<TaskType> taskTypeList = new ArrayList<>(List.of(
-                /* TODO пока что не понимаю как записать в TaskType свойство "project"
-                *   потому как изначально у model id не сгенерирован, а записывать этот model без id мы не можем */
-
-//                new TaskType(null, model,
-//                        //TODO сделал так исключительно чтобы протестировать
-////                            new WorkFlow(null, "name", false, 0L, null, null),
-//                        null,
-//                        "EPIC", null),
-//                new TaskType(null, model,
-//                        //TODO сделал так исключительно чтобы протестировать
-////                            new WorkFlow(null, "name", false, 0L, null, null),
-//                        null,
-//                        "TASK", null),
-//                new TaskType(null, model,
-//                        //TODO сделал так исключительно чтобы протестировать
-////                            new WorkFlow(null, "name", false, 0L, null, null),
-//                        null,
-//                        "BUG", null)
-            )
-        );
-
-        //добавляем TaskType в базу данных
-        taskTypeList.forEach(e -> taskTypeCreateService.create(e));
-
-        model.setTaskTypes(taskTypeList);
         // при создании LastTaskCode всегда = 0
         model.setLastTaskCode(0L);
 
         repository.save(model);
+
+        //создаем список TaskType для проекта
+        List<TaskTypeDtoFull> taskTypeDtoFullList = new ArrayList<>(List.of(
+
+                new TaskTypeDtoFull(null,
+                        projectDtoPreviewConverter.toDto(model),
+                        new WorkFlowDtoPreview(),
+                        "TASK"),
+                new TaskTypeDtoFull(null,
+                        projectDtoPreviewConverter.toDto(model),
+                        new WorkFlowDtoPreview(),
+                        "BUG"),
+                new TaskTypeDtoFull(null,
+                        projectDtoPreviewConverter.toDto(model),
+                        new WorkFlowDtoPreview(),
+                        "EPIC")
+        ));
+
+        //создаем список TaskType для добавления его к объекту model
+        List<TaskType> taskTypeList = new ArrayList<>();
+
+        //добавляем TaskType в базу данных
+        taskTypeDtoFullList.forEach(e -> {
+            TaskType taskType = taskTypeDtoFullConverter.toModel(e);
+            taskTypeCreateService.create(taskType);
+            taskTypeList.add(taskType);
+        });
+
+        model.setTaskTypes(taskTypeList);
     }
 
     /**

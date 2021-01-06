@@ -35,19 +35,20 @@ public class ProjectRefreshService implements RefreshService<Project> {
         Project project = repository.findById(model.getId()).orElseThrow(() ->
                 new OperationIsNotPossibleException("Project.id = " + model.getId() + " doesn't exist"));
 
-        List<Project> projectList = repository.findAll();
+        //TODO переделать реализацию
+//        List<Project> projectList = repository.findAll();
 
-        boolean isExists = false;
+//        boolean isExists = false;
 
-        for (Project p : projectList) {
-            if (p.getPrefix().equals(model.getPrefix())) {
-                isExists = true;
-                break;
-            }
-        }
+//        for (Project p : projectList) {
+//            if (p.getPrefix().equals(model.getPrefix())) {
+//                isExists = true;
+//                break;
+//            }
+//        }
 
-        if (isExists)
-            throw new OperationIsNotPossibleException("Update not possible");
+//        if (isExists)
+//            throw new OperationIsNotPossibleException("Update not possible");
 
          //если в обновленном проекте другой префикс и в обновляемом проекте имеются задачи, то обновление невозможно
         if (!model.getPrefix().equals(project.getPrefix()) &&

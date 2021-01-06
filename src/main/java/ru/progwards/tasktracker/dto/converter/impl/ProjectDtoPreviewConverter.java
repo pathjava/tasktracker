@@ -29,9 +29,11 @@ public class ProjectDtoPreviewConverter implements Converter<Project, ProjectDto
         if (dto == null)
             return null;
 
+        if (dto.getId() == null)
+            return null;
+
         Project model = projectGetService.get(dto.getId());
 
-        //проверка на наличие этого проекта в базе данных
         if (model != null)
             return new Project(dto.getId(), dto.getName(), model.getDescription(), model.getPrefix(),
                     model.getOwner(), model.getCreated(), model.getTasks(), model.getTaskTypes(),
