@@ -2,7 +2,7 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.progwards.tasktracker.util.annotation.UniquePrefix;
+import ru.progwards.tasktracker.util.validator.annotation.UniquePrefix;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;

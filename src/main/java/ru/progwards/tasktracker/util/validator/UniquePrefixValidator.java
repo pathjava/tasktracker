@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.util;
+package ru.progwards.tasktracker.util.validator;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.ProjectRepository;
-import ru.progwards.tasktracker.util.annotation.UniquePrefix;
+import ru.progwards.tasktracker.util.validator.annotation.UniquePrefix;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

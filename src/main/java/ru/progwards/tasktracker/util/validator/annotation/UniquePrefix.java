@@ -1,6 +1,6 @@
-package ru.progwards.tasktracker.util.annotation;
+package ru.progwards.tasktracker.util.validator.annotation;
 
-import ru.progwards.tasktracker.util.UniquePrefixValidator;
+import ru.progwards.tasktracker.util.validator.UniquePrefixValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -20,4 +20,5 @@ public @interface UniquePrefix {
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
+
 }
