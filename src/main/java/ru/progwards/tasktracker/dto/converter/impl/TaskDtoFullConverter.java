@@ -51,8 +51,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     projectDtoConverter.toModel(dto.getProject()),
                     userDtoConverter.toModel(dto.getAuthor()),
                     userDtoConverter.toModel(dto.getExecutor()),
-                    dto.getCreated(),
-                    dto.getUpdated(),
+                    null,
+                    null,
                     workFlowStatusDtoConverter.toModel(dto.getStatus()),
                     dto.getEstimation(),
                     dto.getTimeSpent(),
@@ -74,8 +74,6 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             task.setProject(projectDtoConverter.toModel(dto.getProject()));
             task.setAuthor(userDtoConverter.toModel(dto.getAuthor()));
             task.setExecutor(userDtoConverter.toModel(dto.getExecutor()));
-            task.setCreated(dto.getCreated());
-            task.setUpdated(dto.getUpdated());
             task.setStatus(workFlowStatusDtoConverter.toModel(dto.getStatus()));
             task.setEstimation(dto.getEstimation());
             task.setTimeSpent(dto.getTimeSpent());

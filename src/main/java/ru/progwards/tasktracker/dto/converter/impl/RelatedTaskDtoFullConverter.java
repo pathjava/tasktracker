@@ -44,11 +44,7 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
                     false
             );
         } else {
-            RelatedTask relatedTask = relatedTaskGetService.get(dto.getId());
-            relatedTask.setRelationType(relationTypeDtoConverter.toModel(dto.getRelationType()));
-            relatedTask.setCurrentTask(taskGetService.get(dto.getCurrentTaskId()));
-            relatedTask.setAttachedTask(taskDtoConverter.toModel(dto.getAttachedTask()));
-            return relatedTask;
+            return relatedTaskGetService.get(dto.getId());
         }
     }
 

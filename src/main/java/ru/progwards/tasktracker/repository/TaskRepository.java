@@ -60,4 +60,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      */
     Optional<Task> findByCodeAndDeletedFalse(String code);
 
+    /**
+     * Метод проверки существования Task у Project
+     *
+     * @param id идентификатор Project
+     * @return true - если у Project есть Task (даже одна) и false - если нет
+     */
+    boolean existsByProjectId(Long id);
 }
