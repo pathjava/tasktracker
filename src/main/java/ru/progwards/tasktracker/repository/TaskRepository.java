@@ -66,5 +66,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param id идентификатор Project
      * @return true - если у Project есть Task (даже одна) и false - если нет
      */
-    boolean existsByProjectId(Long id);
+    boolean existsTaskByProjectId(Long id);
 }
