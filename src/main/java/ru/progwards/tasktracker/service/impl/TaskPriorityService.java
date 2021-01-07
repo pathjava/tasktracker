@@ -36,10 +36,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public void create(TaskPriority model) {
-        if (model == null)
-            throw new OperationIsNotPossibleException("Create TaskPriority is not possible");
-        else
-            repository.save(model);
+        repository.save(model);
     }
 
     /**
@@ -67,9 +64,6 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
      */
     @Override
     public void refresh(TaskPriority model) {
-        if (model == null)
-            throw new OperationIsNotPossibleException("Create TaskPriority is not possible");
-
         repository.save(model);
     }
 
@@ -81,6 +75,8 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
     public void remove(TaskPriority model) {
         TaskPriority taskPriority = repository.findById(model.getId()).
                 orElseThrow(() -> new OperationIsNotPossibleException("TaskPriority.id = " + model.getId() + " doesn't exist"));
+
+        //TODO подумать как переделать код ниже
 
         List<Task> tasks = taskPriority.getTasks();
 

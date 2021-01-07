@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.model.Project;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,4 +22,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
      * @return проект
      */
     Optional<Project> findByPrefix(String prefix);
+
+    /**
+     * Метод по получению списка неудаленных проектов
+     * @return список проектов, у которых значение свойства deleted = false
+     */
+    List<Project> getAllByDeletedIsFalse();
 }

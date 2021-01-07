@@ -11,21 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoPreview;
-import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.TaskPriority;
+import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -122,6 +119,7 @@ public class TaskPriorityController {
      * @param id идентификатор изменяемого TaskPriorityDtoFull
      * @param taskPriorityDtoFull измененный TaskPriorityDtoFull
      */
+    @Transactional
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
     public void update(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id,
@@ -136,6 +134,7 @@ public class TaskPriorityController {
      * id должен находится в диапазоне от 0 до 9_223_372_036_854_775_807 и не равен null
      * @param id идентификатор удаляемого TaskPriorityDto
      */
+    @Transactional
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {

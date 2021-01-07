@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -65,8 +66,10 @@ public class Project  {
     ZonedDateTime created;
     /**
      * список задач проекта
+     * в списке содержаться объекты Task, у которых свойство deleted = false
      */
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @Where(clause = "deleted = false")
     List<Task> tasks;
     /**
      * список типов задач, относящихся к данному проекту

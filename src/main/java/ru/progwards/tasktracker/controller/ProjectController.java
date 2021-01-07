@@ -122,6 +122,7 @@ public class ProjectController {
      * @param id идентификатор изменяемого проекта
      * @param projectDto измененный проект
      */
+    @Transactional
     @PostMapping("{id}/update")
     @ResponseStatus(HttpStatus.OK)
     public void update(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable ("id") Long id,
@@ -139,6 +140,7 @@ public class ProjectController {
      * id должен находится в диапазоне от 0 до 9_223_372_036_854_775_807 и не равен null
      * @param id идентификатор удаляемого проекта
      */
+    @Transactional
     @PostMapping("{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {

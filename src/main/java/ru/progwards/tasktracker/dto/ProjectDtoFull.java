@@ -1,12 +1,13 @@
 package ru.progwards.tasktracker.dto;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.progwards.tasktracker.util.validator.annotation.UniquePrefix;
+import ru.progwards.tasktracker.util.validator.annotation.CorrectAndUniquePrefix;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.GroupSequence;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.ZonedDateTime;
@@ -19,8 +20,8 @@ import java.time.ZonedDateTime;
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@GroupSequence({Create.class, Update.class})
-@UniquePrefix(groups = {Create.class, Update.class})
+//@GroupSequence({Create.class, Update.class})
+@CorrectAndUniquePrefix(groups = {Create.class, Update.class})
 public class ProjectDtoFull {
     /**
      * идентификатор проекта
@@ -32,7 +33,7 @@ public class ProjectDtoFull {
     /**
      * имя проекта
      */
-    @NotEmpty
+    @NotEmpty(groups = {Create.class, Update.class})
     @Size(min = 2, max = 100)
     String name;
     /**
@@ -43,13 +44,13 @@ public class ProjectDtoFull {
     /**
      * уникальная аббревиатура, созданная на основании имени проекта
      */
-    @NotEmpty
+    @NotEmpty(groups = {Create.class, Update.class})
     @Size(min = 2, max = 10)
     String prefix;
     /**
      * владелец (создатель) проекта
      */
-    @NotNull
+    @NotNull(groups = {Create.class, Update.class})
     @Valid
     UserDtoPreview owner;
     /**

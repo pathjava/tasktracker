@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -50,7 +51,9 @@ public class TaskPriority {
     Integer value;
     /**
      * список задач с данным приоритетом
+     * в списке содержаться объекты Task, у которых свойство deleted = false
      */
     @OneToMany(mappedBy = "priority", fetch = FetchType.LAZY)
+    @Where(clause = "deleted = false")
     List<Task> tasks;
 }

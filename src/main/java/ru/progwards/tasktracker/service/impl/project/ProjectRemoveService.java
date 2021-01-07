@@ -30,11 +30,8 @@ public class ProjectRemoveService implements RemoveService<Project> {
      */
     @Override
     public void remove(Project model) {
-        Project project = repository.findById(model.getId()).orElseThrow(() ->
-                new OperationIsNotPossibleException("Project.id = " + model.getId() + " doesn't exist"));
-
         // если спискок задач у проекта пустой, то удаляем проект; если какие-то задачи есть, то выводим исключение
-        if (project.getTasks().size() == 0) {
+        if (model.getTasks().size() == 0) {
             // устанавливаем флажок, который означает, что проект удалён
             model.setDeleted(true);
             repository.save(model);
