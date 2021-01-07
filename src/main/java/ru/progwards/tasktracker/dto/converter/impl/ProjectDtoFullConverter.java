@@ -40,19 +40,23 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
      */
     @Override
     public Project toModel(ProjectDtoFull dto) {
-        if (dto == null)
-            return null;
-
         if (dto.getId() == null)
             return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                     userDtoPreviewConverter.toModel(dto.getOwner()), ZonedDateTime.now(),
-                    new ArrayList<>(), new ArrayList<>(), null, false);
+                    new ArrayList<>(), new ArrayList<>(), 0L, false);
 
         Project model = projectGetService.get(dto.getId());
 
-        return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
-                userDtoPreviewConverter.toModel(dto.getOwner()), dto.getCreated(), model.getTasks(),
-                model.getTaskTypes(), model.getLastTaskCode(), model.isDeleted());
+        if (model != null) {
+            model.setName(dto.getName());
+            model.setDescription(dto.getDescription());
+            model.setPrefix(dto.getPrefix());
+            model.setOwner(userDtoPreviewConverter.toModel(dto.getOwner()));
+            //думаю, менять время создания проекта НЕ нужно
+//            model.setCreated(dto.getCreated());
+        }
+
+        return model;
     }
 
     /**
@@ -62,9 +66,6 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
      */
     @Override
     public ProjectDtoFull toDto(Project model) {
-        if (model == null)
-            return null;
-
         return new ProjectDtoFull(model.getId(), model.getName(), model.getDescription(), model.getPrefix(),
                 userDtoPreviewConverter.toDto(model.getOwner()), model.getCreated());
     }

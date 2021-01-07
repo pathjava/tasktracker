@@ -2,22 +2,27 @@ package ru.progwards.tasktracker.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * TaskPriority - бизнес-модель
  * @author Pavel Khovaylo
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "task_priority")
+//В SQL-запрос попадают только измененные поля
+@DynamicUpdate
 public class TaskPriority {
     /**
      * идентификатор
@@ -30,12 +35,16 @@ public class TaskPriority {
     /**
      * имя
      */
+    @NotEmpty
     @Basic
     @Column(name = "name", nullable = false, length = 40)
     String name;
     /**
      * числовой приоритет
      */
+    @NotNull
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     @Basic
     @Column(name = "value", nullable = false)
     Integer value;

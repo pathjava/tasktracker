@@ -33,15 +33,17 @@ public class TaskPriorityDtoFullConverter implements Converter<TaskPriority, Tas
      */
     @Override
     public TaskPriority toModel(TaskPriorityDtoFull dto) {
-        if (dto == null)
-            return null;
-
         if (dto.getId() == null)
             return new TaskPriority(dto.getId(), dto.getName(), dto.getValue(), new ArrayList<>());
 
         TaskPriority model = taskPriorityGetService.get(dto.getId());
 
-        return new TaskPriority(dto.getId(), dto.getName(), dto.getValue(), model.getTasks());
+        if (model != null) {
+            model.setName(dto.getName());
+            model.setValue(dto.getValue());
+        }
+
+        return model;
     }
 
     /**
@@ -51,9 +53,6 @@ public class TaskPriorityDtoFullConverter implements Converter<TaskPriority, Tas
      */
     @Override
     public TaskPriorityDtoFull toDto(TaskPriority model) {
-        if (model == null)
-            return null;
-
         return new TaskPriorityDtoFull(model.getId(), model.getName(), model.getValue());
     }
 }

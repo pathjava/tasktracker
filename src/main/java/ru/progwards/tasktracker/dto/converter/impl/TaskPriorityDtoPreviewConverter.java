@@ -31,18 +31,12 @@ public class TaskPriorityDtoPreviewConverter implements Converter<TaskPriority, 
      */
     @Override
     public TaskPriority toModel(TaskPriorityDtoPreview dto) {
-        if (dto == null)
-            return null;
-
-        if (dto.getId() == null)
-            return null;
-
         TaskPriority model = taskPriorityGetService.get(dto.getId());
 
         if (model != null)
-            return new TaskPriority(dto.getId(), dto.getName(), model.getValue(), model.getTasks());
+            model.setName(dto.getName());
 
-        return null;
+        return model;
     }
 
     /**
@@ -52,9 +46,6 @@ public class TaskPriorityDtoPreviewConverter implements Converter<TaskPriority, 
      */
     @Override
     public TaskPriorityDtoPreview toDto(TaskPriority model) {
-        if (model == null)
-            return null;
-
         return new TaskPriorityDtoPreview(model.getId(), model.getName());
     }
 }

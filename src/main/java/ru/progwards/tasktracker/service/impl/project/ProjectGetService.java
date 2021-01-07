@@ -31,9 +31,6 @@ public class ProjectGetService implements GetService<Long, Project> {
      */
     @Override
     public Project get(Long id) {
-        if (id == null)
-            throw new OperationIsNotPossibleException("Project.id = " + id + " doesn't exist");
-
         return repository.findById(id).
                 orElseThrow(() ->
                         new OperationIsNotPossibleException("Project.id = " + id + " doesn't exist"));

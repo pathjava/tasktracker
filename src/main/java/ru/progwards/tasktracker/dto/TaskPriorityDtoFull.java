@@ -3,34 +3,40 @@ package ru.progwards.tasktracker.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.Length;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.GroupSequence;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * DtoFull для TaskPriority
  * @author Pavel Khovaylo
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Valid
+@Data
 @AllArgsConstructor
-@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@GroupSequence({Create.class, Update.class})
 public class TaskPriorityDtoFull {
     /**
      * идентификатор
      */
-    @Positive
+    @Min(0L)
+    @Max(Long.MAX_VALUE)
     Long id;
     /**
      * имя
      */
-    @NotNull
-    @Length(min = 1, max = 40)
+    @NotEmpty
+    @Length(min = 2, max = 40)
     String name;
     /**
      * числовой приоритет
      */
+    @NotNull
+    @Min(0)
+    @Max(Integer.MAX_VALUE)
     Integer value;
 }

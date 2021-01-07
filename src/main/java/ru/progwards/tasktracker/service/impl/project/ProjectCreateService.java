@@ -50,17 +50,13 @@ public class ProjectCreateService implements CreateService<Project> {
      */
     @Override
     public void create(Project model) {
-        if (model == null)
-            throw new OperationIsNotPossibleException("Create project is not possible");
+        String prefix = filterString(model.getPrefix());
 
-        //TODO реализовал уникальность префикса через аннотацию UniquePrefix в ProjectDtoFull
-//        String prefix = filterString(model.getPrefix());
+        //если значение prefix пустое, то создание нового проекта невозможно
+        if ("".equals(prefix))
+            throw new OperationIsNotPossibleException("Index is incorrect");
 
-        // если значение prefix пустое, то создание нового проекта невозможно
-//        if ("".equals(prefix))
-//            throw new OperationIsNotPossibleException("Index is incorrect");
-
-//        model.setPrefix(prefix);
+        model.setPrefix(prefix);
 
         // получаем список проектов, чтобы искать в них одинаковые prefix
         List<Project> projects = repository.findAll();
@@ -80,9 +76,6 @@ public class ProjectCreateService implements CreateService<Project> {
 
         if (isExist)
             throw new OperationIsNotPossibleException("Create project is not possible");
-
-        // при создании LastTaskCode всегда = 0
-        model.setLastTaskCode(0L);
 
         repository.save(model);
 

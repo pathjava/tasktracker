@@ -2,8 +2,11 @@ package ru.progwards.tasktracker.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -11,14 +14,14 @@ import java.util.List;
  * Project - бизнес-модель проекта
  * @author Pavel Khovaylo
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "project")
+//В SQL-запрос попадают только измененные поля
+@DynamicUpdate
 public class Project  {
     /**
      * идентификатор проекта
@@ -31,6 +34,7 @@ public class Project  {
     /**
      * имя проекта
      */
+    @NotEmpty
     @Basic
     @Column(name = "name", nullable = false, length = 100)
     String name;
@@ -38,13 +42,14 @@ public class Project  {
      * описание проекта
      */
     @Basic
-    @Column(name = "description", nullable = true, length = 800)
+    @Column(name = "description", length = 800)
     String description;
     /**
      * уникальная аббревиатура, созданная на основании имени проекта
      */
+    @NotEmpty
     @Basic
-    @Column(name = "prefix", nullable = false, length = 10, unique = true)
+    @Column(name = "prefix", nullable = false, unique = true, length = 10)
     String prefix;
     /**
      * владелец (создатель) проекта
@@ -55,7 +60,8 @@ public class Project  {
     /**
      * время создания проекта
      */
-    @Column(name = "created")
+    @NotNull
+    @Column(name = "created", nullable = false)
     ZonedDateTime created;
     /**
      * список задач проекта
@@ -70,13 +76,15 @@ public class Project  {
     /**
      * хранит код последней добавленной задачи к данному проекту
      */
+    @NotNull
     @Basic
     @Column(name = "last_task_code", nullable = false)
     Long lastTaskCode;
     /**
      * информация об удалении проекта
      */
+    @NotNull
     @Basic
     @Column(name = "is_deleted", nullable = false)
-    boolean isDeleted;
+    boolean deleted;
 }
