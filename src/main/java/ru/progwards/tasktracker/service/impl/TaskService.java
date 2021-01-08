@@ -124,7 +124,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     public void remove(Task model) {
         deleteRelatedTasksBeforeDeleteTask(model);
 
-        taskRepository.findTaskAndMarkAsDeleted(true, model.getId());
+        taskRepository.markTaskAsDeleted(true, model.getId());
     }
 
     /**

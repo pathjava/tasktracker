@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,6 +39,7 @@ public class TaskType {
     private String name;
 
     @OneToMany(mappedBy = "type")
+    @Where(clause = "deleted = false")
     private List<Task> tasks = new ArrayList<>();
 
 }

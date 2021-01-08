@@ -80,6 +80,7 @@ public class Task {
     private List<RelatedTask> relatedTasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "attachedTask", fetch = FetchType.LAZY)
+    @Where(clause = "deleted = false")
     private List<RelatedTask> relatedTasksAttached = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)

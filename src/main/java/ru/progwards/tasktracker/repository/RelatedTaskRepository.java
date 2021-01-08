@@ -28,7 +28,7 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
      */
     @Modifying
     @Query("UPDATE RelatedTask t SET t.deleted = :value WHERE t.id = :id")
-    void findRelatedTaskAndMarkAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
+    void markRelatedTaskAsDeleted(@Param("value") boolean deleted, @Param("id") Long id);
 
     /**
      * Метод установки значения поля встречной RelatedTask deleted как true - отмечаем RelatedTask как удаленную
@@ -39,7 +39,7 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
      */
     @Modifying
     @Query("UPDATE RelatedTask r SET r.deleted = :value WHERE r.currentTask.id = :taskId AND r.relationType.id = :typeId")
-    void findCounterRelatedTaskAndMarkAsDeleted(
+    void markCounterRelatedTaskAsDeleted(
             @Param("value") boolean deleted, @Param("taskId") Long taskId, @Param("typeId") Long typeId
     );
 

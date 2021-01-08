@@ -102,10 +102,10 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public void remove(RelatedTask model) {
         if (model.getRelationType().getCounterRelation() != null) {
-            relatedTaskRepository.findCounterRelatedTaskAndMarkAsDeleted(
+            relatedTaskRepository.markCounterRelatedTaskAsDeleted(
                     true, model.getAttachedTask().getId(), model.getRelationType().getCounterRelation().getId()
             );
         }
-        relatedTaskRepository.findRelatedTaskAndMarkAsDeleted(true, model.getId());
+        relatedTaskRepository.markRelatedTaskAsDeleted(true, model.getId());
     }
 }
