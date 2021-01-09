@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.ProjectDtoFull;
@@ -35,9 +34,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RequestMapping(value = "/rest/project/",
-                consumes = MediaType.APPLICATION_JSON_VALUE,
-                produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/project/")
 public class ProjectController {
     /**
      * конвертер Project <-> ProjectDtoFull
@@ -72,7 +69,7 @@ public class ProjectController {
      * по запросу получаем список проектов
      * @return список проектов
      */
-    @GetMapping("list")
+    @GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<ProjectDtoPreview>> get() {
 
         Collection<ProjectDtoPreview> projectDtos =
@@ -88,7 +85,7 @@ public class ProjectController {
      * @param id идентификатор проекта
      * @return ProjectDto
      */
-    @GetMapping("{id}")
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProjectDtoFull> get(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
 
@@ -104,8 +101,7 @@ public class ProjectController {
      * @param projectDto передаем наполненный проект
      * @return созданный проект
      */
-    @Transactional
-    @PostMapping("create")
+    @PostMapping(value = "create")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProjectDtoFull> create(@Validated(Create.class) @NotNull @RequestBody ProjectDtoFull projectDto) {
         Project project = converterFull.toModel(projectDto);
@@ -122,8 +118,9 @@ public class ProjectController {
      * @param id идентификатор изменяемого проекта
      * @param projectDto измененный проект
      */
-    @Transactional
-    @PostMapping("{id}/update")
+    @PostMapping(value = "{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void update(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable ("id") Long id,
                        @Validated(Update.class) @NotNull @RequestBody ProjectDtoFull projectDto) {
@@ -140,8 +137,7 @@ public class ProjectController {
      * id должен находится в диапазоне от 0 до 9_223_372_036_854_775_807 и не равен null
      * @param id идентификатор удаляемого проекта
      */
-    @Transactional
-    @PostMapping("{id}/delete")
+    @PostMapping(value = "{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);

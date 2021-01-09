@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
@@ -34,9 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@RequestMapping(value = "/rest/task-priority/",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest/task-priority/")
 public class TaskPriorityController {
     /**
      * конвертер TaskPriority <-> TaskPriorityDtoFull
@@ -71,7 +68,7 @@ public class TaskPriorityController {
      * по запросу получаем список TaskPriorityDtoPreview
      * @return список TaskPriorityDto
      */
-    @GetMapping("list")
+    @GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<TaskPriorityDtoPreview>> get() {
         Collection<TaskPriorityDtoPreview> taskPriorityDtoPreviews =
                 taskPriorityGetListService.getList().stream().
@@ -86,7 +83,7 @@ public class TaskPriorityController {
      * @param id идентификатор TaskPriorityDtoFull
      * @return TaskPriorityDto
      */
-    @GetMapping("{id}")
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskPriorityDtoFull> get(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
@@ -101,8 +98,9 @@ public class TaskPriorityController {
      * @param taskPriorityDtoFull передаем наполненный TaskPriorityDto
      * @return созданный TaskPriorityDto
      */
-    @Transactional
-    @PostMapping("create")
+    @PostMapping(value = "create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskPriorityDtoFull> create(@Validated(Create.class) @NotNull @RequestBody
                                                                   TaskPriorityDtoFull taskPriorityDtoFull) {
         TaskPriority taskPriority = converterFull.toModel(taskPriorityDtoFull);
@@ -119,8 +117,9 @@ public class TaskPriorityController {
      * @param id идентификатор изменяемого TaskPriorityDtoFull
      * @param taskPriorityDtoFull измененный TaskPriorityDtoFull
      */
-    @Transactional
-    @PostMapping("{id}/update")
+    @PostMapping(value = "{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void update(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id,
                        @Validated(Update.class) @NotNull @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
@@ -134,8 +133,7 @@ public class TaskPriorityController {
      * id должен находится в диапазоне от 0 до 9_223_372_036_854_775_807 и не равен null
      * @param id идентификатор удаляемого TaskPriorityDto
      */
-    @Transactional
-    @PostMapping("{id}/delete")
+    @PostMapping(value = "{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
