@@ -18,4 +18,5 @@ public class TaskNoteDtoPreview {
     private User author;
     private User updater;
     private String comment;
+
 }

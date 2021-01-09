@@ -145,8 +145,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Override
     public void createFromTemplate(Object... args) {
         if(args.length!=2) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: 2 arguments expected");
-        if(args[0] instanceof Project) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 0 must be Project");
-        if(args[1] instanceof WorkFlow) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
+        if(!(args[0] instanceof Project)) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 0 must be Project");
+        if(!(args[1] instanceof WorkFlow)) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
 
         List<String> names = List.of("Task", "Bug", "Epic");
         List<TaskType> tts = new ArrayList<>(names.size());
