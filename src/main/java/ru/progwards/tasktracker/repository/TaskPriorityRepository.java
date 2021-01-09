@@ -12,4 +12,6 @@ import ru.progwards.tasktracker.model.TaskPriority;
 @Transactional(readOnly = true)
 public interface TaskPriorityRepository extends JpaRepository<TaskPriority, Long> {
 
+
+
 }
