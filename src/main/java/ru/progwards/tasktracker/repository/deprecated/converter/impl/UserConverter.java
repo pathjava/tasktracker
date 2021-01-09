@@ -1,9 +1,9 @@
 package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.UserEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.UserEntity;
 
 /**
  * Преобразование valueObject <-> entity
@@ -11,6 +11,7 @@ import ru.progwards.tasktracker.model.User;
  * @author Aleksandr Sidelnikov
  */
 @Component
+@Deprecated
 public class UserConverter implements Converter<UserEntity, User> {
 
 //    /**

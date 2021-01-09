@@ -2,13 +2,14 @@ package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
-import ru.progwards.tasktracker.repository.deprecated.entity.UserRoleEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
+import ru.progwards.tasktracker.repository.deprecated.entity.UserRoleEntity;
 
 @Component
+@Deprecated
 public class UserRoleConverter implements Converter<UserRoleEntity, UserRole> {
 
     @Autowired

@@ -1,19 +1,22 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.progwards.tasktracker.dto.converter.Converter;
-import ru.progwards.tasktracker.dto.AttachmentContentDtoFull;
+import ru.progwards.tasktracker.dto.TaskAttachmentContentDtoFull;
 import ru.progwards.tasktracker.dto.TaskAttachmentDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.model.TaskAttachment;
+import ru.progwards.tasktracker.model.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.CreateService;
 import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.model.TaskAttachmentContent;
-import ru.progwards.tasktracker.model.TaskAttachment;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,16 +29,13 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("/rest/taskattachment")
-public class AttachmentController {
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+public class TaskAttachmentContentController {
 
-    @Autowired
-    GetService<Long, TaskAttachment> getService;
-    @Autowired
-    CreateService<TaskAttachmentContent> createContentService;
-    @Autowired
-    Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
-    @Autowired
-    Converter<TaskAttachmentContent, AttachmentContentDtoFull> dtoContentConverter;
+    private final GetService<Long, TaskAttachment> getService;
+    private final CreateService<TaskAttachmentContent> createContentService;
+    private final Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
+    private final Converter<TaskAttachmentContent, TaskAttachmentContentDtoFull> dtoContentConverter;
 
 
     /**
@@ -44,14 +44,14 @@ public class AttachmentController {
      *
      * @return передаем содержимое файла
      */
-    @GetMapping("{id}/download/{name}")
+    @GetMapping(value = "{id}/download/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void download(@PathVariable("id") Long id, HttpServletResponse response) {
         if(id == null)
             throw new BadRequestException("TaskAttachment_id is not set");
 
         TaskAttachment vo = getService.get(id);
         TaskAttachmentDtoFull entity = dtoConverter.toDto(vo);
-        AttachmentContentDtoFull content = dtoContentConverter.toDto(vo.getContent());
+        TaskAttachmentContentDtoFull content = dtoContentConverter.toDto(vo.getContent());
 
         response.setContentType("application/x-binary");
         response.setHeader("Content-disposition", "attachment;filename=" + entity.getName());
@@ -71,18 +71,18 @@ public class AttachmentController {
      *
      * @return возвращаем идентификатор сохраненного файла
      */
-    @PostMapping("/upload")
-    public ResponseEntity<AttachmentContentDtoFull> upload(@PathVariable("id") Long task_id,
-                                                           @RequestParam("file") MultipartFile file) {
+    @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TaskAttachmentContentDtoFull> upload(@PathVariable("id") Long task_id,
+                                                               @RequestParam("file") MultipartFile file) {
         if (task_id == null)
             throw new BadRequestException("TaskAttachment_id is not set");
         if (file == null && file.getOriginalFilename().isEmpty())
             throw new BadRequestException("AttachmentContent 'file' is empty");
 
-        AttachmentContentDtoFull content = null;
+        TaskAttachmentContentDtoFull content = null;
 
         try {
-            content = new AttachmentContentDtoFull(0L, file.getInputStream());
+            content = new TaskAttachmentContentDtoFull(0L, file.getInputStream());
             TaskAttachmentContent model = dtoContentConverter.toModel(content);
             createContentService.create(model);
             content.setId(model.getId());

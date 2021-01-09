@@ -1,7 +1,13 @@
 package ru.progwards.tasktracker.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.InputStream;
 
 /**
@@ -12,9 +18,12 @@ import java.io.InputStream;
  *
  * @author Gregory Lobkov
  */
-public class AttachmentContentDtoFull {
+@Data
+@AllArgsConstructor
+public class TaskAttachmentContentDtoFull {
 
-
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
     private Long id;
 
     /**
@@ -22,27 +31,5 @@ public class AttachmentContentDtoFull {
      */
     @JsonIgnore
     private InputStream data;
-
-
-    public AttachmentContentDtoFull(Long id, InputStream data) {
-        this.id = id;
-        this.data = data;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public InputStream getData() {
-        return data;
-    }
-
-    public void setData(InputStream data) {
-        this.data = data;
-    }
 
 }

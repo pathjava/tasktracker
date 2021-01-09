@@ -1,17 +1,31 @@
 package ru.progwards.tasktracker.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+
 /**
  * Дерево движения задачи по статусам
  *
  * @author Gregory Lobkov
  */
+@Data
+@AllArgsConstructor
 public class WorkFlowDtoFull {
 
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
     Long id;
 
     /**
-     * Ноименование
+     * Наименование
      */
+    @NotEmpty(groups = {Create.class, Update.class})
     String name;
 
     /**
@@ -21,51 +35,12 @@ public class WorkFlowDtoFull {
      * от шаблона, на основе которого будет все создаваться,
      * иначе его нельзя будет настраивать индивидуально
      */
-    boolean pattern;
+    @NotNull(groups = {Create.class, Update.class})
+    Boolean pattern;
 
     /**
      * С какого статуса начинать движение задачи, идентификатор
      */
     Long start_status_id;
-
-
-    public WorkFlowDtoFull(Long id, String name, boolean pattern, Long start_status_id) {
-        this.id = id;
-        this.name = name;
-        this.pattern = pattern;
-        this.start_status_id = start_status_id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isPattern() {
-        return pattern;
-    }
-
-    public void setPattern(boolean pattern) {
-        this.pattern = pattern;
-    }
-
-    public Long getStart_status_id() {
-        return start_status_id;
-    }
-
-    public void setStart_status_id(Long start_status_id) {
-        this.start_status_id = start_status_id;
-    }
 
 }

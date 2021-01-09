@@ -1,5 +1,10 @@
 package ru.progwards.tasktracker.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Файл-вложение, прикрепленный к задаче, или еще куда-нибудь в будущем
  *
@@ -8,22 +13,11 @@ package ru.progwards.tasktracker.dto;
  *
  * @author Gregory Lobkov
  */
-public class AttachmentContentDtoPreview {
+@Data
+@AllArgsConstructor
+public class TaskAttachmentContentDtoPreview {
 
-
+    @NotNull
     private Long id;
-
-
-    public AttachmentContentDtoPreview(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
 }

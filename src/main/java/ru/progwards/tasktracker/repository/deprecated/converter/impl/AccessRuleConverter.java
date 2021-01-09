@@ -1,11 +1,12 @@
 package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.model.AccessRule;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
 
 @Component
+@Deprecated
 public class AccessRuleConverter implements Converter<AccessRuleEntity, AccessRule> {
     @Override
     public AccessRule toVo(AccessRuleEntity entity) {

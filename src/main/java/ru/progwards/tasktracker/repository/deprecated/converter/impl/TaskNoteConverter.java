@@ -1,9 +1,9 @@
 package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskNoteEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.model.TaskNote;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskNoteEntity;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
  * @author Konstantin Kishkin
  */
 @Component
+@Deprecated
 public class TaskNoteConverter implements Converter<TaskNoteEntity, TaskNote> {
 
     /**

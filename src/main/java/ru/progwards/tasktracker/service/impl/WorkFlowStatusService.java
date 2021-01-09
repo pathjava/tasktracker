@@ -1,17 +1,16 @@
 package ru.progwards.tasktracker.service.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryByParentId;
-import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowStatusEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.*;
+import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
+import ru.progwards.tasktracker.repository.WorkFlowStatusRepository;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Бизнес-логика работы со статусами бизнес процесса
@@ -19,15 +18,11 @@ import java.util.stream.Collectors;
  * @author Gregory Lobkov
  */
 @Service
-public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, GetListService<WorkFlowStatus>, RefreshService<WorkFlowStatus>, GetListByParentService<Long, WorkFlowStatus> {
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, GetListService<WorkFlowStatus>, RefreshService<WorkFlowStatus>, CopyService<WorkFlowStatus> {
 
-    //@Autowired
-    private Repository<Long, WorkFlowStatusEntity> workFlowStatusRepository;
-    @Autowired
-    private Converter<WorkFlowStatusEntity, WorkFlowStatus> workFlowStatusConverter;
-    //@Autowired
-    private RepositoryByParentId<Long, WorkFlowStatusEntity> workFlowStatusEntityRepositoryByParentId;
-
+    private final WorkFlowStatusRepository statusRepository;
 
     /**
      * Создание нового WorkFlowStatus
@@ -36,9 +31,7 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
      */
     @Override
     public void create(WorkFlowStatus workFlowStatus) {
-        WorkFlowStatusEntity entity = workFlowStatusConverter.toEntity(workFlowStatus);
-        workFlowStatusRepository.create(entity);
-        workFlowStatus.setId(entity.getId());
+        statusRepository.save(workFlowStatus);
     }
 
 
@@ -49,7 +42,7 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
      */
     @Override
     public void remove(WorkFlowStatus workFlowStatus) {
-        workFlowStatusRepository.delete(workFlowStatus.getId());
+        statusRepository.delete(workFlowStatus);
     }
 
 
@@ -61,7 +54,8 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
      */
     @Override
     public WorkFlowStatus get(Long id) {
-        return workFlowStatusConverter.toVo(workFlowStatusRepository.get(id));
+        return statusRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("WorkFlowStatus id=" + id + " not found"));
     }
 
 
@@ -72,24 +66,9 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
      */
     @Override
     public void refresh(WorkFlowStatus workFlowStatus) {
-        workFlowStatusRepository.update(workFlowStatusConverter.toEntity(workFlowStatus));
+        statusRepository.save(workFlowStatus);
     }
 
-
-
-
-    /**
-     * Получить список статусов для определенного бизнес-процесса
-     *
-     * @param parentId WorkFlowStatusStatus.id
-     * @return список статусов
-     */
-    @Override
-    public Collection<WorkFlowStatus> getListByParentId(Long parentId) {
-        return workFlowStatusEntityRepositoryByParentId.getByParentId(parentId).stream()
-                .map(workFlowEntity -> workFlowStatusConverter.toVo(workFlowEntity))
-                .collect(Collectors.toList());
-    }
 
     /**
      * Получить весь список статусов
@@ -98,8 +77,24 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
      */
     @Override
     public List<WorkFlowStatus> getList() {
-        return workFlowStatusRepository.get().stream()
-                .map(workFlowEntity -> workFlowStatusConverter.toVo(workFlowEntity))
-                .collect(Collectors.toList());
+        return statusRepository.findAll();
     }
+
+    /**
+     * Создать копию бизнес-объекта
+     * Если задан шаблон, то свойства в скопированном объекте заменятся на не null свойства объекта
+     *
+     * @param modelFrom бизнес объект, который необходимо скопировать
+     * @param template  шаблон для замены свойств во вновь созданном объекте
+     * @return копия объекта {@code modelFrom}
+     */
+    @Override
+    public WorkFlowStatus copy(WorkFlowStatus modelFrom, WorkFlowStatus template) {
+        WorkFlowStatus clone = new WorkFlowStatus();
+        clone.setWorkflow(template.getWorkflow() == null ? modelFrom.getWorkflow() : template.getWorkflow());
+        clone.setAlwaysAllow(template.getAlwaysAllow() == null ? modelFrom.getAlwaysAllow() : template.getAlwaysAllow());
+        clone.setName(template.getName() == null ? modelFrom.getName() : template.getName());
+        return clone;
+    }
+
 }

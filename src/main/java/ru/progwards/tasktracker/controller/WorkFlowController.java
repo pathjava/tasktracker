@@ -1,14 +1,16 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.WorkFlowDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
-import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.WorkFlow;
+import ru.progwards.tasktracker.service.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rest/workflow")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkFlowController {
 
     @Autowired

@@ -2,12 +2,11 @@ package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.GetListByParentService;
-import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowEntity;
+import ru.progwards.tasktracker.service.GetService;
 
 
 /**
@@ -19,6 +18,7 @@ import ru.progwards.tasktracker.model.WorkFlowStatus;
  * @author Gregory Lobkov
  */
 @Component
+@Deprecated
 public class WorkFlowConverter implements Converter<WorkFlowEntity, WorkFlow> {
 
     /**
@@ -30,8 +30,7 @@ public class WorkFlowConverter implements Converter<WorkFlowEntity, WorkFlow> {
     /**
      * Сервис получения статусов Workflow по бизнес-процессу
      */
-    @Autowired
-    private GetListByParentService<Long, WorkFlowStatus> statusGetListByParentService;
+    //private GetListByParentService<Long, WorkFlowStatus> statusGetListByParentService;
 
 
     /**
