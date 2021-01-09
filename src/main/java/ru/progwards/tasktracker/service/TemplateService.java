@@ -7,6 +7,6 @@ package ru.progwards.tasktracker.service;
  */
 public interface TemplateService<M> {
 
-    void makeFromTemplate(Object... args);
+    void createFromTemplate(Object... args);
 
 }

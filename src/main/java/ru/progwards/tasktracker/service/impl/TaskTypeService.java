@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.repository.TaskTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskTypeService implements CreateService<TaskType>, GetService<Long, TaskType>,
-        RemoveService<TaskType>, RefreshService<TaskType>, GetListService<TaskType> {
+        RemoveService<TaskType>, RefreshService<TaskType>, GetListService<TaskType>, TemplateService<TaskType> {
 
     private final TaskTypeRepository taskTypeRepository;
     private final TaskRepository taskRepository;
@@ -130,4 +132,33 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     public List<TaskType> getList() {
         return taskTypeRepository.findAll();
     }
+
+    /**
+     * Создание сущности из шаблона
+     *
+     * Параметры:
+     * 0 - Project
+     * 1 - WorkFlow
+     *
+     * @param args
+     */
+    @Override
+    public void createFromTemplate(Object... args) {
+        if(args.length!=2) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: 2 arguments expected");
+        if(args[0] instanceof Project) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 0 must be Project");
+        if(args[1] instanceof WorkFlow) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
+
+        List<String> names = List.of("Task", "Bug", "Epic");
+        List<TaskType> tts = new ArrayList<>(names.size());
+        for (String s: names) {
+            TaskType tt = new TaskType();
+            tt.setTasks(new ArrayList<>(0));
+            tt.setName(s);
+            tt.setProject((Project) args[0]);
+            tt.setWorkFlow((WorkFlow) args[1]);
+            tts.add(tt);
+        }
+        taskTypeRepository.saveAll(tts);
+    }
+
 }
