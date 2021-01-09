@@ -2,11 +2,11 @@ package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskAttachmentEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.model.TaskAttachmentContent;
 import ru.progwards.tasktracker.model.TaskAttachment;
+import ru.progwards.tasktracker.model.TaskAttachmentContent;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskAttachmentEntity;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * Преобразование valueObject <-> entity
@@ -16,6 +16,7 @@ import ru.progwards.tasktracker.model.TaskAttachment;
  * @author Gregory Lobkov
  */
 @Component
+@Deprecated
 public class TaskAttachmentConverter implements Converter<TaskAttachmentEntity, TaskAttachment> {
 
 

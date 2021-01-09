@@ -2,14 +2,13 @@ package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.ProjectEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskTypeEntity;
-import ru.progwards.tasktracker.service.GetListByProjectService;
-import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.ProjectEntity;
+import ru.progwards.tasktracker.service.GetListByProjectService;
+import ru.progwards.tasktracker.service.GetService;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -20,6 +19,7 @@ import java.time.ZonedDateTime;
  * @author Pavel Khovaylo
  */
 @Component
+@Deprecated
 public class ProjectConverter implements Converter<ProjectEntity, Project> {
     /**
      * сервис по поиску пользователя

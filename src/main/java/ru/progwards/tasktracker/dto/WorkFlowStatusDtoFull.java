@@ -1,8 +1,14 @@
 package ru.progwards.tasktracker.dto;
 
-import ru.progwards.tasktracker.model.WorkFlowAction;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import ru.progwards.tasktracker.model.types.WorkFlowState;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -10,91 +16,41 @@ import java.util.List;
  *
  * @author Gregory Lobkov
  */
+@Data
+@AllArgsConstructor
 public class WorkFlowStatusDtoFull {
 
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
     Long id;
 
     /**
      * Родительский WF
      */
+    @NotNull(groups = {Create.class, Update.class})
     Long workflow_id;
 
     /**
      * Наименование
      */
+    @NotEmpty(groups = {Create.class, Update.class})
     String name;
 
     /**
      * Состояние задачи
      */
+    @NotNull(groups = {Create.class, Update.class})
     WorkFlowState state;
 
     /**
      * На данный статус задачу можно переводить из любого состояния
      */
+    @NotNull(groups = {Create.class, Update.class})
     Boolean alwaysAllow;
 
     /**
-     * Действия, в которые могут быть применены к задаче с данным статусом
+     * Действия, которые могут быть применены к задаче с данным статусом
      */
-    List<WorkFlowAction> actions;
-
-    public WorkFlowStatusDtoFull(Long id, Long workflow_id, String name, WorkFlowState state, Boolean alwaysAllow, List<WorkFlowAction> actions) {
-        this.id = id;
-        this.workflow_id = workflow_id;
-        this.name = name;
-        this.state = state;
-        this.alwaysAllow = alwaysAllow;
-        this.actions = actions;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getWorkflow_id() {
-        return workflow_id;
-    }
-
-    public void setWorkflow_id(Long workflow_id) {
-        this.workflow_id = workflow_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public WorkFlowState getState() {
-        return state;
-    }
-
-    public void setState(WorkFlowState state) {
-        this.state = state;
-    }
-
-    public Boolean getAlwaysAllow() {
-        return alwaysAllow;
-    }
-
-    public void setAlwaysAllow(Boolean alwaysAllow) {
-        this.alwaysAllow = alwaysAllow;
-    }
-
-
-    public List<WorkFlowAction> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<WorkFlowAction> actions) {
-        this.actions = actions;
-    }
+    List<WorkFlowActionDtoPreview> actions;
 
 }

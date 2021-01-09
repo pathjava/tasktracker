@@ -1,11 +1,12 @@
 package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskPriorityEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.model.TaskPriority;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.TaskPriorityEntity;
 
 @Component
+@Deprecated
 public class TaskPriorityConverter implements Converter<TaskPriorityEntity, TaskPriority> {
     @Override
     public TaskPriority toVo(TaskPriorityEntity entity) {

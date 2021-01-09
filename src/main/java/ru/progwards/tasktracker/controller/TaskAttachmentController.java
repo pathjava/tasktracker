@@ -1,17 +1,19 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskAttachmentDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.model.TaskAttachment;
 import ru.progwards.tasktracker.service.CreateService;
-import ru.progwards.tasktracker.service.GetListByTaskService;
 import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.service.RemoveService;
-import ru.progwards.tasktracker.model.TaskAttachment;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,18 +26,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rest/task/{task_id}/attachments")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskAttachmentController {
 
-    @Autowired
-    CreateService<TaskAttachment> createService;
-    @Autowired
-    RemoveService<TaskAttachment> removeService;
-    @Autowired
-    GetService<Long, TaskAttachment> getService;
-    @Autowired
-    GetListByTaskService<Long, TaskAttachment> getListByTaskService;
-    @Autowired
-    Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
+    private final CreateService<TaskAttachment> createService;
+    private final RemoveService<TaskAttachment> removeService;
+    private final GetService<Long, Task> getTaskService;
+    private final GetService<Long, TaskAttachment> getService;
+    private final Converter<TaskAttachment, TaskAttachmentDtoFull> dtoConverter;
 
 
     /**
@@ -50,7 +48,8 @@ public class TaskAttachmentController {
             throw new BadRequestException("Task_id is not set");
 
         // получили список бизнес-объектов
-        Collection<TaskAttachment> listByTaskId = getListByTaskService.getListByTaskId(task_id);
+        Task task = getTaskService.get(task_id);
+        Collection<TaskAttachment> listByTaskId = task.getAttachments();
         List<TaskAttachmentDtoFull> resultList = new ArrayList<>(listByTaskId.size());
         // преобразуем к dto
         for (TaskAttachment entity:listByTaskId) {

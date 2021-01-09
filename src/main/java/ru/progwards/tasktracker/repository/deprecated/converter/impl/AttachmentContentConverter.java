@@ -1,9 +1,9 @@
 package ru.progwards.tasktracker.repository.deprecated.converter.impl;
 
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.repository.deprecated.entity.AttachmentContentEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.model.TaskAttachmentContent;
+import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
+import ru.progwards.tasktracker.repository.deprecated.entity.AttachmentContentEntity;
 
 
 /**
@@ -14,6 +14,7 @@ import ru.progwards.tasktracker.model.TaskAttachmentContent;
  * @author Gregory Lobkov
  */
 @Component
+@Deprecated
 public class AttachmentContentConverter implements Converter<AttachmentContentEntity, TaskAttachmentContent> {
 
 
