@@ -14,8 +14,6 @@ import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.repository.TaskTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -139,6 +137,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      *
      * @param args [0] - Project, [1] - WorkFlow
      */
+    @Transactional
     @Override
     public void createFromTemplate(Object... args) {
         if (args.length != 2)
@@ -149,18 +148,14 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
             throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
 
         List<String> typeNames = List.of("Task", "Bug", "Epic");
-        List<TaskType> taskTypes = new ArrayList<>();
-        for (String s : typeNames) {
+        for (String name : typeNames) {
             TaskType taskType = new TaskType();
-
-            taskType.setTasks(Collections.emptyList());
-            taskType.setName(s);
+            taskType.setName(name);
             taskType.setProject((Project) args[0]);
             taskType.setWorkFlow((WorkFlow) args[1]);
 
-            taskTypes.add(taskType);
+            taskTypeRepository.save(taskType);
         }
-        taskTypeRepository.saveAll(taskTypes);
     }
 
 }

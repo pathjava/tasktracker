@@ -124,7 +124,9 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
                 RelationType two = new RelationType();
                 two.setName(entry.getValue());
                 two.setCounterRelation(one);
+
                 relationTypeRepository.save(two);
+
                 one.setCounterRelation(two);
             }
             relationTypeRepository.save(one);
