@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -22,7 +21,6 @@ public class RelationTypeDtoPreview {
     @NotNull
     private Long id;
 
-    @NotEmpty
     private String name;
 
 }

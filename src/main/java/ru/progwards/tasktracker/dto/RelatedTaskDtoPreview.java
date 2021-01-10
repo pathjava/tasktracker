@@ -21,13 +21,10 @@ public class RelatedTaskDtoPreview {
     @NotNull
     private Long id;
 
-    @NotNull
     private RelationTypeDtoPreview relationType;
 
-    @NotNull
     private Long currentTaskId;
 
-    @NotNull
     private TaskDtoPreview attachedTask;
 
 }

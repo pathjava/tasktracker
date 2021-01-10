@@ -14,6 +14,7 @@ import ru.progwards.tasktracker.repository.RelationTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -25,7 +26,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
-        RemoveService<RelationType>, RefreshService<RelationType>, GetListService<RelationType> {
+        RemoveService<RelationType>, RefreshService<RelationType>,
+        GetListService<RelationType>, TemplateService<RelationType> {
 
     private final RelationTypeRepository relationTypeRepository;
     private final RelatedTaskRepository relatedTaskRepository;
@@ -100,5 +102,32 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
             );
 
         relationTypeRepository.delete(model);
+    }
+
+    /**
+     * Метод создания RelationType по шаблону
+     *
+     * @param args null
+     */
+    @Transactional
+    @Override
+    public void createFromTemplate(Object... args) {
+        Map<String, String> relationNames = Map.of(
+                "relates to", "", "duplicates", "is duplicates by",
+                "blocks", "is blocked by", "clones", "is clones by"
+        );
+
+        for (Map.Entry<String, String> entry : relationNames.entrySet()) {
+            RelationType one = new RelationType();
+            one.setName(entry.getKey());
+            if (!entry.getValue().isEmpty()) {
+                RelationType two = new RelationType();
+                two.setName(entry.getValue());
+                two.setCounterRelation(one);
+                relationTypeRepository.save(two);
+                one.setCounterRelation(two);
+            }
+            relationTypeRepository.save(one);
+        }
     }
 }

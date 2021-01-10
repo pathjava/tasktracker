@@ -23,13 +23,10 @@ public class WorkLogDtoPreview {
     @NotNull
     private Long id;
 
-    @NotNull
     private Duration spent;
 
-    @NotNull
     private UserDtoPreview worker;
 
-    @NotNull
     private ZonedDateTime start;
 
 }

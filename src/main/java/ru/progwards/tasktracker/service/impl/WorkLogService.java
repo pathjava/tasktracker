@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkLogService implements CreateService<WorkLog>, GetService<Long, WorkLog>,
         RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog> {
 

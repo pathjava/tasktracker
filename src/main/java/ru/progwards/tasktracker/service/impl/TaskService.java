@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskService implements CreateService<Task>, GetListService<Task>, GetService<Long, Task>,
         RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task> {
 

@@ -15,6 +15,7 @@ import ru.progwards.tasktracker.repository.TaskTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskTypeService implements CreateService<TaskType>, GetService<Long, TaskType>,
         RemoveService<TaskType>, RefreshService<TaskType>, GetListService<TaskType>, TemplateService<TaskType> {
 
@@ -120,7 +121,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
             );
             model.setWorkFlow(copyWorkFlow);
         }
-        taskTypeRepository.save(model); //TODO - можно ли сделать проверку, что сущность обновилась и её стоит обновлять?
+        taskTypeRepository.save(model);
     }
 
     /**
@@ -134,31 +135,32 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     }
 
     /**
-     * Создание сущности из шаблона
+     * Метод создания TaskType по шаблону
      *
-     * Параметры:
-     * 0 - Project
-     * 1 - WorkFlow
-     *
-     * @param args
+     * @param args [0] - Project, [1] - WorkFlow
      */
     @Override
     public void createFromTemplate(Object... args) {
-        if(args.length!=2) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: 2 arguments expected");
-        if(!(args[0] instanceof Project)) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 0 must be Project");
-        if(!(args[1] instanceof WorkFlow)) throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
+        if (args.length != 2)
+            throw new OperationIsNotPossibleException("TaskType.createFromTemplate: 2 arguments expected");
+        if (!(args[0] instanceof Project))
+            throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 0 must be Project");
+        if (!(args[1] instanceof WorkFlow))
+            throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
 
-        List<String> names = List.of("Task", "Bug", "Epic");
-        List<TaskType> tts = new ArrayList<>(names.size());
-        for (String s: names) {
-            TaskType tt = new TaskType();
-            tt.setTasks(new ArrayList<>(0));
-            tt.setName(s);
-            tt.setProject((Project) args[0]);
-            tt.setWorkFlow((WorkFlow) args[1]);
-            tts.add(tt);
+        List<String> typeNames = List.of("Task", "Bug", "Epic");
+        List<TaskType> taskTypes = new ArrayList<>();
+        for (String s : typeNames) {
+            TaskType taskType = new TaskType();
+
+            taskType.setTasks(Collections.emptyList());
+            taskType.setName(s);
+            taskType.setProject((Project) args[0]);
+            taskType.setWorkFlow((WorkFlow) args[1]);
+
+            taskTypes.add(taskType);
         }
-        taskTypeRepository.saveAll(tts);
+        taskTypeRepository.saveAll(taskTypes);
     }
 
 }
