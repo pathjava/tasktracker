@@ -210,6 +210,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
      *
      * @param args [0] - массив Task[] (минимум 2 Task), [1] - User
      */
+    @Transactional
     @Override
     public void createFromTemplate(Object... args) {
         if (args.length != 2)

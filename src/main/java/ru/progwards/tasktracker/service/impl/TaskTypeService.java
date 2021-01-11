@@ -157,5 +157,4 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
             taskTypeRepository.save(taskType);
         }
     }
-
 }

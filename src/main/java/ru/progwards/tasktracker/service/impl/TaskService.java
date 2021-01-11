@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.repository.RelatedTaskRepository;
@@ -26,7 +27,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskService implements CreateService<Task>, GetListService<Task>, GetService<Long, Task>,
-        RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task> {
+        RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task>, TemplateService<Task> {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
@@ -44,7 +45,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     @Transactional
     @Override
     public void create(Task model) {
-        model.setCode(generateTaskCode(model.getProject().getId()));
+        model.setCode(generateTaskCode(model.getProject()));
         model.setCreated(ZonedDateTime.now());
 
         if (model.getType() != null) {
@@ -60,13 +61,11 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      * Из бизнес-объекта проекта получаем крайний индекс задачи,
      * инкрементируем +1 и создаем код задачи, обновляем проект
      *
-     * @param project_id идентификатор проекта, к которому принадлежит задача
+     * @param project проект, к которому принадлежит задача
      * @return код задачи в формате "NGR-1"
      */
     @Transactional
-    public String generateTaskCode(Long project_id) {
-        Project project = projectRepository.findById(project_id)
-                .orElseThrow(() -> new NotFoundException("Project id=" + project_id + " not found"));
+    public String generateTaskCode(Project project) {
         Long lastTaskCode = project.getLastTaskCode() + 1;
         String taskCode = project.getPrefix() + "-" + lastTaskCode;
         project.setLastTaskCode(lastTaskCode);
@@ -165,4 +164,36 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         }
     }
 
+    @Transactional
+    @Override
+    public void createFromTemplate(Object... args) {
+        if (args.length != 5)
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: 2 arguments expected");
+        if (!(args[0] instanceof TaskType))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 0 must be TaskType");
+        if (!(args[1] instanceof TaskPriority))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 1 must be TaskPriority");
+        if (!(args[2] instanceof Project))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 2 must be Project");
+        if (!(args[3] instanceof User))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 3 must be User");
+        if (!(args[4] instanceof Integer))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 4 must be Integer");
+
+        int tasksCount = (int) args[4];
+        for (int i = 0; i < tasksCount; i++) {
+            Task task = new Task();
+            task.setCode(generateTaskCode((Project) args[2]));
+            task.setName("Example task " + (i + 1));
+            task.setDescription("Some description example Task");
+            task.setType((TaskType) args[0]);
+            task.setPriority((TaskPriority) args[1]);
+            task.setProject((Project) args[2]);
+            task.setAuthor((User) args[3]);
+            task.setCreated(ZonedDateTime.now());
+            task.setDeleted(false);
+
+            taskRepository.save(task);
+        }
+    }
 }
