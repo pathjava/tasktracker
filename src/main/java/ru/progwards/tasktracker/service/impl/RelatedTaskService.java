@@ -6,15 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
+import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.repository.RelatedTaskRepository;
 import ru.progwards.tasktracker.repository.RelationTypeRepository;
-import ru.progwards.tasktracker.service.CreateService;
-import ru.progwards.tasktracker.service.GetListService;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.service.RemoveService;
+import ru.progwards.tasktracker.service.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelatedTaskService implements CreateService<RelatedTask>, GetService<Long, RelatedTask>,
-        RemoveService<RelatedTask>, GetListService<RelatedTask> {
+        RemoveService<RelatedTask>, GetListService<RelatedTask>, TemplateService<RelatedTask> {
 
     private final RelatedTaskRepository relatedTaskRepository;
     private final RelationTypeRepository relationTypeRepository;
@@ -107,5 +108,40 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
             );
         }
         relatedTaskRepository.markRelatedTaskAsDeleted(true, model.getId());
+    }
+
+//    @Transactional
+    @Override
+    public void createFromTemplate(Object... args) {
+//        if (args.length != 3)
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 3 arguments expected");
+//        if (!(args[0] instanceof RelationType[]))
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: argument 0 must be RelationType");
+//        if (!(args[1] instanceof Task[]))
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: argument 1 must be Task");
+//        if (((RelationType[]) args[0]).length != 7)
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 7 arguments RelationType expected");
+//        if (((Task[]) args[1]).length != 2)
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 2 arguments Task expected");
+//
+//        List<RelationType> relationTypes = new ArrayList<>(Arrays.asList((RelationType[]) args[0]));
+//        List<Task> tasks = new ArrayList<>(Arrays.asList((Task[]) args[1]));
+//
+//        List<RelatedTask> relatedTasks = new ArrayList<>();
+//
+//        for (RelationType relationType : relationTypes) {
+//            RelatedTask relatedTask = new RelatedTask();
+//            relatedTask.setRelationType(relationType);
+//            relatedTasks.add(relatedTask);
+//        }
+//
+//        for (RelatedTask relatedTask : relatedTasks) {
+//            if (relatedTask.getRelationType().getCounterRelation() == null){
+//                relatedTask.setCurrentTask(tasks.get(0));
+//                relatedTask.setAttachedTask(tasks.get(1));
+//            } else {
+//
+//            }
+//        }
     }
 }

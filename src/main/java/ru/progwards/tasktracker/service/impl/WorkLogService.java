@@ -6,12 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.model.WorkLog;
+import ru.progwards.tasktracker.model.types.EstimateChange;
 import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.repository.WorkLogRepository;
 import ru.progwards.tasktracker.service.*;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,7 +30,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkLogService implements CreateService<WorkLog>, GetService<Long, WorkLog>,
-        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog> {
+        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog>, TemplateService<WorkLog> {
 
     private final WorkLogRepository workLogRepository;
     private final TaskRepository taskRepository;
@@ -196,5 +203,36 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
     @Override
     public List<WorkLog> getList() {
         return workLogRepository.findAll();
+    }
+
+    /**
+     * Метод создания WorkLog по шаблону
+     *
+     * @param args [0] - массив Task[] (минимум 2 Task), [1] - User
+     */
+    @Override
+    public void createFromTemplate(Object... args) {
+        if (args.length != 2)
+            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: 2 arguments expected");
+        if (!(args[0] instanceof Task[]))
+            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: argument 0 must be Task");
+        if (!(args[1] instanceof User))
+            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: argument 1 must be User");
+        if (((Task[]) args[0]).length < 2)
+            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: min 2 arguments Task expected");
+
+        List<Task> tasks = new ArrayList<>(Arrays.asList((Task[]) args[0]));
+
+        for (Task task : tasks) {
+            WorkLog workLog = new WorkLog();
+            workLog.setTask(task);
+            workLog.setWorker((User) args[1]);
+            workLog.setSpent(Duration.ofHours(5));
+            workLog.setStart(ZonedDateTime.now());
+            workLog.setDescription("Some description WorkLog for Task: " + task.getName());
+            workLog.setEstimateChange(EstimateChange.DONT_CHANGE);
+
+            workLogRepository.save(workLog);
+        }
     }
 }

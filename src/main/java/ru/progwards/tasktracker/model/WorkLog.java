@@ -32,6 +32,7 @@ public class WorkLog {
     @JoinColumn(name = "task_id", referencedColumnName = "id")
     private Task task;
 
+    @NotNull
     private Duration spent;
 
     @NotNull

@@ -107,7 +107,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
     /**
      * Метод создания RelationType по шаблону
      *
-     * @param args null
+     * @param args null - метод без параметров
      */
     @Transactional
     @Override
@@ -118,18 +118,18 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
         );
 
         for (Map.Entry<String, String> entry : relationNames.entrySet()) {
-            RelationType one = new RelationType();
-            one.setName(entry.getKey());
+            RelationType currentType = new RelationType();
+            currentType.setName(entry.getKey());
             if (!entry.getValue().isEmpty()) {
-                RelationType two = new RelationType();
-                two.setName(entry.getValue());
-                two.setCounterRelation(one);
+                RelationType counterType = new RelationType();
+                counterType.setName(entry.getValue());
+                counterType.setCounterRelation(currentType);
 
-                relationTypeRepository.save(two);
+                relationTypeRepository.save(counterType);
 
-                one.setCounterRelation(two);
+                currentType.setCounterRelation(counterType);
             }
-            relationTypeRepository.save(one);
+            relationTypeRepository.save(currentType);
         }
     }
 }

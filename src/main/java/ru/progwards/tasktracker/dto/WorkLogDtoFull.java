@@ -5,10 +5,7 @@ import lombok.Data;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.*;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
@@ -30,6 +27,7 @@ public class WorkLogDtoFull {
     @NotNull(groups = {Create.class, Update.class})
     private TaskDtoPreview task;
 
+    @NotNull(groups = {Create.class, Update.class})
     private Duration spent;
 
     @NotNull(groups = {Create.class, Update.class})
@@ -41,6 +39,7 @@ public class WorkLogDtoFull {
     @NotNull(groups = {Create.class, Update.class})
     private String description;
 
+    @NotEmpty(groups = {Create.class, Update.class})
     private String estimateChange;
 
     private Duration estimateValue;
