@@ -17,8 +17,6 @@ import ru.progwards.tasktracker.service.*;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -215,14 +213,16 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
     public void createFromTemplate(Object... args) {
         if (args.length != 2)
             throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: 2 arguments expected");
-        if (!(args[0] instanceof Task[]))
-            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: argument 0 must be Task");
+        if (!(args[0] instanceof List))
+            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: argument 0 must be List<Task>");
         if (!(args[1] instanceof User))
             throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: argument 1 must be User");
-        if (((Task[]) args[0]).length < 2)
-            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: min 2 arguments Task expected");
 
-        List<Task> tasks = new ArrayList<>(Arrays.asList((Task[]) args[0]));
+        /* passing the list of tasks */
+        @SuppressWarnings("unchecked")
+        List<Task> tasks = (List<Task>) args[0];
+        if (tasks.size() < 2)
+            throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: List<Task> min size() expected 2");
 
         for (Task task : tasks) {
             WorkLog workLog = new WorkLog();

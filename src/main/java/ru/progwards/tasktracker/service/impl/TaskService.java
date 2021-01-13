@@ -17,6 +17,7 @@ import java.lang.reflect.Field;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Бизнес-логика создания задачи (Task)
@@ -53,6 +54,11 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
             if (workFlow != null)
                 model.setStatus(workFlow.getStartStatus());
         }
+
+        Map<String, String> map = Map.of("Some key", "Some value");
+        String string = "Some string";
+        createFromTemplate(map, string);
+
         taskRepository.save(model);
     }
 
@@ -164,6 +170,11 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         }
     }
 
+    /**
+     * Метод создания Task по шаблону
+     *
+     * @param args – [0] - TaskType, [1] - TaskPriority, [2] - Project, [3] - User, [4] - Integer (количество создаваемых Task)
+     */
     @Transactional
     @Override
     public void createFromTemplate(Object... args) {

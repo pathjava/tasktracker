@@ -112,24 +112,30 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
     @Transactional
     @Override
     public void createFromTemplate(Object... args) {
-        Map<String, String> relationNames = Map.of(
-                "relates to", "", "duplicates", "is duplicates by",
-                "blocks", "is blocked by", "clones", "is clones by"
-        );
+        if (args.length != 1)
+            throw new OperationIsNotPossibleException("RelationType.createFromTemplate: 1 arguments expected");
+        if (!(args[0] instanceof Map))
+            throw new OperationIsNotPossibleException(
+                    "RelationType.createFromTemplate: argument 0 must be Map<String, String>"
+            );
+
+        /* passing the list of relation types: */
+        /* "relates to", "", "duplicates", "is duplicates by", "blocks", "is blocked by", "clones", "is clones by" */
+        @SuppressWarnings("unchecked")
+        Map<String, String> relationNames = (Map<String, String>) args[0];
 
         for (Map.Entry<String, String> entry : relationNames.entrySet()) {
-            RelationType currentType = new RelationType();
-            currentType.setName(entry.getKey());
+            RelationType relationType = new RelationType();
+            relationType.setName(entry.getKey());
             if (!entry.getValue().isEmpty()) {
-                RelationType counterType = new RelationType();
-                counterType.setName(entry.getValue());
-                counterType.setCounterRelation(currentType);
+                RelationType counterRelationType = new RelationType();
+                counterRelationType.setName(entry.getValue());
+                counterRelationType.setCounterRelation(relationType);
+                relationType.setCounterRelation(counterRelationType);
 
-                relationTypeRepository.save(counterType);
-
-                currentType.setCounterRelation(counterType);
+                relationTypeRepository.save(counterRelationType);
             }
-            relationTypeRepository.save(currentType);
+            relationTypeRepository.save(relationType);
         }
     }
 }
