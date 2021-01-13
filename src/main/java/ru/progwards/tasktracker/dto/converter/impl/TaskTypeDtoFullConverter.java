@@ -41,7 +41,7 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
                     null,
                     projectDtoConverter.toModel(dto.getProject()),
                     workFlowDtoConverter.toModel(dto.getWorkFlow()),
-                    dto.getName(),
+                    dto.getName().toLowerCase(),
                     Collections.emptyList()
             );
         } else {

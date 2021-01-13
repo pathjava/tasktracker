@@ -28,15 +28,15 @@ public class TaskTypeNameValidator implements ConstraintValidator<TaskTypeNameVa
     /**
      * Метод проверки существования имени TaskType в БД перед созданием TaskType
      *
-     * @param name проверяемое имя TaskType
+     * @param name    проверяемое имя TaskType
      * @param context Предоставляет контекстные данные и операции при применении заданного
      * @return false - если в БД есть TaskType с проверяемым именем и true - если нет
      */
     @Override
     public boolean isValid(String name, ConstraintValidatorContext context) {
-        if (taskTypeRepository.existsByName(name)) {
+        if (taskTypeRepository.existsByName(name.toLowerCase())) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("this " + name + " TaskType already exists")
+            context.buildConstraintViolationWithTemplate("this " + name.toLowerCase() + " TaskType already exists")
                     .addConstraintViolation();
             return false;
         } else

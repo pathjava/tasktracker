@@ -33,7 +33,7 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
         if (dto.getId() == null) {
             return new RelationType(
                     null,
-                    dto.getName(),
+                    dto.getName().toLowerCase(),
                     checkCounterRelationDto(dto.getCounterRelationId()),
                     Collections.emptyList()
             );
