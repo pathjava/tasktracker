@@ -54,11 +54,6 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
             if (workFlow != null)
                 model.setStatus(workFlow.getStartStatus());
         }
-
-        Map<String, String> map = Map.of("Some key", "Some value");
-        String string = "Some string";
-        createFromTemplate(map, string);
-
         taskRepository.save(model);
     }
 
