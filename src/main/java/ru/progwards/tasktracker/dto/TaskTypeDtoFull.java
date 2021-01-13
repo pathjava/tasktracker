@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.progwards.tasktracker.util.validator.annotation.TaskTypeNameValid;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
@@ -27,6 +28,7 @@ public class TaskTypeDtoFull {
 
     private WorkFlowDtoPreview workFlow;
 
+    @TaskTypeNameValid(groups = {Create.class, Update.class})
     @NotEmpty(groups = {Create.class, Update.class})
     private String name;
 

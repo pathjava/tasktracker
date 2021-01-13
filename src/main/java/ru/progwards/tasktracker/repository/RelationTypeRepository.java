@@ -11,4 +11,13 @@ import ru.progwards.tasktracker.model.RelationType;
 @Repository
 @Transactional(readOnly = true)
 public interface RelationTypeRepository extends JpaRepository<RelationType, Long> {
+
+    /**
+     * Метод проверки существования в БД RelationType с именем name
+     *
+     * @param name имя RelationType
+     * @return true - если в БД есть RelationType с проверяемым именем и false - если нет
+     */
+    boolean existsByName(String name);
+
 }

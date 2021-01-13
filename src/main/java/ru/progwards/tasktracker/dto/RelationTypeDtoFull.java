@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.progwards.tasktracker.util.validator.annotation.RelationTypeNameValid;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
@@ -22,6 +23,7 @@ public class RelationTypeDtoFull {
     @Null(groups = Create.class)
     private Long id;
 
+    @RelationTypeNameValid(groups = {Create.class, Update.class})
     @NotEmpty(groups = {Create.class, Update.class})
     @Size(min = 1, max = 15, groups = {Create.class, Update.class})
     private String name;
