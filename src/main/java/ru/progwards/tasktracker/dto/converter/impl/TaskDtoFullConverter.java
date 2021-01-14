@@ -43,8 +43,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
         if (dto.getId() == null) {
             return new Task(
                     null,
-                    dto.getCode(),
-                    dto.getName(),
+                    null,
+                    dto.getName().trim(),
                     dto.getDescription(),
                     taskTypeDtoConverter.toModel(dto.getType()),
                     taskPriorityDtoConverter.toModel(dto.getPriority()),
@@ -66,8 +66,8 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             );
         } else {
             Task task = taskGetService.get(dto.getId());
-            task.setCode(dto.getCode());
-            task.setName(dto.getName());
+            task.setCode(dto.getCode().trim());
+            task.setName(dto.getName().trim());
             task.setDescription(dto.getDescription());
             task.setType(taskTypeDtoConverter.toModel(dto.getType()));
             task.setPriority(taskPriorityDtoConverter.toModel(dto.getPriority()));

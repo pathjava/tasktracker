@@ -41,9 +41,9 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
         else if (dto.getId() == null) {
             return new User(
                     null,
-                    dto.getName(),
-                    dto.getEmail().toLowerCase(),
-                    dto.getPassword(),
+                    dto.getName().trim(),
+                    dto.getEmail().toLowerCase().trim(),
+                    dto.getPassword().trim(),
                     Collections.emptyList(),
                     Collections.emptyList(),
                     Collections.emptyList(),
@@ -54,9 +54,9 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
             );
         } else {
             User user = userGetService.get(dto.getId());
-            user.setName(dto.getName());
-            user.setEmail(dto.getEmail().toLowerCase());
-            user.setPassword(dto.getPassword());
+            user.setName(dto.getName().trim());
+            user.setEmail(dto.getEmail().toLowerCase().trim());
+            user.setPassword(dto.getPassword().trim());
             return user;
         }
     }

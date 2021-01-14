@@ -34,9 +34,9 @@ public class RelationTypeNameValidator implements ConstraintValidator<RelationTy
      */
     @Override
     public boolean isValid(String name, ConstraintValidatorContext context) {
-        if (relationTypeRepository.existsByName(name.toLowerCase())) {
+        if (relationTypeRepository.existsByName(name.toLowerCase().trim())) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("this " + name.toLowerCase() + " RelationType already exists")
+            context.buildConstraintViolationWithTemplate("this " + name.toLowerCase().trim() + " RelationType already exists")
                     .addConstraintViolation();
             return false;
         } else

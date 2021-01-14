@@ -32,7 +32,7 @@ public class UserPasswordValidator implements ConstraintValidator<PasswordValid,
      */
     @Override
     public boolean isValid(UserDtoFull userDto, ConstraintValidatorContext context) {
-        if (!userDto.getPassword().equals(userDto.getPasswordConfirm())) {
+        if (!userDto.getPassword().trim().equals(userDto.getPasswordConfirm().trim())) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("passwords don't match")
                     .addConstraintViolation();

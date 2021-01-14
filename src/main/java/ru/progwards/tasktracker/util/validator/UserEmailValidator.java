@@ -39,17 +39,17 @@ public class UserEmailValidator implements ConstraintValidator<EmailValid, UserD
     @Override
     public boolean isValid(UserDtoFull userDto, ConstraintValidatorContext context) {
         if (userDto.getId() == null) {
-            if (userRepository.existsByEmail(userDto.getEmail().toLowerCase())) {
+            if (userRepository.existsByEmail(userDto.getEmail().toLowerCase().trim())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(userDto.getEmail().toLowerCase() + " already exists")
+                context.buildConstraintViolationWithTemplate(userDto.getEmail().toLowerCase().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
         } else {
-            User user = userRepository.findByEmail(userDto.getEmail().toLowerCase()).orElse(null);
+            User user = userRepository.findByEmail(userDto.getEmail().toLowerCase().trim()).orElse(null);
             if (user != null && !user.getId().equals(userDto.getId())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(userDto.getEmail().toLowerCase() + " already exists")
+                context.buildConstraintViolationWithTemplate(userDto.getEmail().toLowerCase().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }

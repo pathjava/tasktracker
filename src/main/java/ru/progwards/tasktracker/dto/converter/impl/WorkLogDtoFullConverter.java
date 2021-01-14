@@ -44,7 +44,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
                     userDtoConverter.toModel(dto.getWorker()),
                     dto.getStart(),
                     dto.getDescription(),
-                    stringToEnum(dto.getEstimateChange()),
+                    stringToEnum(dto.getEstimateChange().trim()),
                     dto.getEstimateValue()
             );
         } else {
@@ -52,7 +52,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
             workLog.setSpent(dto.getSpent());
             workLog.setStart(dto.getStart());
             workLog.setDescription(dto.getDescription());
-            workLog.setEstimateChange(stringToEnum(dto.getEstimateChange()));
+            workLog.setEstimateChange(stringToEnum(dto.getEstimateChange().trim()));
             workLog.setEstimateValue(dto.getEstimateValue());
             return workLog;
         }
