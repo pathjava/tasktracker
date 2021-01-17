@@ -342,6 +342,7 @@ class RelationTypeControllerTest {
     void update_RelationType_when_Request_Id_is_different_Dto_Id() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationType());
         RelationTypeDtoFull dto = getRelationTypeDto();
+        dto.setName("updated name");
         dto.setId(rt.getId() + 1);
 
         try {
