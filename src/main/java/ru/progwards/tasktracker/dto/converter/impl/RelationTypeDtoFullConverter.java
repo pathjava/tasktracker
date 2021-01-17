@@ -40,7 +40,7 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
         } else {
             RelationType relationType = relationTypeGetService.get(dto.getId());
             relationType.setName(dto.getName().trim());
-            relationType.setCounterRelation(relationTypeGetService.get(dto.getCounterRelationId()));
+            relationType.setCounterRelation(checkCounterRelationDto(dto.getCounterRelationId()));
             return relationType;
         }
     }

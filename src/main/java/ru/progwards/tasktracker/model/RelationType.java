@@ -31,7 +31,7 @@ public class RelationType {
     @NotNull
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "counter_id", referencedColumnName = "id")
     private RelationType counterRelation;
 
