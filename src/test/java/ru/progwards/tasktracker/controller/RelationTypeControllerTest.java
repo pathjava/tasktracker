@@ -140,7 +140,8 @@ class RelationTypeControllerTest {
     @Test
     @Order(2)
     void create_RelationType_with_counter_RelationType() throws Exception {
-        RelationType counterType = new RelationType(null, "counter name", null, null);
+        RelationType counterType = getRelationType();
+        counterType.setName("counter name");
         Long counterId = relationTypeRepository.save(counterType).getId();
         RelationTypeDtoFull dto = getRelationTypeDto();
         dto.setCounterRelationId(counterId);
@@ -248,10 +249,11 @@ class RelationTypeControllerTest {
     @Test
     @Order(10)
     void getList_RelationType() throws Exception {
-        List<RelationType> listType = List.of(
-                new RelationType(null, "name one", null, null),
-                new RelationType(null, "name two", null, null)
-        );
+        RelationType one = getRelationType();
+        one.setName("name one");
+        RelationType two = getRelationType();
+        two.setName("name two");
+        List<RelationType> listType = List.of(one, two);
         relationTypeRepository.saveAll(listType);
 
         try {
