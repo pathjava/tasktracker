@@ -53,7 +53,7 @@ class RelationTypeControllerTest {
     @Autowired
     private RelationTypeRepository relationTypeRepository;
 
-    private static final String GET_PATH = "/rest/relationtype/";
+    private static final String GET_PATH = "/rest/relationtype/{id}";
     private static final String GET_LIST_PATH = "/rest/relationtype/list";
     private static final String CREATE_PATH = "/rest/relationtype/create";
     private static final String DELETE_PATH = "/rest/relationtype/{id}/delete";
@@ -88,7 +88,13 @@ class RelationTypeControllerTest {
         }
     }
 
-    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri) {
+    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri, Long id) {
+        return get(uri.replace("{id}", String.valueOf(id)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    public static MockHttpServletRequestBuilder getListUriAndMediaType(String uri) {
         return get(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -124,7 +130,7 @@ class RelationTypeControllerTest {
         Long id = getResultId(result);
 
         try {
-            mockMvc.perform(get(GET_PATH + id))
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class))
                     .andExpect(jsonPath("$.counterRelationId", equalTo(null)))
@@ -157,7 +163,7 @@ class RelationTypeControllerTest {
         Long id = getResultId(result);
 
         try {
-            mockMvc.perform(get(GET_PATH + id))
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class))
                     .andExpect(jsonPath("$.counterRelationId", is(counterType.getId()), Long.class))
@@ -209,7 +215,7 @@ class RelationTypeControllerTest {
 
         try {
             mockMvc.perform(
-                    getUriAndMediaType(GET_PATH + rt.getId()))
+                    getUriAndMediaType(GET_PATH, rt.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(rt.getId()), Long.class))
                     .andExpect(jsonPath("$.name", equalTo("relation name")));
@@ -222,7 +228,7 @@ class RelationTypeControllerTest {
     @Order(7)
     void get_RelationType_when_NotFound() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH + 1L))
+                getUriAndMediaType(GET_PATH,1L))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
@@ -232,7 +238,7 @@ class RelationTypeControllerTest {
     @Order(8)
     void get_one_RelationType_when_Id_is_negative() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH + (-1L)))
+                getUriAndMediaType(GET_PATH, -1L))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -242,7 +248,7 @@ class RelationTypeControllerTest {
     @Order(9)
     void get_one_RelationType_when_Id_more_value_Long() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH + (Long.MAX_VALUE + 1)))
+                getUriAndMediaType(GET_PATH, Long.MAX_VALUE + 1))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -260,7 +266,7 @@ class RelationTypeControllerTest {
 
         try {
             mockMvc.perform(
-                    getUriAndMediaType(GET_LIST_PATH))
+                    getListUriAndMediaType(GET_LIST_PATH))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$[*].name", containsInAnyOrder("name one", "name two")));
         } finally {
@@ -272,7 +278,7 @@ class RelationTypeControllerTest {
     @Order(11)
     void getList_RelationType_when_return_Empty_List() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_LIST_PATH))
+                getListUriAndMediaType(GET_LIST_PATH))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
@@ -329,7 +335,7 @@ class RelationTypeControllerTest {
         Long id = getResultId(result);
 
         try {
-            mockMvc.perform(get(GET_PATH + id))
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class))
                     .andExpect(jsonPath("$.counterRelationId", equalTo(null)))

@@ -58,7 +58,7 @@ class TaskTypeControllerTest {
     @Autowired
     private ProjectRepository projectRepository;
 
-    private static final String GET_PATH = "/rest/tasktype/";
+    private static final String GET_PATH = "/rest/tasktype/{id}";
     private static final String GET_LIST_PATH = "/rest/tasktype/list";
     private static final String GET_LIST_BY_PROJECT_PATH = "/rest/tasktype/{id}/list";
     private static final String CREATE_PATH = "/rest/tasktype/create";
@@ -111,14 +111,14 @@ class TaskTypeControllerTest {
         }
     }
 
-    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri) {
-        return get(uri)
+    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri, Long id) {
+        return get(uri.replace("{id}", String.valueOf(id)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
     }
 
-    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri, Long id) {
-        return get(uri.replace("{id}", String.valueOf(id)))
+    public static MockHttpServletRequestBuilder getListUriAndMediaType(String uri) {
+        return get(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
     }
@@ -153,7 +153,7 @@ class TaskTypeControllerTest {
         Long id = getResultId(result);
 
         try {
-            mockMvc.perform(get(GET_PATH + id))
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class))
                     .andExpect(jsonPath("$.name", equalTo("type name")));
@@ -209,7 +209,7 @@ class TaskTypeControllerTest {
 
         try {
             mockMvc.perform(
-                    getUriAndMediaType(GET_PATH + tt.getId()))
+                    getUriAndMediaType(GET_PATH, tt.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(tt.getId()), Long.class))
                     .andExpect(jsonPath("$.name", equalTo("type name")));
@@ -222,7 +222,7 @@ class TaskTypeControllerTest {
     @Order(6)
     void get_TaskType_when_NotFound() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH + 1L))
+                getUriAndMediaType(GET_PATH, 1L))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
@@ -232,7 +232,7 @@ class TaskTypeControllerTest {
     @Order(7)
     void get_TaskType_when_Id_is_negative() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH + (-1L)))
+                getUriAndMediaType(GET_PATH, -1L))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -242,7 +242,7 @@ class TaskTypeControllerTest {
     @Order(8)
     void get_TaskType_when_Id_more_value_Long() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH + (Long.MAX_VALUE + 1)))
+                getUriAndMediaType(GET_PATH, Long.MAX_VALUE + 1))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -260,7 +260,7 @@ class TaskTypeControllerTest {
 
         try {
             mockMvc.perform(
-                    getUriAndMediaType(GET_LIST_PATH))
+                    getListUriAndMediaType(GET_LIST_PATH))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$[*].name", containsInAnyOrder("name one", "name two")));
         } finally {
@@ -272,7 +272,7 @@ class TaskTypeControllerTest {
     @Order(10)
     void getList_TaskType_when_return_Empty_List() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_LIST_PATH))
+                getListUriAndMediaType(GET_LIST_PATH))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
@@ -394,7 +394,7 @@ class TaskTypeControllerTest {
         Long id = getResultId(result);
 
         try {
-            mockMvc.perform(get(GET_PATH + id))
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class))
                     .andExpect(jsonPath("$.name", equalTo("updated name")));
