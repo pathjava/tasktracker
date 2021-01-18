@@ -342,7 +342,7 @@ class RelationTypeControllerTest {
     void update_RelationType_when_Request_Id_is_different_Dto_Id() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationType());
         RelationTypeDtoFull dto = getRelationTypeDto();
-        dto.setName("updated name");
+        dto.setName("another name");
         dto.setId(rt.getId() + 1);
 
         try {
@@ -358,6 +358,23 @@ class RelationTypeControllerTest {
 
     @Test
     @Order(17)
+    void update_RelationType_when_Name_is_already_used_another_RelationType() throws Exception {
+        RelationType rt = relationTypeRepository.save(getRelationType());
+        RelationTypeDtoFull dto = getRelationTypeDto();
+        dto.setId(rt.getId() + 1);
+
+        try {
+            mockMvc.perform(
+                    putJson(UPDATE_PATH, rt.getId(), dto))
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(mvcResult -> assertNotNull(mvcResult.getResolvedException()));
+        } finally {
+            relationTypeRepository.deleteById(rt.getId());
+        }
+    }
+
+    @Test
+    @Order(18)
     void update_RelationType_when_NotFound() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDto();
         dto.setId(1L);
