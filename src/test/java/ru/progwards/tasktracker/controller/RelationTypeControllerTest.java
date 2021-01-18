@@ -37,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
+ * Тестирование методов контроллера RelationTypeController
+ *
  * @author Oleg Kiselev
  */
 @SpringBootTest
@@ -268,7 +270,7 @@ class RelationTypeControllerTest {
 
     @Test
     @Order(11)
-    void getList_RelationType_when_Empty_List() throws Exception {
+    void getList_RelationType_when_return_Empty_List() throws Exception {
         mockMvc.perform(
                 getUriAndMediaType(GET_LIST_PATH))
                 .andExpect(status().isNotFound())
@@ -366,7 +368,7 @@ class RelationTypeControllerTest {
         try {
             mockMvc.perform(
                     putJson(UPDATE_PATH, rt.getId(), dto))
-                    .andExpect(status().isInternalServerError())
+                    .andExpect(status().isBadRequest())
                     .andExpect(mvcResult -> assertNotNull(mvcResult.getResolvedException()));
         } finally {
             relationTypeRepository.deleteById(rt.getId());
