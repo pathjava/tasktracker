@@ -39,7 +39,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Transactional
     @Override
     public void create(TaskType model) {
-        if (model.getWorkFlow().getPattern()) {
+        if (model.getWorkFlow() != null && model.getWorkFlow().getPattern()) {
             WorkFlow copyWorkFlow = workFlowCopyService.copy(
                     model.getWorkFlow(), getTemplateWorkFlow(model.getWorkFlow().getName(), model.getName())
             );
@@ -113,7 +113,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Transactional
     @Override
     public void refresh(TaskType model) {
-        if (model.getWorkFlow().getPattern()) {
+        if (model.getWorkFlow() != null && model.getWorkFlow().getPattern()) {
             WorkFlow copyWorkFlow = workFlowCopyService.copy(
                     model.getWorkFlow(), getTemplateWorkFlow(model.getWorkFlow().getName(), model.getName())
             );

@@ -39,18 +39,38 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
         if (dto.getId() == null) {
             return new TaskType(
                     null,
-                    projectDtoConverter.toModel(dto.getProject()),
-                    workFlowDtoConverter.toModel(dto.getWorkFlow()),
+                    checkProjectDto(dto.getProject()),
+                    checkWorkFlowDto(dto.getWorkFlow()),
                     dto.getName().toLowerCase().trim(),
                     Collections.emptyList()
             );
         } else {
             TaskType taskType = taskTypeGetService.get(dto.getId());
-            taskType.setProject(projectDtoConverter.toModel(dto.getProject()));
-            taskType.setWorkFlow(workFlowDtoConverter.toModel(dto.getWorkFlow()));
+            taskType.setProject(checkProjectDto(dto.getProject()));
+            taskType.setWorkFlow(checkWorkFlowDto(dto.getWorkFlow()));
             taskType.setName(dto.getName().trim());
             return taskType;
         }
+    }
+
+    /**
+     * Метод проверки параметра WorkFlowDtoPreview на null
+     *
+     * @param workFlow WorkFlowDtoPreview
+     * @return WorkFlow или null
+     */
+    private WorkFlow checkWorkFlowDto(WorkFlowDtoPreview workFlow) {
+        return workFlow != null ? workFlowDtoConverter.toModel(workFlow) : null;
+    }
+
+    /**
+     * Метод проверки параметра ProjectDtoPreview на null
+     *
+     * @param project ProjectDtoPreview
+     * @return Project или null
+     */
+    private Project checkProjectDto(ProjectDtoPreview project) {
+        return project != null ? projectDtoConverter.toModel(project) : null;
     }
 
     /**
@@ -63,9 +83,29 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
     public TaskTypeDtoFull toDto(TaskType model) {
         return new TaskTypeDtoFull(
                 model.getId(),
-                projectDtoConverter.toDto(model.getProject()),
-                workFlowDtoConverter.toDto(model.getWorkFlow()),
+                checkProjectModel(model.getProject()),
+                checkWorkFlowModel(model.getWorkFlow()),
                 model.getName()
         );
+    }
+
+    /**
+     * Метод проверки параметра WorkFlow на null
+     *
+     * @param workFlow WorkFlow
+     * @return WorkFlowDtoPreview или null
+     */
+    private WorkFlowDtoPreview checkWorkFlowModel(WorkFlow workFlow) {
+        return workFlow != null ? workFlowDtoConverter.toDto(workFlow) : null;
+    }
+
+    /**
+     * Метод проверки параметра Project на null
+     *
+     * @param project Project
+     * @return ProjectDtoPreview или null
+     */
+    private ProjectDtoPreview checkProjectModel(Project project) {
+        return project != null ? projectDtoConverter.toDto(project) : null;
     }
 }

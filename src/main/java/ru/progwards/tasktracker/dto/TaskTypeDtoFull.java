@@ -24,7 +24,6 @@ public class TaskTypeDtoFull {
     @Null(groups = Create.class)
     private Long id;
 
-    @NotEmpty(groups = {Create.class, Update.class})
     private ProjectDtoPreview project;
 
     private WorkFlowDtoPreview workFlow;
