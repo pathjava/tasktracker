@@ -15,6 +15,7 @@ import javax.validation.constraints.*;
  */
 @Data
 @AllArgsConstructor
+@RelationTypeNameValid(groups = {Create.class, Update.class})
 public class RelationTypeDtoFull {
 
     @Min(value = 0, groups = Update.class)
@@ -23,7 +24,6 @@ public class RelationTypeDtoFull {
     @Null(groups = Create.class)
     private Long id;
 
-    @RelationTypeNameValid(groups = {Create.class, Update.class})
     @NotEmpty(groups = {Create.class, Update.class})
     @Size(min = 1, max = 15, groups = {Create.class, Update.class})
     private String name;
