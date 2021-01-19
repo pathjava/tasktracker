@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * тестирование методов контроллера задач
+ * Тестирование методов контроллера TaskController
  *
  * @author Oleg Kiselev
  */
@@ -67,19 +67,19 @@ class TaskControllerTest {
 //
 //    @Test
 //    void getListTasks_From_Project() throws Exception {
-////        createDtoForGetListTasks();
-////
-////        Collection<TaskDtoPreview> collection = getListService.getList().stream()
-////                .filter(task -> task.getProject_id().equals(2L))
-////                .map(task -> dtoPreviewConverter.toDto(task))
-////                .collect(Collectors.toList());
-////
-////        String jsonString = new ObjectMapper()
-////                .registerModule(new JavaTimeModule()).writeValueAsString(collection);
-////
-////        mockMvc.perform(get("/rest/project/2/tasks"))
-////                .andExpect(status().isOk())
-////                .andExpect(content().json(jsonString));
+//        createDtoForGetListTasks();
+//
+//        Collection<TaskDtoPreview> collection = getListService.getList().stream()
+//                .filter(task -> task.getProject_id().equals(2L))
+//                .map(task -> dtoPreviewConverter.toDto(task))
+//                .collect(Collectors.toList());
+//
+//        String jsonString = new ObjectMapper()
+//                .registerModule(new JavaTimeModule()).writeValueAsString(collection);
+//
+//        mockMvc.perform(get("/rest/project/2/tasks"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().json(jsonString));
 //    }
 //
 //    private void createDtoForGetListTasks() throws Exception {
@@ -224,16 +224,16 @@ class TaskControllerTest {
 //
 //    @Test()
 //    void updateTask_BadRequestException_Wrong() {
-////        TaskDtoFull task = new TaskDtoFull(1L, "TT1", "Test task 1 TEST", "Description task 1",
-////                null, null, 11L, null, null,
-////                ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
-////                null,
-////                Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
-////                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+//        TaskDtoFull task = new TaskDtoFull(1L, "TT1", "Test task 1 TEST", "Description task 1",
+//                null, null, 11L, null, null,
+//                ZonedDateTime.now(), ZonedDateTime.now().plusDays(1),
+//                null,
+//                Duration.ofDays(3), Duration.ofDays(1), Duration.ofDays(2),
+//                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 //
-////        Exception exception = assertThrows(BadRequestException.class,
-////                () -> controller.updateTask(2L, task));
-////        assertTrue(exception.getMessage().contains("Данная операция недопустима!"));
+//        Exception exception = assertThrows(BadRequestException.class,
+//                () -> controller.updateTask(2L, task));
+//        assertTrue(exception.getMessage().contains("Данная операция недопустима!"));
 //    }
 //
 //    @Test

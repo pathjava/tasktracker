@@ -62,23 +62,38 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
     public void logCreateEstimateChange(WorkLog model) {
         Task task = getTask(model.getTask().getId());
 
-        task.setTimeSpent(task.getTimeSpent().plus(model.getSpent()));
+        Duration taskSpent = getTimeDuration(task.getTimeSpent());
+        Duration taskLeft = getTimeDuration(task.getTimeLeft());
+        Duration workLogSpent = getTimeDuration(model.getSpent());
+        Duration estimateValue = getTimeDuration(model.getEstimateValue());
+
+        task.setTimeSpent(taskSpent.plus(workLogSpent));
 
         switch (model.getEstimateChange()) {
             case AUTO_REDUCE:
-                task.setTimeLeft(task.getTimeLeft().minus(model.getSpent()));
+                task.setTimeLeft(taskLeft.minus(workLogSpent));
                 break;
             case SET_TO_VALUE:
-                task.setTimeLeft(model.getEstimateValue());
+                task.setTimeLeft(estimateValue);
                 break;
             case REDUCE_BY_VALUE:
-                task.setTimeLeft(task.getTimeLeft().minus(model.getEstimateValue()));
+                task.setTimeLeft(taskLeft.minus(estimateValue));
                 break;
             case DONT_CHANGE:
             case INCREASE_BY_VALUE:
                 break;
         }
         taskRepository.save(task);
+    }
+
+    /**
+     * Метод проверки Duration на null
+     *
+     * @param duration Duration
+     * @return Duration, если не null в параметре и Duration.ZERO если null
+     */
+    private Duration getTimeDuration(Duration duration) {
+        return duration != null ? duration : Duration.ZERO;
     }
 
     /**
@@ -118,16 +133,21 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
         Task task = getTask(model.getTask().getId());
         WorkLog workLog = get(model.getId());
 
-        task.setTimeSpent(task.getTimeSpent().minus(workLog.getSpent()));
-        task.setTimeSpent(task.getTimeSpent().plus(model.getSpent()));
+        Duration taskSpent = getTimeDuration(task.getTimeSpent());
+        Duration taskLeft = getTimeDuration(task.getTimeLeft());
+        Duration workLogSpent = getTimeDuration(model.getSpent());
+        Duration estimateValue = getTimeDuration(model.getEstimateValue());
+
+        task.setTimeSpent(taskSpent.minus(workLog.getSpent()));
+        task.setTimeSpent(taskSpent.plus(workLogSpent));
 
         switch (model.getEstimateChange()) {
             case AUTO_REDUCE:
-                task.setTimeLeft(task.getTimeLeft().plus(workLog.getSpent()));
-                task.setTimeLeft(task.getTimeLeft().minus(model.getSpent()));
+                task.setTimeLeft(taskLeft.plus(workLog.getSpent()));
+                task.setTimeLeft(taskLeft.minus(workLogSpent));
                 break;
             case SET_TO_VALUE:
-                task.setTimeLeft(model.getEstimateValue());
+                task.setTimeLeft(estimateValue);
                 break;
             case DONT_CHANGE:
             case REDUCE_BY_VALUE:
@@ -174,17 +194,21 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
         Task task = getTask(model.getTask().getId());
         WorkLog workLog = get(model.getId());
 
-        task.setTimeSpent(task.getTimeSpent().minus(workLog.getSpent()));
+        Duration taskSpent = getTimeDuration(task.getTimeSpent());
+        Duration taskLeft = getTimeDuration(task.getTimeLeft());
+        Duration estimateValue = getTimeDuration(model.getEstimateValue());
+
+        task.setTimeSpent(taskSpent.minus(workLog.getSpent()));
 
         switch (model.getEstimateChange()) {
             case AUTO_REDUCE:
-                task.setTimeLeft(task.getTimeLeft().minus(workLog.getSpent()));
+                task.setTimeLeft(taskLeft.minus(workLog.getSpent()));
                 break;
             case SET_TO_VALUE:
-                task.setTimeLeft(model.getEstimateValue());
+                task.setTimeLeft(estimateValue);
                 break;
             case INCREASE_BY_VALUE:
-                task.setTimeLeft(task.getTimeLeft().plus(model.getEstimateValue()));
+                task.setTimeLeft(taskLeft.plus(estimateValue));
                 break;
             case DONT_CHANGE:
             case REDUCE_BY_VALUE:

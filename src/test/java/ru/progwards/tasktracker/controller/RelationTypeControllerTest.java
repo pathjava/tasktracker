@@ -35,6 +35,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.progwards.tasktracker.controller.objects.GetDto.getRelationTypeDto;
+import static ru.progwards.tasktracker.controller.objects.GetModel.getRelationType;
 
 /**
  * Тестирование методов контроллера RelationTypeController
@@ -58,23 +60,6 @@ class RelationTypeControllerTest {
     private static final String CREATE_PATH = "/rest/relationtype/create";
     private static final String DELETE_PATH = "/rest/relationtype/{id}/delete";
     private static final String UPDATE_PATH = "/rest/relationtype/{id}/update";
-
-    public RelationTypeDtoFull getRelationTypeDto() {
-        return new RelationTypeDtoFull(
-                null,
-                "relation name",
-                null
-        );
-    }
-
-    public RelationType getRelationType() {
-        return new RelationType(
-                null,
-                "relation name",
-                null,
-                null
-        );
-    }
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {
@@ -228,7 +213,7 @@ class RelationTypeControllerTest {
     @Order(7)
     void get_RelationType_when_NotFound() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH,1L))
+                getUriAndMediaType(GET_PATH, 1L))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));

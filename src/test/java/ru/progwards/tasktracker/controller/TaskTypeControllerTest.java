@@ -26,7 +26,6 @@ import ru.progwards.tasktracker.repository.TaskTypeRepository;
 
 import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -38,6 +37,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.progwards.tasktracker.controller.objects.GetDto.getTaskTypeDto;
+import static ru.progwards.tasktracker.controller.objects.GetModel.getProject;
+import static ru.progwards.tasktracker.controller.objects.GetModel.getTaskType;
 
 /**
  * Тестирование методов контроллера TaskTypeController
@@ -64,40 +66,6 @@ class TaskTypeControllerTest {
     private static final String CREATE_PATH = "/rest/tasktype/create";
     private static final String DELETE_PATH = "/rest/tasktype/{id}/delete";
     private static final String UPDATE_PATH = "/rest/tasktype/{id}/update";
-
-    public TaskTypeDtoFull getTaskTypeDto() {
-        return new TaskTypeDtoFull(
-                null,
-                null,
-                null,
-                "type name"
-        );
-    }
-
-    public TaskType getTaskType() {
-        return new TaskType(
-                null,
-                null,
-                null,
-                "type name",
-                null
-        );
-    }
-
-    public Project getProject() {
-        return new Project(
-                null,
-                "Test project",
-                "Description Test project",
-                "TP",
-                null,
-                ZonedDateTime.now(),
-                null,
-                null,
-                0L,
-                false
-        );
-    }
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {

@@ -47,13 +47,13 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     dto.getName().trim(),
                     dto.getDescription(),
                     taskTypeDtoConverter.toModel(dto.getType()),
-                    taskPriorityDtoConverter.toModel(dto.getPriority()),
+                    checkTaskPriorityDto(dto.getPriority()),
                     projectDtoConverter.toModel(dto.getProject()),
                     userDtoConverter.toModel(dto.getAuthor()),
-                    userDtoConverter.toModel(dto.getExecutor()),
+                    checkUserDto(dto.getExecutor()),
                     null,
                     null,
-                    workFlowStatusDtoConverter.toModel(dto.getStatus()),
+                    checkWorkFlowStatusDto(dto.getStatus()),
                     dto.getEstimation(),
                     dto.getTimeSpent(),
                     dto.getTimeLeft(),
@@ -70,11 +70,11 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             task.setName(dto.getName().trim());
             task.setDescription(dto.getDescription());
             task.setType(taskTypeDtoConverter.toModel(dto.getType()));
-            task.setPriority(taskPriorityDtoConverter.toModel(dto.getPriority()));
+            task.setPriority(checkTaskPriorityDto(dto.getPriority()));
             task.setProject(projectDtoConverter.toModel(dto.getProject()));
             task.setAuthor(userDtoConverter.toModel(dto.getAuthor()));
-            task.setExecutor(userDtoConverter.toModel(dto.getExecutor()));
-            task.setStatus(workFlowStatusDtoConverter.toModel(dto.getStatus()));
+            task.setExecutor(checkUserDto(dto.getExecutor()));
+            task.setStatus(checkWorkFlowStatusDto(dto.getStatus()));
             task.setEstimation(dto.getEstimation());
             task.setTimeSpent(dto.getTimeSpent());
             task.setTimeLeft(dto.getTimeLeft());
@@ -82,6 +82,36 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             task.setAttachments(listDtoToVoTaskAttachment(dto.getAttachments()));
             return task;
         }
+    }
+
+    /**
+     * Метод проверки параметра WorkFlowStatusDtoPreview на null
+     *
+     * @param status WorkFlowStatusDtoPreview
+     * @return WorkFlowStatus или null
+     */
+    private WorkFlowStatus checkWorkFlowStatusDto(WorkFlowStatusDtoPreview status) {
+        return status != null ? workFlowStatusDtoConverter.toModel(status) : null;
+    }
+
+    /**
+     * Метод проверки параметра UserDtoPreview на null
+     *
+     * @param executor UserDtoPreview
+     * @return User или null
+     */
+    private User checkUserDto(UserDtoPreview executor) {
+        return executor != null ? userDtoConverter.toModel(executor) : null;
+    }
+
+    /**
+     * Метод проверки параметра TaskPriorityDtoPreview на null
+     *
+     * @param priority TaskPriorityDtoPreview
+     * @return TaskPriority или null
+     */
+    private TaskPriority checkTaskPriorityDto(TaskPriorityDtoPreview priority) {
+        return priority != null ? taskPriorityDtoConverter.toModel(priority) : null;
     }
 
     /**
@@ -128,14 +158,14 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                 model.getName(),
                 model.getDescription(),
                 taskTypeDtoConverter.toDto(model.getType()),
-                taskPriorityDtoConverter.toDto(model.getPriority()),
+                checkTaskPriorityModel(model.getPriority()),
                 projectDtoConverter.toDto(model.getProject()),
                 userDtoConverter.toDto(model.getAuthor()),
-                userDtoConverter.toDto(model.getExecutor()),
+                checkUserModel(model.getExecutor()),
                 model.getCreated(),
                 model.getUpdated(),
-                workFlowStatusDtoConverter.toDto(model.getStatus()),
-                listVoToDtoWorkFlowAction(model.getStatus().getActions()),
+                checkWorkFlowStatusModel(model.getStatus()),
+                listVoToDtoWorkFlowAction(model.getStatus()),
                 model.getEstimation(),
                 model.getTimeSpent(),
                 model.getTimeLeft(),
@@ -145,16 +175,46 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
     }
 
     /**
+     * Метод проверки параметра WorkFlowStatus на null
+     *
+     * @param status WorkFlowStatus
+     * @return WorkFlowStatusDtoPreview или null
+     */
+    private WorkFlowStatusDtoPreview checkWorkFlowStatusModel(WorkFlowStatus status) {
+        return status != null ? workFlowStatusDtoConverter.toDto(status) : null;
+    }
+
+    /**
+     * Метод проверки параметра User на null
+     *
+     * @param executor User
+     * @return UserDtoPreview или null
+     */
+    private UserDtoPreview checkUserModel(User executor) {
+        return executor != null ? userDtoConverter.toDto(executor) : null;
+    }
+
+    /**
+     * Метод проверки параметра TaskPriority на null
+     *
+     * @param priority TaskPriority
+     * @return TaskPriorityDtoPreview или null
+     */
+    private TaskPriorityDtoPreview checkTaskPriorityModel(TaskPriority priority) {
+        return priority != null ? taskPriorityDtoConverter.toDto(priority) : null;
+    }
+
+    /**
      * Метод конвертирует лист из VO в Dto
      *
-     * @param actions лист VO WorkFlowAction задачи
+     * @param status WorkFlowStatus
      * @return лист Dto WorkFlowAction задачи
      */
-    private List<WorkFlowActionDtoPreview> listVoToDtoWorkFlowAction(List<WorkFlowAction> actions) {
-        if (actions == null || actions.isEmpty())
+    private List<WorkFlowActionDtoPreview> listVoToDtoWorkFlowAction(WorkFlowStatus status) {
+        if (status == null || status.getActions().isEmpty())
             return Collections.emptyList();
         else
-            return actions.stream()
+            return status.getActions().stream()
                     .map(workFlowActionDtoConverter::toDto)
                     .collect(Collectors.toList());
     }

@@ -1,202 +1,197 @@
 package ru.progwards.tasktracker.controller;
 
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.dto.WorkLogDtoFull;
-import ru.progwards.tasktracker.exception.BadRequestException;
-import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.service.GetListByTaskService;
-import ru.progwards.tasktracker.model.WorkLog;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import ru.progwards.tasktracker.dto.*;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.model.*;
+import ru.progwards.tasktracker.repository.*;
 
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.Collection;
+import javax.validation.ConstraintViolationException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.progwards.tasktracker.controller.objects.GetDto.getWorkLogDto;
+import static ru.progwards.tasktracker.controller.objects.GetModel.*;
 
 
 /**
- * тестирование контроллера логов
+ * Тестирование методов контроллера WorkLogController
  *
  * @author Oleg Kiselev
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@TestPropertySource(locations = "classpath:application-dev.properties")
+@ActiveProfiles("dev")
 class WorkLogControllerTest {
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Autowired
-//    private WorkLogController controller;
-//
-//    @Autowired
-//    private GetListByTaskService<Long, WorkLog> listByTaskService;
-//
-//    @Test
-//    void getListWorkLogs() throws Exception {
-//        mockMvc.perform(get("/rest/task/{task_id}/worklogs", 2)
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful()
-//                );
-//
-//        Collection<WorkLog> collection = listByTaskService.getListByTaskId(2L);
-//
-//        assertNotNull(collection);
-//    }
-//
-//    @Test
-//    void getListWorkLogs_BadRequestException() {
-//        Exception exception = assertThrows(BadRequestException.class,
-//                () -> controller.getListWorkLogs(null));
-//        assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
-//    }
-//
-//    @Test
-//    void getListWorkLogs_NotFoundException() {
-//        Exception exception = assertThrows(NotFoundException.class,
-//                () -> controller.getListWorkLogs(120L));
-//        assertTrue(exception.getMessage().contains("Список логов пустой!"));
-//    }
-//
-//    @Test
-//    void createWorkLog() throws Exception {
-//        mockMvc.perform(post("/rest/worklog/create")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(
-//                        "{\n" +
-//                                "    \"taskId\": 2,\n" +
-//                                "    \"spent\": null,\n" +
-//                                "    \"worker\": {},\n" +
-//                                "    \"when\": null,\n" +
-//                                "    \"description\": \"Description Log 5\",\n" +
-//                                "    \"estimateChange\": null,\n" +
-//                                "    \"estimateValue\": null\n" +
-//                                "}"
-//                ))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful()
-//                );
-//    }
-//
-//    @Test
-//    void createWorkLog_BadRequestException() {
-//        Exception exception = assertThrows(BadRequestException.class,
-//                () -> controller.createWorkLog(null));
-//        assertTrue(exception.getMessage().contains("Пустой объект!"));
-//    }
-//
-//    @Test
-//    void deleteWorkLog() throws Exception {
-//        mockMvc.perform(post("/rest/worklog/create")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(
-//                        "{\n" +
-//                                "    \"id\": 222,\n" +
-//                                "    \"taskId\": 2,\n" +
-//                                "    \"spent\": null,\n" +
-//                                "    \"worker\": {},\n" +
-//                                "    \"when\": null,\n" +
-//                                "    \"description\": \"Description Log 20\",\n" +
-//                                "    \"estimateChange\": null,\n" +
-//                                "    \"estimateValue\": null\n" +
-//                                "}"
-//                ))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful()
-//                );
-//
-//        mockMvc.perform(delete("/rest/worklog/{log_id}/delete", 222)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().is2xxSuccessful());
-//    }
-//
-//    @Test
-//    void deleteWorkLog_BadRequestException() {
-//        Exception exception = assertThrows(BadRequestException.class,
-//                () -> controller.deleteWorkLog(null));
-//        assertTrue(exception.getMessage().contains(" не задан или задан неверно!"));
-//    }
-//
-//    @Test
-//    void deleteWorkLog_NotFoundException() {
-//        Exception exception = assertThrows(NotFoundException.class,
-//                () -> controller.deleteWorkLog(120L));
-//        assertTrue(exception.getMessage().contains(" не найден!"));
-//    }
-//
-//    @Test
-//    void updateWorkLog() throws Exception {
-//        mockMvc.perform(post("/rest/worklog/create")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(
-//                        "{\n" +
-//                                "    \"taskId\": 2,\n" +
-//                                "    \"spent\": null,\n" +
-//                                "    \"worker\": {},\n" +
-//                                "    \"when\": null,\n" +
-//                                "    \"description\": \"Description Log 20\",\n" +
-//                                "    \"estimateChange\": null,\n" +
-//                                "    \"estimateValue\": null\n" +
-//                                "}"
-//                ))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful()
-//                );
-//
-//        Collection<WorkLog> collection = listByTaskService.getListByTaskId(2L);
-//        Long id = collection.stream()
-//                .filter(workLog -> workLog.getDescription().equals("Description Log 20")).findFirst()
-//                .map(WorkLog::getId)
-//                .orElse(null);
-//
-//        if (id != null) {
-//            String path = "/rest/worklog/" + id + "/update";
-//            mockMvc.perform(put(path)
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .content(
-//                            "{\n" +
-//                                    "    \"id\": " + id + ",\n" +
-//                                    "    \"taskId\": 2,\n" +
-//                                    "    \"spent\": null,\n" +
-//                                    "    \"worker\": {},\n" +
-//                                    "    \"when\": null,\n" +
-//                                    "    \"description\": \"Description Log 20 Updated\",\n" +
-//                                    "    \"estimateChange\": null,\n" +
-//                                    "    \"estimateValue\": null\n" +
-//                                    "}"
-//                    ))
-//                    .andDo(print())
-//                    .andExpect(status().is2xxSuccessful()
-//                    );
-//        }
-//    }
-//
-//    @Test
-//    void updateWorkLog_Wrong() {
-//        WorkLogDtoFull workLog = new WorkLogDtoFull(
-//                1L, 2L, null, null, ZonedDateTime.now(),
-//                "Description", null, null
-//        );
-//
-//        Exception exception = assertThrows(BadRequestException.class,
-//                () -> controller.updateWorkLog(2L, workLog));
-//        assertTrue(exception.getMessage().contains("Данная операция недопустима!"));
-//    }
-//
-//    @Test
-//    void updateWorkLog_BadRequestException_Null_Object() {
-//        Exception exception = assertThrows(BadRequestException.class,
-//                () -> controller.updateWorkLog(anyLong(), null));
-//        assertTrue(exception.getMessage().contains("Пустой объект!"));
-//    }
+
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private WorkLogRepository workLogRepository;
+    @Autowired
+    private TaskRepository taskRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private TaskTypeRepository taskTypeRepository;
+    @Autowired
+    private Converter<Task, TaskDtoPreview> taskDtoPreviewConverter;
+    @Autowired
+    private Converter<User, UserDtoPreview> userDtoPreviewConverter;
+
+    private static final String GET_PATH = "/rest/worklog/{id}";
+    private static final String GET_LIST_PATH = "/rest/worklog/list";
+    private static final String GET_LIST_BY_TASK_PATH = "/rest/worklog/{id}/worklogs";
+    private static final String CREATE_PATH = "/rest/worklog/create";
+    private static final String DELETE_PATH = "/rest/worklog/{id}/delete";
+    private static final String UPDATE_PATH = "/rest/worklog/{id}/update";
+    private Task task;
+    private User user;
+    private Project project;
+    private TaskType taskType;
+
+    public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+//            mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+            String json = mapper.writeValueAsString(body);
+            return post(uri)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri) {
+        return get(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    public static MockHttpServletRequestBuilder getUriAndMediaType(String uri, Long id) {
+        return get(uri.replace("{id}", String.valueOf(id)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    public static MockHttpServletRequestBuilder deleteUriAndMediaType(String uri, Long id) {
+        return delete(uri.replace("{id}", String.valueOf(id)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    public static MockHttpServletRequestBuilder putJson(String uri, Long id, Object body) {
+        try {
+            String json = new ObjectMapper().writeValueAsString(body);
+            return put(uri.replace("{id}", String.valueOf(id)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @BeforeEach
+    public void creator() {
+        user = getUser();
+        userRepository.save(user);
+
+        project = getProject();
+        project.setOwner(user);
+        projectRepository.save(project);
+
+        taskType = getTaskType();
+        taskTypeRepository.save(taskType);
+
+        task = getTask();
+        task.setAuthor(user);
+        task.setProject(project);
+        task.setType(taskType);
+        taskRepository.save(task);
+    }
+
+    @Test
+    @Order(1)
+    void create_WorkLog() throws Exception {
+        WorkLogDtoFull dto = getWorkLogDto();
+        dto.setTask(taskDtoPreviewConverter.toDto(task));
+        dto.setWorker(userDtoPreviewConverter.toDto(user));
+
+        MvcResult result = mockMvc.perform(
+                postJson(CREATE_PATH, dto))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Long id = getResultId(result);
+
+        try {
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id", is(id), Long.class))
+                    .andExpect(jsonPath("$.description", equalTo("Description workLog")));
+        } finally {
+            workLogRepository.deleteById(id);
+        }
+    }
+
+    private Long getResultId(MvcResult result) throws UnsupportedEncodingException {
+        String resultJson = result.getResponse().getContentAsString();
+        return JsonPath.parse(resultJson).read("$.id", Long.class);
+    }
+
+    @Test
+    void get_WorkLog() {
+    }
+
+    @Test
+    void getListByTask_WorkLog() {
+    }
+
+    @Test
+    void getList_WorkLog() {
+    }
+
+    @Test
+    void update_WorkLog() {
+    }
+
+    @Test
+    void delete_WorkLog() {
+    }
+
 }

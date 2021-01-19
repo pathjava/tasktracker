@@ -50,7 +50,17 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
                 model.getCode(),
                 model.getName(),
                 taskTypeDtoConverter.toDto(model.getType()),
-                taskPriorityDtoConverter.toDto(model.getPriority())
+                checkTaskPriorityDto(model.getPriority())
         );
+    }
+
+    /**
+     * Метод проверки параметра TaskPriority на null
+     *
+     * @param priority TaskPriority
+     * @return TaskPriorityDtoPreview
+     */
+    private TaskPriorityDtoPreview checkTaskPriorityDto(TaskPriority priority) {
+        return priority != null ? taskPriorityDtoConverter.toDto(priority) : null;
     }
 }
