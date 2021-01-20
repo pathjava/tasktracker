@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getRelatedTaskDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.getRelatedTask;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -24,13 +26,9 @@ class RelatedTaskDtoFullConverterTest {
     @Mock
     private Converter<RelatedTask, RelatedTaskDtoFull> converter;
 
-    private final RelatedTask model = new RelatedTask(
-            null, null, null, null, false
-    );
+    private final RelatedTask model = getRelatedTask();
 
-    private final RelatedTaskDtoFull dtoPreview = new RelatedTaskDtoFull(
-            null, null, null, null
-    );
+    private final RelatedTaskDtoFull dtoPreview = getRelatedTaskDtoFull();
 
     @Test
     void toModel() {

@@ -19,12 +19,7 @@ import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.*;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -35,8 +30,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.progwards.tasktracker.controller.objects.GetDto.getWorkLogDto;
-import static ru.progwards.tasktracker.controller.objects.GetModel.*;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getWorkLogDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.*;
 
 
 /**
@@ -147,7 +142,7 @@ class WorkLogControllerTest {
     @Test
     @Order(1)
     void create_WorkLog() throws Exception {
-        WorkLogDtoFull dto = getWorkLogDto();
+        WorkLogDtoFull dto = getWorkLogDtoFull();
         dto.setTask(taskDtoPreviewConverter.toDto(task));
         dto.setWorker(userDtoPreviewConverter.toDto(user));
 

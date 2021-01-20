@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.controller.objects;
+package ru.progwards.tasktracker.objects;
 
 import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.model.types.EstimateChange;
@@ -41,6 +41,16 @@ public class GetModel {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 0L,
+                false
+        );
+    }
+
+    public static RelatedTask getRelatedTask() {
+        return new RelatedTask(
+                null,
+                null,
+                null,
+                null,
                 false
         );
     }

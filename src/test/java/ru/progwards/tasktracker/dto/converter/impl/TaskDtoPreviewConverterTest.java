@@ -3,8 +3,8 @@ package ru.progwards.tasktracker.dto.converter.impl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.Task;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetDtoPreview.getTaskDtoPreview;
+import static ru.progwards.tasktracker.objects.GetModel.getTask;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -24,16 +26,9 @@ class TaskDtoPreviewConverterTest {
     @Mock
     private Converter<Task, TaskDtoPreview> converter;
 
-    private final Task model = new Task(
-            null, null, null, null, null, null,
-            null, null, null, null,
-            null, null, null, null, null,
-            null, null, null, null, null, false
-    );
+    private final Task model = getTask();
 
-    private final TaskDtoPreview dtoPreview = new TaskDtoPreview(
-            null, null, null, null, null
-    );
+    private final TaskDtoPreview dtoPreview = getTaskDtoPreview();
 
     @Test
     void toModel() {

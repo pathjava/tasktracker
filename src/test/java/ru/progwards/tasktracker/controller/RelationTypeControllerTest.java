@@ -35,8 +35,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.progwards.tasktracker.controller.objects.GetDto.getRelationTypeDto;
-import static ru.progwards.tasktracker.controller.objects.GetModel.getRelationType;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getRelationTypeDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.getRelationType;
 
 /**
  * Тестирование методов контроллера RelationTypeController
@@ -107,7 +107,7 @@ class RelationTypeControllerTest {
     @Order(1)
     void create_RelationType_without_counter_RelationType() throws Exception {
         MvcResult result = mockMvc.perform(
-                postJson(CREATE_PATH, getRelationTypeDto()))
+                postJson(CREATE_PATH, getRelationTypeDtoFull()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -136,7 +136,7 @@ class RelationTypeControllerTest {
         RelationType counterType = getRelationType();
         counterType.setName("counter name");
         Long counterId = relationTypeRepository.save(counterType).getId();
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setCounterRelationId(counterId);
 
         MvcResult result = mockMvc.perform(
@@ -161,7 +161,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(3)
     void create_RelationType_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setId(1L);
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -173,7 +173,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(4)
     void create_RelationType_BadRequest_Validation_If_Name_is_Empty() throws Exception {
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName("");
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -185,7 +185,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(5)
     void create_RelationType_BadRequest_Validation_If_Name_is_Null() throws Exception {
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName(null);
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -307,7 +307,7 @@ class RelationTypeControllerTest {
     @Order(15)
     void update_RelationType() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationType());
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName("updated name");
         dto.setId(rt.getId());
 
@@ -334,7 +334,7 @@ class RelationTypeControllerTest {
     @Order(16)
     void update_RelationType_when_Request_Id_is_different_Dto_Id() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationType());
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName("another name");
         dto.setId(rt.getId() + 1);
 
@@ -353,7 +353,7 @@ class RelationTypeControllerTest {
     @Order(17)
     void update_RelationType_when_Name_is_already_used_another_RelationType() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationType());
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setId(rt.getId() + 1);
 
         try {
@@ -369,7 +369,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(18)
     void update_RelationType_when_NotFound() throws Exception {
-        RelationTypeDtoFull dto = getRelationTypeDto();
+        RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setId(1L);
 
         mockMvc.perform(

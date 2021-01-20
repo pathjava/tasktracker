@@ -3,8 +3,8 @@ package ru.progwards.tasktracker.dto.converter.impl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.RelationTypeDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.RelationType;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getRelationTypeDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.getRelationType;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -24,13 +26,9 @@ class RelationTypeDtoFullConverterTest {
     @Mock
     private Converter<RelationType, RelationTypeDtoFull> converter;
 
-    private final RelationType model = new RelationType(
-            null, null, null, null
-    );
+    private final RelationType model = getRelationType();
 
-    private final RelationTypeDtoFull dtoPreview = new RelationTypeDtoFull(
-            null, null, null
-    );
+    private final RelationTypeDtoFull dtoPreview = getRelationTypeDtoFull();
 
     @Test
     void toModel() {

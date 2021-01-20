@@ -37,9 +37,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.progwards.tasktracker.controller.objects.GetDto.getTaskTypeDto;
-import static ru.progwards.tasktracker.controller.objects.GetModel.getProject;
-import static ru.progwards.tasktracker.controller.objects.GetModel.getTaskType;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getTaskTypeDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.getProject;
+import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
 
 /**
  * Тестирование методов контроллера TaskTypeController
@@ -113,7 +113,7 @@ class TaskTypeControllerTest {
     @Order(1)
     void create_TaskType() throws Exception {
         MvcResult result = mockMvc.perform(
-                postJson(CREATE_PATH, getTaskTypeDto()))
+                postJson(CREATE_PATH, getTaskTypeDtoFull()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -138,7 +138,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(2)
     void create_TaskType_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(1L);
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -150,7 +150,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(3)
     void create_TaskType_BadRequest_Validation_If_Name_is_Empty() throws Exception {
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("");
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -162,7 +162,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(4)
     void create_TaskType_BadRequest_Validation_If_Name_is_Null() throws Exception {
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName(null);
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -349,7 +349,7 @@ class TaskTypeControllerTest {
     @Order(18)
     void update_TaskType() throws Exception {
         TaskType tt = taskTypeRepository.save(getTaskType());
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("updated name");
         dto.setId(tt.getId());
 
@@ -375,7 +375,7 @@ class TaskTypeControllerTest {
     @Order(19)
     void update_TaskType_when_Request_Id_is_different_Dto_Id() throws Exception {
         TaskType tt = taskTypeRepository.save(getTaskType());
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("another name");
         dto.setId(tt.getId() + 1);
 
@@ -394,7 +394,7 @@ class TaskTypeControllerTest {
     @Order(20)
     void update_TaskType_when_Name_is_already_used_another_TaskType() throws Exception {
         TaskType tt = taskTypeRepository.save(getTaskType());
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(tt.getId() + 1);
 
         try {
@@ -410,7 +410,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(21)
     void update_TaskType_when_NotFound() throws Exception {
-        TaskTypeDtoFull dto = getTaskTypeDto();
+        TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(1L);
 
         mockMvc.perform(

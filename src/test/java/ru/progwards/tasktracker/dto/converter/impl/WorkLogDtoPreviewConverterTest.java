@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetDtoPreview.getWorkLogDtoPreview;
+import static ru.progwards.tasktracker.objects.GetModel.getWorkLog;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -24,14 +26,9 @@ class WorkLogDtoPreviewConverterTest {
     @Mock
     private Converter<WorkLog, WorkLogDtoPreview> converter;
 
-    private final WorkLog model = new WorkLog(
-            null, null, null, null, null,
-            null, null, null
-    );
+    private final WorkLog model = getWorkLog();
 
-    private final WorkLogDtoPreview dtoPreview = new WorkLogDtoPreview(
-            null, null, null, null
-    );
+    private final WorkLogDtoPreview dtoPreview = getWorkLogDtoPreview();
 
     @Test
     void toModel() {
