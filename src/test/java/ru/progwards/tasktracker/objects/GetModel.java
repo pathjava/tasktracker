@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.objects;
 import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.model.types.EstimateChange;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Random;
@@ -131,7 +132,7 @@ public class GetModel {
         return new WorkLog(
                 null,
                 null,
-                null,
+                Duration.ofHours(5),
                 null,
                 ZonedDateTime.now(),
                 "Description workLog",

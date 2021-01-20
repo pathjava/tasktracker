@@ -213,7 +213,7 @@ class RelationTypeControllerTest {
     @Order(7)
     void get_RelationType_when_NotFound() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH, 1L))
+                getUriAndMediaType(GET_PATH, Long.MAX_VALUE))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
@@ -370,10 +370,10 @@ class RelationTypeControllerTest {
     @Order(18)
     void update_RelationType_when_NotFound() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
-        dto.setId(1L);
+        dto.setId(Long.MAX_VALUE);
 
         mockMvc.perform(
-                putJson(UPDATE_PATH, 1L, dto))
+                putJson(UPDATE_PATH, Long.MAX_VALUE, dto))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));

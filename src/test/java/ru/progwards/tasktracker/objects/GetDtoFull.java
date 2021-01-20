@@ -5,6 +5,7 @@ import ru.progwards.tasktracker.dto.*;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * Объекты DtoFull для использования в методах тестирования
@@ -12,6 +13,22 @@ import java.util.Collections;
  * @author Oleg Kiselev
  */
 public class GetDtoFull {
+
+    /**
+     * Метод генерации строки из случайных символов для использования в объектах,
+     * где валидация не допускает использование не уникальных данных
+     *
+     * @return строка из случайных символов
+     */
+    public static String randomChar() {
+        Random random = new Random();
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            result.append(alphabet.charAt(random.nextInt(alphabet.length())));
+        }
+        return result.toString();
+    }
 
     public static RelatedTaskDtoFull getRelatedTaskDtoFull() {
         return new RelatedTaskDtoFull(
@@ -58,7 +75,7 @@ public class GetDtoFull {
                 null,
                 null,
                 null,
-                "type name"
+                "name " + randomChar()
         );
     }
 
