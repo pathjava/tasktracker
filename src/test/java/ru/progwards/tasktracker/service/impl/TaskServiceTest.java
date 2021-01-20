@@ -18,6 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetModel.getTask;
 
 /**
  * Тестирование сервиса создания задачи
@@ -45,23 +46,17 @@ public class TaskServiceTest {
     private UpdateOneFieldService<Task> updateOneFieldService;
 
     {
-        task = new Task(
-                1L, "TT-1", null, null, null, null, null, null,
-                null, null, null, null, null, null,
-                null, null, null, null, null, null, false
-        );
+        task = getTask();
+        task.setId(1L);
+        task.setCode("TT-1");
     }
 
     {
         for (int i = 0; i < 3; i++) {
-            tasks.add(
-                    new Task(
-                            1L + i, null, "testTask " + (1 + i), null,
-                            null, null, null, null, null,
-                            null, null, null, null, null,
-                            null, null, null, null, null, null, false
-                    )
-            );
+            Task t = getTask();
+            t.setId(1L + i);
+            t.setName("testTask " + (1 + i));
+            tasks.add(t);
         }
     }
 
@@ -123,7 +118,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void getList_Return_Empty_Collection() {
+    public void getList_Return_Empty_List() {
         when(getListService.getList()).thenReturn(Collections.emptyList());
 
         List<Task> list = getListService.getList();

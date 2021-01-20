@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetModel.getRelatedTask;
 
 /**
  * Тестирование сервиса связанной задачи
@@ -41,9 +42,9 @@ class RelatedTaskServiceTest {
 
     {
         for (int i = 0; i < 3; i++) {
-            relatedTasks.add(new RelatedTask(
-                    1L + i, null, null, null, false
-            ));
+            RelatedTask relatedTask = getRelatedTask();
+            relatedTask.setId(1L + i);
+            relatedTasks.add(relatedTask);
         }
     }
 

@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
+import static ru.progwards.tasktracker.objects.GetModel.getRelationType;
 
 /**
  * Тестирование сервиса типа отношения связи между задачами
@@ -39,9 +40,10 @@ class RelationTypeServiceTest {
 
     {
         for (int i = 0; i < 3; i++) {
-            relationTypes.add(new RelationType(
-                    1L + i, "type " + (1 + i), null, null
-            ));
+            RelationType relationType = getRelationType();
+            relationType.setId(1L + i);
+            relationType.setName("type " + (1 + i));
+            relationTypes.add(relationType);
         }
     }
 

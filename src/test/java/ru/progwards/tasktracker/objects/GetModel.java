@@ -116,6 +116,17 @@ public class GetModel {
         );
     }
 
+    public static WorkFlow getWorkFlow(){
+        return new WorkFlow(
+                null,
+                null,
+                false,
+                null,
+                Collections.emptyList(),
+                Collections.emptyList()
+        );
+    }
+
     public static WorkLog getWorkLog() {
         return new WorkLog(
                 null,
