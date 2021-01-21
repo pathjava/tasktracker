@@ -163,11 +163,7 @@ class RelationTypeControllerTest {
     void create_RelationType_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setId(1L);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -175,6 +171,10 @@ class RelationTypeControllerTest {
     void create_RelationType_BadRequest_Validation_If_Name_is_Empty() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName("");
+        mockMvcPerformPost(dto);
+    }
+
+    private void mockMvcPerformPost(RelationTypeDtoFull dto) throws Exception {
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andExpect(status().isBadRequest())
@@ -222,8 +222,12 @@ class RelationTypeControllerTest {
     @Test
     @Order(8)
     void get_one_RelationType_when_Id_is_negative() throws Exception {
+        mockMvcPerformGet(-1L);
+    }
+
+    private void mockMvcPerformGet(long l) throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH, -1L))
+                getUriAndMediaType(GET_PATH, l))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -232,11 +236,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(9)
     void get_one_RelationType_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(Long.MAX_VALUE + 1);
     }
 
     @Test
@@ -286,8 +286,12 @@ class RelationTypeControllerTest {
     @Test
     @Order(13)
     void delete_RelationType_when_Id_is_negative() throws Exception {
+        mockMvcPerformDelete(-1L);
+    }
+
+    private void mockMvcPerformDelete(long l) throws Exception {
         mockMvc.perform(
-                deleteUriAndMediaType(DELETE_PATH, -1L))
+                deleteUriAndMediaType(DELETE_PATH, l))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -296,11 +300,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(14)
     void delete_RelationType_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                deleteUriAndMediaType(DELETE_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformDelete(Long.MAX_VALUE + 1);
     }
 
     @Test

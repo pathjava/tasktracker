@@ -139,6 +139,10 @@ class TaskTypeControllerTest {
     void create_TaskType_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(1L);
+        mockMvcPerformPost(dto);
+    }
+
+    private void mockMvcPerformPost(TaskTypeDtoFull dto) throws Exception {
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andExpect(status().isBadRequest())
@@ -151,11 +155,7 @@ class TaskTypeControllerTest {
     void create_TaskType_BadRequest_Validation_If_Name_is_Empty() throws Exception {
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("");
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -197,8 +197,12 @@ class TaskTypeControllerTest {
     @Test
     @Order(7)
     void get_TaskType_Validation_when_Id_is_negative() throws Exception {
+        mockMvcPerformGet(GET_PATH, -1L);
+    }
+
+    private void mockMvcPerformGet(String getPath, long l) throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH, -1L))
+                getUriAndMediaType(getPath, l))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -207,11 +211,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(8)
     void get_TaskType_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(GET_PATH, Long.MAX_VALUE + 1);
     }
 
     @Test
@@ -274,21 +274,13 @@ class TaskTypeControllerTest {
     @Test
     @Order(12)
     void getListByProject_TaskType_Validation_when_Id_is_negative() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_LIST_BY_PROJECT_PATH, -1L))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(GET_LIST_BY_PROJECT_PATH, -1L);
     }
 
     @Test
     @Order(13)
     void getListByProject_TaskType_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_LIST_BY_PROJECT_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(GET_LIST_BY_PROJECT_PATH, Long.MAX_VALUE + 1);
     }
 
     @Test
@@ -325,8 +317,12 @@ class TaskTypeControllerTest {
     @Test
     @Order(16)
     void delete_TaskType_Validation_when_Id_is_negative() throws Exception {
+        mockMvcPerformDelete(-1L);
+    }
+
+    private void mockMvcPerformDelete(long l) throws Exception {
         mockMvc.perform(
-                deleteUriAndMediaType(DELETE_PATH, -1L))
+                deleteUriAndMediaType(DELETE_PATH, l))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -335,11 +331,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(17)
     void delete_TaskType_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                deleteUriAndMediaType(DELETE_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformDelete(Long.MAX_VALUE + 1);
     }
 
     @Test

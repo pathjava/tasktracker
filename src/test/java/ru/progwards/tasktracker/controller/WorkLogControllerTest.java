@@ -185,6 +185,10 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setId(1L);
+        mockMvcPerformPost(dto);
+    }
+
+    private void mockMvcPerformPost(WorkLogDtoFull dto) throws Exception {
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andExpect(status().isBadRequest())
@@ -198,11 +202,7 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setTask(null);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -211,11 +211,7 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setSpent(null);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -224,11 +220,7 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setWorker(null);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -237,11 +229,7 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setStart(null);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -250,11 +238,7 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setDescription(null);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -263,11 +247,7 @@ class WorkLogControllerTest {
         WorkLogDtoFull dto = getDtoFull();
 
         dto.setEstimateChange(null);
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -303,8 +283,12 @@ class WorkLogControllerTest {
 
     @Test
     void get_WorkLog_Validation_when_Id_is_negative() throws Exception {
+        mockMvcPerformGet(GET_PATH, -1L);
+    }
+
+    private void mockMvcPerformGet(String getPath, long l) throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_PATH, -1L))
+                getUriAndMediaType(getPath, l))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -312,11 +296,7 @@ class WorkLogControllerTest {
 
     @Test
     void get_WorkLog_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(GET_PATH, Long.MAX_VALUE + 1);
     }
 
     @Test
@@ -335,20 +315,12 @@ class WorkLogControllerTest {
 
     @Test
     void getListByTask_WorkLog_Validation_when_Id_is_negative() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_LIST_BY_TASK_PATH, -1L))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(GET_LIST_BY_TASK_PATH, -1L);
     }
 
     @Test
     void getListByTask_WorkLog_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                getUriAndMediaType(GET_LIST_BY_TASK_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformGet(GET_LIST_BY_TASK_PATH, Long.MAX_VALUE + 1);
     }
 
     @Test
@@ -452,8 +424,12 @@ class WorkLogControllerTest {
 
     @Test
     void delete_WorkLog_Validation_when_Id_is_negative() throws Exception {
+        mockMvcPerformDelete(-1L);
+    }
+
+    private void mockMvcPerformDelete(long l) throws Exception {
         mockMvc.perform(
-                deleteUriAndMediaType(DELETE_PATH, -1L))
+                deleteUriAndMediaType(DELETE_PATH, l))
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
@@ -461,11 +437,7 @@ class WorkLogControllerTest {
 
     @Test
     void delete_WorkLog_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvc.perform(
-                deleteUriAndMediaType(DELETE_PATH, Long.MAX_VALUE + 1))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
+        mockMvcPerformDelete(Long.MAX_VALUE + 1);
     }
 
 }
