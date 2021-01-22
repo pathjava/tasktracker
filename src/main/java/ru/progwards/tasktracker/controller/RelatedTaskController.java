@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoPreview;
+import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelatedTask;
@@ -81,6 +82,20 @@ public class RelatedTaskController {
             throw new NotFoundException("Список RelatedTaskDtoFull пустой!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения связи задачи (RelatedTask)
+     *
+     * @param id идентификатор связи задачи
+     * @return возвращает RelatedTaskDtoFull
+     */
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RelatedTaskDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+
+        RelatedTaskDtoFull relatedTaskDtoFull = relatedTaskDtoFullConverter.toDto(relatedTaskGetService.get(id));
+
+        return new ResponseEntity<>(relatedTaskDtoFull, HttpStatus.OK);
     }
 
     /**
