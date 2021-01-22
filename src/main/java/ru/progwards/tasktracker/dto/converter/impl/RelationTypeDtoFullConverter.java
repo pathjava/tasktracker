@@ -30,7 +30,9 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
      */
     @Override
     public RelationType toModel(RelationTypeDtoFull dto) {
-        if (dto.getId() == null) {
+        if (dto == null)
+            return null;
+        else if (dto.getId() == null) {
             return new RelationType(
                     null,
                     dto.getName().toLowerCase().trim(),
@@ -63,11 +65,14 @@ public class RelationTypeDtoFullConverter implements Converter<RelationType, Rel
      */
     @Override
     public RelationTypeDtoFull toDto(RelationType model) {
-        return new RelationTypeDtoFull(
-                model.getId(),
-                model.getName(),
-                checkCounterRelationModel(model.getCounterRelation())
-        );
+        if (model == null)
+            return null;
+        else
+            return new RelationTypeDtoFull(
+                    model.getId(),
+                    model.getName(),
+                    checkCounterRelationModel(model.getCounterRelation())
+            );
     }
 
     /**

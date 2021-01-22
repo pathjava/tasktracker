@@ -35,7 +35,9 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
      */
     @Override
     public RelatedTask toModel(RelatedTaskDtoFull dto) {
-        if (dto.getId() == null) {
+        if (dto == null)
+            return null;
+        else if (dto.getId() == null) {
             return new RelatedTask(
                     null,
                     relationTypeDtoConverter.toModel(dto.getRelationType()),
@@ -56,11 +58,14 @@ public class RelatedTaskDtoFullConverter implements Converter<RelatedTask, Relat
      */
     @Override
     public RelatedTaskDtoFull toDto(RelatedTask model) {
-        return new RelatedTaskDtoFull(
-                model.getId(),
-                relationTypeDtoConverter.toDto(model.getRelationType()),
-                model.getCurrentTask().getId(),
-                taskDtoConverter.toDto(model.getAttachedTask())
-        );
+        if (model == null)
+            return null;
+        else
+            return new RelatedTaskDtoFull(
+                    model.getId(),
+                    relationTypeDtoConverter.toDto(model.getRelationType()),
+                    model.getCurrentTask().getId(),
+                    taskDtoConverter.toDto(model.getAttachedTask())
+            );
     }
 }

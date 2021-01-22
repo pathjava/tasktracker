@@ -28,7 +28,10 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
      */
     @Override
     public RelationType toModel(RelationTypeDtoPreview dto) {
-        return relationTypeGetService.get(dto.getId());
+        if (dto == null)
+            return null;
+        else
+            return relationTypeGetService.get(dto.getId());
     }
 
     /**
@@ -39,9 +42,12 @@ public class RelationTypeDtoPreviewConverter implements Converter<RelationType, 
      */
     @Override
     public RelationTypeDtoPreview toDto(RelationType model) {
-        return new RelationTypeDtoPreview(
-                model.getId(),
-                model.getName()
-        );
+        if (model == null)
+            return null;
+        else
+            return new RelationTypeDtoPreview(
+                    model.getId(),
+                    model.getName()
+            );
     }
 }

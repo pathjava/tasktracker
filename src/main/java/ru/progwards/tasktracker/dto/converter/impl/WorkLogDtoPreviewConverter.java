@@ -31,7 +31,10 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
      */
     @Override
     public WorkLog toModel(WorkLogDtoPreview dto) {
-        return workLogGetService.get(dto.getId());
+        if (dto == null)
+            return null;
+        else
+            return workLogGetService.get(dto.getId());
     }
 
     /**
@@ -42,11 +45,14 @@ public class WorkLogDtoPreviewConverter implements Converter<WorkLog, WorkLogDto
      */
     @Override
     public WorkLogDtoPreview toDto(WorkLog model) {
-        return new WorkLogDtoPreview(
-                model.getId(),
-                model.getSpent(),
-                userUserDtoConverter.toDto(model.getWorker()),
-                model.getStart()
-        );
+        if (model == null)
+            return null;
+        else
+            return new WorkLogDtoPreview(
+                    model.getId(),
+                    model.getSpent(),
+                    userUserDtoConverter.toDto(model.getWorker()),
+                    model.getStart()
+            );
     }
 }

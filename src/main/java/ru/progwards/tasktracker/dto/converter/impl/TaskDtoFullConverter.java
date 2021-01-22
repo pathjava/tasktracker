@@ -40,7 +40,9 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      */
     @Override
     public Task toModel(TaskDtoFull dto) {
-        if (dto.getId() == null) {
+        if (dto == null)
+            return null;
+        else if (dto.getId() == null) {
             return new Task(
                     null,
                     null,
@@ -152,26 +154,29 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
      */
     @Override
     public TaskDtoFull toDto(Task model) {
-        return new TaskDtoFull(
-                model.getId(),
-                model.getCode(),
-                model.getName(),
-                model.getDescription(),
-                taskTypeDtoConverter.toDto(model.getType()),
-                checkTaskPriorityModel(model.getPriority()),
-                projectDtoConverter.toDto(model.getProject()),
-                userDtoConverter.toDto(model.getAuthor()),
-                checkUserModel(model.getExecutor()),
-                model.getCreated(),
-                model.getUpdated(),
-                checkWorkFlowStatusModel(model.getStatus()),
-                listVoToDtoWorkFlowAction(model.getStatus()),
-                model.getEstimation(),
-                model.getTimeSpent(),
-                model.getTimeLeft(),
-                listVoToDtoRelatedTask(model.getRelatedTasks()),
-                listVoToDtoTaskAttachment(model.getAttachments())
-        );
+        if (model == null)
+            return null;
+        else
+            return new TaskDtoFull(
+                    model.getId(),
+                    model.getCode(),
+                    model.getName(),
+                    model.getDescription(),
+                    taskTypeDtoConverter.toDto(model.getType()),
+                    checkTaskPriorityModel(model.getPriority()),
+                    projectDtoConverter.toDto(model.getProject()),
+                    userDtoConverter.toDto(model.getAuthor()),
+                    checkUserModel(model.getExecutor()),
+                    model.getCreated(),
+                    model.getUpdated(),
+                    checkWorkFlowStatusModel(model.getStatus()),
+                    listVoToDtoWorkFlowAction(model.getStatus()),
+                    model.getEstimation(),
+                    model.getTimeSpent(),
+                    model.getTimeLeft(),
+                    listVoToDtoRelatedTask(model.getRelatedTasks()),
+                    listVoToDtoTaskAttachment(model.getAttachments())
+            );
     }
 
     /**

@@ -36,7 +36,9 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
      */
     @Override
     public WorkLog toModel(WorkLogDtoFull dto) {
-        if (dto.getId() == null) {
+        if (dto == null)
+            return null;
+        else if (dto.getId() == null) {
             return new WorkLog(
                     null,
                     taskDtoConverter.toModel(dto.getTask()),
@@ -84,16 +86,19 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
      */
     @Override
     public WorkLogDtoFull toDto(WorkLog model) {
-        return new WorkLogDtoFull(
-                model.getId(),
-                taskDtoConverter.toDto(model.getTask()),
-                model.getSpent(),
-                userDtoConverter.toDto(model.getWorker()),
-                model.getStart(),
-                model.getDescription(),
-                enumToString(model.getEstimateChange()),
-                model.getEstimateValue()
-        );
+        if (model == null)
+            return null;
+        else
+            return new WorkLogDtoFull(
+                    model.getId(),
+                    taskDtoConverter.toDto(model.getTask()),
+                    model.getSpent(),
+                    userDtoConverter.toDto(model.getWorker()),
+                    model.getStart(),
+                    model.getDescription(),
+                    enumToString(model.getEstimateChange()),
+                    model.getEstimateValue()
+            );
     }
 
     /**

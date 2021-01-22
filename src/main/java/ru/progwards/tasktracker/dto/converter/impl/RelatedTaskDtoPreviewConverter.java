@@ -34,7 +34,9 @@ public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, Re
      */
     @Override
     public RelatedTask toModel(RelatedTaskDtoPreview dto) {
-        return relatedTaskGetService.get(dto.getCurrentTaskId());
+        if (dto == null)
+            return null;
+        else return relatedTaskGetService.get(dto.getCurrentTaskId());
     }
 
     /**
@@ -45,11 +47,14 @@ public class RelatedTaskDtoPreviewConverter implements Converter<RelatedTask, Re
      */
     @Override
     public RelatedTaskDtoPreview toDto(RelatedTask model) {
-        return new RelatedTaskDtoPreview(
-                model.getId(),
-                relationTypeDtoConverter.toDto(model.getRelationType()),
-                model.getCurrentTask().getId(),
-                taskDtoConverter.toDto(model.getAttachedTask())
-        );
+        if (model == null)
+            return null;
+        else
+            return new RelatedTaskDtoPreview(
+                    model.getId(),
+                    relationTypeDtoConverter.toDto(model.getRelationType()),
+                    model.getCurrentTask().getId(),
+                    taskDtoConverter.toDto(model.getAttachedTask())
+            );
     }
 }

@@ -36,7 +36,9 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
      */
     @Override
     public TaskType toModel(TaskTypeDtoFull dto) {
-        if (dto.getId() == null) {
+        if (dto == null)
+            return null;
+        else if (dto.getId() == null) {
             return new TaskType(
                     null,
                     checkProjectDto(dto.getProject()),
@@ -81,12 +83,15 @@ public class TaskTypeDtoFullConverter implements Converter<TaskType, TaskTypeDto
      */
     @Override
     public TaskTypeDtoFull toDto(TaskType model) {
-        return new TaskTypeDtoFull(
-                model.getId(),
-                checkProjectModel(model.getProject()),
-                checkWorkFlowModel(model.getWorkFlow()),
-                model.getName()
-        );
+        if (model == null)
+            return null;
+        else
+            return new TaskTypeDtoFull(
+                    model.getId(),
+                    checkProjectModel(model.getProject()),
+                    checkWorkFlowModel(model.getWorkFlow()),
+                    model.getName()
+            );
     }
 
     /**

@@ -34,7 +34,10 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
      */
     @Override
     public Task toModel(TaskDtoPreview dto) {
-        return taskGetService.get(dto.getId());
+        if (dto == null)
+            return null;
+        else
+            return taskGetService.get(dto.getId());
     }
 
     /**
@@ -45,13 +48,16 @@ public class TaskDtoPreviewConverter implements Converter<Task, TaskDtoPreview> 
      */
     @Override
     public TaskDtoPreview toDto(Task model) {
-        return new TaskDtoPreview(
-                model.getId(),
-                model.getCode(),
-                model.getName(),
-                taskTypeDtoConverter.toDto(model.getType()),
-                checkTaskPriorityDto(model.getPriority())
-        );
+        if (model == null)
+            return null;
+        else
+            return new TaskDtoPreview(
+                    model.getId(),
+                    model.getCode(),
+                    model.getName(),
+                    taskTypeDtoConverter.toDto(model.getType()),
+                    checkTaskPriorityDto(model.getPriority())
+            );
     }
 
     /**
