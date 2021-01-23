@@ -24,13 +24,13 @@ public class ImportDump {
                     "INSERT INTO task_priority (id, name, value) select 1000001, 'name2', 2  where not exists (select id from task_priority where id = 1000001);\n" +
                     "INSERT INTO task_priority (id, name, value) select 1000002, 'name1', 2  where not exists (select id from task_priority where id = 1000002);\n" +
                     "\n" +
-                    "INSERT INTO project (id, created, description, last_task_code, name, prefix, owner_id, is_deleted) select 1000000, CURRENT_TIMESTAMP, 'description1', 1, 'name', 'prefix', 1000000, false  where not exists (select id from project where id = 1000000);\n" +
-                    "INSERT INTO project (id, created, description, last_task_code, name, prefix, owner_id, is_deleted) select 1000001, CURRENT_TIMESTAMP, 'description2', 1, 'name2', 'prefix', 1000001, false  where not exists (select id from project where id = 1000001);\n" +
-                    "INSERT INTO project (id, created, description, last_task_code, name, prefix, owner_id, is_deleted) select 1000002, CURRENT_TIMESTAMP, 'description3', 1, 'name3', 'prefix', 1000002, false  where not exists (select id from project where id = 1000002);\n" +
+                    "INSERT INTO project (id, created, description, last_task_code, name, prefix, owner_id, deleted) select 1000000, CURRENT_TIMESTAMP, 'description1', 1, 'name', 'prefix', 1000000, false  where not exists (select id from project where id = 1000000);\n" +
+                    "INSERT INTO project (id, created, description, last_task_code, name, prefix, owner_id, deleted) select 1000001, CURRENT_TIMESTAMP, 'description2', 1, 'name2', 'prefix', 1000001, false  where not exists (select id from project where id = 1000001);\n" +
+                    "INSERT INTO project (id, created, description, last_task_code, name, prefix, owner_id, deleted) select 1000002, CURRENT_TIMESTAMP, 'description3', 1, 'name3', 'prefix', 1000002, false  where not exists (select id from project where id = 1000002);\n" +
                     "\n" +
-                    "INSERT INTO user_role (id, name, system_role) select 1000000, 'name1', 1000000  where not exists (select id from user_role where id = 1000000);\n" +
-                    "INSERT INTO user_role (id, name, system_role) select 1000001, 'name2', 1000001  where not exists (select id from user_role where id = 1000001);\n" +
-                    "INSERT INTO user_role (id, name, system_role) select 1000002, 'name3', 1000002  where not exists (select id from user_role where id = 1000002);\n" +
+                    "INSERT INTO user_role (id, name, system_role) select 1000000, 'name1', 'MEMBER'  where not exists (select id from user_role where id = 1000000);\n" +
+                    "INSERT INTO user_role (id, name, system_role) select 1000001, 'name2', 'MEMBER'  where not exists (select id from user_role where id = 1000001);\n" +
+                    "INSERT INTO user_role (id, name, system_role) select 1000002, 'name3', 'MEMBER'  where not exists (select id from user_role where id = 1000002);\n" +
                     "\n" +
                     "INSERT INTO user_role_user (user_role_id, user_id) select 1000000, 1000000  where not exists (select user_role_id from user_role_user where user_role_id = 1000000);\n" +
                     "INSERT INTO user_role_user (user_role_id, user_id) select 1000001, 1000001  where not exists (select user_role_id from user_role_user where user_role_id = 1000001);\n" +
