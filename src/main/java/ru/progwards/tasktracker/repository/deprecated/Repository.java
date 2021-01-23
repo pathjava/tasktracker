@@ -8,6 +8,7 @@ import java.util.Collection;
  * @param <T> тип поля идентификатора (Long)
  * @param <E> тип хранимой в таблице сущности
  */
+@Deprecated
 public interface Repository<T, E> {
 
     Collection<E> get();

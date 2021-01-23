@@ -10,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.entity.TaskPriorityEntity;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.TaskPriority;
 
@@ -38,8 +36,8 @@ public class TaskPriorityControllerTest {
     @Autowired
     private TaskPriorityController controller;
 
-    @Autowired
-    private Repository<Long, TaskPriorityEntity> repository;
+//    @Autowired
+//    private Repository<Long, TaskPriorityEntity> repository;
 
     @Autowired
     private Converter<TaskPriority, TaskPriorityDtoFull> converter;
@@ -133,9 +131,9 @@ public class TaskPriorityControllerTest {
 
     @Test
     public void deleteTest() throws Exception {
-        TaskPriorityEntity entity = repository.get(6L);
-
-        if (entity != null)
-            mockMvc.perform(post("/rest/task-priority/6/delete")).andExpect(status().isOk());
+//        TaskPriorityEntity entity = repository.get(6L);
+//
+//        if (entity != null)
+//            mockMvc.perform(post("/rest/task-priority/6/delete")).andExpect(status().isOk());
     }
 }

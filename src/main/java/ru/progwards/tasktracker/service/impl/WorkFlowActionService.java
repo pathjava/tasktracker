@@ -3,9 +3,6 @@ package ru.progwards.tasktracker.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.repository.deprecated.RepositoryByParentId;
-import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowActionEntity;
-import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.WorkFlowAction;
 
@@ -22,11 +19,11 @@ import java.util.List;
 public class WorkFlowActionService implements CreateService<WorkFlowAction>, RemoveService<WorkFlowAction>, GetListService<WorkFlowAction>, GetService<Long, WorkFlowAction>, RefreshService<WorkFlowAction>, GetListByParentService<Long, WorkFlowAction> {
 
     //@Autowired
-    private Repository<Long, WorkFlowActionEntity> workFlowActionRepository;
-    @Autowired
-    private Converter<WorkFlowActionEntity, WorkFlowAction> workFlowActionConverter;
+//    private Repository<Long, WorkFlowActionEntity> workFlowActionRepository;
+//    @Autowired
+//    private Converter<WorkFlowActionEntity, WorkFlowAction> workFlowActionConverter;
     //@Autowired
-    private RepositoryByParentId<Long, WorkFlowActionEntity> workFlowActionEntityRepositoryByParentId;
+//    private RepositoryByParentId<Long, WorkFlowActionEntity> workFlowActionEntityRepositoryByParentId;
 
 
     /**
@@ -36,9 +33,9 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
      */
     @Override
     public void create(WorkFlowAction workFlowAction) {
-        WorkFlowActionEntity entity = workFlowActionConverter.toEntity(workFlowAction);
-        workFlowActionRepository.create(entity);
-        workFlowAction.setId(entity.getId());
+//        WorkFlowActionEntity entity = workFlowActionConverter.toEntity(workFlowAction);
+//        workFlowActionRepository.create(entity);
+//        workFlowAction.setId(entity.getId());
     }
 
 
@@ -49,7 +46,7 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
      */
     @Override
     public void remove(WorkFlowAction workFlowAction) {
-        workFlowActionRepository.delete(workFlowAction.getId());
+//        workFlowActionRepository.delete(workFlowAction.getId());
     }
 
 
@@ -61,7 +58,8 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
      */
     @Override
     public WorkFlowAction get(Long id) {
-        return workFlowActionConverter.toVo(workFlowActionRepository.get(id));
+//        return workFlowActionConverter.toVo(workFlowActionRepository.get(id));
+        return null;
     }
 
 
@@ -72,7 +70,7 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
      */
     @Override
     public void refresh(WorkFlowAction workFlowAction) {
-        workFlowActionRepository.update(workFlowActionConverter.toEntity(workFlowAction));
+//        workFlowActionRepository.update(workFlowActionConverter.toEntity(workFlowAction));
     }
 
 
@@ -85,13 +83,14 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
     @Override
     public Collection<WorkFlowAction> getListByParentId(Long parentId) {
         // получили список сущностей
-        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionEntityRepositoryByParentId.getByParentId(parentId);
-        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
-        // преобразуем к бизнес-объектам
-        for (WorkFlowActionEntity entity:workFlowActionEntities) {
-            workFlowActions.add(workFlowActionConverter.toVo(entity));
-        }
-        return workFlowActions;
+//        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionEntityRepositoryByParentId.getByParentId(parentId);
+//        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
+//        // преобразуем к бизнес-объектам
+//        for (WorkFlowActionEntity entity:workFlowActionEntities) {
+//            workFlowActions.add(workFlowActionConverter.toVo(entity));
+//        }
+//        return workFlowActions;
+        return null;
     }
 
     /**
@@ -101,14 +100,15 @@ public class WorkFlowActionService implements CreateService<WorkFlowAction>, Rem
      */
     @Override
     public List<WorkFlowAction> getList() {
-        // получили список сущностей
-        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionRepository.get();
-        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
-        // преобразуем к бизнес-объектам
-        for (WorkFlowActionEntity entity:workFlowActionEntities) {
-            workFlowActions.add(workFlowActionConverter.toVo(entity));
-        }
-        return workFlowActions;
+//        // получили список сущностей
+//        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionRepository.get();
+//        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
+//        // преобразуем к бизнес-объектам
+//        for (WorkFlowActionEntity entity:workFlowActionEntities) {
+//            workFlowActions.add(workFlowActionConverter.toVo(entity));
+//        }
+//        return workFlowActions;
+        return null;
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.Collection;
  * @param <T> идентификатор задачи
  * @param  <E> список сущностей репозитория
  */
+@Deprecated
 public interface RepositoryByAttachedTaskId<T, E> {
 
     Collection<E> getByAttachedTaskId(T taskId);
