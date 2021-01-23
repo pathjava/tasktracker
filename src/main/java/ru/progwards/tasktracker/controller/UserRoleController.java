@@ -202,7 +202,8 @@ public class UserRoleController {
         for (AccessRule rule : ruleVOList) {
             int index = binarySearchById(rules, rule.getId());
             if (index > -1) {
-                accessRuleRefreshService.refresh(rule); // ???
+//                accessRuleRefreshService.refresh(rule); // ???
+
             }
         }
 //        userRoleRefreshService.refresh(vo); // ???
