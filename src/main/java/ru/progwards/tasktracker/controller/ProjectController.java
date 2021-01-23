@@ -23,7 +23,7 @@ import ru.progwards.tasktracker.util.validator.validationstage.Update;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -70,9 +70,9 @@ public class ProjectController {
      * @return список проектов
      */
     @GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<ProjectDtoPreview>> get() {
+    public ResponseEntity<List<ProjectDtoPreview>> get() {
 
-        Collection<ProjectDtoPreview> projectDtos =
+        List<ProjectDtoPreview> projectDtos =
                 projectGetListService.getList().stream().
                         map(converterPreview::toDto).collect(Collectors.toList());
 
