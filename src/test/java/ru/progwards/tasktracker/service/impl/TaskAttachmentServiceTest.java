@@ -147,11 +147,12 @@ public class TaskAttachmentServiceTest {
     public void getListByTaskId() {
         removeTestEntity();
         createService.create(attachment);
-        List<TaskAttachment> list = getListByTaskService.getListByTaskId(task.getId());
+        List<TaskAttachment> list = task.getAttachments();
         Assertions.assertTrue(list.size() > 0, "Вложений для задачи " + task.getId() + " не найдено");
         TaskAttachment gotAttachment = (TaskAttachment) list.toArray()[0];
         Assertions.assertEquals(gotAttachment.getId(), attachment.getId(), "Идентификатор связки различается");
-        Assertions.assertNotNull(gotAttachment.getAttachmentContentId(), "Идентификатор вложения не задан");
+        Assertions.assertNotNull(gotAttachment.getContent(), "Вложение не определено");
+        Assertions.assertNotNull(gotAttachment.getContent().getId(), "Идентификатор вложения не задан");
         Assertions.assertEquals(gotAttachment.getAttachmentContentId(), content.getId(), "Идентификатор вложения в связке сохранен не верно");
         AttachmentContent gotContent = gotAttachment.getContent();
         Assertions.assertNotNull(gotContent, "Вложение не определено");
