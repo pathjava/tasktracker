@@ -36,6 +36,7 @@ public class TaskDtoFull {
 
     private String description;
 
+    @NotNull(groups = {Create.class, Update.class})
     private TaskTypeDtoPreview type;
 
     private TaskPriorityDtoPreview priority;
