@@ -1,6 +1,9 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
@@ -30,7 +33,7 @@ public class Project  {
     @Id
     @SequenceGenerator(name = "PROJECT_SEQ", sequenceName = "project_seq", allocationSize = 1)
     @GeneratedValue(generator = "PROJECT_SEQ", strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     Long id;
     /**
      * имя проекта
@@ -50,7 +53,7 @@ public class Project  {
      */
     @NotEmpty
     @Basic
-    @Column(name = "prefix", nullable = false, unique = true, length = 10)
+    @Column(name = "prefix", unique = true, length = 10)
     String prefix;
     /**
      * владелец (создатель) проекта
@@ -62,7 +65,7 @@ public class Project  {
      * время создания проекта
      */
     @NotNull
-    @Column(name = "created", nullable = false)
+    @Column(name = "created")
     ZonedDateTime created;
     /**
      * список задач проекта
@@ -81,13 +84,13 @@ public class Project  {
      */
     @NotNull
     @Basic
-    @Column(name = "last_task_code", nullable = false)
+    @Column(name = "last_task_code")
     Long lastTaskCode;
     /**
      * информация об удалении проекта
      */
     @NotNull
     @Basic
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted", columnDefinition = "boolean default false")
     boolean deleted;
 }

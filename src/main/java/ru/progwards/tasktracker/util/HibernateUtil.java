@@ -2,10 +2,9 @@ package ru.progwards.tasktracker.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.model.TaskAttachmentContent;
 
-@Service
+//@Service
 public class HibernateUtil {
 
     private static final SessionFactory factory;
