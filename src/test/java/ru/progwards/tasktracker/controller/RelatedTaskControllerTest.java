@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class RelatedTaskControllerTest {
 
 

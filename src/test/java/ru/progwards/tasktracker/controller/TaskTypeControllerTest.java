@@ -47,7 +47,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
  * @author Oleg Kiselev
  */
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@TestPropertySource(locations = "classpath:application-dev.properties")
 @ActiveProfiles("dev")
