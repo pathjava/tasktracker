@@ -28,7 +28,7 @@ public class TaskTypeDtoFull {
 
     private WorkFlowDtoPreview workFlow;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String name;
 
 }

@@ -26,12 +26,12 @@ public class TaskDtoFull {
     @Null(groups = Create.class)
     private Long id;
 
-    @NotEmpty(groups = Update.class)
+    @NotBlank(groups = Update.class)
     @Size(min = 1, max = 10, groups = Update.class)
     @Null(groups = Create.class)
     private String code;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String name;
 
     private String description;

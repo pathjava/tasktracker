@@ -36,10 +36,10 @@ public class WorkLogDtoFull {
     @NotNull(groups = {Create.class, Update.class})
     private ZonedDateTime start;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String description;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String estimateChange;
 
     private Duration estimateValue;

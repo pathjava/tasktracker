@@ -24,7 +24,7 @@ public class RelationTypeDtoFull {
     @Null(groups = Create.class)
     private Long id;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     @Size(min = 1, max = 15, groups = {Create.class, Update.class})
     private String name;
 
