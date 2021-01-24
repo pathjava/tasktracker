@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -31,10 +32,10 @@ public class Task {
     @GeneratedValue(generator = "TaskSeq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String code;
 
-    @NotNull
+    @NotBlank
     private String name;
 
     private String description;

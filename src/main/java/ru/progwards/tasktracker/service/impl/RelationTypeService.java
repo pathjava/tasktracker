@@ -127,7 +127,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
         for (Map.Entry<String, String> entry : relationNames.entrySet()) {
             RelationType relationType = new RelationType();
             relationType.setName(entry.getKey());
-            if (!entry.getValue().isEmpty()) {
+            if (!entry.getValue().isBlank()) {
                 RelationType counterRelationType = new RelationType();
                 counterRelationType.setName(entry.getValue());
                 counterRelationType.setCounterRelation(relationType);

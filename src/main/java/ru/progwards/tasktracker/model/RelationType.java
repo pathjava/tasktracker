@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class RelationType {
     @GeneratedValue(generator = "RelationTypeSeq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

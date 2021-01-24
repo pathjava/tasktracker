@@ -17,7 +17,6 @@ import java.lang.reflect.Field;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Бизнес-логика создания задачи (Task)
@@ -104,7 +103,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     @Transactional
     @Override
     public void refresh(Task model) {
-        if (model.getTimeLeft().isNegative())
+        if (model.getTimeLeft() != null && model.getTimeLeft().isNegative())
             model.setTimeLeft(Duration.ZERO);
 
         model.setUpdated(ZonedDateTime.now());

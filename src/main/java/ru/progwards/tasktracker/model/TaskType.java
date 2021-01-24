@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class TaskType {
     @JoinColumn(name = "work_flow_id", referencedColumnName = "id")
     private WorkFlow workFlow;
 
-    @NotNull
+    @NotBlank
     private String name;
 
     @OneToMany(mappedBy = "type")
