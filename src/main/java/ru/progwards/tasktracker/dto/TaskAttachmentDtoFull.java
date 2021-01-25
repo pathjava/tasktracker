@@ -31,25 +31,25 @@ public class TaskAttachmentDtoFull {
     /**
      * Ссылка на задачу
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     private Long taskId;
 
     /**
      * Полное имя файла-вложения
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotEmpty
     private String name;
 
     /**
      * Расширение файла
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotEmpty
     private String extension;
 
     /**
      * Размер в байтах
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     private Long size;
 
     /**

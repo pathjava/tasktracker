@@ -11,10 +11,7 @@ import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskAttachment;
 import ru.progwards.tasktracker.model.TaskAttachmentContent;
 import ru.progwards.tasktracker.repository.TaskAttachmentRepository;
-import ru.progwards.tasktracker.service.CreateService;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.service.RemoveService;
-import ru.progwards.tasktracker.service.TemplateService;
+import ru.progwards.tasktracker.service.*;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -27,12 +24,11 @@ import java.util.Collections;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
-public class TaskAttachmentService implements CreateService<TaskAttachment>, RemoveService<TaskAttachment>, GetService<Long, TaskAttachment>, TemplateService<TaskAttachment> {
+public class TaskAttachmentService implements CreateService<TaskAttachment>, RemoveService<TaskAttachment>, GetService<Long, TaskAttachment>, TemplateService<TaskAttachment>, RefreshService<TaskAttachment> {
 
     private final TaskAttachmentRepository repository;
-    private final CreateService<TaskAttachmentContent> createService;
-    private final RemoveService<TaskAttachmentContent> removeService;
-
+    private final CreateService<TaskAttachmentContent> contentCreateService;
+    private final RemoveService<TaskAttachmentContent> contentRemoveService;
 
     /**
      * Прикрепление файла к задаче
@@ -41,14 +37,15 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
      *
      * @param attachment описание связки
      */
+    @Transactional
     @Override
     public void create(TaskAttachment attachment) {
         // сохраним содержимое, если подкреплено
         TaskAttachmentContent content = attachment.getContent();
         if(content != null) {
             // Если содержимое новое, добавим его в таблицу содержимого
-            if (content.getId() == null || content.getId() <= 0) {
-                createService.create(content);
+            if (content.getId() == null) {
+                contentCreateService.create(content);
             }
         }
         // установим время создания
@@ -69,7 +66,7 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
         TaskAttachmentContent content = attachment.getContent();
         repository.delete(attachment);
         // содержимое удаляем ПОСЛЕ удаления TaskAttachment
-        removeService.remove(content);
+        contentRemoveService.remove(content);
     }
 
 
@@ -109,4 +106,9 @@ public class TaskAttachmentService implements CreateService<TaskAttachment>, Rem
         create(attachment);
     }
 
+    @Transactional
+    @Override
+    public void refresh(TaskAttachment model) {
+        repository.save(model);
+    }
 }

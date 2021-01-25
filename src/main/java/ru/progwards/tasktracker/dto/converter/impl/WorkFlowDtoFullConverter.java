@@ -19,16 +19,10 @@ import ru.progwards.tasktracker.service.GetService;
 @Component
 public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDtoFull> {
 
-    /**
-     * Сервис получения статусов Workflow
-     */
     @Autowired
     private GetService<Long, WorkFlowStatus> statusGetService;
-
-    /**
-     * Сервис получения статусов Workflow по бизнес-процессу
-     */
-    //private GetListByParentService<Long, WorkFlowStatus> statusGetListByParentService;
+    @Autowired
+    private GetService<Long, WorkFlow> getService;
 
 
     /**

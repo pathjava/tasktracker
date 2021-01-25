@@ -1,13 +1,10 @@
 package ru.progwards.tasktracker.service.impl;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.TaskAttachmentContent;
 import ru.progwards.tasktracker.service.CreateService;
 import ru.progwards.tasktracker.service.GetService;
@@ -21,12 +18,13 @@ import java.util.NoSuchElementException;
  * Тестирование бизнес-сущности и репозитория
  */
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
-public class AttachmentContentServiceTest {
+public class TaskAttachmentContentServiceTest {
 
+    @Autowired
     CreateService<TaskAttachmentContent> createService;
+    @Autowired
     RemoveService<TaskAttachmentContent> removeService;
+    @Autowired
     GetService<Long, TaskAttachmentContent> getService;
 
     // инициализация тестового экземпляра бизнес-объекта
@@ -34,7 +32,7 @@ public class AttachmentContentServiceTest {
     TaskAttachmentContent content;
 
     {
-        content = new TaskAttachmentContent(-23123L, dataBytes, Collections.emptyList());
+        content = new TaskAttachmentContent(null, dataBytes, Collections.emptyList());
     }
 
     /**
@@ -43,6 +41,7 @@ public class AttachmentContentServiceTest {
     public void removeTestEntity() {
         try {
             removeService.remove(content);
+            content.setId(null);
         } catch (NoSuchElementException e) {
         }
     }
@@ -54,7 +53,8 @@ public class AttachmentContentServiceTest {
     @Test
     public void getNotExistsException() {
         removeTestEntity();
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
+        content.setId(-12342L);
+        Assertions.assertThrows(NotFoundException.class, () -> {
             getService.get(content.getId());
         });
     }
@@ -67,6 +67,7 @@ public class AttachmentContentServiceTest {
     public void create() {
         removeTestEntity();
         createService.create(content);
+        System.out.println(content.getId());
         TaskAttachmentContent got = getService.get(content.getId());
         Assertions.assertNotNull(got, "Сохранено в репо, но прочесть не смогли");
         Assertions.assertEquals(content.getId(), got.getId(), "Идентификатор сохраненного объекта не совпал");
@@ -89,7 +90,7 @@ public class AttachmentContentServiceTest {
         boolean cantFind = false;
         try {
             getService.get(content.getId());
-        } catch (NoSuchElementException ex) {
+        } catch (NotFoundException ex) {
             cantFind = true;
         }
         Assertions.assertTrue(cantFind, "Удаление элемента из репозитория не удалось");
@@ -100,11 +101,10 @@ public class AttachmentContentServiceTest {
      * Проверка на удаление несуществующего
      */
     @Test
-    public void removeNotExistsException() {
+    public void silentNotExistsRemove() {
         removeTestEntity();
-        Assertions.assertThrows(NoSuchElementException.class, () -> {
-            removeService.remove(content);
-        });
+        content.setId(-1L);
+        removeService.remove(content);
     }
 
 }

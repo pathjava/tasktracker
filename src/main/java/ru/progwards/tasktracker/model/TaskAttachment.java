@@ -38,7 +38,7 @@ public class TaskAttachment {
     private Task task;
 
     /**
-     * Полное имя файла-вложения
+     * Имя файла без расширения
      */
     @Column(name = "name", nullable = false)
     private String name;

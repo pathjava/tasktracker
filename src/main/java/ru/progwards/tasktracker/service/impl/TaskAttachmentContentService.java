@@ -13,7 +13,7 @@ import ru.progwards.tasktracker.service.CreateService;
 import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.service.RemoveService;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Бизнес-логика работы с содержимым вложений
@@ -25,32 +25,33 @@ import java.util.Collection;
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class TaskAttachmentContentService implements CreateService<TaskAttachmentContent>, RemoveService<TaskAttachmentContent>, GetService<Long, TaskAttachmentContent> {
 
-    private final TaskAttachmentContentRepository contentRepository;
+    private final TaskAttachmentContentRepository repository;
 
     /**
      * Сохранение файла в таблицу вложений
      *
-     * @param attachment вложение
+     * @param content вложение
      */
+    @Transactional
     @Override
-    public void create(TaskAttachmentContent attachment) {
-        contentRepository.save(attachment);
+    public void create(TaskAttachmentContent content) {
+        repository.save(content);
     }
 
 
     /**
      * Удаление файла из таблицы вложений
      *
-     * @param attachment вложение
+     * @param content вложение
      */
     @Transactional
     @Override
-    public void remove(TaskAttachmentContent attachment) {
+    public void remove(TaskAttachmentContent content) {
         // проверить, имеются ли TaskAttachment, в которых TaskAttachment.content_id = TaskAttachmentContent.id
-        Collection<TaskAttachment> taskAttachments = attachment.getTaskAttachment();
+        List<TaskAttachment> taskAttachments = content.getTaskAttachment();
         if(taskAttachments.size() == 0) {
             // удалить, если связей нет
-            contentRepository.delete(attachment);
+            repository.delete(content);
         }
     }
 
@@ -63,7 +64,7 @@ public class TaskAttachmentContentService implements CreateService<TaskAttachmen
      */
     @Override
     public TaskAttachmentContent get(Long id) {
-        return contentRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("TaskAttachmentContent id=" + id + " not found"));
     }
 

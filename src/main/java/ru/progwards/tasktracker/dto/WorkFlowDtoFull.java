@@ -25,7 +25,7 @@ public class WorkFlowDtoFull {
     /**
      * Наименование
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotEmpty
     String name;
 
     /**
@@ -35,7 +35,7 @@ public class WorkFlowDtoFull {
      * от шаблона, на основе которого будет все создаваться,
      * иначе его нельзя будет настраивать индивидуально
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     Boolean pattern;
 
     /**

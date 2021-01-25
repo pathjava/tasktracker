@@ -8,7 +8,6 @@ import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import java.io.InputStream;
 
 /**
  * Файл-вложение, прикрепленный к задаче, или еще куда-нибудь в будущем
@@ -30,6 +29,6 @@ public class TaskAttachmentContentDtoFull {
      * Содержимое вложения
      */
     @JsonIgnore
-    private InputStream data;
+    private byte[] data;
 
 }

@@ -27,25 +27,25 @@ public class WorkFlowStatusDtoFull {
     /**
      * Родительский WF
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     Long workflow_id;
 
     /**
      * Наименование
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotEmpty
     String name;
 
     /**
      * Состояние задачи
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     WorkFlowState state;
 
     /**
      * На данный статус задачу можно переводить из любого состояния
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     Boolean alwaysAllow;
 
     /**
