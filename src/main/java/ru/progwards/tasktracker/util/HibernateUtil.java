@@ -5,7 +5,7 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.model.TaskAttachmentContent;
 
-@Service
+//@Service
 public class HibernateUtil {
 
     private static final SessionFactory factory;
@@ -13,9 +13,9 @@ public class HibernateUtil {
     static {
         try {
             Configuration configuration = new Configuration()
-                    .configure("hibernate-h2.cfg.xml") // собственная файловая БД, H2
+//                    .configure("hibernate-h2.cfg.xml") // собственная файловая БД, H2
                     //.configure("hibernate-mariadb.cfg.xml") // общая БД, MariaDB
-                    //.configure("hibernate-postgres.cfg.xml") // собственная файловая БД
+                    .configure("hibernate-postgres.cfg.xml") // собственная файловая БД
                     .addAnnotatedClass(ru.progwards.tasktracker.model.AccessRule.class)
                     .addAnnotatedClass(TaskAttachmentContent.class)
                     .addAnnotatedClass(ru.progwards.tasktracker.model.Project.class)

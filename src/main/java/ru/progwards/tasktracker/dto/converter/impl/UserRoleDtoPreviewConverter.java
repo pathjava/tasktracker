@@ -17,7 +17,6 @@ import ru.progwards.tasktracker.model.UserRole;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserRoleDtoPreviewConverter implements Converter<UserRole, UserRoleDtoPreview> {
 
-    private final GetService<Long, AccessRule> accessRuleGetService;
     private final GetService<Long, UserRole> userRoleGetService;
 
     @Override
