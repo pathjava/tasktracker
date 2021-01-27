@@ -12,8 +12,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.UserRole;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +36,7 @@ public class UserRoleController {
     private final RefreshService<AccessRule> accessRuleRefreshService;
 
     /**
+     *
      * @return
      */
     @GetMapping("/rest/userRole/list")
@@ -202,10 +201,9 @@ public class UserRoleController {
         for (AccessRule rule : ruleVOList) {
             int index = binarySearchById(rules, rule.getId());
             if (index > -1) {
-                accessRuleRefreshService.refresh(rule); // ???
+                accessRuleRefreshService.refresh(rule);
             }
         }
-//        userRoleRefreshService.refresh(vo); // ???
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

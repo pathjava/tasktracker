@@ -27,7 +27,7 @@ public class UserRole {
     private Long id;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)

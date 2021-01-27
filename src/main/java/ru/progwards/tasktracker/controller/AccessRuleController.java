@@ -10,7 +10,6 @@ import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.model.AccessRule;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 

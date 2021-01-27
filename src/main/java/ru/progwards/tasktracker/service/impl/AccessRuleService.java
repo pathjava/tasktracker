@@ -41,7 +41,7 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
 
     @Override
     public void refresh(AccessRule model) {
-        accessRuleRepository.save(model);
+        accessRuleRepository.saveAndFlush(model);
     }
 
     @Override
