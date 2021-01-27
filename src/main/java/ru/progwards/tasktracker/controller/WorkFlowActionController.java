@@ -1,41 +1,49 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.dto.*;
 import ru.progwards.tasktracker.dto.WorkFlowActionDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
-import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.model.WorkFlowAction;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Обработка запросов API по работе с действиями workflow
  *
- * @author Gregory Lobkov
+ * @author Aleksandr Sidelnikov
  */
 @RestController
-@RequestMapping("/rest/workflowaction")
+@RequestMapping(value = "/rest/workflowaction")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class WorkFlowActionController {
 
-    @Autowired
-    GetService<Long, WorkFlowAction> getService;
-    @Autowired
-    CreateService<WorkFlowAction> createService;
-    @Autowired
-    RemoveService<WorkFlowAction> removeService;
-    @Autowired
-    RefreshService<WorkFlowAction> refreshService;
-    @Autowired
-    GetListService<WorkFlowAction> getListService;
-    @Autowired
-    Converter<WorkFlowAction, WorkFlowActionDtoFull> dtoConverter;
-
+    private final CreateService<WorkFlowAction> workFlowActionCreateService;
+    private final GetService<Long, WorkFlowAction> workFlowActionGetService;
+    private final GetListService<WorkFlowAction> workFlowActionGetListService;
+    private final RemoveService<WorkFlowAction> workFlowActionRemoveService;
+    private final RefreshService<WorkFlowAction> workFlowActionRefreshService;
+    private final Converter<WorkFlowAction, WorkFlowActionDtoFull> dtoFullConverter;
+    private final Converter<WorkFlowAction, WorkFlowActionDtoPreview> dtoPreviewConverter;
 
     /**
      * Получить список всех действий workflow
@@ -43,19 +51,19 @@ public class WorkFlowActionController {
      *
      * @return список вложений
      */
-    @GetMapping("/list")
-    public ResponseEntity<Collection<WorkFlowActionDtoFull>> getList() {
-        // получили список бизнес-объектов
-        Collection<WorkFlowAction> list = getListService.getList();
-        List<WorkFlowActionDtoFull> resultList = new ArrayList<>(list.size());
-        // преобразуем к dto
-        for (WorkFlowAction entity:list) {
-            WorkFlowActionDtoFull dto = dtoConverter.toDto(entity);
-            resultList.add(dto);
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<WorkFlowActionDtoPreview>> getList() {
+        List<WorkFlowActionDtoPreview> list = new ArrayList<>();
+        for (WorkFlowAction workFlowAction : workFlowActionGetListService.getList()) {
+            WorkFlowActionDtoPreview workFlowActionDtoPreview = dtoPreviewConverter.toDto(workFlowAction);
+            list.add(workFlowActionDtoPreview);
         }
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
-    }
 
+        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+            throw new NotFoundException("Список WorkFlowActionDtoFull пустой!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
     /**
      * Получить конкретное действие workflow
@@ -64,61 +72,51 @@ public class WorkFlowActionController {
      * @param id идентификатор объекта
      * @return объект dto
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<WorkFlowActionDtoFull> get(@PathVariable("id") Long id) {
-        if (id == null)
-            throw new BadRequestException("Id is not set");
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WorkFlowActionDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
-        WorkFlowAction vo = getService.get(id);
-        WorkFlowActionDtoFull entity = dtoConverter.toDto(vo);
+        WorkFlowActionDtoFull workFlowAction = dtoFullConverter.toDto(workFlowActionGetService.get(id));
 
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        return new ResponseEntity<>(workFlowAction, HttpStatus.OK);
     }
-
 
     /**
      * Создаём новое действие workflow
      * POST /rest/workflowaction/create
      *
-     * @param entity объект для создания
      * @return объект после бизнес-логики
      */
-    @PostMapping("/create")
-    public ResponseEntity<WorkFlowActionDtoFull> create(@RequestBody WorkFlowActionDtoFull entity) {
-        if (entity == null)
-            throw new BadRequestException("WorkFlowAction is null");
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WorkFlowActionDtoFull> create(@Validated(Create.class) @RequestBody WorkFlowActionDtoFull dtoFull) {
 
-        WorkFlowAction vo = dtoConverter.toModel(entity);
-        createService.create(vo);
-        WorkFlowActionDtoFull result = dtoConverter.toDto(vo);
+        WorkFlowAction workFlowAction = dtoFullConverter.toModel(dtoFull);
+        workFlowActionCreateService.create(workFlowAction);
+        WorkFlowActionDtoFull createdWorkFlowAction = dtoFullConverter.toDto(workFlowAction);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(createdWorkFlowAction, HttpStatus.OK);
     }
-
 
     /**
      * Обновляем действие workflow
      * POST /rest/workflowaction/{id}/update
      *
      * @param id идентификатор изменяемого объекта
-     * @param entity измененный объект
      */
-    @PostMapping("/{id}/update")
-    public ResponseEntity<WorkFlowActionDtoFull> update(@PathVariable("id") Long id,
-                                                        @RequestBody WorkFlowActionDtoFull entity) {
-        if (id == null)
-            throw new BadRequestException("Id is not set");
-        if (entity == null)
-            throw new BadRequestException("WorkFlowAction Id is null");
+    @PutMapping(value = "/{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WorkFlowActionDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+                                                  @Validated(Update.class) @RequestBody WorkFlowActionDtoFull dtoFull) {
 
-        entity.setId(id);
-        WorkFlowAction vo = dtoConverter.toModel(entity);
-        refreshService.refresh(vo);
-        WorkFlowActionDtoFull result = dtoConverter.toDto(vo);
+        if (!id.equals(dtoFull.getId()))
+            throw new BadRequestException("Данная операция недопустима!");
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        WorkFlowAction workFlowAction = dtoFullConverter.toModel(dtoFull);
+        workFlowActionRefreshService.refresh(workFlowAction);
+        WorkFlowActionDtoFull updatedWorkFlowAction = dtoFullConverter.toDto(workFlowAction);
+
+        return new ResponseEntity<>(updatedWorkFlowAction, HttpStatus.OK);
     }
-
 
     /**
      * Удалить существующее действие workflow
@@ -126,14 +124,13 @@ public class WorkFlowActionController {
      *
      * @param id идентификатор удаляемого объекта
      */
-    @PostMapping("/delete")
-    @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
-        if (id == null)
-            throw new BadRequestException("Workflow Id is not set");
+    @DeleteMapping(value = "/{id}/delete")
+    public ResponseEntity<WorkFlowActionDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
 
-        WorkFlowAction vo = getService.get(id);
-        removeService.remove(vo);
+        WorkFlowAction workFlowAction = workFlowActionGetService.get(id);
+        workFlowActionRemoveService.remove(workFlowAction);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

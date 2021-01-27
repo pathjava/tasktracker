@@ -3,7 +3,7 @@ package ru.progwards.tasktracker.dto;
 /**
  * Действия над задачей, переводящие её из одного состояния WorkFlowStatus в другое
  *
- * @author Gregory Lobkov
+ * @author Aleksandr Sidelnikov
  */
 public class WorkFlowActionDtoFull {
 
@@ -26,14 +26,12 @@ public class WorkFlowActionDtoFull {
      */
     Long nextStatus_id;
 
-
     public WorkFlowActionDtoFull(Long id, Long parentStatus_id, String name, Long nextStatus_id) {
         this.id = id;
         this.parentStatus_id = parentStatus_id;
         this.name = name;
         this.nextStatus_id = nextStatus_id;
     }
-
 
     public Long getId() {
         return id;
