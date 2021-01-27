@@ -29,27 +29,27 @@ public class TaskAttachmentDtoFull {
     private Long id;
 
     /**
-     * Ссылка на задачу
+     * Задача, связанная с вложением
      */
-    @NotNull(groups = {Create.class, Update.class})
-    private Long taskId;
+    @NotEmpty
+    private TaskDtoPreview task;
 
     /**
      * Полное имя файла-вложения
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotEmpty
     private String name;
 
     /**
      * Расширение файла
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotEmpty
     private String extension;
 
     /**
      * Размер в байтах
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     private Long size;
 
     /**
@@ -57,5 +57,11 @@ public class TaskAttachmentDtoFull {
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private ZonedDateTime created;
+
+    /**
+     * Вложение
+     */
+//    @NotEmpty
+//    private TaskAttachmentContentDtoPreview content;
 
 }

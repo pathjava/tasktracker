@@ -7,6 +7,12 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
+/**
+ * Связка между задачами и вложениями
+ * много ко многим
+ *
+ * @author Gregory Lobkov
+ */
 @Data
 @AllArgsConstructor
 public class TaskAttachmentDtoPreview {

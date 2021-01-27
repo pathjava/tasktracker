@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class TaskAttachmentContent {
      * Содержимое вложения
      */
     @Lob
-    private Blob data;
+    private byte[] data;
 
     /**
      * Обратная ссылка на связку вложения

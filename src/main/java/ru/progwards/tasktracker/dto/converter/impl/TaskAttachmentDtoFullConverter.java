@@ -1,12 +1,16 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import ru.progwards.tasktracker.dto.converter.Converter;
+import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.TaskAttachmentDtoFull;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.model.TaskAttachmentContent;
+import ru.progwards.tasktracker.dto.TaskDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskAttachment;
+import ru.progwards.tasktracker.model.TaskAttachmentContent;
+import ru.progwards.tasktracker.service.GetService;
 
 
 /**
@@ -16,22 +20,14 @@ import ru.progwards.tasktracker.model.TaskAttachment;
  *
  * @author Gregory Lobkov
  */
-@Controller
+@Component
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment, TaskAttachmentDtoFull> {
 
-
-    /**
-     * Сервис получения содержимого файла
-     */
-    @Autowired
-    private GetService<Long, TaskAttachmentContent> attachmentContentGetService;
-
-    /**
-     * Сервис получения связи задача - вложение
-     */
-    @Autowired
-    private GetService<Long, TaskAttachment> taskAttachmentGetService;
-
+    private final GetService<Long, TaskAttachment> getService;
+    private final Converter<Task, TaskDtoPreview> taskDtoConverter;
+//    private final GetService<Long, TaskAttachmentContent> contentGetService;
+//    private final Converter<TaskAttachmentContent, TaskAttachmentContentDtoPreview> contentDtoConverter;
 
     /**
      * Преобразовать в бизнес-объект
@@ -41,12 +37,31 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachment toModel(TaskAttachmentDtoFull dto) {
-//        TaskAttachment saved = taskAttachmentGetService.get(dto.getId());
-//        AttachmentContent attachmentContent = attachmentContentGetService.get(dto.getContentId());
-//
-//        return new TaskAttachment(dto.getId(), dto.getTaskId(), dto.getName(), dto.getExtension(),
-//                dto.getSize(), dto.getCreated(), saved.getContentId(), attachmentContent);
-        return null;
+        TaskAttachment model = null;
+        if (dto != null) {
+            Task task = taskDtoConverter.toModel(dto.getTask());
+            TaskAttachmentContent content = null;//dto.getContent()==null?null:contentGetService.get(dto.getContent().getId());
+            if (dto.getId() == null) {
+                model = new TaskAttachment(
+                        null,
+                        task,
+                        dto.getName(),
+                        dto.getExtension(),
+                        dto.getSize(),
+                        dto.getCreated(),
+                        content
+                );
+            } else {
+                model = getService.get(dto.getId());
+                model.setTask(task);
+                model.setName(dto.getName());
+                model.setExtension(dto.getExtension());
+                model.setSize(dto.getSize());
+                model.setCreated(dto.getCreated());
+                model.setContent(content);
+            }
+        }
+        return model;
     }
 
 
@@ -58,9 +73,19 @@ public class TaskAttachmentDtoFullConverter implements Converter<TaskAttachment,
      */
     @Override
     public TaskAttachmentDtoFull toDto(TaskAttachment model) {
-//        return new TaskAttachmentDtoFull(model.getId(), model.getTask(), model.getName(), model.getExtension(),
-//                model.getSize(), model.getCreated());
-        return null;
+        TaskAttachmentDtoFull dto = null;
+        if (model != null) {
+            dto = new TaskAttachmentDtoFull(
+                    model.getId(),
+                    taskDtoConverter.toDto(model.getTask()),
+                    model.getName(),
+                    model.getExtension(),
+                    model.getSize(),
+                    model.getCreated()
+                    //,contentDtoConverter.toDto(model.getContent())
+            );
+        }
+        return dto;
     }
 
 }

@@ -15,6 +15,6 @@ public class WorkFlowStatusDtoPreview {
 
     String name;
 
-    WorkFlowState state;
+    WorkFlowState state; //enum
 
 }

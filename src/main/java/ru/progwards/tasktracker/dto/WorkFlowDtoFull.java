@@ -5,7 +5,7 @@ import lombok.Data;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
@@ -25,7 +25,7 @@ public class WorkFlowDtoFull {
     /**
      * Наименование
      */
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank
     String name;
 
     /**
@@ -35,12 +35,13 @@ public class WorkFlowDtoFull {
      * от шаблона, на основе которого будет все создаваться,
      * иначе его нельзя будет настраивать индивидуально
      */
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull
     Boolean pattern;
 
     /**
      * С какого статуса начинать движение задачи, идентификатор
      */
-    Long start_status_id;
+    //@NotNull //невозможно установить ограничение, т.к. статусов по началу нет
+    WorkFlowStatusDtoPreview startStatus;
 
 }
