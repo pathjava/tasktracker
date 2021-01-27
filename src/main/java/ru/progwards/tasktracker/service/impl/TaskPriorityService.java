@@ -24,8 +24,12 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TaskPriorityService implements GetListService<TaskPriority>,
-        GetService<Long, TaskPriority>, CreateService<TaskPriority>,
-        RefreshService<TaskPriority>, RemoveService<TaskPriority> {
+                                            GetService<Long,
+                                            TaskPriority>,
+                                            CreateService<TaskPriority>,
+                                            RefreshService<TaskPriority>,
+                                            RemoveService<TaskPriority>,
+                                            TemplateService<TaskPriority> {
 
     /**
      * репозиторий с TaskPriorityEntity
@@ -99,5 +103,28 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
             repository.delete(model);
         else
             throw new OperationIsNotPossibleException("TaskPriority with id = " + model.getId() + " delete not possible");
+    }
+
+    @Override
+    public void createFromTemplate(Object... args) {
+        if (args.length != 3)
+            throw new OperationIsNotPossibleException("TaskPriority.createFromTemplate: creating test task-priority is impossible");
+        if (!(args[0] instanceof String))
+            throw new OperationIsNotPossibleException("TaskPriority.createFromTemplate: argument 0 must be String");
+        if (!(args[1] instanceof List))
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 1 must be List<Task>");
+        if (!(args[2] instanceof Integer) || (int) args[2] != 4)
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 2 must be Integer and equals 4");
+
+        int count = (int) args[2];
+
+        for (int i = 1; i <= count; i++) {
+            TaskPriority taskPriority = new TaskPriority();
+            taskPriority.setName((String)args[0]);
+            taskPriority.setValue(i);
+            taskPriority.setTasks((List<Task>)args[1]);
+
+            repository.save(taskPriority);
+        }
     }
 }

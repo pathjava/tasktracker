@@ -40,6 +40,8 @@ public class ProjectDtoFullConverter implements Converter<Project, ProjectDtoFul
      */
     @Override
     public Project toModel(ProjectDtoFull dto) {
+        if (dto == null) return null;
+
         if (dto.getId() == null)
             return new Project(dto.getId(), dto.getName(), dto.getDescription(), dto.getPrefix(),
                     userDtoPreviewConverter.toModel(dto.getOwner()), ZonedDateTime.now(),
