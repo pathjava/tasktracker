@@ -10,7 +10,7 @@ import javax.persistence.*;
 /**
  * Действия над задачей, переводящие её из одного состояния WorkFlowStatus в другое
  *
- * @author Gregory Lobkov
+ * @author Aleksandr Sidelnikov
  */
 @Data
 @NoArgsConstructor

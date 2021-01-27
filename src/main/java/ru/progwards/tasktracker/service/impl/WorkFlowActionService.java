@@ -1,114 +1,161 @@
 package ru.progwards.tasktracker.service.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.progwards.tasktracker.repository.deprecated.Repository;
-import ru.progwards.tasktracker.service.*;
+import org.springframework.transaction.annotation.Transactional;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.WorkFlowAction;
+import ru.progwards.tasktracker.model.WorkFlow;
+import ru.progwards.tasktracker.repository.TaskRepository;
+import ru.progwards.tasktracker.repository.WorkFlowActionRepository;
+import ru.progwards.tasktracker.service.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Бизнес-логика работы над действиями Workflow
+ * Бизнес-логика типов задачи
  *
- * @author Gregory Lobkov
+ * @author Aleksandr Sidelnikov
  */
 @Service
-public class WorkFlowActionService implements CreateService<WorkFlowAction>, RemoveService<WorkFlowAction>, GetListService<WorkFlowAction>, GetService<Long, WorkFlowAction>, RefreshService<WorkFlowAction>, GetListByParentService<Long, WorkFlowAction> {
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+public class WorkFlowActionService implements
+        CreateService<WorkFlowAction>,
+        GetService<Long, WorkFlowAction>,
+        RemoveService<WorkFlowAction>,
+        RefreshService<WorkFlowAction>,
+        GetListService<WorkFlowAction>,
+        GetListByParentService<Long, WorkFlowAction> {
+//        TemplateService<WorkFlowAction> {
 
-    //@Autowired
-//    private Repository<Long, WorkFlowActionEntity> workFlowActionRepository;
-//    @Autowired
-//    private Converter<WorkFlowActionEntity, WorkFlowAction> workFlowActionConverter;
-    //@Autowired
-//    private RepositoryByParentId<Long, WorkFlowActionEntity> workFlowActionEntityRepositoryByParentId;
+//    public class WorkFlowActionService implements
+//    CreateService<WorkFlowAction>,
+//    GetService<Long, WorkFlowAction>,
+//    RemoveService<WorkFlowAction>,
+//    RefreshService<WorkFlowAction>,
+//    GetListService<WorkFlowAction>,
+//    GetListByParentService<Long, WorkFlowAction> {
 
+        private final WorkFlowActionRepository workFlowActionRepository;
+    private final TaskRepository taskRepository;
+    private final CopyService<WorkFlow> workFlowCopyService;
 
     /**
-     * Создание нового WorkFlowAction
+     * Метод создания типа задачи
      *
-     * @param workFlowAction новый WorkFlowAction
+     * @param model создаваемый объект
      */
+    @Transactional
     @Override
-    public void create(WorkFlowAction workFlowAction) {
-//        WorkFlowActionEntity entity = workFlowActionConverter.toEntity(workFlowAction);
-//        workFlowActionRepository.create(entity);
-//        workFlowAction.setId(entity.getId());
+    public void create(WorkFlowAction model) {
+//  sidnet1964
+//        if (model.getWorkFlow() != null && model.getWorkFlow().getPattern()) {
+//            WorkFlow copyWorkFlow = workFlowCopyService.copy(
+//                    model.getWorkFlow(), getTemplateWorkFlow(model.getWorkFlow().getName(), model.getName())
+//            );
+//            model.setWorkFlow(copyWorkFlow);
+//        }
+        workFlowActionRepository.save(model);
     }
 
-
     /**
-     * Удаление WorkFlowAction
+     * Метод создания шаблона WorkFlow для метода копирования
      *
-     * @param workFlowAction удаляемый WorkFlowAction
+     * @param workFlowName имя текущего WorkFlow
+     * @param typeName     имя текущего WorkFlowAction
+     * @return шаблон WorkFlow
      */
-    @Override
-    public void remove(WorkFlowAction workFlowAction) {
-//        workFlowActionRepository.delete(workFlowAction.getId());
+    public WorkFlow getTemplateWorkFlow(String workFlowName, String typeName) {
+        return new WorkFlow(
+                null,
+                workFlowName + " - WorkFlowAction " + typeName,
+                false,
+                null,
+                null,
+                null
+        );
     }
 
-
     /**
-     * Получить информацию по WorkFlowAction
+     * Метод получения типа задачи по идентификатору
      *
-     * @param id идентификатор WorkFlowAction
-     * @return WorkFlowAction
+     * @param id идентификатор типа задачи
+     * @return полученный объект тип задачи
      */
     @Override
     public WorkFlowAction get(Long id) {
-//        return workFlowActionConverter.toVo(workFlowActionRepository.get(id));
-        return null;
+        return workFlowActionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("WorkFlowAction id=" + id + " not found"));
     }
 
-
     /**
-     * Обновить поля WorkFlowAction
+     * Метод удаления типа задачи
+     * Перед удалением выполняется проверка на доступность удаления типа задачи
      *
-     * @param workFlowAction измененный WorkFlowAction
+     * @param model удаляемый объект типа задачи
      */
+    @Transactional
     @Override
-    public void refresh(WorkFlowAction workFlowAction) {
-//        workFlowActionRepository.update(workFlowActionConverter.toEntity(workFlowAction));
+    public void remove(WorkFlowAction model) {
+//  sidnet1964
+//        if (checkingOtherDependenciesWorkFlowAction(model))
+//            throw new OperationIsNotPossibleException(
+//                    "Удаление невозможно, WorkFlowAction id=" + model.getId() + " используется!"
+//            );
+        workFlowActionRepository.delete(model);
     }
 
+    /**
+     * Метод проверки использования типа задачи другими ресурсами
+     *
+     * @param model тип задачи
+     * @return true - если удаляемый тип задачи где-то используется
+     * и false - если тип задачи "свободный" и его можно удалять
+     */
+//  sidnet1964
+//    private boolean checkingOtherDependenciesWorkFlowAction(WorkFlowAction model) {
+//        return taskRepository.existsTaskByType(model);
+//    }
 
     /**
-     * Получить список действий для определенного статуса
-     * 
-     * @param parentId WorkFlowStatus.id
-     * @return список действий
+     * Метод обновления типа задачи
+     *
+     * @param model обновленный объект типа задачи
      */
+    @Transactional
     @Override
-    public Collection<WorkFlowAction> getListByParentId(Long parentId) {
-        // получили список сущностей
-//        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionEntityRepositoryByParentId.getByParentId(parentId);
-//        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
-//        // преобразуем к бизнес-объектам
-//        for (WorkFlowActionEntity entity:workFlowActionEntities) {
-//            workFlowActions.add(workFlowActionConverter.toVo(entity));
+    public void refresh(WorkFlowAction model) {
+//  sidnet1964
+//        if (model.getWorkFlow() != null && model.getWorkFlow().getPattern()) {
+//            WorkFlow copyWorkFlow = workFlowCopyService.copy(
+//                    model.getWorkFlow(), getTemplateWorkFlow(model.getWorkFlow().getName(), model.getName())
+//            );
+//            model.setWorkFlow(copyWorkFlow);
 //        }
-//        return workFlowActions;
-        return null;
+        workFlowActionRepository.save(model);
     }
 
     /**
-     * Получить список всех действий
+     * Метод получения абсолютно всех типов задач
      *
-     * @return
+     * @return коллекция типов задач
      */
     @Override
     public List<WorkFlowAction> getList() {
-//        // получили список сущностей
-//        Collection<WorkFlowActionEntity> workFlowActionEntities = workFlowActionRepository.get();
-//        List<WorkFlowAction> workFlowActions = new ArrayList<>(workFlowActionEntities.size());
-//        // преобразуем к бизнес-объектам
-//        for (WorkFlowActionEntity entity:workFlowActionEntities) {
-//            workFlowActions.add(workFlowActionConverter.toVo(entity));
-//        }
-//        return workFlowActions;
-        return null;
+        return workFlowActionRepository.findAll();
     }
 
+//  sidnet1964  добавлено согласно списку интерфейсов исходного файла
+//  что делать с перечеркнутым интерфейсом?
+
+    @Override
+    public Collection<WorkFlowAction> getListByParentId(Long parentId) {
+        return null;
+    }
 }
