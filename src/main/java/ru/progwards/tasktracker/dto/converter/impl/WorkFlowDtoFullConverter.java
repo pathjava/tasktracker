@@ -1,12 +1,17 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.WorkFlowDtoFull;
+import ru.progwards.tasktracker.dto.WorkFlowStatusDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
 import ru.progwards.tasktracker.service.GetService;
+
+import java.util.Collections;
 
 
 /**
@@ -17,13 +22,11 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Gregory Lobkov
  */
 @Component
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDtoFull> {
 
-    @Autowired
-    private GetService<Long, WorkFlowStatus> statusGetService;
-    @Autowired
-    private GetService<Long, WorkFlow> getService;
-
+    private final GetService<Long, WorkFlow> getService;
+    private final Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> statusDtoConverter;
 
     /**
      * Преобразовать в бизнес-объект
@@ -33,11 +36,26 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
      */
     @Override
     public WorkFlow toModel(WorkFlowDtoFull dto) {
-//        WorkFlowStatus startStatus = statusGetService.get(dto.getStart_status_id()); // должно стать lazy load в будущем
-//        List<WorkFlowStatus> statuses = new ArrayList(statusGetListByParentService.getListByParentId(dto.getId()));
-//        return new WorkFlow(dto.getId(), dto.getName(), dto.getPattern(), startStatus, statuses,
-//                null); //TODO не NULL, а что?
-        return null;
+        WorkFlow model = null;
+        if (dto != null) {
+            WorkFlowStatus status = statusDtoConverter.toModel(dto.getStartStatus());
+            if (dto.getId() == null) {
+                model = new WorkFlow(
+                        null,
+                        dto.getName(),
+                        dto.getPattern(),
+                        status,
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                );
+            } else {
+                model = getService.get(dto.getId());
+                model.setName(dto.getName());
+                model.setPattern(dto.getPattern());
+                model.setStartStatus(status);
+            }
+        }
+        return model;
     }
 
     /**
@@ -48,7 +66,16 @@ public class WorkFlowDtoFullConverter implements Converter<WorkFlow, WorkFlowDto
      */
     @Override
     public WorkFlowDtoFull toDto(WorkFlow model) {
-        return new WorkFlowDtoFull(model.getId(), model.getName(), model.getPattern(), null);
+        WorkFlowDtoFull dto = null;
+        if (model != null) {
+            dto = new WorkFlowDtoFull(
+                    model.getId(),
+                    model.getName(),
+                    model.getPattern(),
+                    statusDtoConverter.toDto(model.getStartStatus())
+            );
+        }
+        return dto;
     }
 
 

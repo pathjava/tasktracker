@@ -49,7 +49,7 @@ public class TaskAttachmentContentService implements CreateService<TaskAttachmen
     public void remove(TaskAttachmentContent content) {
         // проверить, имеются ли TaskAttachment, в которых TaskAttachment.content_id = TaskAttachmentContent.id
         List<TaskAttachment> taskAttachments = content.getTaskAttachment();
-        if(taskAttachments.size() == 0) {
+        if (taskAttachments.size() == 0) {
             // удалить, если связей нет
             repository.delete(content);
         }
@@ -64,8 +64,9 @@ public class TaskAttachmentContentService implements CreateService<TaskAttachmen
      */
     @Override
     public TaskAttachmentContent get(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("TaskAttachmentContent id=" + id + " not found"));
+        return id == null ? null :
+                repository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("TaskAttachmentContent id=" + id + " not found"));
     }
 
 }

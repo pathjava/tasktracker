@@ -29,10 +29,10 @@ public class TaskAttachmentDtoFull {
     private Long id;
 
     /**
-     * Ссылка на задачу
+     * Задача, связанная с вложением
      */
-    @NotNull
-    private Long taskId;
+    @NotEmpty
+    private TaskDtoPreview task;
 
     /**
      * Полное имя файла-вложения
@@ -57,5 +57,11 @@ public class TaskAttachmentDtoFull {
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private ZonedDateTime created;
+
+    /**
+     * Вложение
+     */
+//    @NotEmpty
+//    private TaskAttachmentContentDtoPreview content;
 
 }
