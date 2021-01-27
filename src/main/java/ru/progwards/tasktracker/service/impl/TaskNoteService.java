@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
-import ru.progwards.tasktracker.model.TaskNote;
-import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.repository.TaskNoteRepository;
 import ru.progwards.tasktracker.service.*;
@@ -26,10 +25,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskNoteService implements CreateService<TaskNote>, GetService<Long, TaskNote>,
-        RemoveService<TaskNote>, RefreshService<TaskNote>, GetListService<TaskNote> {
+        RemoveService<TaskNote>, RefreshService<TaskNote>, GetListService<TaskNote>, TemplateService<TaskNote> {
 
     private final @NonNull TaskNoteRepository taskNoteRepository;
-    private final @NonNull TaskRepository taskRepository;
 
     @Override
     public void create(TaskNote model) {
@@ -57,11 +55,38 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
 
     @Override
     public void remove(TaskNote model) {
-//        if (taskRepository.existsTaskByTaskNote(model))
-//            throw new OperationIsNotPossibleException(
-//                    "Удаление невозможно, TaskNote id=" + model.getId() + " используется!"
-//            );
         taskNoteRepository.delete(model);
+    }
+
+    /**
+     * Метод создания TaskNote по шаблону
+     *
+     * @param args – [0] - Task, [1] - User, [2] - Integer (количество создаваемых комментариев)
+     */
+    @Transactional
+    @Override
+    public void createFromTemplate(Object... args) {
+        if (args.length != 3)
+            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: arguments expected");
+        if (!(args[0] instanceof Task))
+            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 0 must be Task");
+        if (!(args[1] instanceof User))
+            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 1 must be User");
+        if (!(args[2] instanceof Integer))
+            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 2 must be Integer");
+
+        int tnCount = (int) args[2];
+        for (int i = 0; i < tnCount; i++) {
+            TaskNote taskNote = new TaskNote();
+            taskNote.setComment("Example comment");
+            taskNote.setCreated(ZonedDateTime.now());
+            taskNote.setUpdated(ZonedDateTime.now());
+            taskNote.setAuthor((User) args[1]);
+            taskNote.setTask((Task) args[0]);
+            taskNote.setUpdater((User) args[1]);
+
+            taskNoteRepository.save(taskNote);
+        }
     }
 }
 
