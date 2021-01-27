@@ -26,6 +26,8 @@ public class ProjectDtoPreviewConverter implements Converter<Project, ProjectDto
 
     @Override
     public Project toModel(ProjectDtoPreview dto) {
+        if (dto == null) return null;
+
         Project model = projectGetService.get(dto.getId());
 
         if (model != null)

@@ -9,13 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.Project;
+import ru.progwards.tasktracker.model.Task;
+import ru.progwards.tasktracker.model.TaskType;
+import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.ConfigProperties;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -120,11 +122,37 @@ public class ProjectService implements GetListService<Project>,
             repository.save(model);
 //            repository.delete(model.getId());
         } else
-            throw new OperationIsNotPossibleException("Project has the tasks. Delete not possible");
+            throw new OperationIsNotPossibleException("Project has tasks. Deleting is not possible");
     }
 
     @Override
     public void createFromTemplate(Object... args) {
-        Arrays.stream(args).forEach(e -> repository.save((Project) e));
+        if (args.length != 6)
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: creating test project is impossible");
+        if (!(args[0] instanceof String))
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 0 must be String");
+        if (!(args[1] instanceof String))
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 1 must be String");
+        if (!(args[2] instanceof String))
+        throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 2 must be String");
+        if (!(args[3] instanceof User))
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 3 must be User");
+        if (!(args[4] instanceof List))
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 4 must be List<Task>");
+        if (!(args[5] instanceof List))
+            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 5 must be List<TaskType>");
+
+        Project project = new Project();
+        project.setName((String)args[0]);
+        project.setDescription((String)args[1]);
+        project.setPrefix((String)args[2]);
+        project.setOwner((User)args[3]);
+        project.setCreated(ZonedDateTime.now());
+        project.setTasks((List<Task>)args[4]);
+        project.setTaskTypes((List<TaskType>)args[5]);
+        project.setLastTaskCode(0L);
+        project.setDeleted(false);
+
+        repository.save(project);
     }
 }
