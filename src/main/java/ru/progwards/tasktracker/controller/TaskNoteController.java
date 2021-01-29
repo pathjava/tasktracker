@@ -14,6 +14,8 @@ import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.model.TaskNote;
 import ru.progwards.tasktracker.service.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,7 @@ public class TaskNoteController {
      * @return коллекция комментариев
      */
     @GetMapping("/task/{id}/tasknotes")
-    public ResponseEntity<List<TaskNoteDtoFull>> getListTaskNotes(@PathVariable Long id) {
+    public ResponseEntity<List<TaskNoteDtoFull>> getListTaskNotes(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 
@@ -88,7 +90,7 @@ public class TaskNoteController {
      * @return возвращает обновленный комментарий
      */
     @PutMapping("/tasknote/{id}/update")
-    public ResponseEntity<TaskNoteDtoFull> updateTaskNote(@PathVariable Long id, @RequestBody TaskNoteDtoFull taskNoteDtoPreview) {
+    public ResponseEntity<TaskNoteDtoFull> updateTaskNote(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id, @RequestBody TaskNoteDtoFull taskNoteDtoPreview) {
         if (taskNoteDtoPreview == null)
             throw new BadRequestException("Пустой объект!");
 
@@ -109,7 +111,7 @@ public class TaskNoteController {
      * @return возвращает статус ответа
      */
     @DeleteMapping("/tasknote/{id}/delete")
-    public ResponseEntity<Task> deleteTaskNote(@PathVariable Long id) {
+    public ResponseEntity<Task> deleteTaskNote(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
         if (id == null)
             throw new BadRequestException("Id: " + id + " не задан или задан неверно!");
 

@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.progwards.tasktracker.model.User;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * DtoPreview для TaskNote
  *
@@ -14,6 +18,9 @@ import ru.progwards.tasktracker.model.User;
 @AllArgsConstructor
 public class TaskNoteDtoPreview {
 
+    @Min(0)
+    @Max(Long.MAX_VALUE)
+    @NotNull
     private Long id;
     private User author;
     private User updater;
