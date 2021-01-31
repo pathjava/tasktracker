@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
-import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.model.Task;
-import ru.progwards.tasktracker.model.TaskType;
-import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.ConfigProperties;
@@ -32,15 +29,15 @@ public class ProjectService implements GetListService<Project>,
                                         GetService<Long, Project>,
                                         CreateService<Project>,
                                         RefreshService<Project>,
-                                        RemoveService<Project>,
-                                        TemplateService<Project> {
+                                        RemoveService<Project> {
 
     /**
      * репозиторий с проектами
      */
     ProjectRepository repository;
 
-    ConfigProperties configProperties;
+    TemplateService<TaskType> taskTypeTemplateService;
+    TemplateService<WorkFlow> workflowTemplateService;
 
     /**
      * метод по получению списка всех проектов, у которых значение свойства deleted = false
@@ -68,7 +65,7 @@ public class ProjectService implements GetListService<Project>,
     @Transactional
     @Override
     public void create(Project model) {
-        //значение префикса у тестового проекта
+        /*//значение префикса у тестового проекта
         String prefixTestProjectValue = configProperties.getConfigValue("project.test-project.prefix");
 
         //создаем тестовый проект, если его не существует в базе
@@ -84,10 +81,20 @@ public class ProjectService implements GetListService<Project>,
             project.setLastTaskCode(0L);
             project.setDeleted(false);
             repository.save(project);
-        }
+        }*/
+        //провряем, нет ли уже проекта с таким кодом
+        String prefix = model.getPrefix().toUpperCase();
+        if (repository.findByPrefix(prefix).isPresent())
+            throw new OperationIsNotPossibleException("Prefix is already exists");
 
-        model.setPrefix(model.getPrefix().toUpperCase());
+        model.setCreated(ZonedDateTime.now());
+        model.setPrefix(prefix);
+        model.setLastTaskCode(0L);
         repository.save(model);
+
+        //создаем простой шаблон и стандартные типы задач
+        List<WorkFlow> workFlows = workflowTemplateService.createFromTemplate();
+        taskTypeTemplateService.createFromTemplate(model, workFlows.get(0));
     }
     /**
      * метод по обновлению проекта
@@ -99,12 +106,13 @@ public class ProjectService implements GetListService<Project>,
         Project project = repository.findById(model.getId()).orElseThrow(() ->
                 new OperationIsNotPossibleException("Project.id = " + model.getId() + " doesn't exist"));
 
+        String newPrefix = model.getPrefix().toUpperCase();
         //если в обновляемом проекте меняем префикс и у проекта имеются задачи, то обновление невозможно
-        if (!model.getPrefix().equals(project.getPrefix()) &&
+        if (!newPrefix.equals(project.getPrefix()) &&
                 model.getTasks().size() > 0)
-            throw new OperationIsNotPossibleException("Update not possible");
+            throw new OperationIsNotPossibleException("Cannot change prefix, child tasks presents");
         else {
-            model.setPrefix(model.getPrefix().toUpperCase());
+            model.setPrefix(newPrefix);
             repository.save(model);
         }
     }
@@ -125,34 +133,4 @@ public class ProjectService implements GetListService<Project>,
             throw new OperationIsNotPossibleException("Project has tasks. Deleting is not possible");
     }
 
-    @Override
-    public void createFromTemplate(Object... args) {
-        if (args.length != 6)
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: creating test project is impossible");
-        if (!(args[0] instanceof String))
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 0 must be String");
-        if (!(args[1] instanceof String))
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 1 must be String");
-        if (!(args[2] instanceof String))
-        throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 2 must be String");
-        if (!(args[3] instanceof User))
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 3 must be User");
-        if (!(args[4] instanceof List))
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 4 must be List<Task>");
-        if (!(args[5] instanceof List))
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 5 must be List<TaskType>");
-
-        Project project = new Project();
-        project.setName((String)args[0]);
-        project.setDescription((String)args[1]);
-        project.setPrefix((String)args[2]);
-        project.setOwner((User)args[3]);
-        project.setCreated(ZonedDateTime.now());
-        project.setTasks((List<Task>)args[4]);
-        project.setTaskTypes((List<TaskType>)args[5]);
-        project.setLastTaskCode(0L);
-        project.setDeleted(false);
-
-        repository.save(project);
-    }
 }

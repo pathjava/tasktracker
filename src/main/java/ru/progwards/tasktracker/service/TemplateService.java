@@ -1,5 +1,7 @@
 package ru.progwards.tasktracker.service;
 
+import java.util.List;
+
 /**
  * Создать бизнес-объект по шаблону
  *
@@ -7,6 +9,6 @@ package ru.progwards.tasktracker.service;
  */
 public interface TemplateService<M> {
 
-    void createFromTemplate(Object... args);
+    List<M> createFromTemplate(Object... args);
 
 }

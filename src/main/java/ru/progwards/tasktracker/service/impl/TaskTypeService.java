@@ -14,6 +14,7 @@ import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.repository.TaskTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -132,6 +133,8 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
         return taskTypeRepository.findAll();
     }
 
+
+    CreateService<TaskType> taskTypeCreateService;
     /**
      * Метод создания TaskType по шаблону
      *
@@ -139,28 +142,33 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
      */
     @Transactional
     @Override
-    public void createFromTemplate(Object... args) {
-        if (args.length != 3)
+    public List<TaskType> createFromTemplate(Object... args) {
+        if (args.length != 2)
             throw new OperationIsNotPossibleException("TaskType.createFromTemplate: 2 arguments expected");
         if (!(args[0] instanceof Project))
             throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 0 must be Project");
         if (!(args[1] instanceof WorkFlow))
             throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 1 must be WorkFlow");
-        if (!(args[2] instanceof List))
-            throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 2 must be List<String>");
+        //if (!(args[2] instanceof List))
+        //    throw new OperationIsNotPossibleException("TaskType.createFromTemplate: argument 2 must be List<String>");
 
-        /* passing the list of task types: */
-        /* "Task", "Bug", "Epic" */
-        @SuppressWarnings("unchecked")
-        List<String> typeNames = (List<String>) args[2];
+        List<String> typeNames = List.of("Task", "Bug", "Epic");
+        Project project = (Project) args[0];
+        WorkFlow workflow = (WorkFlow) args[1];
+        if (workflow.getPattern())
+            workflow = workFlowCopyService.copy(
+                    workflow, getTemplateWorkFlow(workflow.getName(), project.getName())
+            );
 
+        List<TaskType> resultList = new ArrayList<>(typeNames.size());
         for (String name : typeNames) {
             TaskType taskType = new TaskType();
             taskType.setName(name);
-            taskType.setProject((Project) args[0]);
-            taskType.setWorkFlow((WorkFlow) args[1]);
-
-            taskTypeRepository.save(taskType);
+            taskType.setProject(project);
+            taskType.setWorkFlow(workflow);
+            taskTypeCreateService.create(taskType);
+            resultList.add(taskType);
         }
+        return resultList;
     }
 }

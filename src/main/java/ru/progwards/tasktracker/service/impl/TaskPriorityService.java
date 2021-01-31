@@ -28,8 +28,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
                                             TaskPriority>,
                                             CreateService<TaskPriority>,
                                             RefreshService<TaskPriority>,
-                                            RemoveService<TaskPriority>,
-                                            TemplateService<TaskPriority> {
+                                            RemoveService<TaskPriority> {
 
     /**
      * репозиторий с TaskPriorityEntity
@@ -104,7 +103,7 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
         else
             throw new OperationIsNotPossibleException("TaskPriority with id = " + model.getId() + " delete not possible");
     }
-
+/*
     @Override
     public void createFromTemplate(Object... args) {
         if (args.length != 3)
@@ -126,5 +125,5 @@ public class TaskPriorityService implements GetListService<TaskPriority>,
 
             repository.save(taskPriority);
         }
-    }
+    }*/
 }

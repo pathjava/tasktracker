@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.repository.RelatedTaskRepository;
 import ru.progwards.tasktracker.repository.RelationTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
         RemoveService<RelationType>, RefreshService<RelationType>,
-        GetListService<RelationType>, TemplateService<RelationType> {
+        GetListService<RelationType> {
 
     private final RelationTypeRepository relationTypeRepository;
     private final RelatedTaskRepository relatedTaskRepository;
@@ -102,40 +103,5 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
             );
 
         relationTypeRepository.delete(model);
-    }
-
-    /**
-     * Метод создания RelationType по шаблону
-     *
-     * @param args null - метод без параметров
-     */
-    @Transactional
-    @Override
-    public void createFromTemplate(Object... args) {
-        if (args.length != 1)
-            throw new OperationIsNotPossibleException("RelationType.createFromTemplate: 1 arguments expected");
-        if (!(args[0] instanceof Map))
-            throw new OperationIsNotPossibleException(
-                    "RelationType.createFromTemplate: argument 0 must be Map<String, String>"
-            );
-
-        /* passing the list of relation types: */
-        /* "relates to", "", "duplicates", "is duplicates by", "blocks", "is blocked by", "clones", "is clones by" */
-        @SuppressWarnings("unchecked")
-        Map<String, String> relationNames = (Map<String, String>) args[0];
-
-        for (Map.Entry<String, String> entry : relationNames.entrySet()) {
-            RelationType relationType = new RelationType();
-            relationType.setName(entry.getKey());
-            if (!entry.getValue().isBlank()) {
-                RelationType counterRelationType = new RelationType();
-                counterRelationType.setName(entry.getValue());
-                counterRelationType.setCounterRelation(relationType);
-                relationType.setCounterRelation(counterRelationType);
-
-                relationTypeRepository.save(counterRelationType);
-            }
-            relationTypeRepository.save(relationType);
-        }
     }
 }
