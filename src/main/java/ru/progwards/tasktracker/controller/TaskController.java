@@ -56,7 +56,7 @@ public class TaskController {
      * @return возвращает найденную TaskDtoFull
      */
     @GetMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskDtoFull> get(@PathVariable @Min(0) Long id) {
 
         TaskDtoFull task = dtoFullConverter.toDto(taskGetService.get(id));
 
@@ -84,8 +84,7 @@ public class TaskController {
      * @return лист TaskDtoPreview
      */
     @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskDtoPreview>> getListByProject(
-            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable @Min(0) Long id) {
 
         Project project = projectGetService.get(id);
         List<TaskDtoPreview> list = project.getTasks().stream()
@@ -142,7 +141,7 @@ public class TaskController {
      */
     @PutMapping(value = "/task/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<TaskDtoFull> update(@PathVariable @Min(0) Long id,
                                               @Validated(Update.class) @RequestBody TaskDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -162,7 +161,7 @@ public class TaskController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/task/{id}/delete")
-    public ResponseEntity<TaskDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         Task task = taskGetService.get(id);
         taskRemoveService.remove(task);
@@ -179,7 +178,7 @@ public class TaskController {
      */
     @PutMapping(value = "/task/{id}/updatefield",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable @Min(0) Long id,
                                                          @Validated(Update.class) @RequestBody UpdateOneValue oneValue) {
 
         if (oneValue.getFieldName().equals("id"))
