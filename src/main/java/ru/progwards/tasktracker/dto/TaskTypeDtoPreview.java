@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 public class TaskTypeDtoPreview {
 
     @Min(0)
-    @Max(Long.MAX_VALUE)
     @NotNull
     private Long id;
 
