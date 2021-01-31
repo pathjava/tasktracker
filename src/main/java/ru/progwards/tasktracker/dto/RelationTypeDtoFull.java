@@ -19,7 +19,6 @@ import javax.validation.constraints.*;
 public class RelationTypeDtoFull {
 
     @Min(value = 0, groups = Update.class)
-    @Max(value = Long.MAX_VALUE, groups = Update.class)
     @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;

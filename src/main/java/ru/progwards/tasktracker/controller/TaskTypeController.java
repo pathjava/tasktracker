@@ -68,7 +68,7 @@ public class TaskTypeController {
      * @return возвращает TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable @Min(0) Long id) {
 
         TaskTypeDtoFull taskType = dtoFullConverter.toDto(taskTypeGetService.get(id));
 
@@ -99,8 +99,7 @@ public class TaskTypeController {
      * @return возвращает лист TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(
-            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(@PathVariable @Min(0) Long id) {
 
         Project project = projectGetService.get(id);
         List<TaskTypeDtoPreview> list = project.getTaskTypes().stream()
@@ -122,7 +121,7 @@ public class TaskTypeController {
      */
     @PutMapping(value = "/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable @Min(0) Long id,
                                                   @Validated(Update.class) @RequestBody TaskTypeDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -142,7 +141,7 @@ public class TaskTypeController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         TaskType taskType = taskTypeGetService.get(id);
         taskTypeRemoveService.remove(taskType);

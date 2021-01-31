@@ -295,11 +295,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    void get_WorkLog_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformGet(GET_PATH, Long.MAX_VALUE + 1);
-    }
-
-    @Test
     void getListByTask_WorkLog() throws Exception {
         WorkLog wl = getLog();
 
@@ -316,11 +311,6 @@ class WorkLogControllerTest {
     @Test
     void getListByTask_WorkLog_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformGet(GET_LIST_BY_TASK_PATH, -1L);
-    }
-
-    @Test
-    void getListByTask_WorkLog_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformGet(GET_LIST_BY_TASK_PATH, Long.MAX_VALUE + 1);
     }
 
     @Test
@@ -433,11 +423,6 @@ class WorkLogControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
-    }
-
-    @Test
-    void delete_WorkLog_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformDelete(Long.MAX_VALUE + 1);
     }
 
 }

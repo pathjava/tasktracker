@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 public class WorkLogDtoPreview {
 
     @Min(0)
-    @Max(Long.MAX_VALUE)
     @NotNull
     private Long id;
 

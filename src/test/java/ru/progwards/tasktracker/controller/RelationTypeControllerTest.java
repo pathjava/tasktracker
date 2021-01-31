@@ -234,12 +234,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(9)
-    void get_one_RelationType_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformGet(Long.MAX_VALUE + 1);
-    }
-
-    @Test
     @Order(10)
     void getList_RelationType() throws Exception {
         RelationType one = getRelationType();
@@ -295,12 +289,6 @@ class RelationTypeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
-    }
-
-    @Test
-    @Order(14)
-    void delete_RelationType_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformDelete(Long.MAX_VALUE + 1);
     }
 
     @Test
