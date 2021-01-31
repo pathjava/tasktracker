@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 public class RelationTypeDtoPreview {
 
     @Min(0)
-    @Max(Long.MAX_VALUE)
     @NotNull
     private Long id;
 
