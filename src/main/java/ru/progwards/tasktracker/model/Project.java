@@ -56,7 +56,7 @@ public class Project  {
     /**
      * владелец (создатель) проекта
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     User owner;
     /**
