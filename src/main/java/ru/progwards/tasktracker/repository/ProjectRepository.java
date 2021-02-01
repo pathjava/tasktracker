@@ -32,6 +32,13 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findByPrefix(String prefix);
 
     /**
+     * Метод по получению проекта по его id. При этом свойство deleted должно быть со значением false
+     * @param id id проекта
+     * @return проект
+     */
+    Optional<Project> findByIdAndDeletedIsFalse(Long id);
+
+    /**
      * Метод по получению списка неудаленных проектов
      * @return список проектов, у которых значение свойства deleted = false
      */

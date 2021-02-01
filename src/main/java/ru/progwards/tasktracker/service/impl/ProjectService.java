@@ -14,7 +14,6 @@ import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.repository.ProjectRepository;
 import ru.progwards.tasktracker.service.*;
-import ru.progwards.tasktracker.util.ConfigProperties;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -39,8 +38,6 @@ public class ProjectService implements GetListService<Project>,
      */
     ProjectRepository repository;
 
-    ConfigProperties configProperties;
-
     /**
      * метод по получению списка всех проектов, у которых значение свойства deleted = false
      * @return список проектов
@@ -56,7 +53,7 @@ public class ProjectService implements GetListService<Project>,
      */
     @Override
     public Project get(Long id) {
-        return repository.findById(id).
+        return repository.findByIdAndDeletedIsFalse(id).
                 orElseThrow(() ->
                         new OperationIsNotPossibleException("Project.id = " + id + " doesn't exist"));
     }
@@ -67,24 +64,6 @@ public class ProjectService implements GetListService<Project>,
     @Transactional
     @Override
     public void create(Project model) {
-        //значение префикса у тестового проекта
-//        String prefixTestProjectValue = configProperties.getConfigValue("project.test-project.prefix");
-
-        //создаем тестовый проект, если его не существует в базе
-//        if (!repository.findByPrefix(prefixTestProjectValue).isPresent()) {
-//            Project project = new Project();
-//            project.setName("Test project");
-//            project.setDescription("The project is needed for example");
-//            project.setPrefix(prefixTestProjectValue);
-//            project.setOwner(null);
-//            project.setCreated(ZonedDateTime.now());
-//            project.setTasks(new ArrayList<>());
-//            project.setTaskTypes(new ArrayList<>());
-//            project.setLastTaskCode(0L);
-//            project.setDeleted(false);
-//            repository.save(project);
-//        }
-
         model.setPrefix(model.getPrefix().toUpperCase());
         repository.save(model);
     }

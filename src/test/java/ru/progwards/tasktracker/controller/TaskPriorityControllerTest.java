@@ -16,15 +16,19 @@ import org.springframework.test.web.servlet.MvcResult;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.TaskPriority;
 import ru.progwards.tasktracker.service.GetListService;
 import ru.progwards.tasktracker.service.GetService;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -59,6 +63,8 @@ public class TaskPriorityControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private Long createdId;
+
 
     @Test
     @Order(1)
@@ -72,22 +78,26 @@ public class TaskPriorityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
     }
 
     @Test
+    @Order(2)
     public void getTaskPriority() throws Exception {
         TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(getService.get(1L));
         String expectedJsonResponse = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
 
         String url = "/rest/task-priority/1";
         mockMvc.perform(get(url))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJsonResponse))
                 .andExpect(jsonPath("$.name", equalTo(taskPriorityDtoFull.getName())));
     }
 
     @Test
+    @Order(3)
     public void getTaskPriorityList() throws Exception {
         List<TaskPriorityDtoPreview> list = getListService.getList().stream()
                 .map(dtoPreviewConverter::toDto)
@@ -103,6 +113,7 @@ public class TaskPriorityControllerTest {
     }
 
     @Test
+    @Order(4)
     public void update() throws Exception {
         TaskPriority taskPriority = getService.get(1L);
         String newName = "BUG";
@@ -129,7 +140,42 @@ public class TaskPriorityControllerTest {
     }
 
     @Test
+    @Order(5)
     public void deleteTest() throws Exception {
+        String url = "/rest/task-priority/4/delete";
+        mockMvc.perform(post(url)).andExpect(status().isOk());
 
+        String urlGet = "/rest/task-priority/4";
+
+        mockMvc.perform(get(urlGet))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException));
+    }
+
+    @Test
+    @Order(6)
+    public void checkingId() throws Exception {
+        mockMvc.perform(get("/rest/task-priority/" + (Long.MAX_VALUE + 1)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ConstraintViolationException));
+    }
+
+    @Test
+    @Order(7)
+    public void checkingUpdate() throws Exception {
+        TaskPriority taskPriority = getService.get(5L);
+        TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(taskPriority);
+        String updatedTaskPriority = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
+
+        String url = "/rest/task-priority/7/update";
+        mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedTaskPriority))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException))
+                .andExpect(result -> assertEquals("Impossible to update task-priority", result.getResolvedException().getMessage()));
     }
 }

@@ -115,7 +115,7 @@ public class ProjectControllerTest {
         User user = userGetService.get(1L);
 
         ProjectDtoFull projectDto = new ProjectDtoFull(null, "Name of project",
-                "something", "PR1", converterUserDtoPreview.toDto(user),
+                "something", "PR3", converterUserDtoPreview.toDto(user),
                 ZonedDateTime.now());
 
         String json = objectMapper.registerModule(new JavaTimeModule()).
@@ -210,11 +210,14 @@ public class ProjectControllerTest {
     @Test
     @Order(5)
     public void delete() throws Exception {
-        String url = "/rest/project/22/delete";
-        mockMvc.perform(post(url)).andExpect(status().isOk());
+        String urlDelete = "/rest/project/24/delete";
+        mockMvc.perform(post(urlDelete)).andExpect(status().isOk());
 
-        Project remote = projectGetService.get(22L);
-        assertTrue(remote.isDeleted());
+        String urlGet = "/rest/project/24";
+        mockMvc.perform(get(urlGet))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException))
+                .andExpect(result -> assertEquals("Project.id = 24 doesn't exist", result.getResolvedException().getMessage()));
     }
 
     @Test
