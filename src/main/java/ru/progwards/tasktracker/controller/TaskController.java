@@ -21,7 +21,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -92,7 +91,7 @@ public class TaskController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список TaskDtoPreview пустой!");
+            throw new NotFoundException("List TaskDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -110,7 +109,7 @@ public class TaskController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список TaskDtoPreview пустой!");
+            throw new NotFoundException("List TaskDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -145,7 +144,7 @@ public class TaskController {
                                               @Validated(Update.class) @RequestBody TaskDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         Task task = dtoFullConverter.toModel(dtoFull);
         taskRefreshService.refresh(task);
@@ -185,7 +184,7 @@ public class TaskController {
             throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
 
         if (!id.equals(oneValue.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         updateOneFieldService.updateOneField(oneValue);
 

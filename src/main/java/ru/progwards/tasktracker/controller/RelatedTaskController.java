@@ -78,7 +78,7 @@ public class RelatedTaskController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список RelatedTaskDtoFull пустой!");
+            throw new NotFoundException("List RelatedTaskDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -109,7 +109,7 @@ public class RelatedTaskController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список RelatedTaskDtoFull пустой!");
+            throw new NotFoundException("List RelatedTaskDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

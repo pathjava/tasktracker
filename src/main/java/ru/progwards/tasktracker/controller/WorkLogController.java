@@ -19,7 +19,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +72,7 @@ public class WorkLogController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список WorkLogDtoFull пустой!");
+            throw new NotFoundException("List WorkLogDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -90,7 +89,7 @@ public class WorkLogController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список WorkLogDtoFull пустой!");
+            throw new NotFoundException("List WorkLogDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -124,7 +123,7 @@ public class WorkLogController {
                                                  @Validated(Update.class) @RequestBody WorkLogDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         WorkLog workLog = workLogDtoFullConverter.toModel(dtoFull);
         workLogRefreshService.refresh(workLog);
