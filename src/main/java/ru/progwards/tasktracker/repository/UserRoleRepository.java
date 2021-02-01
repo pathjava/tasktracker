@@ -11,4 +11,5 @@ import ru.progwards.tasktracker.model.UserRole;
 @Repository
 @Transactional(readOnly = true)
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
+    public UserRole findByName(String name);
 }

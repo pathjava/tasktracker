@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
-import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.AccessRule;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +41,7 @@ public class AccessRuleController {
     }
 
     @GetMapping("/rest/accessRule/{id}")
-    public ResponseEntity<AccessRuleDtoFull> getAccessRule(@PathVariable("id") Long id) {
+    public ResponseEntity<AccessRuleDtoFull> getAccessRule(@PathVariable("id") @Positive Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);
@@ -48,14 +52,14 @@ public class AccessRuleController {
     }
 
     @PostMapping("/rest/accessRule/create")
-    public ResponseEntity<?> createAccessRule(@RequestBody AccessRuleDtoFull dto) {
+    public ResponseEntity<?> createAccessRule(@RequestBody @Validated(Create.class) AccessRuleDtoFull dto) {
         AccessRule vo = accessRuleDtoConverter.toModel(dto);
         accessRuleCreateService.create(vo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/rest/accessRule/{id}/delete")
-    public ResponseEntity<?> deleteAccessRule(@PathVariable Long id) {
+    public ResponseEntity<?> deleteAccessRule(@PathVariable @Positive Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);
@@ -67,7 +71,7 @@ public class AccessRuleController {
     }
 
     @PostMapping("/rest/accessRule/{id}/update")
-    public ResponseEntity<?> updateAccessRule(@PathVariable Long id, @RequestBody AccessRuleDtoFull dto) {
+    public ResponseEntity<?> updateAccessRule(@PathVariable @Positive Long id, @RequestBody @Validated(Update.class) AccessRuleDtoFull dto) {
         if (id == null || !id.equals(dto.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);

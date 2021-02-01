@@ -4,6 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.progwards.tasktracker.model.types.AccessType;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * @author Artem Dikov
@@ -12,7 +18,10 @@ import ru.progwards.tasktracker.model.types.AccessType;
 @Data
 public class AccessRuleDtoFull {
     @EqualsAndHashCode.Exclude
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
     private Long id;
+    @NotBlank
     private String objectName;
     private String propertyName; // null == all
     private Long objectId; // null == all

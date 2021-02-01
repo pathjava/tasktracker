@@ -4,14 +4,17 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.model.types.SystemRole;
 import ru.progwards.tasktracker.repository.UserRoleRepository;
+import ru.progwards.tasktracker.service.*;
+
+import java.util.List;
+
 //import ru.progwards.tasktracker.repository.deprecated.Repository;
 //import ru.progwards.tasktracker.repository.deprecated.entity.UserRoleEntity;
 //import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
-import ru.progwards.tasktracker.service.*;
-import ru.progwards.tasktracker.model.UserRole;
-
-import java.util.*;
 
 /**
  * @author Artem Dikov
@@ -48,5 +51,9 @@ public class UserRoleService implements CreateService<UserRole>, GetListService<
     @Override
     public void remove(UserRole model) {
         userRoleRepository.deleteById(model.getId());
+    }
+
+    public UserRole getByName(String name) {
+        return userRoleRepository.findByName(name);
     }
 }

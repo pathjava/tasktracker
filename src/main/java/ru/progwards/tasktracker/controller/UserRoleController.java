@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.dto.UserRoleDtoFull;
-import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
+import javax.validation.constraints.Positive;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +55,7 @@ public class UserRoleController {
      * @return
      */
     @GetMapping("/rest/userRole/{id}")
-    public ResponseEntity<UserRoleDtoFull> getUserRole(@PathVariable("id") Long id) {
+    public ResponseEntity<UserRoleDtoFull> getUserRole(@PathVariable("id") @Positive Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -65,7 +69,7 @@ public class UserRoleController {
      * @return
      */
     @GetMapping("/rest/userRole/{id}/accessRules")
-    public ResponseEntity<List<AccessRuleDtoFull>> getRules(@PathVariable("id") Long id) {
+    public ResponseEntity<List<AccessRuleDtoFull>> getRules(@PathVariable("id") @Positive Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -82,7 +86,7 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/rest/userRole/create")
-    public ResponseEntity<?> createUserRole(@RequestBody UserRoleDtoFull dto) {
+    public ResponseEntity<?> createUserRole(@RequestBody @Validated(Create.class) UserRoleDtoFull dto) {
         UserRole vo = userRoleDtoConverter.toModel(dto);
         userRoleCreateService.create(vo);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -93,7 +97,7 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/rest/userRole/{id}/delete")
-    public ResponseEntity<?> deleteUserRole(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUserRole(@PathVariable @Positive Long id) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -110,7 +114,7 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/rest/userRole/{id}/update")
-    public ResponseEntity<?> updateUserRole(@PathVariable Long id, @RequestBody UserRoleDtoFull dto) {
+    public ResponseEntity<?> updateUserRole(@PathVariable @Positive Long id, @RequestBody @Validated(Update.class) UserRoleDtoFull dto) {
         if (id == null || !id.equals(dto.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -127,7 +131,7 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/rest/userRole/{id}/accessRules/add")
-    public ResponseEntity<?> addRules(@PathVariable Long id, @RequestBody List<AccessRuleDtoFull> newRules) {
+    public ResponseEntity<?> addRules(@PathVariable @Positive Long id, @RequestBody List<AccessRuleDtoFull> newRules) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -147,7 +151,7 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/rest/userRole/{id}/accessRules/delete")
-    public ResponseEntity<?> deleteRules(@PathVariable Long id, @RequestBody List<Long> ruleIdList) {
+    public ResponseEntity<?> deleteRules(@PathVariable @Positive Long id, @RequestBody List<Long> ruleIdList) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
@@ -189,7 +193,7 @@ public class UserRoleController {
      * @return
      */
     @PostMapping("/rest/userRole/{id}/accessRules/update")
-    public ResponseEntity<?> updateRules(@PathVariable Long id, @RequestBody List<AccessRuleDtoFull> ruleDtoList) {
+    public ResponseEntity<?> updateRules(@PathVariable @Positive Long id, @RequestBody List<AccessRuleDtoFull> ruleDtoList) {
         if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         UserRole vo = userRoleGetService.get(id);
