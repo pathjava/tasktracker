@@ -26,9 +26,9 @@ public class ProjectDtoFull {
     /**
      * идентификатор проекта
      */
+    @Null(groups = Create.class)
     @NotNull(groups = Update.class)
     @Min(0L)
-    @Max(Long.MAX_VALUE)
     Long id;
     /**
      * имя проекта

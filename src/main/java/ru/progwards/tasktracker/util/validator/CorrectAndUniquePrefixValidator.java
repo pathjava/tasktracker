@@ -52,7 +52,7 @@ public class CorrectAndUniquePrefixValidator implements ConstraintValidator<Corr
             }
             if (repository.findByPrefix(prefix.toUpperCase()).isPresent()) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(prefix + " is already in use");
+                context.buildConstraintViolationWithTemplate(prefix + " already exists");
                 return false;
             }
         }

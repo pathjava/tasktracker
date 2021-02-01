@@ -17,7 +17,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.ConfigProperties;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,22 +68,22 @@ public class ProjectService implements GetListService<Project>,
     @Override
     public void create(Project model) {
         //значение префикса у тестового проекта
-        String prefixTestProjectValue = configProperties.getConfigValue("project.test-project.prefix");
+//        String prefixTestProjectValue = configProperties.getConfigValue("project.test-project.prefix");
 
         //создаем тестовый проект, если его не существует в базе
-        if (!repository.findByPrefix(prefixTestProjectValue).isPresent()) {
-            Project project = new Project();
-            project.setName("Test project");
-            project.setDescription("The project is needed for example");
-            project.setPrefix(prefixTestProjectValue);
-            project.setOwner(null);
-            project.setCreated(ZonedDateTime.now());
-            project.setTasks(new ArrayList<>());
-            project.setTaskTypes(new ArrayList<>());
-            project.setLastTaskCode(0L);
-            project.setDeleted(false);
-            repository.save(project);
-        }
+//        if (!repository.findByPrefix(prefixTestProjectValue).isPresent()) {
+//            Project project = new Project();
+//            project.setName("Test project");
+//            project.setDescription("The project is needed for example");
+//            project.setPrefix(prefixTestProjectValue);
+//            project.setOwner(null);
+//            project.setCreated(ZonedDateTime.now());
+//            project.setTasks(new ArrayList<>());
+//            project.setTaskTypes(new ArrayList<>());
+//            project.setLastTaskCode(0L);
+//            project.setDeleted(false);
+//            repository.save(project);
+//        }
 
         model.setPrefix(model.getPrefix().toUpperCase());
         repository.save(model);

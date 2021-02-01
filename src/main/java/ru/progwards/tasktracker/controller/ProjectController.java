@@ -20,7 +20,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -86,7 +85,7 @@ public class ProjectController {
      * @return ProjectDto
      */
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectDtoFull> get(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
+    public ResponseEntity<ProjectDtoFull> get(@NotNull @Min(0) @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
 
         if (project == null)
@@ -122,13 +121,12 @@ public class ProjectController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable ("id") Long id,
+    public void update(@NotNull @Min(0) @PathVariable ("id") Long id,
                        @Validated(Update.class) @NotNull @RequestBody ProjectDtoFull projectDto) {
 
         if (!id.equals(projectDto.getId()))
-            throw new OperationIsNotPossibleException("Impossible to create the project");
+            throw new OperationIsNotPossibleException("Impossible to update project");
 
-        projectDto.setId(id);
         projectRefreshService.refresh(converterFull.toModel(projectDto));
     }
 
@@ -139,7 +137,7 @@ public class ProjectController {
      */
     @PostMapping(value = "{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
+    public void delete(@NotNull @Min(0) @PathVariable("id") Long id) {
         Project project = projectGetService.get(id);
         if (project == null)
             throw new NotFoundException("Not found the project with id=" + id);
