@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.repository.TaskNoteRepository;
 import ru.progwards.tasktracker.service.*;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,8 @@ import java.util.List;
 public class TaskNoteService implements CreateService<TaskNote>, GetService<Long, TaskNote>,
         RemoveService<TaskNote>, RefreshService<TaskNote>, GetListService<TaskNote>, TemplateService<TaskNote> {
 
-    private final @NonNull TaskNoteRepository taskNoteRepository;
+    @NonNull
+    private final TaskNoteRepository taskNoteRepository;
 
     @Override
     public void create(TaskNote model) {
@@ -65,7 +67,7 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
      */
     @Transactional
     @Override
-    public void createFromTemplate(Object... args) {
+    public List<TaskNote> createFromTemplate(Object... args) {
         if (args.length != 3)
             throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: arguments expected");
         if (!(args[0] instanceof Task))
@@ -75,6 +77,7 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
         if (!(args[2] instanceof Integer))
             throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 2 must be Integer");
 
+        List<TaskNote> result = new ArrayList<>();
         int tnCount = (int) args[2];
         for (int i = 0; i < tnCount; i++) {
             TaskNote taskNote = new TaskNote();
@@ -86,7 +89,9 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
             taskNote.setUpdater((User) args[1]);
 
             taskNoteRepository.save(taskNote);
+            result.add(taskNote);
         }
+        return result;
     }
 }
 

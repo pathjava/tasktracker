@@ -39,7 +39,7 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
     public UserRoleDtoFull toDto(UserRole model) {
         if (model == null)
             return null;
-        return new UserRoleDtoFull(model.getId(), model.getName(), model.getSystemRole(),
+        return new UserRoleDtoFull(model.getId(), model.getSystemRole(), model.getName(),
                 model.getAccessRules().stream().map(AccessRule::getId).collect(Collectors.toList()),
                 model.getUsers().stream().map(userDtoPreviewConverter::toDto).collect(Collectors.toList()));
     }

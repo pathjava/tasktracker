@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.progwards.tasktracker.model.types.AccessObject;
 import ru.progwards.tasktracker.model.types.AccessType;
 
 /**
@@ -18,4 +19,5 @@ public class AccessRuleDtoFull {
     private Long objectId; // null == all
     private AccessType accessType;
     private Long userRoleId;
+    private AccessObject accessObject;
 }

@@ -13,6 +13,7 @@ import ru.progwards.tasktracker.repository.RelatedTaskRepository;
 import ru.progwards.tasktracker.repository.RelationTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -104,38 +105,40 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
         relationTypeRepository.delete(model);
     }
 
-    /**
-     * Метод создания RelationType по шаблону
-     *
-     * @param args null - метод без параметров
-     */
-    @Transactional
-    @Override
-    public void createFromTemplate(Object... args) {
-        if (args.length != 1)
-            throw new OperationIsNotPossibleException("RelationType.createFromTemplate: 1 arguments expected");
-        if (!(args[0] instanceof Map))
-            throw new OperationIsNotPossibleException(
-                    "RelationType.createFromTemplate: argument 0 must be Map<String, String>"
-            );
 
-        /* passing the list of relation types: */
-        /* "relates to", "", "duplicates", "is duplicates by", "blocks", "is blocked by", "clones", "is clones by" */
-        @SuppressWarnings("unchecked")
-        Map<String, String> relationNames = (Map<String, String>) args[0];
+    CreateService<RelationType> relationTypeCreateService;
 
-        for (Map.Entry<String, String> entry : relationNames.entrySet()) {
-            RelationType relationType = new RelationType();
-            relationType.setName(entry.getKey());
-            if (!entry.getValue().isEmpty()) {
-                RelationType counterRelationType = new RelationType();
-                counterRelationType.setName(entry.getValue());
-                counterRelationType.setCounterRelation(relationType);
-                relationType.setCounterRelation(counterRelationType);
+/**
+ * Метод создания RelationType по шаблону
+ *
+ * @param args null - метод без параметров
+*/
+ @Transactional
+ @Override
+ public List<RelationType> createFromTemplate(Object... args) {
+ if (args.length != 0)
+ throw new OperationIsNotPossibleException("RelationType.createFromTemplate: No arguments expected");
 
-                relationTypeRepository.save(counterRelationType);
-            }
-            relationTypeRepository.save(relationType);
-        }
-    }
+ String[][] names = {
+ {"ссылается на"}, // "relates to"
+ {"дублирует","дублирован"}, // "duplicates", "is duplicates by"
+ {"блокирует","блокирован"}, // "blocks", "is blocked by"
+ {"клонирует","клонирован"} // "clones", "is clones by"
+ };
+ List<RelationType> result = new ArrayList<>(names.length);
+ for (String[] name : names) {
+ RelationType relation = new RelationType();
+ relation.setName(name[0]);
+ relationTypeCreateService.create(relation);
+ result.add(relation);
+ if(name.length>1) {
+ RelationType counterRelation = new RelationType();
+ counterRelation.setName(name[1]);
+ counterRelation.setCounterRelation(relation);
+ relationTypeCreateService.create(counterRelation);
+ result.add(counterRelation);
+ }
+ }
+ return result;
+ }
 }

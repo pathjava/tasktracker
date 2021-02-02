@@ -12,7 +12,7 @@ import ru.progwards.tasktracker.repository.UserRoleRepository;
 import java.util.Optional;
 
 /**
- * @author Artem Dikov
+ * @author Artem Dikov, Konstantin Kishkin
  */
 
 @Component
@@ -27,7 +27,7 @@ public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessR
             return null;
         Optional<UserRole> optionalUserRole = userRoleRepository.findById(dto.getUserRoleId());
         return new AccessRule(dto.getId(), dto.getObjectName(), dto.getPropertyName(), dto.getObjectId(),
-                dto.getAccessType(), optionalUserRole.get());
+                dto.getAccessType(), optionalUserRole.get(), dto.getAccessObject());
     }
 
     @Override
@@ -35,6 +35,6 @@ public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessR
         if (model == null)
             return null;
         return new AccessRuleDtoFull(model.getId(), model.getObjectName(), model.getPropertyName(), model.getObjectId(),
-                model.getAccessType(), model.getUserRole().getId());
+                model.getAccessType(), model.getUserRole().getId(), model.getObject());
     }
 }

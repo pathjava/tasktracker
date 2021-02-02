@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ru.progwards.tasktracker.model.types.AccessObject;
 import ru.progwards.tasktracker.model.types.AccessType;
 
 import javax.persistence.*;
 
 /**
- * @author Artem Dikov
+ * @author Artem Dikov, Konstantin Kishkin
  */
 
 @AllArgsConstructor
@@ -45,4 +46,6 @@ public class AccessRule {
     @JoinColumn(name = "user_role", referencedColumnName = "id")
     UserRole userRole;
 
+    @Enumerated(EnumType.STRING)
+    AccessObject object;
 }

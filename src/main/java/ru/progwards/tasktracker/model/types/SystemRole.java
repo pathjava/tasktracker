@@ -5,5 +5,5 @@ package ru.progwards.tasktracker.model.types;
  * @author Pavel Khovaylo
  */
 public enum  SystemRole {
-    ADMIN, MEMBER, VIEWER
+    ADMIN, USER
 }

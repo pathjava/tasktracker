@@ -3,14 +3,21 @@ package ru.progwards.tasktracker.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.progwards.tasktracker.model.types.SystemRole;
+
+import javax.validation.constraints.NotNull;
 
 /**
- * @author Artem Dikov
+ * Статус авторизации пользователя
+ *
+ * @author Artem Dikov, Konstantin Kishkin
  */
 @AllArgsConstructor
 @Data
 public class UserRoleDtoPreview {
-    @EqualsAndHashCode.Exclude
+
+    @NotNull
     private Long id;
-    private String name;
+
+    SystemRole role;
 }
