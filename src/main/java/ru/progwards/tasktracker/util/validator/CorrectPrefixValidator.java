@@ -7,9 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.progwards.tasktracker.dto.ProjectDtoFull;
-import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.repository.ProjectRepository;
-import ru.progwards.tasktracker.util.validator.annotation.CorrectAndUniquePrefix;
+import ru.progwards.tasktracker.util.validator.annotation.CorrectPrefix;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -21,16 +19,11 @@ import javax.validation.ConstraintValidatorContext;
 @Service
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class CorrectAndUniquePrefixValidator implements ConstraintValidator<CorrectAndUniquePrefix, ProjectDtoFull> {
-
-    ProjectRepository repository;
-
+public class CorrectPrefixValidator implements ConstraintValidator<CorrectPrefix, ProjectDtoFull> {
     /**
-     * 1. метод сперва проверяет значение свойства prefix объекта ProjectDtoFull на корректность
-     * 1.1. значение свойства prefix не должно содержать другие символы, кроме букв латинского алфавита и цифр
-     * 1.2. значение свойства prefix должно начинаться только с буквы
-     * 2. затем метод позволяет проверить значение свойства prefix объекта ProjectDtoFull на уникальность
-     * (т.е. содержит БД или нет объект с данным свойством) при создании и при обновлении объекта
+     * метод сперва проверяет значение свойства prefix объекта ProjectDtoFull на корректность
+     * значение свойства prefix не должно содержать другие символы, кроме букв латинского алфавита и цифр
+     * значение свойства prefix должно начинаться только с буквы
      * @param projectDtoFull объект, для которого происходит проверка свойства
      * @param context предоставляет контекстные данные и операции при применении заданного валидатора ограничений
      * @return true - если значение свойства уникально, false - если в БД уже содержится объект с таким же значением
@@ -50,17 +43,6 @@ public class CorrectAndUniquePrefixValidator implements ConstraintValidator<Corr
                 context.buildConstraintViolationWithTemplate("Prefix's first symbol is not letter");
                 return false;
             }
-            if (repository.findByPrefix(prefix.toUpperCase()).isPresent()) {
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(prefix + " already exists");
-                return false;
-            }
-        }
-        Project model = repository.findByPrefix(prefix.toUpperCase()).orElse(null);
-        if (model != null && !model.getId().equals(projectDtoFull.getId())) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(prefix + " is already in use");
-            return false;
         }
         return true;
     }

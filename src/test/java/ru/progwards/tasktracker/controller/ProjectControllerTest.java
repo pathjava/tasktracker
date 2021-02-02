@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.progwards.tasktracker.dto.ProjectDtoFull;
 import ru.progwards.tasktracker.dto.ProjectDtoPreview;
 import ru.progwards.tasktracker.dto.UserDtoFull;
@@ -103,6 +104,10 @@ public class ProjectControllerTest {
 //                .build();
 //    }
 
+    /**
+     * тестируем создание объекта + проверка исключения при создании объекта с уже существующим префиксом в СУБД
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(1)
     public void create() throws Exception {
@@ -115,25 +120,33 @@ public class ProjectControllerTest {
         User user = userGetService.get(1L);
 
         ProjectDtoFull projectDto = new ProjectDtoFull(null, "Name of project",
-                "something", "PR3", converterUserDtoPreview.toDto(user),
+                "something", "PR4", converterUserDtoPreview.toDto(user),
                 ZonedDateTime.now());
 
         String json = objectMapper.registerModule(new JavaTimeModule()).
                 writeValueAsString(projectDto);
 
-        mockMvc.perform(post("/rest/project/create")
+        String url = "/rest/project/create";
+        mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isOk());
 
-        Project project = projectRepository.findByPrefix(projectDto.getPrefix()).get();
-
-        mockMvc.perform(get("/rest/project/" + project.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo("Name of project")));
+        mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException))
+                .andExpect(result -> assertEquals("Project prefix " + projectDto.getPrefix() + " already exists",
+                                                result.getResolvedException().getMessage()));
     }
 
+    /**
+     * проверка получения одинаковых проектов через сервисный метод и метод контроллера
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(2)
     public void getProject() throws Exception {
@@ -155,7 +168,7 @@ public class ProjectControllerTest {
 
         String url = "/rest/project/22";
 //        MvcResult mvcResult =
-                mockMvc.perform(get(url)).andExpect(status().isOk())
+                mockMvc.perform(get(url)).andExpect(status().isOk()).andDo(print())
                 .andExpect(content().json(expectedJsonResponse))
                 .andExpect(jsonPath("$.name", equalTo(projectDtoFull.getName())))
 //                .andReturn()
@@ -166,7 +179,10 @@ public class ProjectControllerTest {
 //        assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
     }
 
-
+    /**
+     * проверка получения одинаковых списков проектов через сервисный метод и метод контроллера
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(3)
     public void getProjectList() throws Exception {
@@ -175,7 +191,7 @@ public class ProjectControllerTest {
                 .collect(Collectors.toList());
 
         String url = "/rest/project/list";
-        MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get(url)).andDo(print()).andExpect(status().isOk()).andReturn();
 
         String actualJsonResponse = mvcResult.getResponse().getContentAsString();
         String expectedJsonResponse = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(projects);
@@ -183,17 +199,19 @@ public class ProjectControllerTest {
         assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
     }
 
+    /**
+     * проверка метода контроллера по обновлению проекта
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(4)
     public void update() throws Exception {
         Project project = projectGetService.get(22L);
-//        String oldDesc = project.getDescription();
         String newDesc = "New description 2";
         project.setDescription(newDesc);
 
         ProjectDtoFull projectDtoFull = converterProjectDtoFull.toDto(project);
         String updatedProject = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(projectDtoFull);
-
 
         String url = "/rest/project/22/update";
         mockMvc.perform(post(url)
@@ -207,6 +225,10 @@ public class ProjectControllerTest {
 //        assertThat(newDesc).isEqualToIgnoringWhitespace(updated.getDescription());
     }
 
+    /**
+     * проверка метода контроллера по удалению проекта и проверка на исключение метода получения удаленного проекта
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(5)
     public void delete() throws Exception {
@@ -220,22 +242,31 @@ public class ProjectControllerTest {
                 .andExpect(result -> assertEquals("Project.id = 24 doesn't exist", result.getResolvedException().getMessage()));
     }
 
+    /**
+     * проверка выбрасывания исключения ConstraintViolationException при указании в качестве id значение,
+     * выходящее за пределы допустимого
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(6)
     public void checkingId() throws Exception {
+        System.out.println(Long.MAX_VALUE + 1);
         mockMvc.perform(get("/rest/project/" + (Long.MAX_VALUE + 1)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ConstraintViolationException));
     }
 
+    /**
+     * проверка выбрасывания исключения ValidationException при создании проекта с некорректным значение prefix
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(7)
-    public void uniquePrefix() throws Exception {
+    public void correctPrefix() throws Exception {
         User user = userGetService.get(1L);
-
         ProjectDtoFull projectDto = new ProjectDtoFull(null, "Project name 1",
-                "something", "TEST", converterUserDtoPreview.toDto(user),
+                "something", "TEST&!", converterUserDtoPreview.toDto(user),
                 ZonedDateTime.now());
 
         String json = objectMapper.registerModule(new JavaTimeModule()).
@@ -249,14 +280,20 @@ public class ProjectControllerTest {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ValidationException));
     }
 
+    /**
+     * проверка выбрасывания исключения OperationIsNotPossibleException при обновлении проекта методом контроллера,
+     * в котором происходит несовпадение id проекта
+     * @throws Exception при вызове метода perform()
+     */
     @Test
     @Order(8)
-    public void checkingUpdate() throws Exception {
-        Project project = projectGetService.get(22L);
+    public void checkingEqualIdUpdate() throws Exception {
+        long id = 22L;
+        Project project = projectGetService.get(id);
         ProjectDtoFull projectDtoFull = converterProjectDtoFull.toDto(project);
         String updatedProject = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(projectDtoFull);
 
-        String url = "/rest/project/21/update";
+        String url = "/rest/project/" + (id+1) + "/update";
         mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedProject))
@@ -264,5 +301,28 @@ public class ProjectControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException))
                 .andExpect(result -> assertEquals("Impossible to update project", result.getResolvedException().getMessage()));
+    }
+
+    /**
+     * проверка выбрасывания исключения MethodArgumentNotValidException при обновлении проекта методом контроллера,
+     * в котором id = null
+     * @throws Exception при вызове метода perform()
+     */
+    @Test
+    @Order(9)
+    public void checkingNullIdUpdate() throws Exception {
+        User user = userGetService.get(1L);
+        ProjectDtoFull projectDto = new ProjectDtoFull(null, "Project name 1",
+                "something", "TEST1", converterUserDtoPreview.toDto(user),
+                ZonedDateTime.now());
+        String updatedProject = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(projectDto);
+
+        String url = "/rest/project/21/update";
+        mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedProject))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
 }

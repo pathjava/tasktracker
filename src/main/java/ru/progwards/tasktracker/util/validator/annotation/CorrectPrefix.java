@@ -1,6 +1,6 @@
 package ru.progwards.tasktracker.util.validator.annotation;
 
-import ru.progwards.tasktracker.util.validator.CorrectAndUniquePrefixValidator;
+import ru.progwards.tasktracker.util.validator.CorrectPrefixValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,10 +12,10 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = CorrectAndUniquePrefixValidator.class)
-public @interface CorrectAndUniquePrefix {
+@Constraint(validatedBy = CorrectPrefixValidator.class)
+public @interface CorrectPrefix {
 
-    String message() default "This prefix is already in use";
+    String message() default "This prefix is not correct";
 
     Class<?>[] groups() default { };
 

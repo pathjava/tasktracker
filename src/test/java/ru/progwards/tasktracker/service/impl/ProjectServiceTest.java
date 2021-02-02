@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
+ * Тест ProjectService
  * @author Pavel Khovaylo
  */
 @SpringBootTest
@@ -70,7 +71,7 @@ public class ProjectServiceTest {
 
     @Test
     public void create() {
-        Project project = new Project(1L, "Name 1", "something", "P1", getUserForTest(),
+        Project project = new Project(null, "Name 1", "something", "P1", getUserForTest(),
                 ZonedDateTime.now(), new ArrayList<>(), new ArrayList<>(), 0L, false);
 
         projectService.create(project);

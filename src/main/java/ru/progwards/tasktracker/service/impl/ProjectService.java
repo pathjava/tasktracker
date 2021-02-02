@@ -58,13 +58,17 @@ public class ProjectService implements GetListService<Project>,
                         new OperationIsNotPossibleException("Project.id = " + id + " doesn't exist"));
     }
     /**
-     * метот добавляет проект в репозиторий
+     * метот добавляет проект в репозиторий, если в СУБД нет проекта с таким же префиксом
      * @param model бизнес-модель
      */
     @Transactional
     @Override
     public void create(Project model) {
-        model.setPrefix(model.getPrefix().toUpperCase());
+        String prefix = model.getPrefix().toUpperCase();
+        if (repository.findByPrefix(prefix).isPresent())
+            throw new OperationIsNotPossibleException("Project prefix " + prefix + " already exists");
+
+        model.setPrefix(prefix);
         repository.save(model);
     }
     /**
@@ -74,7 +78,7 @@ public class ProjectService implements GetListService<Project>,
     @Transactional
     @Override
     public void refresh(Project model) {
-        Project project = repository.findById(model.getId()).orElseThrow(() ->
+        Project project = repository.findByIdAndDeletedIsFalse(model.getId()).orElseThrow(() ->
                 new OperationIsNotPossibleException("Project.id = " + model.getId() + " doesn't exist"));
 
         //если в обновляемом проекте меняем префикс и у проекта имеются задачи, то обновление невозможно
