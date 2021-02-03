@@ -28,7 +28,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkLogService implements CreateService<WorkLog>, GetService<Long, WorkLog>,
-        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog>, TemplateService<WorkLog> {
+        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog> {
 
     private final WorkLogRepository workLogRepository;
     private final TaskRepository taskRepository;
@@ -232,9 +232,9 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
      *
      * @param args [0] - массив Task[] (минимум 2 Task), [1] - User
      */
-    @Transactional
+    /*@Transactional
     @Override
-    public void createFromTemplate(Object... args) {
+    public List<WorkLog> createFromTemplate(Object... args) {
         if (args.length != 2)
             throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: 2 arguments expected");
         if (!(args[0] instanceof List))
@@ -242,7 +242,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
         if (!(args[1] instanceof User))
             throw new OperationIsNotPossibleException("WorkLog.createFromTemplate: argument 1 must be User");
 
-        /* passing the list of tasks */
+        // passing the list of tasks
         @SuppressWarnings("unchecked")
         List<Task> tasks = (List<Task>) args[0];
         if (tasks.size() < 2)
@@ -259,5 +259,5 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
 
             workLogRepository.save(workLog);
         }
-    }
+    }*/
 }

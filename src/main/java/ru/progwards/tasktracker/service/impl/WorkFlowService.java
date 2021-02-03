@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.model.Project;
+import ru.progwards.tasktracker.model.TaskType;
 import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
 import ru.progwards.tasktracker.repository.WorkFlowRepository;
@@ -123,4 +125,5 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
 
         return clone;
     }
+
 }

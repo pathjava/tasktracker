@@ -16,7 +16,9 @@ import ru.progwards.tasktracker.service.*;
 import java.lang.reflect.Field;
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Бизнес-логика создания задачи (Task)
@@ -164,41 +166,62 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         }
     }
 
+    CreateService<Task> taskCreateService;
+    GetListService<TaskPriority> taskPriorityGetListService;
     /**
      * Метод создания Task по шаблону
      *
-     * @param args – [0] - TaskType, [1] - TaskPriority, [2] - Project, [3] - User, [4] - Integer (количество создаваемых Task)
+     * @param args – [0] - Project
      */
     @Transactional
     @Override
-    public void createFromTemplate(Object... args) {
-        if (args.length != 5)
-            throw new OperationIsNotPossibleException("Task.createFromTemplate: 2 arguments expected");
-        if (!(args[0] instanceof TaskType))
-            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 0 must be TaskType");
-        if (!(args[1] instanceof TaskPriority))
-            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 1 must be TaskPriority");
-        if (!(args[2] instanceof Project))
-            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 2 must be Project");
-        if (!(args[3] instanceof User))
-            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 3 must be User");
-        if (!(args[4] instanceof Integer))
-            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 4 must be Integer");
+    public List<Task> createFromTemplate(Object... args) {
+        if (args.length != 2)
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: 1 argument expected");
+        if (!(args[0] instanceof Project))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 0 must be Project");
+        if (!(args[1] instanceof User))
+            throw new OperationIsNotPossibleException("Task.createFromTemplate: argument 1 must be User");
+        Project project = (Project) args[0];
+        User user = (User) args[1];
 
-        int tasksCount = (int) args[4];
-        for (int i = 0; i < tasksCount; i++) {
+        String[][] names = { // массив входных параметров: имя, описание
+                {"Это ваша первая задача", "Это ваша первая задача.\n" +
+                        "Проблемы - это то, что вы делаете в проекте. В бизнес-проектах проблемы называются задачами.\n" +
+                        "\n" +
+                        "Типы задач\n" +
+                        "Задача может представлять собой документ, творческий актив, покупку и даже человека.\n"},
+                {"Рабочие процессы и статусы", "Рабочие процессы\n" +
+                        "Рабочие процессы определяют шаги для выполнения задачи. Чтобы увидеть рабочий процесс, через который проходит эта задача, нажмите «Просмотреть рабочий процесс» выше.\n" +
+                        "\n" +
+                        "Статус\n" +
+                        "Статус представляет собой «состояние» задачи в определенной точке рабочего процесса. Текущий статус вашей задачи можно посмотреть в разделе «Подробности» выше. Когда вы будете готовы перейти к следующему шагу, нажмите соответствующую кнопку перехода."},
+                {"Редактирование задач","Редактирование задач\n" +
+                        "Наведите курсор на контент, который хотите отредактировать, и внесите изменения. Нажмите на галочку, и все готово! Вы также можете редактировать, используя сочетания клавиш или нажав кнопку «Изменить». И не забудьте поручить кому-нибудь задачу.\n" +
+                        "\n" +
+                        "Комментирование\n" +
+                        "Вы можете добавить комментарии к задаче ниже. Комментарии - отличный способ общаться с вашей командой и оставаться в курсе. Кроме того, вы можете уведомить определенных членов команды, используя @mentions."},
+                {"Поиск информации","Поиск информации\n" +
+                        "Используйте панель поиска в правом верхнем углу, чтобы быстро найти конкретную задачу.\n" +
+                        "Для более расширенного поиска нажмите «Искать проблемы» в меню «Проблемы»."}
+        };
+        Random random = new Random();
+        List<TaskType> taskTypes = project.getTaskTypes();
+        List<TaskPriority> priorities = taskPriorityGetListService.getList();
+        List<Task> result = new ArrayList<>(names.length);
+        for (String[] name: names) {
+            int randomTaskType = random.nextInt(taskTypes.size());
+            int randomPriority = random.nextInt(priorities.size());
             Task task = new Task();
-            task.setCode(generateTaskCode((Project) args[2]));
-            task.setName("Example task " + (i + 1));
-            task.setDescription("Some description example Task");
-            task.setType((TaskType) args[0]);
-            task.setPriority((TaskPriority) args[1]);
-            task.setProject((Project) args[2]);
-            task.setAuthor((User) args[3]);
-            task.setCreated(ZonedDateTime.now());
-            task.setDeleted(false);
-
-            taskRepository.save(task);
+            task.setName(name[0]);
+            task.setDescription(name[1]);
+            task.setType(taskTypes.get(randomTaskType));
+            task.setPriority(priorities.get(randomPriority));
+            task.setProject(project);
+            task.setAuthor(user);
+            taskCreateService.create(task);
+            result.add(task);
         }
+        return result;
     }
 }

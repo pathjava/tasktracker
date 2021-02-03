@@ -50,7 +50,8 @@ public class WorkFlowStatusController {
      */
     @GetMapping(value = "/list",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<WorkFlowStatusDtoPreview>> getList() {
+    public ResponseEntity<Collection<WorkFlowStatusDtoPreview>> getList(
+    ) {
         // получили список бизнес-объектов
         List<WorkFlowStatus> list = getListService.getList();
         List<WorkFlowStatusDtoPreview> resultList = new ArrayList<>(list.size());
@@ -73,7 +74,7 @@ public class WorkFlowStatusController {
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkFlowStatusDtoFull> get(
-            @PathVariable("id") @Min(0) @Max(Long.MAX_VALUE) Long id
+            @PathVariable("id") @Min(0) Long id
     ) {
         WorkFlowStatus vo = getService.get(id);
         WorkFlowStatusDtoFull entity = dtoConverter.toDto(vo);
@@ -112,7 +113,7 @@ public class WorkFlowStatusController {
      */
     @PostMapping(value = "/{id}/update")
     public ResponseEntity<WorkFlowStatusDtoFull> update(
-            @PathVariable("id") @Min(0) @Max(Long.MAX_VALUE) Long id,
+            @PathVariable("id") @Min(0) Long id,
             @RequestBody @Validated(Update.class) WorkFlowStatusDtoFull entity
     ) {
         entity.setId(id);
@@ -133,7 +134,7 @@ public class WorkFlowStatusController {
     @PostMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(
-            @PathVariable("id") @Min(0) @Max(Long.MAX_VALUE) Long id
+            @PathVariable("id") @Min(0) Long id
     ) {
         WorkFlowStatus vo = getService.get(id);
         removeService.remove(vo);

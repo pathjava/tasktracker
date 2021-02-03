@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
+import ru.progwards.tasktracker.model.types.WorkFlowState;
 import ru.progwards.tasktracker.repository.WorkFlowStatusRepository;
 import ru.progwards.tasktracker.service.*;
 
@@ -20,7 +23,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
-public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, GetListService<WorkFlowStatus>, RefreshService<WorkFlowStatus>, CopyService<WorkFlowStatus> {
+public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, RemoveService<WorkFlowStatus>, GetService<Long, WorkFlowStatus>, GetListService<WorkFlowStatus>, RefreshService<WorkFlowStatus>, CopyService<WorkFlowStatus>, TemplateService<WorkFlowStatus> {
 
     private final WorkFlowStatusRepository statusRepository;
 
@@ -97,4 +100,32 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
         return clone;
     }
 
+    @Override
+    public List<WorkFlowStatus> createFromTemplate(Object... args) {
+        if (args.length != 1)
+            throw new OperationIsNotPossibleException("WorkFlowStatus.createFromTemplate: 1 argument expected");
+        if (!(args[0] instanceof WorkFlow))
+            throw new OperationIsNotPossibleException("WorkFlowStatus.createFromTemplate: argument 0 must be WorkFlow");
+        WorkFlow workflow = (WorkFlow) args[0];
+
+        WorkFlowStatus s1 = new WorkFlowStatus();
+        s1.setState(WorkFlowState.TO_DO);
+        s1.setName("Сделать");
+        s1.setAlwaysAllow(true);
+        s1.setWorkflow(workflow);
+
+        WorkFlowStatus s2 = new WorkFlowStatus();
+        s1.setState(WorkFlowState.IN_PROGRESS);
+        s1.setName("В работе");
+        s1.setAlwaysAllow(true);
+        s1.setWorkflow(workflow);
+
+        WorkFlowStatus s3 = new WorkFlowStatus();
+        s1.setState(WorkFlowState.DONE);
+        s1.setName("Выполнено");
+        s1.setAlwaysAllow(true);
+        s1.setWorkflow(workflow);
+
+        return List.of(s1, s2, s3);
+    }
 }
