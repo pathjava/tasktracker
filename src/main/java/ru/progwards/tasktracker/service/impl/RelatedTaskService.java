@@ -16,7 +16,6 @@ import ru.progwards.tasktracker.service.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -111,39 +110,38 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
         relatedTaskRepository.markRelatedTaskAsDeleted(true, model.getId());
     }
 
-/*    @Transactional
-    @Override
-    public List<RelationType> createFromTemplate(Object... args) {
-        if (args.length != 3)
-            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 3 arguments expected");
-        if (!(args[0] instanceof RelationType[]))
-            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: argument 0 must be RelationType");
-        if (!(args[1] instanceof Task[]))
-            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: argument 1 must be Task");
-        if (((RelationType[]) args[0]).length != 7)
-            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 7 arguments RelationType expected");
-        if (((Task[]) args[1]).length != 2)
-            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 2 arguments Task expected");
-
-        List<RelationType> relationTypes = new ArrayList<>(Arrays.asList((RelationType[]) args[0]));
-        List<Task> tasks = new ArrayList<>(Arrays.asList((Task[]) args[1]));
-
-        List<RelatedTask> relatedTasks = new ArrayList<>();
-
-        for (RelationType relationType : relationTypes) {
-            RelatedTask relatedTask = new RelatedTask();
-            relatedTask.setRelationType(relationType);
-            relatedTasks.add(relatedTask);
-        }
-
-        for (RelatedTask relatedTask : relatedTasks) {
-            if (relatedTask.getRelationType().getCounterRelation() == null){
-                relatedTask.setCurrentTask(tasks.get(0));
-                relatedTask.setAttachedTask(tasks.get(1));
-            } else {
-
-            }
-        }
-        return Collections.emptyList();
-    }*/
+//    @Transactional
+//    @Override
+//    public List<RelationType> createFromTemplate(Object... args) {
+//        if (args.length != 3)
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 3 arguments expected");
+//        if (!(args[0] instanceof RelationType[]))
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: argument 0 must be RelationType");
+//        if (!(args[1] instanceof Task[]))
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: argument 1 must be Task");
+//        if (((RelationType[]) args[0]).length != 7)
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 7 arguments RelationType expected");
+//        if (((Task[]) args[1]).length != 2)
+//            throw new OperationIsNotPossibleException("RelatedTask.createFromTemplate: 2 arguments Task expected");
+//
+//        List<RelationType> relationTypes = new ArrayList<>(Arrays.asList((RelationType[]) args[0]));
+//        List<Task> tasks = new ArrayList<>(Arrays.asList((Task[]) args[1]));
+//
+//        List<RelatedTask> relatedTasks = new ArrayList<>();
+//
+//        for (RelationType relationType : relationTypes) {
+//            RelatedTask relatedTask = new RelatedTask();
+//            relatedTask.setRelationType(relationType);
+//            relatedTasks.add(relatedTask);
+//        }
+//
+//        for (RelatedTask relatedTask : relatedTasks) {
+//            if (relatedTask.getRelationType().getCounterRelation() == null){
+//                relatedTask.setCurrentTask(tasks.get(0));
+//                relatedTask.setAttachedTask(tasks.get(1));
+//            } else {
+//
+//            }
+//        }
+//    }
 }

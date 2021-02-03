@@ -73,7 +73,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
                 counterRelation.setCounterRelation(model);
                 relationTypeRepository.save(counterRelation);
             } else
-                throw new BadRequestException("RelationType id=" + counterRelation.getId() + " уже используется");
+                throw new BadRequestException("RelationType id=" + counterRelation.getId() + " already exists");
         } else
             relationTypeRepository.save(model);
     }
@@ -99,7 +99,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
     public void remove(RelationType model) {
         if (relatedTaskRepository.existsRelatedTaskByRelationType(model))
             throw new OperationIsNotPossibleException(
-                    "Удаление RelationType id=" + model.getId() + " невозможно, данный RelationType используется!"
+                    "Removing RelationType id=" + model.getId() + " is not possible, this RelationType is in use!"
             );
 
         relationTypeRepository.delete(model);

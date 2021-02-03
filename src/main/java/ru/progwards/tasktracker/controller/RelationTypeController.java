@@ -17,7 +17,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +46,7 @@ public class RelationTypeController {
      * @return полученный по идентификатору RelationTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(0) Long id) {
 
         RelationTypeDtoFull typeDto = converter.toDto(relationTypeGetService.get(id));
 
@@ -66,7 +65,7 @@ public class RelationTypeController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список RelationTypeDtoFull пустой!");
+            throw new NotFoundException("List RelationTypeDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -98,11 +97,11 @@ public class RelationTypeController {
      */
     @PutMapping(value = "/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Min(0) Long id,
                                                       @Validated(Update.class) @RequestBody RelationTypeDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         RelationType relationType = converter.toModel(dtoFull);
         relationTypeRefreshService.refresh(relationType);
@@ -118,7 +117,7 @@ public class RelationTypeController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         RelationType relationType = relationTypeGetService.get(id);
         relationTypeRemoveService.remove(relationType);

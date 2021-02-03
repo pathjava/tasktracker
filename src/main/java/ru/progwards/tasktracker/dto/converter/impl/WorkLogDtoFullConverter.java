@@ -74,7 +74,7 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
             }
 
         throw new BadRequestException(
-                estimateChange + " не соответствует ни одному перечислению EstimateChange!"
+                estimateChange + " does not match any enumeration EstimateChange!"
         );
     }
 

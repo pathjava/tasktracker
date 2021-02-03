@@ -19,7 +19,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +50,7 @@ public class WorkLogController {
      * @return возвращает WorkLogDtoFull
      */
     @GetMapping(value = "/worklog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(0) Long id) {
 
         WorkLogDtoFull workLogDto = workLogDtoFullConverter.toDto(workLogGetService.get(id));
 
@@ -65,7 +64,7 @@ public class WorkLogController {
      * @return лист WorkLogDtoFull
      */
     @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(0) Long id) {
 
         Task task = taskGetService.get(id);
         List<WorkLogDtoFull> list = task.getWorkLogs().stream()
@@ -73,7 +72,7 @@ public class WorkLogController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список WorkLogDtoFull пустой!");
+            throw new NotFoundException("List WorkLogDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -90,7 +89,7 @@ public class WorkLogController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список WorkLogDtoFull пустой!");
+            throw new NotFoundException("List WorkLogDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -120,11 +119,11 @@ public class WorkLogController {
      */
     @PutMapping(value = "/worklog/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(0) Long id,
                                                  @Validated(Update.class) @RequestBody WorkLogDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         WorkLog workLog = workLogDtoFullConverter.toModel(dtoFull);
         workLogRefreshService.refresh(workLog);
@@ -140,7 +139,7 @@ public class WorkLogController {
      * @return статус ответа
      */
     @DeleteMapping(value = "/worklog/{id}/delete")
-    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         WorkLog workLog = workLogGetService.get(id);
         workLogRemoveService.remove(workLog);

@@ -21,7 +21,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -56,7 +55,7 @@ public class TaskController {
      * @return возвращает найденную TaskDtoFull
      */
     @GetMapping(value = "/task/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskDtoFull> get(@PathVariable @Min(0) Long id) {
 
         TaskDtoFull task = dtoFullConverter.toDto(taskGetService.get(id));
 
@@ -84,8 +83,7 @@ public class TaskController {
      * @return лист TaskDtoPreview
      */
     @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskDtoPreview>> getListByProject(
-            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable @Min(0) Long id) {
 
         Project project = projectGetService.get(id);
         List<TaskDtoPreview> list = project.getTasks().stream()
@@ -93,7 +91,7 @@ public class TaskController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список TaskDtoPreview пустой!");
+            throw new NotFoundException("List TaskDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -111,7 +109,7 @@ public class TaskController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список TaskDtoPreview пустой!");
+            throw new NotFoundException("List TaskDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -142,11 +140,11 @@ public class TaskController {
      */
     @PutMapping(value = "/task/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<TaskDtoFull> update(@PathVariable @Min(0) Long id,
                                               @Validated(Update.class) @RequestBody TaskDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         Task task = dtoFullConverter.toModel(dtoFull);
         taskRefreshService.refresh(task);
@@ -162,7 +160,7 @@ public class TaskController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/task/{id}/delete")
-    public ResponseEntity<TaskDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         Task task = taskGetService.get(id);
         taskRemoveService.remove(task);
@@ -179,14 +177,14 @@ public class TaskController {
      */
     @PutMapping(value = "/task/{id}/updatefield",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable @Min(0) Long id,
                                                          @Validated(Update.class) @RequestBody UpdateOneValue oneValue) {
 
         if (oneValue.getFieldName().equals("id"))
-            throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
+            throw new OperationIsNotPossibleException("Update field: " + oneValue.getFieldName() + " is not possible!");
 
         if (!id.equals(oneValue.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         updateOneFieldService.updateOneField(oneValue);
 

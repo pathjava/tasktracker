@@ -19,7 +19,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,7 +67,7 @@ public class TaskTypeController {
      * @return возвращает TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable @Min(0) Long id) {
 
         TaskTypeDtoFull taskType = dtoFullConverter.toDto(taskTypeGetService.get(id));
 
@@ -87,7 +86,7 @@ public class TaskTypeController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("Список TaskTypeDtoFull пустой!");
+            throw new NotFoundException("List TaskTypeDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -99,8 +98,7 @@ public class TaskTypeController {
      * @return возвращает лист TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(
-            @PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(@PathVariable @Min(0) Long id) {
 
         Project project = projectGetService.get(id);
         List<TaskTypeDtoPreview> list = project.getTaskTypes().stream()
@@ -108,7 +106,7 @@ public class TaskTypeController {
                 .collect(Collectors.toList());
 
         if (list.isEmpty())
-            throw new NotFoundException("Список TaskTypeDtoPreview пустой!");
+            throw new NotFoundException("List TaskTypeDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -122,11 +120,11 @@ public class TaskTypeController {
      */
     @PutMapping(value = "/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable @Min(0) Long id,
                                                   @Validated(Update.class) @RequestBody TaskTypeDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
-            throw new BadRequestException("Данная операция недопустима!");
+            throw new BadRequestException("This operation is not possible!");
 
         TaskType taskType = dtoFullConverter.toModel(dtoFull);
         taskTypeRefreshService.refresh(taskType);
@@ -142,7 +140,7 @@ public class TaskTypeController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable @Min(0) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         TaskType taskType = taskTypeGetService.get(id);
         taskTypeRemoveService.remove(taskType);

@@ -49,7 +49,6 @@ import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@TestPropertySource(locations = "classpath:application-dev.properties")
 @ActiveProfiles("dev")
 class TaskTypeControllerTest {
 
@@ -209,12 +208,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(8)
-    void get_TaskType_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformGet(GET_PATH, Long.MAX_VALUE + 1);
-    }
-
-    @Test
     @Order(9)
     void getList_TaskType() throws Exception {
         TaskType one = getTaskType();
@@ -278,12 +271,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(13)
-    void getListByProject_TaskType_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformGet(GET_LIST_BY_PROJECT_PATH, Long.MAX_VALUE + 1);
-    }
-
-    @Test
     @Order(14)
     void getListByProject_TaskType_when_return_Empty_List() throws Exception {
         Project project = getProject();
@@ -326,12 +313,6 @@ class TaskTypeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
-    }
-
-    @Test
-    @Order(17)
-    void delete_TaskType_Validation_when_Id_more_value_Long() throws Exception {
-        mockMvcPerformDelete(Long.MAX_VALUE + 1);
     }
 
     @Test
