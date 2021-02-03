@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
-import ru.progwards.tasktracker.model.Project;
 import ru.progwards.tasktracker.model.WorkFlowAction;
 import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.repository.TaskRepository;
@@ -18,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Бизнес-логика типов задачи
+ * Бизнес-логика действий workflow
  *
  * @author Aleksandr Sidelnikov
  */
@@ -34,20 +32,12 @@ public class WorkFlowActionService implements
         GetListByParentService<Long, WorkFlowAction> {
 //        TemplateService<WorkFlowAction> {
 
-//    public class WorkFlowActionService implements
-//    CreateService<WorkFlowAction>,
-//    GetService<Long, WorkFlowAction>,
-//    RemoveService<WorkFlowAction>,
-//    RefreshService<WorkFlowAction>,
-//    GetListService<WorkFlowAction>,
-//    GetListByParentService<Long, WorkFlowAction> {
-
-        private final WorkFlowActionRepository workFlowActionRepository;
+    private final WorkFlowActionRepository workFlowActionRepository;
     private final TaskRepository taskRepository;
     private final CopyService<WorkFlow> workFlowCopyService;
 
     /**
-     * Метод создания типа задачи
+     * Метод создания действия workflow
      *
      * @param model создаваемый объект
      */
@@ -64,29 +54,12 @@ public class WorkFlowActionService implements
         workFlowActionRepository.save(model);
     }
 
-    /**
-     * Метод создания шаблона WorkFlow для метода копирования
-     *
-     * @param workFlowName имя текущего WorkFlow
-     * @param typeName     имя текущего WorkFlowAction
-     * @return шаблон WorkFlow
-     */
-    public WorkFlow getTemplateWorkFlow(String workFlowName, String typeName) {
-        return new WorkFlow(
-                null,
-                workFlowName + " - WorkFlowAction " + typeName,
-                false,
-                null,
-                null,
-                null
-        );
-    }
 
     /**
-     * Метод получения типа задачи по идентификатору
+     * Метод получения действия workflow по идентификатору
      *
-     * @param id идентификатор типа задачи
-     * @return полученный объект тип задачи
+     * @param id идентификатор действия workflow
+     * @return полученный объект действия workflow
      */
     @Override
     public WorkFlowAction get(Long id) {
@@ -95,10 +68,10 @@ public class WorkFlowActionService implements
     }
 
     /**
-     * Метод удаления типа задачи
-     * Перед удалением выполняется проверка на доступность удаления типа задачи
+     * Метод удаления действия workflow
+     * Перед удалением выполняется проверка на доступность удаления действия workflow
      *
-     * @param model удаляемый объект типа задачи
+     * @param model удаляемый объект действия workflow
      */
     @Transactional
     @Override
@@ -112,21 +85,9 @@ public class WorkFlowActionService implements
     }
 
     /**
-     * Метод проверки использования типа задачи другими ресурсами
+     * Метод обновления действия workflow
      *
-     * @param model тип задачи
-     * @return true - если удаляемый тип задачи где-то используется
-     * и false - если тип задачи "свободный" и его можно удалять
-     */
-//  sidnet1964
-//    private boolean checkingOtherDependenciesWorkFlowAction(WorkFlowAction model) {
-//        return taskRepository.existsTaskByType(model);
-//    }
-
-    /**
-     * Метод обновления типа задачи
-     *
-     * @param model обновленный объект типа задачи
+     * @param model обновленный объект действия workflow
      */
     @Transactional
     @Override
@@ -142,9 +103,9 @@ public class WorkFlowActionService implements
     }
 
     /**
-     * Метод получения абсолютно всех типов задач
+     * Метод получения абсолютно всех действий workflow
      *
-     * @return коллекция типов задач
+     * @return коллекция действия workflow
      */
     @Override
     public List<WorkFlowAction> getList() {

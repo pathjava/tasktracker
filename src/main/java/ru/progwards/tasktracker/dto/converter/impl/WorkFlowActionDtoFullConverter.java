@@ -22,8 +22,6 @@ import ru.progwards.tasktracker.service.GetService;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkFlowActionDtoFullConverter implements Converter<WorkFlowAction, WorkFlowActionDtoFull> {
 
-    private final Converter<WorkFlow, WorkFlowDtoPreview> workFlowDtoConverter;
-    private final Converter<Project, ProjectDtoPreview> projectDtoConverter;
     private final GetService<Long, WorkFlowAction> workFlowActionGetService;
     private final GetService<Long, WorkFlowStatus> workFlowStatusGetService;
 
@@ -41,11 +39,12 @@ public class WorkFlowActionDtoFullConverter implements Converter<WorkFlowAction,
             return new WorkFlowAction(
                     null,
                     workFlowStatusGetService.get(dto.getParentStatus_id()),
-                    dto.getName().toLowerCase().trim(),
+                    dto.getName().trim(),
                     workFlowStatusGetService.get(dto.getNextStatus_id()));
         } else {
             WorkFlowAction workFlowAction = workFlowActionGetService.get(dto.getId());
             workFlowAction.setId(dto.getId());
+            workFlowAction.setParentStatus(workFlowStatusGetService.get(dto.getParentStatus_id()));
             workFlowAction.setName(dto.getName().trim());
             workFlowAction.setNextStatus(workFlowStatusGetService.get(dto.getNextStatus_id()));
             return workFlowAction;

@@ -1,68 +1,45 @@
 package ru.progwards.tasktracker.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import ru.progwards.tasktracker.util.validator.annotation.TaskTypeNameValid;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
+import javax.validation.constraints.*;
+
 /**
  * Действия над задачей, переводящие её из одного состояния WorkFlowStatus в другое
  *
  * @author Aleksandr Sidelnikov
  */
+
+@Data
+@AllArgsConstructor
+@TaskTypeNameValid(groups = {Create.class, Update.class})
 public class WorkFlowActionDtoFull {
 
-    Long id;
+    @Min(value = 0, groups = Update.class)
+//    @Max(value = Long.MAX_VALUE, groups = Update.class)
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
+    private Long id;
 
     /**
      * Родительский статус
      *
      * Статус задач, к которым применимо данное действие
      */
-    Long parentStatus_id;
+    private Long parentStatus_id;
 
     /**
      * Наименование действия
      */
-    String name;
+    @NotBlank(groups = {Create.class, Update.class})
+    private String name;
 
     /**
      * Идентификатор статуса, в который переводится задача после применения действия
      */
-    Long nextStatus_id;
-
-    public WorkFlowActionDtoFull(Long id, Long parentStatus_id, String name, Long nextStatus_id) {
-        this.id = id;
-        this.parentStatus_id = parentStatus_id;
-        this.name = name;
-        this.nextStatus_id = nextStatus_id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getParentStatus_id() {
-        return parentStatus_id;
-    }
-
-    public void setParentStatus_id(Long parentStatus_id) {
-        this.parentStatus_id = parentStatus_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getNextStatus_id() {
-        return nextStatus_id;
-    }
-
-    public void setNextStatus_id(Long nextStatus_id) {
-        this.nextStatus_id = nextStatus_id;
-    }
+    private Long nextStatus_id;
 
 }
