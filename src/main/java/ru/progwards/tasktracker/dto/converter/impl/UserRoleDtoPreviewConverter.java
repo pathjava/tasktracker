@@ -30,6 +30,6 @@ public class UserRoleDtoPreviewConverter implements Converter<UserRole, UserRole
     public UserRoleDtoPreview toDto(UserRole model) {
         if (model == null)
             return null;
-        return new UserRoleDtoPreview(model.getId(), model.getName());
+        return new UserRoleDtoPreview(model.getId(), model.getSystemRole());
     }
 }

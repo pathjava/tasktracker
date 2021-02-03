@@ -28,7 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelationTypeService implements GetService<Long, RelationType>, CreateService<RelationType>,
         RemoveService<RelationType>, RefreshService<RelationType>,
-        GetListService<RelationType> {
+        GetListService<RelationType>, TemplateService<RelationType> {
 
     private final RelationTypeRepository relationTypeRepository;
     private final RelatedTaskRepository relatedTaskRepository;
@@ -104,4 +104,41 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
 
         relationTypeRepository.delete(model);
     }
+
+
+    CreateService<RelationType> relationTypeCreateService;
+
+/**
+ * Метод создания RelationType по шаблону
+ *
+ * @param args null - метод без параметров
+*/
+ @Transactional
+ @Override
+ public List<RelationType> createFromTemplate(Object... args) {
+ if (args.length != 0)
+ throw new OperationIsNotPossibleException("RelationType.createFromTemplate: No arguments expected");
+
+ String[][] names = {
+ {"ссылается на"}, // "relates to"
+ {"дублирует","дублирован"}, // "duplicates", "is duplicates by"
+ {"блокирует","блокирован"}, // "blocks", "is blocked by"
+ {"клонирует","клонирован"} // "clones", "is clones by"
+ };
+ List<RelationType> result = new ArrayList<>(names.length);
+ for (String[] name : names) {
+ RelationType relation = new RelationType();
+ relation.setName(name[0]);
+ relationTypeCreateService.create(relation);
+ result.add(relation);
+ if(name.length>1) {
+ RelationType counterRelation = new RelationType();
+ counterRelation.setName(name[1]);
+ counterRelation.setCounterRelation(relation);
+ relationTypeCreateService.create(counterRelation);
+ result.add(counterRelation);
+ }
+ }
+ return result;
+ }
 }
