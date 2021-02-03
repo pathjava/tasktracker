@@ -23,11 +23,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserRoleService implements CreateService<UserRole>, GetListService<UserRole>, GetService<Long, UserRole>,
-        RefreshService<UserRole>, RemoveService<UserRole>, TemplateService<UserRole> {
+        RefreshService<UserRole>, RemoveService<UserRole> {
 
     private final UserRoleRepository userRoleRepository;
-    private final CreateService<UserRole> userRoleCreateService;
-    private final TemplateService<AccessRule> accessRuleTemplateService;
 
     @Override
     public void create(UserRole model) {
@@ -54,41 +52,8 @@ public class UserRoleService implements CreateService<UserRole>, GetListService<
         userRoleRepository.deleteById(model.getId());
     }
 
-    public UserRole getByName(String name) {
-        return userRoleRepository.findByName(name);
-    }
+//    public UserRole getByName(String name) {
+//        return userRoleRepository.findByName(name);
+//    }
 
-//    /**
-//     * Метод создания UserRole по шаблону
-//     *
-//     * @param args – [0] - SystemRole, [1] - User(менеджер проектов), [2] - User
-//     */
-
-    @Override
-    public List<UserRole> createFromTemplate(Object... args) {
-
-        List<UserRole> result = new ArrayList<>();
-//        if (args.length != 2)
-//            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: arguments expected");
-//        if (!(args[0] instanceof SystemRole))
-//            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 0 must be SystemRole");
-//        if (!(args[1] instanceof User))
-//            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 1 must be User");
-//        if (!(args[2] instanceof User))
-//            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 2 must be User");
-
-
-        UserRole userRole1 = new UserRole();
-        userRole1.setSystemRole(SystemRole.ADMIN);
-        userRole1.setName("Администраторы");
-        userRoleCreateService.create(userRole1);
-
-        UserRole userRole2 = new UserRole();
-        userRole2.setSystemRole(SystemRole.USER);
-        userRole2.setAccessRules(accessRuleTemplateService.createFromTemplate());
-        userRoleCreateService.create(userRole2);
-        result.add(userRole1);
-        result.add(userRole2);
-        return result;
-    }
 }

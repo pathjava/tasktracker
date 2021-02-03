@@ -8,7 +8,6 @@ import ru.progwards.tasktracker.util.ImportDump;
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        ImportDump importDump = new ImportDump();
-        importDump.exec1();
+//        (new ImportDump()).exec1();
     }
 }

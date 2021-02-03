@@ -22,11 +22,12 @@ public class AccessRuleDtoFull {
     @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;
-    @NotBlank
-    private String objectName;
+    @NotNull
+    private UserRoleDtoPreview userRole;
+    @NotNull
+    AccessObject object;
     private String propertyName; // null == all
     private Long objectId; // null == all
+    @NotNull
     private AccessType accessType;
-    private Long userRoleId;
-    private AccessObject accessObject;
 }

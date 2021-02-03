@@ -26,9 +26,13 @@ public class AccessRule {
     @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Basic
-    @Column(name = "object_name")
-    private String objectName;
+    @ManyToOne
+    @JoinColumn(name = "user_role", referencedColumnName = "id")
+    UserRole userRole;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "object")
+    AccessObject object;
 
     @Basic
     @Column(name = "property_name")
@@ -42,10 +46,4 @@ public class AccessRule {
     @Column(name = "access_type")
     private AccessType accessType;
 
-    @ManyToOne
-    @JoinColumn(name = "user_role", referencedColumnName = "id")
-    UserRole userRole;
-
-    @Enumerated(EnumType.STRING)
-    AccessObject object;
 }

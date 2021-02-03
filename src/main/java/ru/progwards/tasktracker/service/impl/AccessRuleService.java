@@ -63,17 +63,16 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
     public List<AccessRule> createFromTemplate(Object... args) {
         List<AccessRule> accessRuleList = new ArrayList<>();
         for (AccessObject accessObject : AccessObject.values()){
-            if (accessObject == AccessObject.PROJECT || accessObject == AccessObject.TASK || accessObject == AccessObject.TASK_TYPE
-            || accessObject == AccessObject.TASK_PRIORITY || accessObject == AccessObject.RELATED_TASK || accessObject == AccessObject.RELATION_TYPE
-            || accessObject == AccessObject.WORKFLOW || accessObject == AccessObject.WORKFLOW_STATUS || accessObject == AccessObject.WORKFLOW_ACTION
-            || accessObject == AccessObject.TASK_ATTACHMENT || accessObject == AccessObject.TASK_ATTACHMENT_CONTENT ||
-                    accessObject == AccessObject.WORK_LOG || accessObject == AccessObject.TASK_NOTE){
+            if (accessObject != AccessObject.ACCESS_RULE
+                    && accessObject != AccessObject.USER_ROLE
+                    && accessObject != AccessObject.USER
+            ){
                 AccessRule accessRule = new AccessRule();
                 accessRule.setId(null);
                 accessRule.setAccessType(AccessType.MODIFY);
                 accessRule.setObject(accessObject);
                 accessRule.setObjectId(null);
-                accessRule.setObjectName(accessObject.toString());
+                accessRule.setObject(accessObject);
                 accessRule.setPropertyName(null);
                 accessRule.setUserRole(null);
                 accessRuleList.add(accessRule);

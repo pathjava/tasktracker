@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDtoFull> {
 
-    private final AccessRuleDtoFullConverter accessRuleDtoFullConverter;
     private final GetService<Long, UserRole> userRoleGetService;
 
     @Override
@@ -31,12 +30,13 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
                     null,
                     dto.getName(),
                     dto.getSystemRole(),
-                    dto.getAccessRules().stream().map(accessRuleDtoFullConverter::toModel).collect(Collectors.toList()),
-                    Collections.emptyList());
+                    Collections.emptyList(),
+                    Collections.emptyList()
+            );
         UserRole userRole = userRoleGetService.get(dto.getId());
         userRole.setName(dto.getName());
         userRole.setSystemRole(dto.getSystemRole());
-        userRole.setAccessRules(dto.getAccessRules().stream().map(accessRuleDtoFullConverter::toModel).collect(Collectors.toList()));
+        //userRole.setAccessRules(dto.getAccessRules().stream().map(accessRuleDtoFullConverter::toModel).collect(Collectors.toList()));
         return userRole;
     }
 
@@ -47,7 +47,7 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
         return new UserRoleDtoFull(
                 model.getId(),
                 model.getName(),
-                model.getSystemRole(),
-                model.getAccessRules().stream().map(accessRuleDtoFullConverter::toDto).collect(Collectors.toList()));
+                model.getSystemRole()
+        );
     }
 }
