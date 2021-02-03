@@ -14,12 +14,12 @@ import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.TaskPriority;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -84,7 +84,7 @@ public class TaskPriorityController {
      * @return TaskPriorityDto
      */
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskPriorityDtoFull> get(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
+    public ResponseEntity<TaskPriorityDtoFull> get(@NotNull @Min(0) @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);
@@ -121,9 +121,12 @@ public class TaskPriorityController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id,
+    public void update(@NotNull @Min(0) @PathVariable("id") Long id,
                        @Validated(Update.class) @NotNull @RequestBody TaskPriorityDtoFull taskPriorityDtoFull) {
-        taskPriorityDtoFull.setId(id);
+
+        if (!id.equals(taskPriorityDtoFull.getId()))
+            throw new OperationIsNotPossibleException("Impossible to update task-priority");
+
         taskPriorityRefreshService.refresh(converterFull.toModel(taskPriorityDtoFull));
     }
 
@@ -135,7 +138,7 @@ public class TaskPriorityController {
      */
     @PostMapping(value = "{id}/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@NotNull @Min(0) @Max(Long.MAX_VALUE) @PathVariable("id") Long id) {
+    public void delete(@NotNull @Min(0) @PathVariable("id") Long id) {
         TaskPriority taskPriority = taskPriorityGetService.get(id);
         if (taskPriority == null)
             throw new NotFoundException("Not found a taskPriority with id=" + id);

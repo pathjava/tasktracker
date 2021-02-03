@@ -1,139 +1,181 @@
 package ru.progwards.tasktracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.progwards.tasktracker.dto.converter.Converter;
+import org.springframework.test.web.servlet.MvcResult;
 import ru.progwards.tasktracker.dto.TaskPriorityDtoFull;
-import ru.progwards.tasktracker.service.*;
+import ru.progwards.tasktracker.dto.TaskPriorityDtoPreview;
+import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.TaskPriority;
+import ru.progwards.tasktracker.service.GetListService;
+import ru.progwards.tasktracker.service.GetService;
 
-import java.util.Collection;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * Тест TaskPriorityController
  * @author Pavel Khovaylo
  */
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
+//подключаем к тестированию базу данных H2
+@TestPropertySource(locations = {"/application-test.properties"})
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TaskPriorityControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private TaskPriorityController controller;
-
-//    @Autowired
-//    private Repository<Long, TaskPriorityEntity> repository;
+    private GetService<Long, TaskPriority> getService;
 
     @Autowired
-    private Converter<TaskPriority, TaskPriorityDtoFull> converter;
+    private GetListService<TaskPriority> getListService;
 
     @Autowired
-    private GetListService<TaskPriority> taskPriorityGetListService;
+    private Converter<TaskPriority, TaskPriorityDtoFull> dtoFullConverter;
 
     @Autowired
-    private GetService<Long, TaskPriority> taskPriorityGetService;
+    private Converter<TaskPriority, TaskPriorityDtoPreview> dtoPreviewConverter;
 
     @Autowired
-    private CreateService<TaskPriority> taskPriorityCreateService;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    private RefreshService<TaskPriority> taskPriorityRefreshService;
+    private Long createdId;
 
-    @Autowired
-    private RemoveService<TaskPriority> taskPriorityRemoveService;
 
     @Test
-    public void loadedController() {
-        Assertions.assertNotNull(controller);
+    @Order(1)
+    public void create() throws Exception {
+        TaskPriorityDtoFull taskPriorityDtoFull = new TaskPriorityDtoFull(null, "TASK", 1);
+
+        String json = objectMapper.registerModule(new JavaTimeModule()).
+                writeValueAsString(taskPriorityDtoFull);
+
+        mockMvc.perform(post("/rest/task-priority/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
     }
 
     @Test
-    public void getTaskPrioritiesTest() throws Exception {
-        Collection<TaskPriorityDtoFull> taskPriorityDtoFulls = taskPriorityGetListService.getList().stream().
-                map(e -> converter.toDto(e)).collect(Collectors.toList());
+    @Order(2)
+    public void getTaskPriority() throws Exception {
+        TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(getService.get(1L));
+        String expectedJsonResponse = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
 
-        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtoFulls);
-
-        mockMvc.perform(get("/rest/task-priority/list")).
-                andExpect(status().isOk()).
-                andExpect(content().json(stringJson));
+        String url = "/rest/task-priority/1";
+        mockMvc.perform(get(url))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJsonResponse))
+                .andExpect(jsonPath("$.name", equalTo(taskPriorityDtoFull.getName())));
     }
 
     @Test
-    public void getTaskPriorityTest() throws Exception {
-        TaskPriorityDtoFull taskPriorityDtoFull = converter.toDto(taskPriorityGetService.get(1L));
+    @Order(3)
+    public void getTaskPriorityList() throws Exception {
+        List<TaskPriorityDtoPreview> list = getListService.getList().stream()
+                .map(dtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
 
-        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtoFull);
+        String url = "/rest/task-priority/list";
+        MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 
-        mockMvc.perform(get("/rest/task-priority/1")).
-                andExpect(status().isOk()).
-                andExpect(content().json(stringJson));
+        String actualJsonResponse = mvcResult.getResponse().getContentAsString();
+        String expectedJsonResponse = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(list);
+
+        assertThat(actualJsonResponse).isEqualToIgnoringWhitespace(expectedJsonResponse);
     }
 
     @Test
-    public void createTest() throws Exception {
-        TaskPriorityDtoFull taskPriorityDtoFull = new TaskPriorityDtoFull(6L, "name6", 6);
+    @Order(4)
+    public void update() throws Exception {
+        TaskPriority taskPriority = getService.get(1L);
+        String newName = "BUG";
+        taskPriority.setName(newName);
 
-        String stringJson = new ObjectMapper().writeValueAsString(taskPriorityDtoFull);
+        TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(taskPriority);
+        String updated = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
 
-        mockMvc.perform(post("/rest/task-priority/create").
-                content(
-                   "{\n" +
-                   "    \"id\": 6,\n" +
-                   "    \"name\": \"name6\",\n" +
-                   "    \"value\": 6\n" +
-                   "}"
-                ).
-                contentType(MediaType.APPLICATION_JSON).
-                accept(MediaType.APPLICATION_JSON)).
-                andDo(print()).
-                andExpect(status().is2xxSuccessful()).andExpect(content().json(stringJson));
+        String urlUpdate = "/rest/task-priority/1/update";
 
-        mockMvc.perform(get("/rest/task-priority/6")).
-                andExpect(jsonPath("$.name").value("name6")).
-                andExpect(jsonPath("$.value").value("6"));
+        mockMvc.perform(post(urlUpdate)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updated))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        String urlGet = "/rest/task-priority/1";
+
+        mockMvc.perform(get(urlGet))
+                .andExpect(status().isOk())
+                .andExpect(content().json(updated))
+//                .andExpect(jsonPath("$.name").value(newName))
+                .andExpect(jsonPath("$.name", equalTo(newName)));
     }
 
     @Test
-    public void updateTest() throws Exception {
-        String newName = "name of project 6";
-
-        mockMvc.perform(post("/rest/task-priority/6/update").
-                content(
-                        "{\n" +
-                        "    \"name\": \"name of project 6\",\n" +
-                        "    \"value\": 6\n" +
-                        "}"
-                ).
-                contentType(MediaType.APPLICATION_JSON).
-                accept(MediaType.APPLICATION_JSON)).
-                andDo(print()).
-                andExpect(status().isOk());
-
-        mockMvc.perform(get("/rest/task-priority/6")).
-                andExpect(jsonPath("$.name").value(newName));
-    }
-
-    @Test
+    @Order(5)
     public void deleteTest() throws Exception {
-//        TaskPriorityEntity entity = repository.get(6L);
-//
-//        if (entity != null)
-//            mockMvc.perform(post("/rest/task-priority/6/delete")).andExpect(status().isOk());
+        String url = "/rest/task-priority/4/delete";
+        mockMvc.perform(post(url)).andExpect(status().isOk());
+
+        String urlGet = "/rest/task-priority/4";
+
+        mockMvc.perform(get(urlGet))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException));
+    }
+
+    @Test
+    @Order(6)
+    public void checkingId() throws Exception {
+        mockMvc.perform(get("/rest/task-priority/" + (Long.MAX_VALUE + 1)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ConstraintViolationException));
+    }
+
+    @Test
+    @Order(7)
+    public void checkingUpdate() throws Exception {
+        TaskPriority taskPriority = getService.get(5L);
+        TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(taskPriority);
+        String updatedTaskPriority = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
+
+        String url = "/rest/task-priority/7/update";
+        mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedTaskPriority))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OperationIsNotPossibleException))
+                .andExpect(result -> assertEquals("Impossible to update task-priority", result.getResolvedException().getMessage()));
     }
 }

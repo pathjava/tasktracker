@@ -9,10 +9,7 @@ import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 /**
  * DtoFull для TaskPriority
@@ -27,9 +24,9 @@ public class TaskPriorityDtoFull {
     /**
      * идентификатор
      */
+    @Null(groups = Create.class)
     @NotNull(groups = Update.class)
     @Min(0L)
-    @Max(Long.MAX_VALUE)
     Long id;
     /**
      * имя

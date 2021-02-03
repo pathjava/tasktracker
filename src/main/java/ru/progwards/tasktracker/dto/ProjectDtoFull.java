@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.progwards.tasktracker.util.validator.annotation.CorrectAndUniquePrefix;
+import ru.progwards.tasktracker.util.validator.annotation.CorrectPrefix;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
@@ -21,14 +21,14 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 //@GroupSequence({Create.class, Update.class})
-@CorrectAndUniquePrefix(groups = {Create.class, Update.class})
+@CorrectPrefix(groups = {Create.class, Update.class})
 public class ProjectDtoFull {
     /**
      * идентификатор проекта
      */
+    @Null(groups = Create.class)
     @NotNull(groups = Update.class)
     @Min(0L)
-    @Max(Long.MAX_VALUE)
     Long id;
     /**
      * имя проекта
