@@ -52,7 +52,7 @@ public class TaskAttachmentController {
     @GetMapping(value = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<TaskAttachmentDtoFull>> getList(
-            @PathVariable("task_id") @Min(0) @Max(Long.MAX_VALUE) Long task_id
+            @PathVariable("task_id") @Min(0) Long task_id
     ) {
         if (task_id == null)
             throw new BadRequestException("Task_id is not set");
@@ -79,7 +79,7 @@ public class TaskAttachmentController {
      */
     @PostMapping("/add")
     public ResponseEntity<Collection<TaskAttachmentDtoFull>> createList(
-            @PathVariable("task_id") @Min(0) @Max(Long.MAX_VALUE) Long task_id,
+            @PathVariable("task_id") @Min(0) Long task_id,
             @RequestBody @NotNull @Validated(Update.class) Collection<TaskAttachmentDtoFull> newEntities
     ) {
         List<TaskAttachmentDtoFull> resultList = new ArrayList<>(newEntities.size());
@@ -104,8 +104,8 @@ public class TaskAttachmentController {
     @PostMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteList(
-            @PathVariable("task_id") @Min(0) @Max(Long.MAX_VALUE) Long task_id,
-            @RequestBody @NotNull @Min(0) @Max(Long.MAX_VALUE) Collection<Long> ids
+            @PathVariable("task_id") @Min(0) Long task_id,
+            @RequestBody @NotNull @Min(0) Collection<Long> ids
     ) {
         for (Long id : ids)
             if (id != null) {

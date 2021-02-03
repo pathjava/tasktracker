@@ -32,16 +32,9 @@ public class TaskAttachmentContentDtoPreviewConverter implements Converter<TaskA
     @Override
     public TaskAttachmentContent toModel(TaskAttachmentContentDtoPreview dto) {
         TaskAttachmentContent model = null;
-        if (dto != null)
-            if (dto.getId() == null) {
-                model = new TaskAttachmentContent(
-                        null,
-                        null,
-                        Collections.emptyList()
-                );
-            } else {
-                model = getService.get(dto.getId());
-            }
+        if (dto != null) {
+            model = getService.get(dto.getId());
+        }
         return model;
     }
 
@@ -55,10 +48,11 @@ public class TaskAttachmentContentDtoPreviewConverter implements Converter<TaskA
     @Override
     public TaskAttachmentContentDtoPreview toDto(TaskAttachmentContent model) {
         TaskAttachmentContentDtoPreview dto = null;
-        if (model != null)
+        if (model != null) {
             dto = new TaskAttachmentContentDtoPreview(
                     model.getId()
             );
+        }
         return dto;
     }
 

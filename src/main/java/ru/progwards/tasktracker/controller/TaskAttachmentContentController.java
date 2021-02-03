@@ -48,12 +48,10 @@ public class TaskAttachmentContentController {
     /**
      * Передать пользователю содержимое вложения
      * GET /rest/taskattachment/{id}/download/{anyFileName}
-     *
-     * @return передаем содержимое файла
      */
     @GetMapping(value = "{id}/download/{name}")
     public void download(
-            @PathVariable("id") @Min(0) @Max(Long.MAX_VALUE) Long id,
+            @PathVariable("id") @Min(0) Long id,
             @PathVariable("name") String name,
             HttpServletResponse response
     ) {
@@ -81,7 +79,7 @@ public class TaskAttachmentContentController {
     @PostMapping(value = "{attach_id}/upload",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskAttachmentContentDtoFull> upload(
-            @PathVariable("attach_id") @Min(0) @Max(Long.MAX_VALUE) Long attach_id,
+            @PathVariable("attach_id") @Min(0) Long attach_id,
             @RequestParam("file") @NotNull MultipartFile file
     ) {
         TaskAttachment attachment = attachmentGetService.get(attach_id);
