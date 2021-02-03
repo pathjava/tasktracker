@@ -181,7 +181,7 @@ public class TaskController {
                                                          @Validated(Update.class) @RequestBody UpdateOneValue oneValue) {
 
         if (oneValue.getFieldName().equals("id"))
-            throw new OperationIsNotPossibleException("Обновление поля: " + oneValue.getFieldName() + " невозможно!");
+            throw new OperationIsNotPossibleException("Update field: " + oneValue.getFieldName() + " is not possible!");
 
         if (!id.equals(oneValue.getId()))
             throw new BadRequestException("This operation is not possible!");
