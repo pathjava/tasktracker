@@ -35,8 +35,10 @@ public class WorkFlowStateController {
      *
      * @return полный список WorkFlowStateDtoPreview
      */
-    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WorkFlowStateDtoPreview>> getList() {
+    @GetMapping(value = "/list",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<WorkFlowStateDtoPreview>> getList(
+    ) {
 //        List<WorkFlowStateDtoPreview> result = Arrays.stream(WorkFlowState.values()) //тоже рабочий вариант, но без стримов будет быстрее
 //                .map((s)->dtoPreviewConverter.toDto(s))
 //                .collect(Collectors.toList());

@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.WorkFlowDtoPreview;
+import ru.progwards.tasktracker.dto.WorkFlowStateDtoPreview;
 import ru.progwards.tasktracker.dto.WorkFlowStatusDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
+import ru.progwards.tasktracker.model.types.WorkFlowState;
 import ru.progwards.tasktracker.service.GetService;
 
 @Component
@@ -16,9 +18,6 @@ import ru.progwards.tasktracker.service.GetService;
 public class WorkFlowDtoPreviewConverter implements Converter<WorkFlow, WorkFlowDtoPreview> {
 
     private final GetService<Long, WorkFlow> getService;
-    private final GetService<Long, WorkFlowStatus> statusGetService;
-    private final Converter<WorkFlowStatus, WorkFlowStatusDtoPreview> statusDtoConverter;
-
 
     /**
      * Преобразовать в бизнес-объект
@@ -29,7 +28,7 @@ public class WorkFlowDtoPreviewConverter implements Converter<WorkFlow, WorkFlow
     @Override
     public WorkFlow toModel(WorkFlowDtoPreview dto) {
         WorkFlow model = null;
-        if (dto != null && dto.getId() != null)
+        if (dto != null)
             model = getService.get(dto.getId());
         return model;
     }

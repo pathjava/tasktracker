@@ -15,6 +15,7 @@ import ru.progwards.tasktracker.model.types.WorkFlowState;
 @Component
 public class WorkFlowStateDtoPreviewConverter implements Converter<WorkFlowState, WorkFlowStateDtoPreview> {
 
+
     @Override
     public WorkFlowState toModel(WorkFlowStateDtoPreview dto) {
         return dto == null ? null : WorkFlowState.valueOf(dto.getName());
@@ -24,4 +25,5 @@ public class WorkFlowStateDtoPreviewConverter implements Converter<WorkFlowState
     public WorkFlowStateDtoPreview toDto(WorkFlowState model) {
         return new WorkFlowStateDtoPreview(model.toString());
     }
+
 }
