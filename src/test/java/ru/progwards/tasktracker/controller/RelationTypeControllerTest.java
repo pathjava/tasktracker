@@ -46,7 +46,6 @@ import static ru.progwards.tasktracker.objects.GetModel.getRelationType;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@TestPropertySource(locations = "classpath:application-dev.properties")
 @ActiveProfiles("dev")
 class RelationTypeControllerTest {
 

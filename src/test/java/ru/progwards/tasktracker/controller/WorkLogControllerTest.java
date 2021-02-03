@@ -47,7 +47,6 @@ import static ru.progwards.tasktracker.objects.GetModel.*;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@TestPropertySource(locations = "classpath:application-dev.properties")
 @ActiveProfiles("dev")
 class WorkLogControllerTest {
 
@@ -126,7 +125,7 @@ class WorkLogControllerTest {
     }
 
     @BeforeEach
-    public void creator() {
+    public void taskAndUserCreator() {
         user = getUser();
         userRepository.save(user);
 
