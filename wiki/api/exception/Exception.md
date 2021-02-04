@@ -1,4 +1,4 @@
-#Exception
+# Exception
 
 [BadRequestException](https://github.com/progwards-tasktracker/tasktracker) <br />
 [CreateTemplateException](https://github.com/progwards-tasktracker/tasktracker) <br />
