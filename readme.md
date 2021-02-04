@@ -1,6 +1,6 @@
 # Task Tracker by Progwards team
 
-##Структура
+## Структура
 
 [Controller](https://github.com/progwards-tasktracker/tasktracker) <br />
 [Dto](https://github.com/progwards-tasktracker/tasktracker) <br />
