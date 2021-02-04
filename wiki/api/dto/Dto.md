@@ -1,0 +1,36 @@
+#Dto
+
+[AccessRuleDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[AccessRuleDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[AccessTypeDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[ProjectDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[ProjectDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[RelatedTaskDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[RelatedTaskDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[RelationTypeDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[RelationTypeDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskAttachmentContentDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskAttachmentContentDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskAttachmentDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskAttachmentDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskNoteDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskNoteDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskPriorityDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskPriorityDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskTypeDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[TaskTypeDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[UserDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[UserDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[UserRoleDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[UserRoleDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowActionDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowActionDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowStateDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowStatusDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkFlowStatusDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkLogDtoFull](https://github.com/progwards-tasktracker/tasktracker) <br />
+[WorkLogDtoPreview](https://github.com/progwards-tasktracker/tasktracker) <br />
