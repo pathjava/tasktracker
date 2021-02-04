@@ -31,7 +31,7 @@ public class GetModel {
         return result.toString();
     }
 
-    public static Project getProject() {
+    public static Project getProjectModel() {
         return new Project(
                 null,
                 "Test project " + randomChar(),
@@ -46,7 +46,7 @@ public class GetModel {
         );
     }
 
-    public static RelatedTask getRelatedTask() {
+    public static RelatedTask getRelatedTaskModel() {
         return new RelatedTask(
                 null,
                 null,
@@ -56,7 +56,7 @@ public class GetModel {
         );
     }
 
-    public static RelationType getRelationType() {
+    public static RelationType getRelationTypeModel() {
         return new RelationType(
                 null,
                 "relation name",
@@ -65,7 +65,7 @@ public class GetModel {
         );
     }
 
-    public static Task getTask() {
+    public static Task getTaskModel() {
         return new Task(
                 null,
                 randomChar(),
@@ -91,7 +91,7 @@ public class GetModel {
         );
     }
 
-    public static TaskType getTaskType() {
+    public static TaskType getTaskTypeModel() {
         return new TaskType(
                 null,
                 null,
@@ -101,7 +101,7 @@ public class GetModel {
         );
     }
 
-    public static User getUser() {
+    public static User getUserModel() {
         return new User(
                 null,
                 "Ivan",
@@ -117,7 +117,7 @@ public class GetModel {
         );
     }
 
-    public static WorkFlow getWorkFlow(){
+    public static WorkFlow getWorkFlowModel(){
         return new WorkFlow(
                 null,
                 null,
@@ -128,7 +128,7 @@ public class GetModel {
         );
     }
 
-    public static WorkLog getWorkLog() {
+    public static WorkLog getWorkLogModel() {
         return new WorkLog(
                 null,
                 null,

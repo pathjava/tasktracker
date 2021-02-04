@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
-import static ru.progwards.tasktracker.objects.GetModel.getTask;
+import static ru.progwards.tasktracker.objects.GetModel.getTaskModel;
 
 /**
  * Тестирование сервиса получения задачи по строковому коду
@@ -25,7 +25,7 @@ class TaskByCodeGetServiceTest {
     private GetService<String, Task> getService;
 
     {
-        task = getTask();
+        task = getTaskModel();
         task.setId(1L);
         task.setCode("TT-1");
     }

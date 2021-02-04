@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getRelationTypeDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getRelationType;
+import static ru.progwards.tasktracker.objects.GetModel.getRelationTypeModel;
 
 /**
  * Тестирование методов контроллера RelationTypeController
@@ -132,7 +132,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(2)
     void create_RelationType_with_counter_RelationType() throws Exception {
-        RelationType counterType = getRelationType();
+        RelationType counterType = getRelationTypeModel();
         counterType.setName("counter name");
         Long counterId = relationTypeRepository.save(counterType).getId();
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
@@ -195,7 +195,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(6)
     void get_RelationType() throws Exception {
-        RelationType rt = relationTypeRepository.save(getRelationType());
+        RelationType rt = relationTypeRepository.save(getRelationTypeModel());
 
         try {
             mockMvc.perform(
@@ -235,9 +235,9 @@ class RelationTypeControllerTest {
     @Test
     @Order(10)
     void getList_RelationType() throws Exception {
-        RelationType one = getRelationType();
+        RelationType one = getRelationTypeModel();
         one.setName("name one");
-        RelationType two = getRelationType();
+        RelationType two = getRelationTypeModel();
         two.setName("name two");
         List<RelationType> listType = List.of(one, two);
         relationTypeRepository.saveAll(listType);
@@ -265,7 +265,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(12)
     void delete_RelationType() {
-        RelationType rt = relationTypeRepository.save(getRelationType());
+        RelationType rt = relationTypeRepository.save(getRelationTypeModel());
 
         try {
             mockMvc.perform(
@@ -293,7 +293,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(15)
     void update_RelationType() throws Exception {
-        RelationType rt = relationTypeRepository.save(getRelationType());
+        RelationType rt = relationTypeRepository.save(getRelationTypeModel());
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName("updated name");
         dto.setId(rt.getId());
@@ -320,7 +320,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(16)
     void update_RelationType_when_Request_Id_is_different_Dto_Id() throws Exception {
-        RelationType rt = relationTypeRepository.save(getRelationType());
+        RelationType rt = relationTypeRepository.save(getRelationTypeModel());
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName("another name");
         dto.setId(rt.getId() + 1);
@@ -339,7 +339,7 @@ class RelationTypeControllerTest {
     @Test
     @Order(17)
     void update_RelationType_when_Name_is_already_used_another_RelationType() throws Exception {
-        RelationType rt = relationTypeRepository.save(getRelationType());
+        RelationType rt = relationTypeRepository.save(getRelationTypeModel());
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setId(rt.getId() + 1);
 

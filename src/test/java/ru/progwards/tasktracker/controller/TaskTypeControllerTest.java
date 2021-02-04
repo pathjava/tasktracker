@@ -38,8 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getTaskTypeDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getProject;
-import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
+import static ru.progwards.tasktracker.objects.GetModel.getProjectModel;
+import static ru.progwards.tasktracker.objects.GetModel.getTaskTypeModel;
 
 /**
  * Тестирование методов контроллера TaskTypeController
@@ -171,7 +171,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(5)
     void get_TaskType() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
 
         try {
             mockMvc.perform(
@@ -210,9 +210,9 @@ class TaskTypeControllerTest {
     @Test
     @Order(9)
     void getList_TaskType() throws Exception {
-        TaskType one = getTaskType();
+        TaskType one = getTaskTypeModel();
         one.setName("name one");
-        TaskType two = getTaskType();
+        TaskType two = getTaskTypeModel();
         two.setName("name two");
         List<TaskType> listType = List.of(one, two);
         taskTypeRepository.saveAll(listType);
@@ -239,14 +239,14 @@ class TaskTypeControllerTest {
     @Test
     @Order(11)
     void getListByProject_TaskType() throws Exception {
-        Project project = getProject();
+        Project project = getProjectModel();
         projectRepository.save(project);
 
-        TaskType one = getTaskType();
+        TaskType one = getTaskTypeModel();
         one.setName("name one");
         one.setProject(project);
 
-        TaskType two = getTaskType();
+        TaskType two = getTaskTypeModel();
         two.setName("name two");
         two.setProject(project);
 
@@ -273,7 +273,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(14)
     void getListByProject_TaskType_when_return_Empty_List() throws Exception {
-        Project project = getProject();
+        Project project = getProjectModel();
         projectRepository.save(project);
 
         try {
@@ -290,7 +290,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(15)
     void delete_TaskType() {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
 
         try {
             mockMvc.perform(
@@ -318,7 +318,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(18)
     void update_TaskType() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("updated name");
         dto.setId(tt.getId());
@@ -344,7 +344,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(19)
     void update_TaskType_when_Request_Id_is_different_Dto_Id() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("another name");
         dto.setId(tt.getId() + 1);
@@ -363,7 +363,7 @@ class TaskTypeControllerTest {
     @Test
     @Order(20)
     void update_TaskType_when_Name_is_already_used_another_TaskType() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(tt.getId() + 1);
 

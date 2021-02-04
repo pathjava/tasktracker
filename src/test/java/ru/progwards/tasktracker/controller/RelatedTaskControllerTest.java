@@ -105,17 +105,17 @@ class RelatedTaskControllerTest {
     }
 
     public TaskDtoPreview taskCreator() {
-        User user = getUser();
+        User user = getUserModel();
         userRepository.save(user);
 
-        Project project = getProject();
+        Project project = getProjectModel();
         project.setOwner(user);
         projectRepository.save(project);
 
-        TaskType taskType = getTaskType();
+        TaskType taskType = getTaskTypeModel();
         taskTypeRepository.save(taskType);
 
-        Task task = getTask();
+        Task task = getTaskModel();
         task.setAuthor(user);
         task.setProject(project);
         task.setType(taskType);
@@ -123,7 +123,7 @@ class RelatedTaskControllerTest {
     }
 
     public RelationTypeDtoPreview typeCreator() {
-        RelationType type = getRelationType();
+        RelationType type = getRelationTypeModel();
         type.setName("type name");
         return relationTypeDtoPreviewConverter.toDto(relationTypeRepository.save(type));
     }
