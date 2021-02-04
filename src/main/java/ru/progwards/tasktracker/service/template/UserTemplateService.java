@@ -36,19 +36,20 @@ public class UserTemplateService implements TemplateService<User> {
      */
     @Override
     public List<User> createFromTemplate(Object... args) {
+
+        if (args.length != 1)
+            throw new OperationIsNotPossibleException("User.createFromTemplate: 1 argument expected");
+        if (!(args[0] instanceof UserRole))
+            throw new OperationIsNotPossibleException("User.createFromTemplate: argument 0 must be UserRole");
+
         List <UserRole> userRoleList = new ArrayList<>();
         userRoleList.add((UserRole) args[0]);
-        if (args.length != 1)
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: 1 argument expected");
-        if (!(args[0] instanceof UserRole))
-            throw new OperationIsNotPossibleException("Project.createFromTemplate: argument 0 must be UserRole");
-
         UserRole userRole = (UserRole) args[0];
 
         User user = new User();
-        user.setName("Пользователь");
+        user.setName("admin");
         user.setEmail("userMail@mail.com");
-        user.setPassword("1234");
+        user.setPassword("12345");
         user.setRoles(userRoleList);
         userCreateService.create(user);
 
