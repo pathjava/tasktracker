@@ -42,15 +42,11 @@ public class UserTemplateService implements TemplateService<User> {
         if (!(args[0] instanceof UserRole))
             throw new OperationIsNotPossibleException("User.createFromTemplate: argument 0 must be UserRole");
 
-        List <UserRole> userRoleList = new ArrayList<>();
-        userRoleList.add((UserRole) args[0]);
-        UserRole userRole = (UserRole) args[0];
-
         User user = new User();
         user.setName("admin");
         user.setEmail("userMail@mail.com");
         user.setPassword("12345");
-        user.setRoles(userRoleList);
+        user.setRoles(List.of((UserRole) args[0]));
         userCreateService.create(user);
 
         return List.of(user);
