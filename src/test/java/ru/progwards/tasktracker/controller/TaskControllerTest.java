@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -21,16 +22,14 @@ import ru.progwards.tasktracker.dto.*;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.model.Task;
-import ru.progwards.tasktracker.model.TaskType;
-import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.*;
 
 import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -53,9 +52,8 @@ import static ru.progwards.tasktracker.objects.GetModel.getProjectModel;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("dev")
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class TaskControllerTest {
 
     @Autowired
@@ -214,10 +212,10 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setId(anyLong());
-        mockMvcPerformPostAssertTrue(dto);
+        mockMvcPerformPost(dto);
     }
 
-    private void mockMvcPerformPostAssertTrue(TaskDtoFull dto) throws Exception {
+    private void mockMvcPerformPost(TaskDtoFull dto) throws Exception {
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andExpect(status().isBadRequest())
@@ -230,7 +228,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setCode(anyString());
-        mockMvcPerformPostAssertTrue(dto);
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -238,7 +236,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setName("   ");
-        mockMvcPerformPostAssertTrue(dto);
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -246,7 +244,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setType(null);
-        mockMvcPerformPostAssertTrue(dto);
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -254,7 +252,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setProject(null);
-        mockMvcPerformPostAssertTrue(dto);
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -262,7 +260,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setAuthor(null);
-        mockMvcPerformPostAssertTrue(dto);
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -270,15 +268,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setCreated(ZonedDateTime.now());
-        mockMvcPerformPostAssertFalse(dto);
-    }
-
-    private void mockMvcPerformPostAssertFalse(TaskDtoFull dto) throws Exception {
-        mockMvc.perform(
-                postJson(CREATE_PATH, dto))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult ->
-                        assertFalse(mvcResult.getResolvedException() instanceof MethodArgumentNotValidException));
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -286,7 +276,7 @@ class TaskControllerTest {
         TaskDtoFull dto = getTaskDto();
 
         dto.setUpdated(ZonedDateTime.now());
-        mockMvcPerformPostAssertFalse(dto);
+        mockMvcPerformPost(dto);
     }
 
     @Test
@@ -439,27 +429,106 @@ class TaskControllerTest {
     }
 
     @Test
-    void update_Task_when_Code_is_already_used_another_Task() {
+    void update_Task_when_NotFound() throws Exception {
+        Task task = getTask();
+        TaskDtoFull dto = taskDtoFullConverter.toDto(task);
+        dto.setId(Long.MAX_VALUE);
 
+        mockMvc.perform(
+                putJson(UPDATE_PATH, Long.MAX_VALUE, dto))
+                .andExpect(status().isNotFound())
+                .andExpect(mvcResult ->
+                        assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
     }
 
     @Test
-    void update_Task_when_NotFound() {
+    void delete_Task() throws Exception {
+        Task task = getTask();
+
+        try {
+            mockMvc.perform(
+                    deleteUriAndMediaType(DELETE_PATH, task.getId()))
+                    .andExpect(status().isOk())
+                    .andExpect(mvcResult ->
+                            assertTrue(Objects.requireNonNull(taskRepository.findById(task.getId())
+                                    .orElse(null)).isDeleted()));
+        } finally {
+            taskRepository.deleteById(task.getId());
+        }
     }
 
     @Test
-    void delete_Task() {
+    void delete_Task_Validation_when_Id_is_negative() throws Exception {
+        mockMvcPerformDelete(-1L);
+    }
+
+    private void mockMvcPerformDelete(long l) throws Exception {
+        mockMvc.perform(
+                deleteUriAndMediaType(DELETE_PATH, l))
+                .andExpect(status().isBadRequest())
+                .andExpect(mvcResult ->
+                        assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
     }
 
     @Test
-    void delete_Task_Validation_when_Id_is_negative() {
+    void updateOneField_Task() throws Exception {
+        Task task = getTask();
+        UpdateOneValue updateOneValue = new UpdateOneValue(
+                task.getId(),
+                "Update Task name",
+                "name"
+        );
+
+        MvcResult result = mockMvc.perform(
+                putJson(UPDATE_FIELD_PATH, task.getId(), updateOneValue))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Long id = getResultId(result);
+
+        try {
+            mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id", is(id), Long.class))
+                    .andExpect(jsonPath("$.name", equalTo("Update Task name")));
+        } finally {
+            taskRepository.deleteById(id);
+        }
     }
 
     @Test
-    void updateOneField_Task() {
+    void updateOneField_Task_when_Request_Id_is_different_Dto_Id() throws Exception {
+        Task task = getTask();
+        UpdateOneValue updateOneValue = new UpdateOneValue(
+                task.getId() + 1,
+                "Update Task name",
+                "name"
+        );
+
+        try {
+            mockMvc.perform(
+                    putJson(UPDATE_FIELD_PATH, task.getId(), updateOneValue))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(mvcResult ->
+                            assertTrue(mvcResult.getResolvedException() instanceof BadRequestException));
+        } finally {
+            taskRepository.deleteById(task.getId());
+        }
     }
 
     @Test
-    void updateOneField_Task_when_Request_Id_is_different_Dto_Id() {
+    void updateOneField_when_NotFound() throws Exception {
+        UpdateOneValue updateOneValue = new UpdateOneValue(
+                Long.MAX_VALUE,
+                "Update Task name",
+                "name"
+        );
+
+        mockMvc.perform(
+                putJson(UPDATE_FIELD_PATH, Long.MAX_VALUE, updateOneValue))
+                .andExpect(status().isNotFound())
+                .andExpect(mvcResult ->
+                        assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
     }
 }

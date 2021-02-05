@@ -3,14 +3,12 @@ package ru.progwards.tasktracker.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,6 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,8 +44,8 @@ import static ru.progwards.tasktracker.objects.GetModel.getRelationTypeModel;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("dev")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class RelationTypeControllerTest {
 
     @Autowired
@@ -103,7 +102,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(1)
     void create_RelationType_without_counter_RelationType() throws Exception {
         MvcResult result = mockMvc.perform(
                 postJson(CREATE_PATH, getRelationTypeDtoFull()))
@@ -130,7 +128,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(2)
     void create_RelationType_with_counter_RelationType() throws Exception {
         RelationType counterType = getRelationTypeModel();
         counterType.setName("counter name");
@@ -158,18 +155,16 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(3)
     void create_RelationType_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
-        dto.setId(1L);
+        dto.setId(anyLong());
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(4)
     void create_RelationType_BadRequest_Validation_If_Name_is_Empty() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
-        dto.setName("");
+        dto.setName("   ");
         mockMvcPerformPost(dto);
     }
 
@@ -182,7 +177,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(5)
     void create_RelationType_BadRequest_Validation_If_Name_is_Null() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setName(null);
@@ -193,7 +187,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(6)
     void get_RelationType() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationTypeModel());
 
@@ -209,7 +202,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(7)
     void get_RelationType_when_NotFound() throws Exception {
         mockMvc.perform(
                 getUriAndMediaType(GET_PATH, Long.MAX_VALUE))
@@ -219,7 +211,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(8)
     void get_one_RelationType_when_Id_is_negative() throws Exception {
         mockMvcPerformGet(-1L);
     }
@@ -233,7 +224,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(10)
     void getList_RelationType() throws Exception {
         RelationType one = getRelationTypeModel();
         one.setName("name one");
@@ -253,7 +243,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(11)
     void getList_RelationType_when_return_Empty_List() throws Exception {
         mockMvc.perform(
                 getListUriAndMediaType(GET_LIST_PATH))
@@ -263,7 +252,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(12)
     void delete_RelationType() {
         RelationType rt = relationTypeRepository.save(getRelationTypeModel());
 
@@ -277,7 +265,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(13)
     void delete_RelationType_when_Id_is_negative() throws Exception {
         mockMvcPerformDelete(-1L);
     }
@@ -291,7 +278,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(15)
     void update_RelationType() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationTypeModel());
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
@@ -318,7 +304,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(16)
     void update_RelationType_when_Request_Id_is_different_Dto_Id() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationTypeModel());
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
@@ -337,7 +322,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(17)
     void update_RelationType_when_Name_is_already_used_another_RelationType() throws Exception {
         RelationType rt = relationTypeRepository.save(getRelationTypeModel());
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
@@ -354,7 +338,6 @@ class RelationTypeControllerTest {
     }
 
     @Test
-    @Order(18)
     void update_RelationType_when_NotFound() throws Exception {
         RelationTypeDtoFull dto = getRelationTypeDtoFull();
         dto.setId(Long.MAX_VALUE);

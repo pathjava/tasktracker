@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -50,8 +51,8 @@ import static ru.progwards.tasktracker.objects.GetModel.*;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("dev")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class WorkLogControllerTest {
 
     @Autowired
@@ -169,7 +170,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(1)
     void create_WorkLog() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -192,7 +192,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(2)
     void create_WorkLog_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -209,7 +208,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(3)
     void create_WorkLog_BadRequest_Validation_If_Task_Null() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -218,7 +216,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(4)
     void create_WorkLog_BadRequest_Validation_If_Spent_Null() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -227,7 +224,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(5)
     void create_WorkLog_BadRequest_Validation_If_Worker_Null() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -236,7 +232,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(6)
     void create_WorkLog_BadRequest_Validation_If_Start_Null() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -245,7 +240,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(7)
     void create_WorkLog_BadRequest_Validation_If_Description_Null() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
@@ -254,7 +248,6 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(8)
     void create_WorkLog_BadRequest_Validation_If_EstimateChange_Null() throws Exception {
         WorkLogDtoFull dto = getWorkLogDto();
 
