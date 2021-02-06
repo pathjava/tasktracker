@@ -3,11 +3,15 @@
 ## RelationTypeController
 
 ### get(Long id) <br />
+
 #### Запрос: <br />
+
 `http://localhost:8080/rest/relationtype/1`
 
 #### Ответ: <br />
+
 Если запрашиваемый RelationType существует в БД:
+
 ```json
 {
   "id": 1,
@@ -15,6 +19,7 @@
   "counterRelationId": null
 }
 ``` 
+
 Если запрашиваемый RelationType отсутствует в БД: <br />
 
 ```json
@@ -35,7 +40,6 @@
 ### update(Long id, RelationTypeDtoFull dtoFull) <br />
 
 ### delete(Long id) <br />
-
 
 ```json
 {
