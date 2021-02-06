@@ -103,6 +103,14 @@ public class GetDtoFull {
                 "name " + randomChar()
         );
     }
+    public static WorkFlowActionDtoFull getWorkFlowActionDtoFull() {
+        return new WorkFlowActionDtoFull(
+                null,
+                null,
+                "name " + randomChar(),
+                null
+        );
+    }
 
     public static UserRoleDtoFull getUserRoleDtoFull() {
         return new UserRoleDtoFull(

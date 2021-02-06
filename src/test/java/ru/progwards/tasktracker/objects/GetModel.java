@@ -127,6 +127,15 @@ public class GetModel {
         );
     }
 
+    public static WorkFlowAction getWorkFlowAction() {
+        return new WorkFlowAction(
+                null,
+                null,
+                "name " + randomChar(),
+                null
+        );
+    }
+
     public static User getUser() {
         return new User(
                 null,
