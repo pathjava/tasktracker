@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,6 +35,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -46,8 +51,8 @@ import static ru.progwards.tasktracker.objects.GetModel.*;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("dev")
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class WorkLogControllerTest {
 
     @Autowired
@@ -73,7 +78,6 @@ class WorkLogControllerTest {
     private static final String CREATE_PATH = "/rest/worklog/create";
     private static final String DELETE_PATH = "/rest/worklog/{id}/delete";
     private static final String UPDATE_PATH = "/rest/worklog/{id}/update";
-    private Task task;
     private User user;
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
@@ -124,29 +128,50 @@ class WorkLogControllerTest {
         }
     }
 
-    @BeforeEach
-    public void taskAndUserCreator() {
-        user = getUser();
+    private void userCreator() {
+        user = getUserModel();
         userRepository.save(user);
+    }
 
-        Project project = getProject();
+    private Task taskCreator() {
+        userCreator();
+        Project project = getProjectModel();
         project.setOwner(user);
         projectRepository.save(project);
 
-        TaskType taskType = getTaskType();
+        TaskType taskType = getTaskTypeModel();
         taskTypeRepository.save(taskType);
 
-        task = getTask();
+        Task task = getTaskModel();
         task.setAuthor(user);
         task.setProject(project);
         task.setType(taskType);
-        taskRepository.save(task);
+        return taskRepository.save(task);
+    }
+
+    private WorkLogDtoFull getWorkLogDto() {
+        WorkLogDtoFull dto = getWorkLogDtoFull();
+        dto.setTask(taskDtoPreviewConverter.toDto(taskCreator()));
+        dto.setWorker(userDtoPreviewConverter.toDto(user));
+        return dto;
+    }
+
+    private WorkLog getWorkLog() {
+        WorkLog wl = getWorkLogModel();
+        wl.setTask(taskCreator());
+        wl.setWorker(user);
+        workLogRepository.save(wl);
+        return wl;
+    }
+
+    private Long getResultId(MvcResult result) throws UnsupportedEncodingException {
+        String resultJson = result.getResponse().getContentAsString();
+        return JsonPath.parse(resultJson).read("$.id", Long.class);
     }
 
     @Test
-    @Order(1)
     void create_WorkLog() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         MvcResult result = mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -166,24 +191,11 @@ class WorkLogControllerTest {
         }
     }
 
-    private WorkLogDtoFull getDtoFull() {
-        WorkLogDtoFull dto = getWorkLogDtoFull();
-        dto.setTask(taskDtoPreviewConverter.toDto(task));
-        dto.setWorker(userDtoPreviewConverter.toDto(user));
-        return dto;
-    }
-
-    private Long getResultId(MvcResult result) throws UnsupportedEncodingException {
-        String resultJson = result.getResponse().getContentAsString();
-        return JsonPath.parse(resultJson).read("$.id", Long.class);
-    }
-
     @Test
-    @Order(2)
     void create_WorkLog_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
-        dto.setId(1L);
+        dto.setId(anyLong());
         mockMvcPerformPost(dto);
     }
 
@@ -196,54 +208,48 @@ class WorkLogControllerTest {
     }
 
     @Test
-    @Order(3)
     void create_WorkLog_BadRequest_Validation_If_Task_Null() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         dto.setTask(null);
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(4)
     void create_WorkLog_BadRequest_Validation_If_Spent_Null() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         dto.setSpent(null);
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(5)
     void create_WorkLog_BadRequest_Validation_If_Worker_Null() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         dto.setWorker(null);
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(6)
     void create_WorkLog_BadRequest_Validation_If_Start_Null() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         dto.setStart(null);
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(7)
     void create_WorkLog_BadRequest_Validation_If_Description_Null() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         dto.setDescription(null);
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(8)
     void create_WorkLog_BadRequest_Validation_If_EstimateChange_Null() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
 
         dto.setEstimateChange(null);
         mockMvcPerformPost(dto);
@@ -251,7 +257,7 @@ class WorkLogControllerTest {
 
     @Test
     void get_WorkLog() throws Exception {
-        WorkLog wl = getLog();
+        WorkLog wl = getWorkLog();
 
         try {
             mockMvc.perform(
@@ -261,14 +267,6 @@ class WorkLogControllerTest {
         } finally {
             workLogRepository.deleteById(wl.getId());
         }
-    }
-
-    private WorkLog getLog() {
-        WorkLog wl = getWorkLog();
-        wl.setTask(task);
-        wl.setWorker(user);
-        workLogRepository.save(wl);
-        return wl;
     }
 
     @Test
@@ -295,7 +293,7 @@ class WorkLogControllerTest {
 
     @Test
     void getListByTask_WorkLog() throws Exception {
-        WorkLog wl = getLog();
+        WorkLog wl = getWorkLog();
 
         try {
             mockMvc.perform(
@@ -323,15 +321,15 @@ class WorkLogControllerTest {
 
     @Test
     void getList_WorkLog() throws Exception {
-        WorkLog wl = getLog();
-        List<WorkLog> listLog = List.of(wl);
+        WorkLog wl = getWorkLog();
+        List<WorkLog> list = List.of(wl);
         try {
             mockMvc.perform(
                     getUriAndMediaType(GET_LIST_PATH))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").exists());
         } finally {
-            workLogRepository.deleteAll(listLog);
+            workLogRepository.deleteAll(list);
         }
     }
 
@@ -346,8 +344,8 @@ class WorkLogControllerTest {
 
     @Test
     void update_WorkLog() throws Exception {
-        WorkLog wl = getLog();
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLog wl = getWorkLog();
+        WorkLogDtoFull dto = getWorkLogDto();
         dto.setDescription("updated description");
         dto.setId(wl.getId());
 
@@ -371,8 +369,8 @@ class WorkLogControllerTest {
 
     @Test
     void update_WorkLog_when_Request_Id_is_different_Dto_Id() throws Exception {
-        WorkLog wl = getLog();
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLog wl = getWorkLog();
+        WorkLogDtoFull dto = getWorkLogDto();
         dto.setId(wl.getId() + 1);
 
         try {
@@ -388,7 +386,7 @@ class WorkLogControllerTest {
 
     @Test
     void update_WorkLog_when_NotFound() throws Exception {
-        WorkLogDtoFull dto = getDtoFull();
+        WorkLogDtoFull dto = getWorkLogDto();
         dto.setId(Long.MAX_VALUE);
 
         mockMvc.perform(
@@ -400,7 +398,7 @@ class WorkLogControllerTest {
 
     @Test
     void delete_WorkLog() {
-        WorkLog wl = getLog();
+        WorkLog wl = getWorkLog();
 
         try {
             mockMvc.perform(

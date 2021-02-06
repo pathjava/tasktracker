@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Entity
 @DynamicUpdate
+@ToString(of = {"id"})
 @Table(name = "related_task")
 public class RelatedTask {
 

@@ -13,7 +13,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getWorkLogDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getWorkLog;
+import static ru.progwards.tasktracker.objects.GetModel.getWorkLogModel;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -26,7 +26,7 @@ class WorkLogDtoFullConverterTest {
     @Mock
     private Converter<WorkLog, WorkLogDtoFull> converter;
 
-    private final WorkLog model = getWorkLog();
+    private final WorkLog model = getWorkLogModel();
 
     private final WorkLogDtoFull dtoPreview = getWorkLogDtoFull();
 

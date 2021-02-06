@@ -17,8 +17,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
-import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
-import static ru.progwards.tasktracker.objects.GetModel.getWorkFlow;
+import static ru.progwards.tasktracker.objects.GetModel.getTaskTypeModel;
+import static ru.progwards.tasktracker.objects.GetModel.getWorkFlowModel;
 
 /**
  * Тестирование сервиса типов задачи
@@ -42,8 +42,8 @@ class TaskTypeServiceTest {
 
     {
         for (int i = 0; i < 3; i++) {
-            TaskType taskType = getTaskType();
-            WorkFlow workFlow = getWorkFlow();
+            TaskType taskType = getTaskTypeModel();
+            WorkFlow workFlow = getWorkFlowModel();
             workFlow.setId(1L + i);
             workFlow.setName("flow " + (1 + i));
             taskType.setId(1L + i);

@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static ru.progwards.tasktracker.objects.GetModel.getWorkLog;
+import static ru.progwards.tasktracker.objects.GetModel.getWorkLogModel;
 
 /**
  * Тестирование сервиса создания лога (Журнала работ)
@@ -46,7 +46,7 @@ class WorkLogServiceTest {
     {
         User user = mock(User.class);
         for (int i = 0; i < 3; i++) {
-            WorkLog workLog = getWorkLog();
+            WorkLog workLog = getWorkLogModel();
             workLog.setId(1L + i);
             workLog.setSpent(Duration.ofHours(15));
             workLog.setWorker(user);

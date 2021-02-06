@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ru.progwards.tasktracker.model.types.EstimateChange;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString(of = {"id"})
 @Table(name = "work_log")
 public class WorkLog {
 
@@ -45,11 +47,11 @@ public class WorkLog {
 
     private String description;
 
-    //    @Column(name = "estimate_change")
+    @Column(name = "estimate_change")
     @Enumerated(EnumType.STRING)
     private EstimateChange estimateChange;
 
-    //    @Column(name = "estimate_value")
+    @Column(name = "estimate_value")
     private Duration estimateValue;
 
 }

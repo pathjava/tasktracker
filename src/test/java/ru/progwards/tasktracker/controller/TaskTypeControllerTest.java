@@ -3,14 +3,12 @@ package ru.progwards.tasktracker.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -33,13 +31,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getTaskTypeDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getProject;
-import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
+import static ru.progwards.tasktracker.objects.GetModel.getProjectModel;
+import static ru.progwards.tasktracker.objects.GetModel.getTaskTypeModel;
 
 /**
  * Тестирование методов контроллера TaskTypeController
@@ -48,8 +47,8 @@ import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("dev")
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class TaskTypeControllerTest {
 
     @Autowired
@@ -109,7 +108,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(1)
     void create_TaskType() throws Exception {
         MvcResult result = mockMvc.perform(
                 postJson(CREATE_PATH, getTaskTypeDtoFull()))
@@ -134,10 +132,9 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(2)
     void create_TaskType_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
-        dto.setId(1L);
+        dto.setId(anyLong());
         mockMvcPerformPost(dto);
     }
 
@@ -150,15 +147,13 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(3)
     void create_TaskType_BadRequest_Validation_If_Name_is_Empty() throws Exception {
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
-        dto.setName("");
+        dto.setName("   ");
         mockMvcPerformPost(dto);
     }
 
     @Test
-    @Order(4)
     void create_TaskType_BadRequest_Validation_If_Name_is_Null() throws Exception {
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName(null);
@@ -169,9 +164,8 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(5)
     void get_TaskType() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
 
         try {
             mockMvc.perform(
@@ -184,7 +178,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(6)
     void get_TaskType_when_NotFound() throws Exception {
         mockMvc.perform(
                 getUriAndMediaType(GET_PATH, Long.MAX_VALUE))
@@ -194,7 +187,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(7)
     void get_TaskType_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformGet(GET_PATH, -1L);
     }
@@ -208,11 +200,10 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(9)
     void getList_TaskType() throws Exception {
-        TaskType one = getTaskType();
+        TaskType one = getTaskTypeModel();
         one.setName("name one");
-        TaskType two = getTaskType();
+        TaskType two = getTaskTypeModel();
         two.setName("name two");
         List<TaskType> listType = List.of(one, two);
         taskTypeRepository.saveAll(listType);
@@ -227,7 +218,6 @@ class TaskTypeControllerTest {
     }
 
 //    @Test
-//    @Order(10)
 //    void getList_TaskType_when_return_Empty_List() throws Exception {
 //        mockMvc.perform(
 //                getUriAndMediaType(GET_LIST_PATH))
@@ -237,16 +227,15 @@ class TaskTypeControllerTest {
 //    }
 
     @Test
-    @Order(11)
     void getListByProject_TaskType() throws Exception {
-        Project project = getProject();
+        Project project = getProjectModel();
         projectRepository.save(project);
 
-        TaskType one = getTaskType();
+        TaskType one = getTaskTypeModel();
         one.setName("name one");
         one.setProject(project);
 
-        TaskType two = getTaskType();
+        TaskType two = getTaskTypeModel();
         two.setName("name two");
         two.setProject(project);
 
@@ -265,15 +254,13 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(12)
     void getListByProject_TaskType_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformGet(GET_LIST_BY_PROJECT_PATH, -1L);
     }
 
     @Test
-    @Order(14)
     void getListByProject_TaskType_when_return_Empty_List() throws Exception {
-        Project project = getProject();
+        Project project = getProjectModel();
         projectRepository.save(project);
 
         try {
@@ -288,9 +275,8 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(15)
     void delete_TaskType() {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
 
         try {
             mockMvc.perform(
@@ -302,7 +288,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(16)
     void delete_TaskType_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformDelete(-1L);
     }
@@ -316,9 +301,8 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(18)
     void update_TaskType() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("updated name");
         dto.setId(tt.getId());
@@ -342,9 +326,8 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(19)
     void update_TaskType_when_Request_Id_is_different_Dto_Id() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setName("another name");
         dto.setId(tt.getId() + 1);
@@ -361,9 +344,8 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(20)
     void update_TaskType_when_Name_is_already_used_another_TaskType() throws Exception {
-        TaskType tt = taskTypeRepository.save(getTaskType());
+        TaskType tt = taskTypeRepository.save(getTaskTypeModel());
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(tt.getId() + 1);
 
@@ -378,7 +360,6 @@ class TaskTypeControllerTest {
     }
 
     @Test
-    @Order(21)
     void update_TaskType_when_NotFound() throws Exception {
         TaskTypeDtoFull dto = getTaskTypeDtoFull();
         dto.setId(Long.MAX_VALUE);

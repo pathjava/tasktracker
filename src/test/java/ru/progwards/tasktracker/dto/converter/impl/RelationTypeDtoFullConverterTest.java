@@ -13,7 +13,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getRelationTypeDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getRelationType;
+import static ru.progwards.tasktracker.objects.GetModel.getRelationTypeModel;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -26,7 +26,7 @@ class RelationTypeDtoFullConverterTest {
     @Mock
     private Converter<RelationType, RelationTypeDtoFull> converter;
 
-    private final RelationType model = getRelationType();
+    private final RelationType model = getRelationTypeModel();
 
     private final RelationTypeDtoFull dtoPreview = getRelationTypeDtoFull();
 

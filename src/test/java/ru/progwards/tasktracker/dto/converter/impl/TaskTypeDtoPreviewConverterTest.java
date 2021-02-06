@@ -13,7 +13,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ru.progwards.tasktracker.objects.GetDtoPreview.getTaskTypeDtoPreview;
-import static ru.progwards.tasktracker.objects.GetModel.getTaskType;
+import static ru.progwards.tasktracker.objects.GetModel.getTaskTypeModel;
 
 /**
  * Тестирование конвертера между valueObject <-> dto
@@ -26,7 +26,7 @@ class TaskTypeDtoPreviewConverterTest {
     @Mock
     private Converter<TaskType, TaskTypeDtoPreview> converter;
 
-    private final TaskType model = getTaskType();
+    private final TaskType model = getTaskTypeModel();
 
     private final TaskTypeDtoPreview dtoPreview = getTaskTypeDtoPreview();
 
