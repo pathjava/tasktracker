@@ -10,9 +10,9 @@
 
 ```json
 {
-    "id": 1,
-    "name": "blocks",
-    "counterRelationId": null
+  "id": 1,
+  "name": "blocks",
+  "counterRelationId": null
 }
 ```
 
@@ -26,8 +26,8 @@
 
 ```json
 {
-    "id": 2,
-    "name": "is blocked by",
-    "counterRelationId": 1
+  "id": 2,
+  "name": "is blocked by",
+  "counterRelationId": 1
 }
 ```
