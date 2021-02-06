@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
-@TaskTypeNameValid(groups = {Create.class, Update.class})
+//@TaskTypeNameValid(groups = {Create.class, Update.class})
 public class WorkFlowActionDtoFull {
 
     @Min(value = 0, groups = Update.class)
