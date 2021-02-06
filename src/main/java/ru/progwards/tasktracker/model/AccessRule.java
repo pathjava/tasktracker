@@ -1,9 +1,6 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.progwards.tasktracker.model.types.AccessObject;
 import ru.progwards.tasktracker.model.types.AccessType;
 
@@ -17,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Entity
+@ToString(of = {"id"})
 @Table(name = "access_rule")
 public class AccessRule {
     @Id

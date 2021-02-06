@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -17,6 +18,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(of = {"id"})
 @Table(name="task_note")
 public class TaskNote {
 

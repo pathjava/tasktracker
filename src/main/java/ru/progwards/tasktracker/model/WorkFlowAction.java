@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(of = {"id"})
 @Table(name = "workflow_action")
 public class WorkFlowAction {
 

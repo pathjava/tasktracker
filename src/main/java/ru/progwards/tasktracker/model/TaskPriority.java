@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@ToString(of = {"id"})
 @Table(name = "task_priority")
 //В SQL-запрос попадают только измененные поля
 @DynamicUpdate

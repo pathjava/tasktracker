@@ -1,9 +1,6 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.progwards.tasktracker.model.types.SystemRole;
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import java.util.List;
  */
 
 @Entity
+@ToString(of = {"id"})
 @Table(name = "user_role")
 @AllArgsConstructor
 @NoArgsConstructor
