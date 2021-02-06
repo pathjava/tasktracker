@@ -2,7 +2,7 @@
 
 ## RelationTypeController
 
-### get(id) <br />
+### get(Long id) <br />
 #### Запрос: <br />
 `http://localhost:8080/rest/relationtype/1`
 
@@ -27,6 +27,14 @@
   ]
 }
 ```
+
+### getList() <br />
+
+### create(RelationTypeDtoFull dtoFull) <br />
+
+### update(Long id, RelationTypeDtoFull dtoFull) <br />
+
+### delete(Long id) <br />
 
 
 ```json
