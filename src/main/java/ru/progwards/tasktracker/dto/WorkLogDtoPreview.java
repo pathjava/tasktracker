@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -22,10 +23,12 @@ public class WorkLogDtoPreview {
     @NotNull
     private Long id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration spent;
 
     private UserDtoPreview worker;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private ZonedDateTime start;
 
 }

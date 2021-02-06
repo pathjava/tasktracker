@@ -1,5 +1,6 @@
 package ru.progwards.tasktracker.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
@@ -27,12 +28,14 @@ public class WorkLogDtoFull {
     private TaskDtoPreview task;
 
     @NotNull(groups = {Create.class, Update.class})
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration spent;
 
     @NotNull(groups = {Create.class, Update.class})
     private UserDtoPreview worker;
 
     @NotNull(groups = {Create.class, Update.class})
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private ZonedDateTime start;
 
     @NotBlank(groups = {Create.class, Update.class})
@@ -41,6 +44,7 @@ public class WorkLogDtoFull {
     @NotBlank(groups = {Create.class, Update.class})
     private String estimateChange;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSS")
     private Duration estimateValue;
 
 }
