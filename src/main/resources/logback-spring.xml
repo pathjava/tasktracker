@@ -119,7 +119,7 @@
 <!--        </connectionSource>-->
 <!--    </appender>-->
 
-    <springProfile name="test">
+    <springProfile name="dev">
         <root level="info">
             <appender-ref ref="TO-CONSOLE"/>
             <appender-ref ref="TO-FILE"/>
@@ -129,6 +129,15 @@
             <appender-ref ref="TO-CONSOLE"/>
             <appender-ref ref="TO-FILE"/>
 <!--            <appender-ref ref="TO-DB" />-->
+        </logger>
+    </springProfile>
+
+    <springProfile name="test">
+        <root level="info">
+            <appender-ref ref="TO-CONSOLE"/>
+        </root>
+        <logger name="ru.progwards.tasktracker" additivity="false" level="debug">
+            <appender-ref ref="TO-CONSOLE"/>
         </logger>
     </springProfile>
 
