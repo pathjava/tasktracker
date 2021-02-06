@@ -52,7 +52,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getProjectModel;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class TaskControllerTest {
 

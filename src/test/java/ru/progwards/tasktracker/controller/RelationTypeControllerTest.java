@@ -44,7 +44,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getRelationTypeModel;
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class RelationTypeControllerTest {
 

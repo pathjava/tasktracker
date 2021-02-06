@@ -50,7 +50,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getAccessRule;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class AccessRuleControllerTest {
     private MockMvc mockMvc;
     @Autowired

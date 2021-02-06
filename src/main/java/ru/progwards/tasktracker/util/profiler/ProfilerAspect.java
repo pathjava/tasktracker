@@ -10,8 +10,8 @@ import org.springframework.util.StopWatch;
 /**
  * @author Oleg Kiselev
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class ProfilerAspect {
 
     @Pointcut("within(ru.progwards.tasktracker.service.impl.*) " +

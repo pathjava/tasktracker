@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.TaskDtoFull;
+import ru.progwards.tasktracker.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.dto.TaskNoteDtoFull;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
@@ -22,7 +22,7 @@ import ru.progwards.tasktracker.service.GetService;
 public class TaskNoteDtoFullConverter implements Converter<TaskNote, TaskNoteDtoFull> {
 
     private final @NonNull GetService<Long, TaskNote> taskNoteGetService;
-    private final @NonNull Converter<Task, TaskDtoFull> taskDtoFullConverter;
+    private final @NonNull Converter<Task, TaskDtoPreview> taskDtoPreviewConverter;
     private final @NonNull Converter<User, UserDtoPreview> userDtoPreviewConverter;
 
     /**
@@ -36,7 +36,7 @@ public class TaskNoteDtoFullConverter implements Converter<TaskNote, TaskNoteDto
             return null;
         else {
             TaskNote taskNote = taskNoteGetService.get(dto.getId());
-            taskNote.setTask(taskDtoFullConverter.toModel(dto.getTask()));
+            taskNote.setTask(taskDtoPreviewConverter.toModel(dto.getTask()));
             taskNote.setAuthor(userDtoPreviewConverter.toModel(dto.getUser()));
             taskNote.setUpdater(userDtoPreviewConverter.toModel(dto.getUser()));
             return taskNote;
@@ -60,7 +60,7 @@ public class TaskNoteDtoFullConverter implements Converter<TaskNote, TaskNoteDto
                     model.getCreated(),
                     model.getUpdated(),
                     model.getComment(),
-                    taskDtoFullConverter.toDto(model.getTask()),
+                    taskDtoPreviewConverter.toDto(model.getTask()),
                     userDtoPreviewConverter.toDto(model.getAuthor())
             );
         }

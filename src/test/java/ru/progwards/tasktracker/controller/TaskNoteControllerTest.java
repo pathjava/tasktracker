@@ -50,7 +50,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getTaskNote;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class TaskNoteControllerTest {
     private MockMvc mockMvc;
     @Autowired

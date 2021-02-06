@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getWorkFlowActionDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getProject;
+import static ru.progwards.tasktracker.objects.GetModel.getProjectModel;
 import static ru.progwards.tasktracker.objects.GetModel.getWorkFlowAction;
 
 /**
@@ -49,7 +49,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getWorkFlowAction;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 class WorkFlowActionControllerTest {
 
     @Autowired

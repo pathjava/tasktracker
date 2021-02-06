@@ -15,8 +15,8 @@ import java.util.Arrays;
 /**
  * @author Oleg Kiselev
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LogAspect {
 
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);

@@ -110,25 +110,25 @@
 <!--    http://logback.qos.ch/manual/appenders.html#DBAppender-->
 
 <!--    <property resource="application.properties" />-->
-    <appender name="TO-DB" class="ch.qos.logback.classic.db.DBAppender">
-        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
-            <driverClass>org.postgresql.Driver</driverClass>
-            <url>jdbc:postgresql://localhost:5432/tt</url>
-            <user>postgres</user>
-            <password>123</password>
-        </connectionSource>
-    </appender>
+<!--    <appender name="TO-DB" class="ch.qos.logback.classic.db.DBAppender">-->
+<!--        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">-->
+<!--            <driverClass>org.postgresql.Driver</driverClass>-->
+<!--            <url>jdbc:postgresql://localhost:5432/tt</url>-->
+<!--            <user>postgres</user>-->
+<!--            <password>123</password>-->
+<!--        </connectionSource>-->
+<!--    </appender>-->
 
     <springProfile name="test">
         <root level="info">
             <appender-ref ref="TO-CONSOLE"/>
             <appender-ref ref="TO-FILE"/>
-            <appender-ref ref="TO-DB" />
+<!--            <appender-ref ref="TO-DB" />-->
         </root>
         <logger name="ru.progwards.tasktracker" additivity="false" level="debug">
             <appender-ref ref="TO-CONSOLE"/>
             <appender-ref ref="TO-FILE"/>
-            <appender-ref ref="TO-DB" />
+<!--            <appender-ref ref="TO-DB" />-->
         </logger>
     </springProfile>
 
