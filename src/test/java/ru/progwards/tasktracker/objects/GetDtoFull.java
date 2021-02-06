@@ -1,6 +1,7 @@
 package ru.progwards.tasktracker.objects;
 
 import ru.progwards.tasktracker.dto.*;
+import ru.progwards.tasktracker.model.types.SystemRole;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -28,6 +29,17 @@ public class GetDtoFull {
             result.append(alphabet.charAt(random.nextInt(alphabet.length())));
         }
         return result.toString();
+    }
+
+    public static AccessRuleDtoFull getAccessRuleDtoFull() {
+        return new AccessRuleDtoFull(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
     }
 
     public static RelatedTaskDtoFull getRelatedTaskDtoFull() {
@@ -70,6 +82,19 @@ public class GetDtoFull {
         );
     }
 
+    public static TaskNoteDtoFull getTaskNoteDtoFull() {
+        return new TaskNoteDtoFull(
+                null,
+                null,
+                null,
+                ZonedDateTime.now(),
+                ZonedDateTime.now(),
+                "Comment",
+                null,
+                null
+        );
+    }
+
     public static TaskTypeDtoFull getTaskTypeDtoFull() {
         return new TaskTypeDtoFull(
                 null,
@@ -78,6 +103,15 @@ public class GetDtoFull {
                 "name " + randomChar()
         );
     }
+
+    public static UserRoleDtoFull getUserRoleDtoFull() {
+        return new UserRoleDtoFull(
+                null,
+                "Администраторы",
+                SystemRole.ADMIN
+        );
+    }
+
 
     public static WorkLogDtoFull getWorkLogDtoFull() {
         return new WorkLogDtoFull(

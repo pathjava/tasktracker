@@ -18,32 +18,32 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
-import ru.progwards.tasktracker.dto.TaskNoteDtoFull;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
-import ru.progwards.tasktracker.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.Task;
-import ru.progwards.tasktracker.model.TaskNote;
 import ru.progwards.tasktracker.model.User;
-import ru.progwards.tasktracker.repository.TaskNoteRepository;
+import ru.progwards.tasktracker.model.types.AccessObject;
+import ru.progwards.tasktracker.repository.AccessRuleRepository;
 
 import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.progwards.tasktracker.objects.GetDtoFull.getTaskNoteDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getTaskNote;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getAccessRuleDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.getAccessRule;
 
 /**
- * Тестирование методов контроллера TaskNoteController
+ * Тестирование методов контроллера AccessRuleController
  *
  * @author Konstantin Kishkin
  */
@@ -51,20 +51,20 @@ import static ru.progwards.tasktracker.objects.GetModel.getTaskNote;
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("dev")
-public class TaskNoteControllerTest {
+public class AccessRuleControllerTest {
     private MockMvc mockMvc;
     @Autowired
-    private TaskNoteRepository taskNoteRepository;
+    private AccessRuleRepository accessRuleRepository;
     @Autowired
     private Converter<Task, TaskDtoPreview> taskDtoPreviewConverter;
     @Autowired
     private Converter<User, UserDtoPreview> userDtoPreviewConverter;
 
-    private static final String GET_PATH = "/rest/task/{id}/tasknotes";
-    private static final String CREATE_PATH = "/rest/tasknote/create";
-    private static final String GET_LIST_BY_TASK_PATH = "/rest/task/{id}/tasknotes";
-    private static final String UPDATE_PATH = "/rest/tasknote/{id}/update";
-    private static final String DELETE_PATH = "/rest/tasknote/{id}/delete";
+    private static final String GET_PATH = "/rest/accessRule/{id}";
+    private static final String CREATE_PATH = "/rest/accessRule/create";
+    private static final String GET_LIST = "/rest/accessRule/list";
+    private static final String UPDATE_PATH = "/rest/accessRule/{id}/update";
+    private static final String DELETE_PATH = "/rest/accessRule/{id}/delete";
     private Task task;
     private User user;
 
@@ -101,6 +101,12 @@ public class TaskNoteControllerTest {
                 .accept(MediaType.APPLICATION_JSON);
     }
 
+    public static MockHttpServletRequestBuilder getListUriAndMediaType(String uri) {
+        return get(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
     public static MockHttpServletRequestBuilder putJson(String uri, Long id, Object body) {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -118,8 +124,8 @@ public class TaskNoteControllerTest {
 
     @Test
     @Order(1)
-    void create_TaskNote() throws Exception {
-        TaskNoteDtoFull dto = getDtoFull();
+    void create_AccessRule() throws Exception {
+        AccessRuleDtoFull dto = getDtoFull();
 
         MvcResult result = mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -134,14 +140,13 @@ public class TaskNoteControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class));
         } finally {
-            taskNoteRepository.deleteById(id);
+            accessRuleRepository.deleteById(id);
         }
     }
 
-    private TaskNoteDtoFull getDtoFull() {
-        TaskNoteDtoFull dto = getTaskNoteDtoFull();
-        dto.setTask(taskDtoPreviewConverter.toDto(task));
-        dto.setUser(userDtoPreviewConverter.toDto(user));
+    private AccessRuleDtoFull getDtoFull() {
+        AccessRuleDtoFull dto = getAccessRuleDtoFull();
+
         return dto;
     }
 
@@ -152,14 +157,14 @@ public class TaskNoteControllerTest {
 
     @Test
     @Order(2)
-    void create_TaskNote_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
-        TaskNoteDtoFull dto = getDtoFull();
+    void create_AccessRule_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
+        AccessRuleDtoFull dto = getDtoFull();
 
         dto.setId(1L);
         mockMvcPerformPost(dto);
     }
 
-    private void mockMvcPerformPost(TaskNoteDtoFull dto) throws Exception {
+    private void mockMvcPerformPost(AccessRuleDtoFull dto) throws Exception {
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andExpect(status().isBadRequest())
@@ -168,30 +173,27 @@ public class TaskNoteControllerTest {
     }
 
     @Test
-    void getListByTask_TaskNote() throws Exception {
-        TaskNote taskNote = getNote();
+    void getList_AccessRule() throws Exception {
+        AccessRule accessRule1 = getAccessRule();
+        accessRule1.setObject(AccessObject.PROJECT);
+        AccessRule accessRule2 = getAccessRule();
+        accessRule2.setObject(AccessObject.TASK);
+        List<AccessRule> accessRuleList = List.of(accessRule1, accessRule2);
+        accessRuleRepository.saveAll(accessRuleList);
 
         try {
             mockMvc.perform(
-                    getUriAndMediaType(GET_LIST_BY_TASK_PATH, taskNote.getTask().getId()))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$").exists());
+                    getListUriAndMediaType(GET_LIST))
+                    .andExpect(status().isOk());
         } finally {
-            taskNoteRepository.deleteById(taskNote.getId());
+            accessRuleRepository.deleteAll(accessRuleList);
         }
     }
 
-    private TaskNote getNote() {
-        TaskNote taskNote = getTaskNote();
-        taskNote.setTask(task);
-        taskNote.setAuthor(user);
-        taskNoteRepository.save(taskNote);
-        return taskNote;
-    }
 
     @Test
-    void getListByTask_TaskNote_Validation_when_Id_is_negative() throws Exception {
-        mockMvcPerformGet(GET_LIST_BY_TASK_PATH, -1L);
+    void getList_AccessRule_Validation_when_Id_is_negative() throws Exception {
+        mockMvcPerformGet(GET_LIST, -1L);
     }
 
     private void mockMvcPerformGet(String getPath, long l) throws Exception {
@@ -203,23 +205,23 @@ public class TaskNoteControllerTest {
     }
 
     @Test
-    void getListByTask_TaskNote_when_return_Empty_List() throws Exception {
+    void getList_AccessRule_when_return_Empty_List() throws Exception {
         mockMvc.perform(
-                getUriAndMediaType(GET_LIST_BY_TASK_PATH, Long.MAX_VALUE))
+                getUriAndMediaType(GET_LIST, Long.MAX_VALUE))
                 .andExpect(status().isNotFound())
                 .andExpect(mvcResult ->
                         assertTrue(mvcResult.getResolvedException() instanceof NotFoundException));
     }
 
     @Test
-    void update_TaskNote() throws Exception {
-        TaskNote taskNote = getNote();
-        TaskNoteDtoFull dto = getDtoFull();
-        dto.setComment("updated comment");
-        dto.setId(taskNote.getId());
+    void update_AccessRule() throws Exception {
+        AccessRule accessRule = getAccessRule();
+        AccessRuleDtoFull dto = getDtoFull();
+        dto.setObject(AccessObject.ACCESS_RULE);
+        dto.setId(accessRule.getId());
 
         MvcResult result = mockMvc.perform(
-                putJson(UPDATE_PATH, taskNote.getId(), dto))
+                putJson(UPDATE_PATH, accessRule.getId(), dto))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -229,16 +231,15 @@ public class TaskNoteControllerTest {
         try {
             mockMvc.perform(get(GET_PATH.replace("{id}", String.valueOf(id))))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.id", is(id), Long.class))
-                    .andExpect(jsonPath("$.description", equalTo("updated comment")));
+                    .andExpect(jsonPath("$.id", is(id), Long.class));
         } finally {
-            taskNoteRepository.deleteById(id);
+            accessRuleRepository.deleteById(id);
         }
     }
 
     @Test
-    void update_TaskNote_when_NotFound() throws Exception {
-        TaskNoteDtoFull dto = getDtoFull();
+    void update_AccessRule_when_NotFound() throws Exception {
+        AccessRuleDtoFull dto = getDtoFull();
         dto.setId(Long.MAX_VALUE);
 
         mockMvc.perform(
@@ -249,20 +250,20 @@ public class TaskNoteControllerTest {
     }
 
     @Test
-    void delete_TaskNote() {
-        TaskNote taskNote = getNote();
+    void delete_AccessRule() {
+        AccessRule accessRule = getAccessRule();
 
         try {
             mockMvc.perform(
-                    deleteUriAndMediaType(DELETE_PATH, taskNote.getId()))
+                    deleteUriAndMediaType(DELETE_PATH, accessRule.getId()))
                     .andExpect(status().isOk());
         } catch (Exception e) {
-            taskNoteRepository.deleteById(taskNote.getId());
+            accessRuleRepository.deleteById(accessRule.getId());
         }
     }
 
     @Test
-    void delete_TaskNote_Validation_when_Id_is_negative() throws Exception {
+    void delete_AccessRule_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformDelete(-1L);
     }
 
@@ -274,3 +275,4 @@ public class TaskNoteControllerTest {
                         assertTrue(mvcResult.getResolvedException() instanceof ConstraintViolationException));
     }
 }
+
