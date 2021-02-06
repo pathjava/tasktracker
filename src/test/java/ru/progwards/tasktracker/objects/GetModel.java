@@ -1,7 +1,10 @@
 package ru.progwards.tasktracker.objects;
 
 import ru.progwards.tasktracker.model.*;
+import ru.progwards.tasktracker.model.types.AccessObject;
+import ru.progwards.tasktracker.model.types.AccessType;
 import ru.progwards.tasktracker.model.types.EstimateChange;
+import ru.progwards.tasktracker.model.types.SystemRole;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -29,6 +32,17 @@ public class GetModel {
             result.append(alphabet.charAt(random.nextInt(alphabet.length())));
         }
         return result.toString();
+    }
+
+    public static AccessRule getAccessRule() {
+        return new AccessRule(
+                null,
+                null,
+                AccessObject.ACCESS_RULE,
+                null,
+                null,
+                AccessType.MODIFY
+        );
     }
 
     public static Project getProject() {
@@ -91,6 +105,18 @@ public class GetModel {
         );
     }
 
+    public static TaskNote getTaskNote() {
+        return new TaskNote(
+                null,
+                null,
+                null,
+                null,
+                "Comment",
+                ZonedDateTime.now(),
+                ZonedDateTime.now()
+        );
+    }
+
     public static TaskType getTaskType() {
         return new TaskType(
                 null,
@@ -114,6 +140,16 @@ public class GetModel {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList()
+        );
+    }
+
+    public static UserRole getUserRole() {
+        return new UserRole(
+                null,
+                "Администраторы",
+                SystemRole.ADMIN,
+                null,
+                null
         );
     }
 

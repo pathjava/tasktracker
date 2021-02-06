@@ -20,8 +20,8 @@ public class CreateDefaultTemplate {
 
     private final GetListService <UserRole> userRoleGetListService;
     private final TemplateService<UserRole> userRoleTemplateService;
-//    private final GetListService <User> userGetListService;
-//    private final TemplateService<User> userTemplateService;
+    private final GetListService <User> userGetListService;
+    private final TemplateService<User> userTemplateService;
     private final GetListService <TaskPriority> taskPriorityGetListService;
     private final TemplateService<TaskPriority> taskPriorityTemplateService;
     private final GetListService <RelationType> relationTypeGetListService;
@@ -52,19 +52,19 @@ public class CreateDefaultTemplate {
                 throw new CreateTemplateException("Лист создания шаблонов ролей пользователей пустой");
             }
         }
-//        List<User> userList = userGetListService.getList();
-//        if(userList.isEmpty()){
-//            userList = userTemplateService.createFromTemplate(userRoleList.get(0));
-//            if (userList.isEmpty()){
-//                throw new CreateTemplateException("Лист создания шаблонов пользователей пустой");
-//            }
-//        }
-//        List<Project> projectList = projectGetListService.getList();
-//        if(projectList.isEmpty()){
-//            projectList = projectTemplateService.createFromTemplate(userList.get(0));
-//            if (projectList.isEmpty()){
-//                throw new CreateTemplateException("Лист создания шаблонов проектов пустой");
-//            }
-//        }
+        List<User> userList = userGetListService.getList();
+        if(userList.isEmpty()){
+            userList = userTemplateService.createFromTemplate(userRoleList.get(0));
+            if (userList.isEmpty()){
+                throw new CreateTemplateException("Лист создания шаблонов пользователей пустой");
+            }
+        }
+        List<Project> projectList = projectGetListService.getList();
+        if(projectList.isEmpty()){
+            projectList = projectTemplateService.createFromTemplate(userList.get(0));
+            if (projectList.isEmpty()){
+                throw new CreateTemplateException("Лист создания шаблонов проектов пустой");
+            }
+        }
     }
 }

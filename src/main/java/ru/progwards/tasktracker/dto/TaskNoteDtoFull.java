@@ -3,11 +3,10 @@ package ru.progwards.tasktracker.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.progwards.tasktracker.model.User;
+import ru.progwards.tasktracker.util.validator.validationstage.Create;
+import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.ZonedDateTime;
 
 /**
@@ -21,8 +20,8 @@ import java.time.ZonedDateTime;
 public class TaskNoteDtoFull {
 
     @Min(0)
-    @Max(Long.MAX_VALUE)
-    @NotNull
+    @NotNull(groups = Update.class)
+    @Null(groups = Create.class)
     private Long id;
 
     @NotBlank
@@ -39,7 +38,7 @@ public class TaskNoteDtoFull {
     private String comment;
 
     @NotNull
-    private TaskDtoFull task;
+    private TaskDtoPreview task;
 
     @NotNull
     private UserDtoPreview user;
