@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+<!--    https://www.codingame.com/playgrounds/4497/configuring-logback-with-spring-boot-->
+<!--    %M - выводит имя метода, в котором возникло сообщение журнала
+        (очевидно, это довольно замедляет работу и не рекомендуется использовать,
+        если вы не беспокоитесь о производительности или имя метода особенно важно для вас).-->
+
+    <appender name="TO-CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %green(%d{dd-MM-yyyy HH:mm:ss.SSS}) %yellow([%thread]) %highlight(%-5level) %cyan(%logger{36}.%M) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+
+<!--    TimeBasedRollingPolicy создаст новый файл на основе даты.-->
+<!--    maxHistory указывает, как долго файлы архивных журналов будут храниться до их автоматического удаления.-->
+<!--    totalSizeCap ограничивает максимальный размер всех заархивированных файлов журнала, он требует,
+        чтобы для свойства maxHistory было установлено значение maxHistory,
+        имеющее приоритет над totalSizeCap при удалении заархивированных файлов.-->
+
+<!--    <appender name="TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>log.log</file>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <Pattern>-->
+<!--                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n-->
+<!--            </Pattern>-->
+<!--        </encoder>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>-->
+<!--                log_archive_%d{dd-MM-yyyy}.log.zip-->
+<!--            </fileNamePattern>-->
+<!--            <maxHistory>10</maxHistory>-->
+<!--            <totalSizeCap>100MB</totalSizeCap>-->
+<!--        </rollingPolicy>-->
+<!--    </appender>-->
+
+
+<!--    Чтобы пролонгировать только размер файла, необходимо использовать политику прокрутки FixedWindowRollingPolicy
+        и политику запуска SizeBasedTriggeringPolicy.-->
+<!--    Необязательные свойства minIndex и maxIndex, найденные в FixedWindowRollingPolicy, указывают минимальное и максимальное значение,
+        которое %i может принимать в именах файлов журнала.-->
+<!--    Процесс создания файлов журнала выглядит следующим образом (на примере приведенного фрагмента кода) - файл log.log
+        будет принимать все новые входные данные журнала, и при достижении maxFileSize log.log переименовывается в архивный файл log_2.log,
+        и создается новый файл log.log, когда log_2.log также достигает максимального размера all файлы журнала переименовываются
+        и сдвигаются вместе с новым файлом журнала, который создается снова. Этот процесс будет продолжен, если maxIndex не установлен,
+        но если это файл журнала с указанным максимальным индексом, он будет удален (он содержит самые старые сообщения) в момент,
+        когда должен быть создан другой файл архива. Следуя тому же примеру, приведенному выше, это означает,
+        что при создании log_4.log вместо этого удаляется log_3.log, а все остальные журналы соответственно переименовываются.-->
+
+<!--    <appender name="TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>log.log</file>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <Pattern>-->
+<!--                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n-->
+<!--            </Pattern>-->
+<!--        </encoder>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+<!--            <fileNamePattern>-->
+<!--                log_%i.log-->
+<!--            </fileNamePattern>-->
+<!--            <minIndex>1</minIndex>-->
+<!--            <maxIndex>3</maxIndex>-->
+<!--        </rollingPolicy>-->
+<!--        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+<!--            <maxFileSize>5KB</maxFileSize>-->
+<!--        </triggeringPolicy>-->
+<!--    </appender>-->
+
+
+<!--    SizeAndTimeBasedRollingPolicy берет части обоих примеров, приведенных выше, позволяя ему перемещаться по размеру и времени.
+        Обратите внимание, что для включения даты и номера журнала в имя файла используются обозначения% d и% i.-->
+<!--    параметры maxFileSize, maxHistory и totalSizeCap, обеспечивают контроль над размером отдельных файлов, а также коллекцией файлов.
+        В приведенном примере будет храниться история за 10 дней, разделенная на файлы размером 10 МБ,
+        и когда общий размер всех файлов достигнет 100 МБ, самые старые файлы будут удалены.-->
+
+<!--    <appender name="TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <file>log.log</file>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <Pattern>-->
+<!--                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n-->
+<!--            </Pattern>-->
+<!--        </encoder>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>-->
+<!--                log_%d{dd-MM-yyyy-HH-mm}_%i.log-->
+<!--            </fileNamePattern>-->
+<!--            <maxFileSize>10MB</maxFileSize>-->
+<!--            <maxHistory>30</maxHistory>-->
+<!--            <totalSizeCap>500MB</totalSizeCap>-->
+<!--        </rollingPolicy>-->
+<!--    </appender>-->
+
+
+    <appender name="TO-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>log.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+<!--    Скрипты для создания таблиц под логи-->
+<!--    https://github.com/qos-ch/logback/tree/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script-->
+
+<!--    Документация Logback по подключению к БД-->
+<!--    http://logback.qos.ch/manual/appenders.html#DBAppender-->
+
+<!--    <property resource="application.properties" />-->
+    <appender name="TO-DB" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>org.postgresql.Driver</driverClass>
+            <url>jdbc:postgresql://localhost:5432/tt</url>
+            <user>postgres</user>
+            <password>123</password>
+        </connectionSource>
+    </appender>
+
+    <springProfile name="test">
+        <root level="info">
+            <appender-ref ref="TO-CONSOLE"/>
+            <appender-ref ref="TO-FILE"/>
+            <appender-ref ref="TO-DB" />
+        </root>
+        <logger name="ru.progwards.tasktracker" additivity="false" level="debug">
+            <appender-ref ref="TO-CONSOLE"/>
+            <appender-ref ref="TO-FILE"/>
+            <appender-ref ref="TO-DB" />
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="TO-FILE"/>
+        </root>
+        <logger name="ru.progwards.tasktracker" additivity="false" level="error">
+            <appender-ref ref="TO-FILE"/>
+        </logger>
+    </springProfile>
+
+</configuration>
