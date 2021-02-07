@@ -6,6 +6,7 @@ import lombok.Data;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -37,13 +38,12 @@ public class TaskAttachmentDtoFull {
     /**
      * Полное имя файла-вложения
      */
-    @NotEmpty
+    @NotBlank
     private String name;
 
     /**
      * Расширение файла
      */
-    @NotEmpty
     private String extension;
 
     /**

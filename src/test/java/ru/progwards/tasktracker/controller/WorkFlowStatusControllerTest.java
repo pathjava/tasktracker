@@ -16,28 +16,30 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ru.progwards.tasktracker.dto.WorkFlowDtoFull;
-import ru.progwards.tasktracker.dto.WorkFlowDtoPreview;
+import ru.progwards.tasktracker.dto.*;
+import ru.progwards.tasktracker.model.types.WorkFlowState;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc(addFilters = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
-public class WorkFlowControllerTest {
+public class WorkFlowStatusControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private WorkFlowDtoFull flowEntity = null;
+    static WorkFlowDtoPreview parentEntity = null;
+    private boolean parentIsMine = true;
+    private WorkFlowStatusDtoFull flowEntity = null;
 
-    static final String CREATE_PATH = "/rest/workflow/create";
-    static final String GET_PATH = "/rest/workflow/{id}";
-    static final String GET_LIST_PATH = "/rest/workflow/list";
-    static final String UPDATE_PATH = "/rest/workflow/{id}/update";
-    static final String DELETE_PATH = "/rest/workflow/{id}/delete";
+    static final String CREATE_PATH = "/rest/workflowstatus/create";
+    static final String GET_PATH = "/rest/workflowstatus/{id}";
+    static final String GET_LIST_PATH = "/rest/workflowstatus/list";
+    static final String UPDATE_PATH = "/rest/workflowstatus/{id}/update";
+    static final String DELETE_PATH = "/rest/workflowstatus/{id}/delete";
 
     /**
      * Создать запрос на MVC контроллер
@@ -79,19 +81,14 @@ public class WorkFlowControllerTest {
     }
 
     static int testNo = 0;
-    public static WorkFlowDtoFull fullCreator() {
-        WorkFlowDtoFull result = new WorkFlowDtoFull();
+    public static WorkFlowStatusDtoFull fullCreator() {
+        WorkFlowStatusDtoFull result = new WorkFlowStatusDtoFull();
         testNo++;
-        result.setName("testWF"+testNo);
-        result.setPattern(false);
+        result.setName("testWFstatus"+testNo);
+        result.setAlwaysAllow(true);
+        result.setState(new WorkFlowStateDtoPreview(WorkFlowState.TO_DO.toString()));
+        result.setWorkflow(parentEntity);
         return result;
-    }
-    public static WorkFlowDtoPreview fullToPreview(WorkFlowDtoFull full) {
-        WorkFlowDtoPreview preview = new WorkFlowDtoPreview();
-        preview.setId(full.getId());
-        preview.setName(full.getName());
-        preview.setPattern(full.getPattern());
-        return preview;
     }
 
     private void checkIsError(String responce) {
@@ -100,13 +97,43 @@ public class WorkFlowControllerTest {
         Assertions.assertFalse(isError, "The response have error body '"+responce+"'");
     }
 
+
+    @Test
+    @Order(0)
+    void prepareParentEntity() throws Exception {
+        String responce = makeRequest("GET", WorkFlowControllerTest.GET_LIST_PATH);
+        checkIsError(responce);
+
+        WorkFlowDtoPreview[] arr = objectMapper.readValue(responce, WorkFlowDtoPreview[].class);
+        Assertions.assertTrue(arr[0] instanceof WorkFlowDtoPreview, "Result array is wrong");
+
+        for(WorkFlowDtoPreview el:arr) {
+            if(el.getPattern()) {
+                parentEntity = el;
+                break;
+            }
+        }
+        if(parentEntity == null) {
+            WorkFlowDtoFull dto = WorkFlowControllerTest.fullCreator();
+            dto.setPattern(true);
+            String responce2 = makeRequest("POST", WorkFlowControllerTest.CREATE_PATH, dto.getId(), dto);
+            checkIsError(responce2);
+            WorkFlowDtoFull full = objectMapper.readValue(responce2, WorkFlowDtoFull.class);
+            parentEntity = WorkFlowControllerTest.fullToPreview(full);
+        }
+        Assertions.assertNotNull(parentEntity, "Cannot resolve parent entity WorkFlow");
+        flowEntity = fullCreator();
+    }
+
     @Test
     @Order(10)
     void create() throws Exception {
-        WorkFlowDtoFull dto = fullCreator();
+        Assertions.assertNotNull(flowEntity, "flowEntity was not set. Cannot start test");
+
+        WorkFlowStatusDtoFull dto = flowEntity;
         String responce = makeRequest("POST", CREATE_PATH, dto.getId(), dto);
         checkIsError(responce);
-        flowEntity = objectMapper.readValue(responce, WorkFlowDtoFull.class);
+        flowEntity = objectMapper.readValue(responce, WorkFlowStatusDtoFull.class);
 
         Assertions.assertNotNull(flowEntity.getId(), "Identifier was not set. Entity is invalid");
         Assertions.assertEquals(dto.getName(), flowEntity.getName());
@@ -115,10 +142,12 @@ public class WorkFlowControllerTest {
     @Test
     @Order(20)
     void get() throws Exception {
-        WorkFlowDtoFull dto = flowEntity;
+        Assertions.assertNotNull(flowEntity, "flowEntity was not set. Cannot start test");
+
+        WorkFlowStatusDtoFull dto = flowEntity;
         String responce = makeRequest("GET", GET_PATH, dto.getId(), null);
         checkIsError(responce);
-        flowEntity = objectMapper.readValue(responce, WorkFlowDtoFull.class);
+        flowEntity = objectMapper.readValue(responce, WorkFlowStatusDtoFull.class);
 
         Assertions.assertNotNull(flowEntity.getId(), "Identifier was not set. Entity is invalid");
         Assertions.assertEquals(dto.getName(), flowEntity.getName());
@@ -127,14 +156,16 @@ public class WorkFlowControllerTest {
     @Test
     @Order(30)
     void getList() throws Exception {
+        Assertions.assertNotNull(flowEntity, "flowEntity was not set. Cannot start test");
+
         String responce = makeRequest("GET", GET_LIST_PATH);
         checkIsError(responce);
 
-        WorkFlowDtoPreview[] arr = objectMapper.readValue(responce, WorkFlowDtoPreview[].class);
-        Assertions.assertTrue(arr[0] instanceof WorkFlowDtoPreview, "Result array is wrong");
+        WorkFlowStatusDtoPreview[] arr = objectMapper.readValue(responce, WorkFlowStatusDtoPreview[].class);
+        Assertions.assertTrue(arr[0] instanceof WorkFlowStatusDtoPreview, "Result array is wrong");
 
         boolean found = false;
-        for(WorkFlowDtoPreview el:arr) {
+        for(WorkFlowStatusDtoPreview el:arr) {
             if(el.getId().equals(flowEntity.getId())) {
                 found = true;
                 break;
@@ -146,7 +177,7 @@ public class WorkFlowControllerTest {
     @Test
     @Order(40)
     void updateNotExists() throws Exception {
-        WorkFlowDtoFull dto = fullCreator();
+        WorkFlowStatusDtoFull dto = fullCreator();
         dto.setId(Long.MAX_VALUE);
         String responce = makeRequest("POST", UPDATE_PATH, dto.getId(), dto,
                 MockMvcResultMatchers.status().is4xxClientError());
@@ -158,22 +189,22 @@ public class WorkFlowControllerTest {
         Assertions.assertNotNull(flowEntity, "flowEntity was not set. Cannot start test");
         Assertions.assertNotNull(flowEntity.getId(), "Identifier was not set. Cannot start test");
 
-        WorkFlowDtoFull dto = flowEntity;
+        WorkFlowStatusDtoFull dto = flowEntity;
         dto.setName(dto.getName()+" renamed");
         String responce = makeRequest("POST", UPDATE_PATH, dto.getId(), dto);
     }
 
     @Test
     @Order(60)
-    void updatePatternToNull_validation() throws Exception {
+    void updateAlwaysAllowToNull_validation() throws Exception {
         Assertions.assertNotNull(flowEntity, "flowEntity was not set. Cannot start test");
         Assertions.assertNotNull(flowEntity.getId(), "Identifier was not set. Cannot start test");
 
-        Boolean pattern_save = flowEntity.getPattern();
-        flowEntity.setPattern(null);
+        Boolean pattern_save = flowEntity.getAlwaysAllow();
+        flowEntity.setAlwaysAllow(null);
         String responce = makeRequest("POST", UPDATE_PATH, flowEntity.getId(), flowEntity,
                 MockMvcResultMatchers.status().is4xxClientError());
-        flowEntity.setPattern(pattern_save);
+        flowEntity.setAlwaysAllow(pattern_save);
     }
 
     @Test

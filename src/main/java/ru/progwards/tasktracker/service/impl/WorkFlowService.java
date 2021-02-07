@@ -36,6 +36,7 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
      *
      * @param workFlow новый Workflow
      */
+    @Transactional
     @Override
     public void create(WorkFlow workFlow) {
         repository.save(workFlow);

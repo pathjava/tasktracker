@@ -16,4 +16,6 @@ public class WorkFlowDtoPreview {
 
     String name;
 
+    Boolean pattern;
+
 }
