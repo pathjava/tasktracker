@@ -1,13 +1,14 @@
 # TaskPriority
 
-### Методы контроллера:
+1. Получить список всех объектов **TaskPriority** в JSON формате
 
-1. Метод ***get()***
-
-   Данный метод посредством **GET**-запроса позволяет получить список всех объектов ***TaskPriorityDtoPreview***
+   Запрос:<br/>
+   ````
+   GET /rest/task-priority/list
+   ````
    
-   Пример запроса:<br/>
-   http://localhost:8080/rest/task-priority/list
+   Результат:<br/>
+   список объектов [TaskPriorityDtoPreview](#description)
 
 2. Метод ***get(Long id)***
 
@@ -52,3 +53,5 @@
    
    Пример запроса:<br/>
    http://localhost:8080/rest/task-priority/1/delete
+   
+   <a name="description">TaskPriorityDtoPreview</a>
