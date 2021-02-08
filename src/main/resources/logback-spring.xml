@@ -123,12 +123,12 @@
         <root level="info">
             <appender-ref ref="TO-CONSOLE"/>
 <!--            <appender-ref ref="TO-FILE"/>-->
-            <appender-ref ref="TO-DB" />
+<!--            <appender-ref ref="TO-DB" />-->
         </root>
         <logger name="ru.progwards.tasktracker" additivity="false" level="debug">
             <appender-ref ref="TO-CONSOLE"/>
 <!--            <appender-ref ref="TO-FILE"/>-->
-            <appender-ref ref="TO-DB" />
+<!--            <appender-ref ref="TO-DB" />-->
         </logger>
     </springProfile>
 
