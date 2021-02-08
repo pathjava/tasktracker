@@ -8,19 +8,28 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
 /**
+ * Логика логирования методов, определенных в @Pointcut с помощью Spring AOP
+ *
  * @author Oleg Kiselev
  */
-//@Aspect
-//@Component
-public class LogAspect {
+@Profile("dev")
+@Aspect
+@Component
+public class InternalLogicLogging {
 
-    private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    // https://stackoverflow.com/questions/33744875/spring-boot-how-to-log-all-requests-and-responses-with-exceptions-in-single-pl/39207422#39207422
 
+    private final Logger logger = LoggerFactory.getLogger(InternalLogicLogging.class);
+
+    /**
+     * Pointcut — срез, запрос точек присоединения для return методов
+     */
     @Pointcut("execution(!void ru.progwards.tasktracker.service.impl.*.*(..)) " +
             "|| execution(!void ru.progwards.tasktracker.repository.*.*(..)) " +
             "|| execution(!void ru.progwards.tasktracker.controller.*.*(..))" +
@@ -28,6 +37,9 @@ public class LogAspect {
     public void returnPointcut() {
     }
 
+    /**
+     * Pointcut — срез, запрос точек присоединения для void методов
+     */
     @Pointcut("execution(void ru.progwards.tasktracker.service.impl.*.*(..)) " +
             "|| execution(void ru.progwards.tasktracker.repository.*.*(..)) " +
             "|| execution(void ru.progwards.tasktracker.controller.*.*(..))" +
@@ -35,19 +47,45 @@ public class LogAspect {
     public void voidPointcut() {
     }
 
+    /**
+     * Метод запускается после выхода из метода (совпадающего с выражением pointcut) с генерацией исключения.
+     *
+     * @param joinPoint представляет собой точку в приложении, где можно подключить аспект АОП.
+     *                  Можно сказать, что это фактическое место в приложении,
+     *                  где будет выполняться действие с использованием инфраструктуры Spring AOP.
+     *                  Не обязательный параметр, который предоставляет дополнительную информацию,
+     *                  но если он используется, то он должен быть первым.
+     *                  Используется при @Before,@AfterThrowing,@AfterReturning
+     * @param e         исключение, переданное из метода
+     */
     @AfterThrowing(value = "returnPointcut() || voidPointcut()", throwing = "e")
     public void logMethodWithThrows(JoinPoint joinPoint, Exception e) {
         logger.info("Reason Exception: {} with message = {}", joinPoint.getSignature().toString(), e.getMessage());
     }
 
+    /**
+     * Метод, который может выполняться до и после выполнения анализируемого метода.
+     * Можно получить информацию о входящих и исходящих данных/параметрах анализируемого метода.
+     *
+     * @param joinPoint представляет собой точку в приложении, где можно подключить аспект АОП.
+     *                  Можно сказать, что это фактическое место в приложении,
+     *                  где будет выполняться действие с использованием инфраструктуры Spring AOP.
+     *                  Используется при @Around
+     * @return результат joinPoint.proceed()
+     * @throws Throwable исключение, возникшее при выполнении
+     */
     @Around("returnPointcut() || voidPointcut()")
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
-        logger.info("Enter: {} with argument[s] = {}", joinPoint.getSignature().toString(),
-                Arrays.toString(joinPoint.getArgs())
-        );
+        if (logger.isDebugEnabled()) {
+            logger.info("Enter: {} with argument[s] = {}", joinPoint.getSignature().toString(),
+                    Arrays.toString(joinPoint.getArgs())
+            );
+        }
         try {
             Object result = joinPoint.proceed();
-            logger.info("Exit: {} with result = {}", joinPoint.getSignature().toString(), result);
+            if (logger.isDebugEnabled()) {
+                logger.info("Exit: {} with result = {}", joinPoint.getSignature().toString(), result);
+            }
             return result;
         } catch (IllegalArgumentException ex) {
             logger.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
