@@ -9,6 +9,19 @@
    
    Результат:<br/>
    список объектов [TaskPriorityDtoPreview](#description)
+   
+   Пример строки запроса:<br/>
+   ````
+   http://localhost:8080/rest/task-priority/list
+   ````
+   
+   <details>
+     <summary>Пример ответа:</summary>
+   
+     ```
+     long console output here
+     ```
+   </details>
 
 2. Метод ***get(Long id)***
 
@@ -54,4 +67,9 @@
    Пример запроса:<br/>
    http://localhost:8080/rest/task-priority/1/delete
    
-   <a name="description">TaskPriorityDtoPreview</a>
+   <a name="description">**TaskPriorityDtoPreview**</a>
+   
+   Свойство | Описание
+   :--- | :---
+   ***id*** | идентификатор объекта TaskPriority
+   ***name*** | имя приоритета (*Lowest, Low, Medium, High, Highest*)
