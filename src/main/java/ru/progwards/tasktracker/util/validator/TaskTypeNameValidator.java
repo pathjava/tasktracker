@@ -37,18 +37,18 @@ public class TaskTypeNameValidator implements ConstraintValidator<TaskTypeNameVa
     @Override
     public boolean isValid(TaskTypeDtoFull typeDto, ConstraintValidatorContext context) {
         if (typeDto.getId() == null) {
-            if (taskTypeRepository.existsByName(typeDto.getName().toLowerCase().trim())) {
+            if (taskTypeRepository.existsByNameIgnoreCase(typeDto.getName().trim())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(typeDto.getName().toLowerCase().trim() + " already exists")
+                context.buildConstraintViolationWithTemplate(typeDto.getName().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
         } else {
-            TaskType taskType = taskTypeRepository.findByName(
-                    typeDto.getName().toLowerCase().trim()).orElse(null);
+            TaskType taskType = taskTypeRepository.findByNameIgnoreCase(
+                    typeDto.getName().trim()).orElse(null);
             if (taskType != null && !taskType.getId().equals(typeDto.getId())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(typeDto.getName().toLowerCase().trim() + " already exists")
+                context.buildConstraintViolationWithTemplate(typeDto.getName().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }

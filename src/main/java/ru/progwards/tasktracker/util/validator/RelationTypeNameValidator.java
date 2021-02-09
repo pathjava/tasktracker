@@ -37,18 +37,18 @@ public class RelationTypeNameValidator implements ConstraintValidator<RelationTy
     @Override
     public boolean isValid(RelationTypeDtoFull typeDto, ConstraintValidatorContext context) {
         if (typeDto.getId() == null) {
-            if (relationTypeRepository.existsByName(typeDto.getName().toLowerCase().trim())) {
+            if (relationTypeRepository.existsByNameIgnoreCase(typeDto.getName().trim())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(typeDto.getName().toLowerCase().trim() + " already exists")
+                context.buildConstraintViolationWithTemplate(typeDto.getName().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
         } else {
-            RelationType relationType = relationTypeRepository.findByName(
-                    typeDto.getName().toLowerCase().trim()).orElse(null);
+            RelationType relationType = relationTypeRepository.findByNameIgnoreCase(
+                    typeDto.getName().trim()).orElse(null);
             if (relationType != null && !relationType.getId().equals(typeDto.getId())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(typeDto.getName().toLowerCase().trim() + " already exists")
+                context.buildConstraintViolationWithTemplate(typeDto.getName().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
