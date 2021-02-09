@@ -8,11 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -54,24 +50,31 @@ public class HttpRequestResponseLoggingFilter implements Filter {
             BufferedRequestWrapper bufferedRequest = new BufferedRequestWrapper(httpServletRequest);
             BufferedResponseWrapper bufferedResponse = new BufferedResponseWrapper(httpServletResponse);
 
-            StringBuilder logMessage = new StringBuilder("REST Request - ")
-                    .append("[HTTP Method:")
-                    .append(httpServletRequest.getMethod())
-                    .append("] [Path Info:")
-                    .append(httpServletRequest.getServletPath())
-                    .append("] [Request Parameters:")
-                    .append(requestMap)
-                    .append("] [Request Body:")
-                    .append(bufferedRequest.getRequestBody())
-                    .append("] [Remote Address:")
-                    .append(httpServletRequest.getRemoteAddr())
-                    .append("] [Remote User:")
-                    .append(httpServletRequest.getUserPrincipal().getName())
-                    .append("]");
+            /* Request message */
+            String messageRequest = "REST Request - " +
+                    "[HTTP Method:" +
+                    httpServletRequest.getMethod() +
+                    "] [Path Info:" +
+                    httpServletRequest.getServletPath() +
+                    "] [Request Parameters:" +
+                    requestMap +
+                    "] [Request Body:" +
+                    bufferedRequest.getRequestBody() +
+                    "] [Remote Address:" +
+                    httpServletRequest.getRemoteAddr() +
+                    "] [Remote User:" +
+                    httpServletRequest.getUserPrincipal().getName() +
+                    "]";
+            LOGGER.debug(messageRequest);
 
             chain.doFilter(bufferedRequest, bufferedResponse);
-            logMessage.append(" [Response:").append(bufferedResponse.getContent()).append("]");
-            LOGGER.debug(logMessage.toString());
+
+            /* Response message */
+            String messageResponse = "REST Response - " +
+                    " [Response:" + bufferedResponse.getContent() + "]" +
+                    " [HTTP Status:" + bufferedResponse.getStatus() + "]";
+            LOGGER.debug(messageResponse);
+
         } catch (Throwable a) {
             LOGGER.error(a.getMessage());
         }
@@ -215,8 +218,13 @@ public class HttpRequestResponseLoggingFilter implements Filter {
             original = response;
         }
 
-        public String getContent() {
-            return bos.toString();
+        public String getContent() { //TODO - check!!!
+            if (bos == null) {
+                return String.format("called %s too early", BufferedResponseWrapper.class.getCanonicalName());
+            }
+            byte[] bytes = bos.toByteArray();
+            return new String(Arrays.copyOf(bytes, 5000));
+//            return bos.toString();
         }
 
         public PrintWriter getWriter() throws IOException {

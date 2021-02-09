@@ -23,9 +23,7 @@ import java.util.Arrays;
 @Component
 public class InternalLogicLogging {
 
-    // https://stackoverflow.com/questions/33744875/spring-boot-how-to-log-all-requests-and-responses-with-exceptions-in-single-pl/39207422#39207422
-
-    private final Logger logger = LoggerFactory.getLogger(InternalLogicLogging.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InternalLogicLogging.class);
 
     /**
      * Pointcut — срез, запрос точек присоединения для return методов
@@ -60,7 +58,7 @@ public class InternalLogicLogging {
      */
     @AfterThrowing(value = "returnPointcut() || voidPointcut()", throwing = "e")
     public void logMethodWithThrows(JoinPoint joinPoint, Exception e) {
-        logger.info("Reason Exception: {} with message = {}", joinPoint.getSignature().toString(), e.getMessage());
+        LOGGER.info("Reason Exception: {} with message = {}", joinPoint.getSignature().toString(), e.getMessage());
     }
 
     /**
@@ -76,19 +74,19 @@ public class InternalLogicLogging {
      */
     @Around("returnPointcut() || voidPointcut()")
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
-        if (logger.isDebugEnabled()) {
-            logger.info("Enter: {} with argument[s] = {}", joinPoint.getSignature().toString(),
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.info("Enter: {} with argument[s] = {}", joinPoint.getSignature().toString(),
                     Arrays.toString(joinPoint.getArgs())
             );
         }
         try {
             Object result = joinPoint.proceed();
-            if (logger.isDebugEnabled()) {
-                logger.info("Exit: {} with result = {}", joinPoint.getSignature().toString(), result);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.info("Exit: {} with result = {}", joinPoint.getSignature().toString(), result);
             }
             return result;
         } catch (IllegalArgumentException ex) {
-            logger.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
+            LOGGER.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
                     joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName()
             );
             throw ex;
