@@ -21,7 +21,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.dto.TaskNoteDtoFull;
 import ru.progwards.tasktracker.dto.UserDtoPreview;
-import ru.progwards.tasktracker.dto.WorkLogDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.Task;
