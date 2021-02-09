@@ -1,6 +1,6 @@
 # TaskPriority
 
-1. Получить список всех объектов **TaskPriority** в JSON формате
+1. Получить список всех объектов [**TaskPriority**](#model) в JSON формате
 
    Запрос:<br/>
    ````
@@ -8,7 +8,7 @@
    ````
    
    Результат:<br/>
-   список объектов [TaskPriorityDtoPreview](#description)
+   список объектов [TaskPriorityDtoPreview](#dtoPreview)
    
    Пример строки запроса:<br/>
    ````
@@ -17,59 +17,172 @@
    
    <details>
      <summary>Пример ответа:</summary>
-   
-     ```
-     long console output here
+     
+     ```json
+     [
+         {
+            "id": 1,
+            "name": "Highest"
+         },
+         {
+            "id": 2,
+            "name": "High"
+         },
+         {
+            "id": 3,
+            "name": "Low"
+         },
+         {
+            "id": 4,
+            "name": "Lowest"
+         }
+     ]
      ```
    </details>
+   
+   Метод ***get()***
 
-2. Метод ***get(Long id)***
-
-   **входные параметры**:<br/>
-   id - идентификатор объекта *TaskPriority*<br/>
+2. Получить один объект [**TaskPriority**](#model) в JSON формате
    
-   Данный метод посредством **GET**-запроса позволяет получить список конкретного объекта 
-   ***TaskPriorityDtoFull*** по его идентификатору
+   Запрос:<br/>
+   ````
+   GET /rest/task-priority/{id}
+   ````
+  
+   Результат:<br/>
+   объект [TaskPriorityDtoFull](#dtoFull)
+  
+   Пример строки запроса:<br/>
+   ````
+   http://localhost:8080/rest/task-priority/3
+   ````
+  
+   <details>
+     <summary>Пример ответа:</summary>
+    
+     ```json
+     {
+        "id": 3,
+        "name": "Low",
+        "value": 3
+     }
+     ```
+   </details>
+  
+   Метод ***get(Long id)***
    
-   Пример запроса:<br/>
-   http://localhost:8080/rest/task-priority/1
-   
-3. Метод ***create(TaskPriorityDtoFull dto)***
-
-   **входные параметры**:<br/>
-   dto - создаваемый объект *TaskPriorityDtoFull*
-   
-   При помощи данного метода создается объект ***TaskPriority*** и сохраняется в СУБД.
-   Метод выполняется при помощи **POST**-запроса. Данные передаются в теле запроса при помощи JSON
-   формата.
-   
-   Пример запроса:<br/>
+3. Создать объект [**TaskPriority**](#model)
+      
+   Запрос:<br/>
+   ````
+   POST /rest/task-priority/create
+   ````
+ 
+   Результат:<br/>
+   объект [TaskPriorityDtoFull](#dtoFull)
+ 
+   Пример строки запроса:<br/>
+   ````
    http://localhost:8080/rest/task-priority/create
+   ````
    
-4. Метод ***update(TaskPriorityDtoFull dto)***
+   <details>
+     <summary>Пример тела запроса:</summary>
+  
+     ```json
+     {
+        "id": null,
+        "name": "High",
+        "value": 2
+     }
+     ```
+   </details>
+ 
+   <details>
+     <summary>Пример ответа:</summary>
+   
+     ```json
+     {
+        "id": 2,
+        "name": "High",
+        "value": 2
+     }
+     ```
+   </details>
+ 
+   Метод ***create(TaskPriorityDtoFull dto)***
+   
+4. Обновить объект [**TaskPriority**](#model)
+         
+   Запрос:<br/>
+   ````
+   POST /rest/task-priority/{id}/update
+   ````
+    
+   Результат:<br/>
+   ничего не возвращается
+    
+   Пример строки запроса:<br/>
+   ````
+   http://localhost:8080/rest/task-priority/1/update
+   ````
+      
+   <details>
+     <summary>Пример тела запроса:</summary>
+ 
+     ```json
+     {
+        "name": "Highest",
+        "value": 0
+     }
+     ```
+   </details>
+    
+   Метод ***update(Long id, TaskPriorityDtoFull dto)***
+   
+5. Удалить объект [**TaskPriority**](#model)
 
-   **входные параметры**:<br/>
-   dto - измененный объект *TaskPriorityDtoFull*
+   Запрос:<br/>
+   ````
+   POST /rest/task-priority/{id}/delete
+   ````
+       
+   Результат:<br/>
+   ничего не возвращается
    
-   При помощи данного метода обновляется объект ***TaskPriority***. Метод выполняется при помощи **POST**-запроса. 
-   Данные передаются в теле запроса при помощи JSON формата.
-   
-   Пример запроса:<br/>
-   http://localhost:8080/rest/task-priority/update
-   
-5. Метод ***delete(Long id)***
-
-   **входные параметры**:<br/>
-   id - идентификатор объекта *TaskPriority*<br/>
-   
-   При помощи данного метода удаляем объект ***TaskPriority*** из СУБД. Метод выполняется при помощи **POST**-запроса.
-   
-   Пример запроса:<br/>
+   Пример строки запроса:<br/>
+   ````
    http://localhost:8080/rest/task-priority/1/delete
+   ````
    
-   <a name="description">**TaskPriorityDtoPreview**</a>
+   Метод ***delete(Long id)***
    
-   Свойство | Описание
-   :--- | :---
-   ***id*** | идентификатор объекта TaskPriority
-   ***name*** | имя приоритета (*Lowest, Low, Medium, High, Highest*)
+   <br/>
+   
+<a name="dtoPreview">**TaskPriorityDtoPreview**</a>
+
+Свойство | Тип данных | Описание
+:--- | :--- | :---
+***id*** | Long | идентификатор объекта TaskPriority
+***name*** | String | имя приоритета (*Lowest, Low, Medium, High, Highest*)
+
+<br/>
+
+<a name="dtoFull">**TaskPriorityDtoFull**</a>
+  
+Свойство | Тип данных | Описание
+:--- | :--- | :--- 
+***id*** | Long | идентификатор объекта TaskPriority
+***name*** | String | имя приоритета (*Lowest, Low, Medium, High, Highest*)
+***value*** | Integer | числовое значение приоритета
+
+<br/>
+
+<a name="model">**TaskPriority**</a>
+
+Свойство | Тип данных | Описание
+:--- | :--- | :---
+***id*** | Long | идентификатор объекта TaskPriority
+***name*** | String | имя приоритета (*Lowest, Low, Medium, High, Highest*)
+***value*** | Integer | числовое значение приоритета
+***tasks*** | List\<Task\> | список задач с данным приоритетом
