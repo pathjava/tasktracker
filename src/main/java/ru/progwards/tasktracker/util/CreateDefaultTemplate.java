@@ -1,6 +1,6 @@
 package ru.progwards.tasktracker.util;
 
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @Service
-//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 public class CreateDefaultTemplate {
 
     private final Logger loggerCreateTemplate = LoggerFactory.getLogger(CreateDefaultTemplate.class);
@@ -47,6 +47,19 @@ public class CreateDefaultTemplate {
     private GetListService <Project> projectGetListService;
     @Autowired
     private TemplateService<Project> projectTemplateService;
+
+/*    private GetListService <UserRole> userRoleGetListService;
+    private TemplateService<UserRole> userRoleTemplateService;
+    private GetListService <User> userGetListService;
+    private TemplateService<User> userTemplateService;
+    private GetListService <TaskPriority> taskPriorityGetListService;
+    private TemplateService<TaskPriority> taskPriorityTemplateService;
+    private GetListService <RelationType> relationTypeGetListService;
+    private TemplateService<RelationType> relationTypeTemplateService;
+    private GetListService <WorkFlow> workFlowGetListService;
+    private TemplateService<WorkFlow> workFlowTemplateService;
+    private GetListService <Project> projectGetListService;
+    private TemplateService<Project> projectTemplateService;*/
 
     public void exec(){
         long count;
@@ -95,5 +108,6 @@ public class CreateDefaultTemplate {
             }
             loggerCreateTemplate.info("Created: {} count = {}", "шаблоны проектов", count);
         }
+        loggerCreateTemplate.info("CreateDefaultTemplate done.");
     }
 }
