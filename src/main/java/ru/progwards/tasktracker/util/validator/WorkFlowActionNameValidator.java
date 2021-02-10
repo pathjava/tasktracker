@@ -37,18 +37,18 @@ public class WorkFlowActionNameValidator implements ConstraintValidator<WorkFlow
     @Override
     public boolean isValid(WorkFlowActionDtoFull dtoFull, ConstraintValidatorContext context) {
         if (dtoFull.getId() == null) {
-            if (workFlowActionRepository.existsByName(dtoFull.getName().toLowerCase().trim())) {
+            if (workFlowActionRepository.existsByNameIgnoreCase(dtoFull.getName().trim())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(dtoFull.getName().toLowerCase().trim() + " already exists")
+                context.buildConstraintViolationWithTemplate(dtoFull.getName().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }
         } else {
-            WorkFlowAction workFlowAction = workFlowActionRepository.findByName(
-                    dtoFull.getName().toLowerCase().trim()).orElse(null);
+            WorkFlowAction workFlowAction = workFlowActionRepository.findByNameIgnoreCase(
+                    dtoFull.getName().trim()).orElse(null);
             if (workFlowAction != null && !workFlowAction.getId().equals(dtoFull.getId())) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(dtoFull.getName().toLowerCase().trim() + " already exists")
+                context.buildConstraintViolationWithTemplate(dtoFull.getName().trim() + " already exists")
                         .addConstraintViolation();
                 return false;
             }

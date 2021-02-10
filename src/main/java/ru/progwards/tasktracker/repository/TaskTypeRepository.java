@@ -21,7 +21,7 @@ public interface TaskTypeRepository extends JpaRepository<TaskType, Long> {
      * @param name имя TaskType
      * @return true - если в БД есть TaskType с проверяемым именем и false - если нет
      */
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
     /**
      * Метод получения TaskType по имени
@@ -29,7 +29,7 @@ public interface TaskTypeRepository extends JpaRepository<TaskType, Long> {
      * @param name имя TaskType
      * @return TaskType
      */
-    Optional<TaskType> findByName(String name);
+    Optional<TaskType> findByNameIgnoreCase(String name);
 
     // https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
     // https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods

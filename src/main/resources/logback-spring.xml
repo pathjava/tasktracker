@@ -9,7 +9,7 @@
     <appender name="TO-CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                %green(%d{dd-MM-yyyy HH:mm:ss.SSS}) %yellow([%thread]) %highlight(%-5level) %cyan(%logger{36}.%M) - %msg%n
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %yellow([%thread]) %highlight(%-5level) %cyan(%logger{36}.%M) - %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -94,14 +94,14 @@
 <!--    </appender>-->
 
 
-    <appender name="TO-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>log.log</file>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>
-                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
-            </Pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="TO-FILE" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>log.log</file>-->
+<!--        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+<!--            <Pattern>-->
+<!--                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n-->
+<!--            </Pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
 <!--    Скрипты для создания таблиц под логи-->
 <!--    https://github.com/qos-ch/logback/tree/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script-->
@@ -109,36 +109,45 @@
 <!--    Документация Logback по подключению к БД-->
 <!--    http://logback.qos.ch/manual/appenders.html#DBAppender-->
 
-<!--    <property resource="application.properties" />-->
-<!--    <appender name="TO-DB" class="ch.qos.logback.classic.db.DBAppender">-->
-<!--        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">-->
-<!--            <driverClass>org.postgresql.Driver</driverClass>-->
-<!--            <url>jdbc:postgresql://localhost:5432/tt</url>-->
-<!--            <user>postgres</user>-->
-<!--            <password>123</password>-->
-<!--        </connectionSource>-->
-<!--    </appender>-->
+    <property resource="application.properties" />
+    <appender name="TO-DB" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>org.postgresql.Driver</driverClass>
+            <url>jdbc:postgresql://localhost:5432/tt</url>
+            <user>postgres</user>
+            <password>123</password>
+        </connectionSource>
+    </appender>
 
     <springProfile name="dev">
         <root level="info">
             <appender-ref ref="TO-CONSOLE"/>
-            <appender-ref ref="TO-FILE"/>
+<!--            <appender-ref ref="TO-FILE"/>-->
 <!--            <appender-ref ref="TO-DB" />-->
         </root>
         <logger name="ru.progwards.tasktracker" additivity="false" level="debug">
             <appender-ref ref="TO-CONSOLE"/>
-            <appender-ref ref="TO-FILE"/>
+<!--            <appender-ref ref="TO-FILE"/>-->
 <!--            <appender-ref ref="TO-DB" />-->
         </logger>
     </springProfile>
 
-    <springProfile name="prod">
+    <springProfile name="test">
         <root level="info">
-            <appender-ref ref="TO-FILE"/>
+            <appender-ref ref="TO-CONSOLE"/>
         </root>
-        <logger name="ru.progwards.tasktracker" additivity="false" level="error">
-            <appender-ref ref="TO-FILE"/>
+        <logger name="ru.progwards.tasktracker" additivity="false" level="debug">
+            <appender-ref ref="TO-CONSOLE"/>
         </logger>
     </springProfile>
+
+<!--    <springProfile name="prod">-->
+<!--        <root level="info">-->
+<!--            <appender-ref ref="TO-FILE"/>-->
+<!--        </root>-->
+<!--        <logger name="ru.progwards.tasktracker" additivity="false" level="error">-->
+<!--            <appender-ref ref="TO-FILE"/>-->
+<!--        </logger>-->
+<!--    </springProfile>-->
 
 </configuration>

@@ -76,7 +76,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return тело ошибки
      */
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(
@@ -99,7 +99,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return тело ошибки
      */
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
+    protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
                                                                    WebRequest request) {
         String error = ex.getName() + " should be of type " + Objects.requireNonNull(ex.getRequiredType()).getName();
         ApiError apiError = new ApiError(LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
@@ -199,7 +199,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return тело ошибки
      */
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
+    protected ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
         ApiError apiError = new ApiError(
                 LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occurred"
         );
@@ -215,7 +215,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return сообщение об ошибке
      */
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
+    protected ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
         ApiError errors = new ApiError(
                 LocalDateTime.now(), HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), ex.getLocalizedMessage()
         );
@@ -229,7 +229,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return сообщение об ошибке
      */
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
+    protected ResponseEntity<ApiError> handleBadRequest(BadRequestException ex) {
         ApiError errors = new ApiError(
                 LocalDateTime.now(), HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex.getLocalizedMessage()
         );
@@ -243,7 +243,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return сообщение об ошибке
      */
     @ExceptionHandler(OperationIsNotPossibleException.class)
-    public ResponseEntity<ApiError> handleOperationIsNotPossible(OperationIsNotPossibleException ex) {
+    protected ResponseEntity<ApiError> handleOperationIsNotPossible(OperationIsNotPossibleException ex) {
         ApiError errors = new ApiError(
                 LocalDateTime.now(), HttpStatus.NO_CONTENT, ex.getLocalizedMessage(), ex.getLocalizedMessage()
         );

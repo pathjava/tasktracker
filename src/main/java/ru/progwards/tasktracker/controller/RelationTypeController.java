@@ -64,7 +64,7 @@ public class RelationTypeController {
                 .map(converter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("List RelationTypeDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);

@@ -20,7 +20,7 @@ public interface RelationTypeRepository extends JpaRepository<RelationType, Long
      * @param name имя RelationType
      * @return true - если в БД есть RelationType с проверяемым именем и false - если нет
      */
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
     /**
      * Метод получения RelationType по имени
@@ -28,6 +28,6 @@ public interface RelationTypeRepository extends JpaRepository<RelationType, Long
      * @param name имя RelationType
      * @return RelationType
      */
-    Optional<RelationType> findByName(String name);
+    Optional<RelationType> findByNameIgnoreCase(String name);
 
 }

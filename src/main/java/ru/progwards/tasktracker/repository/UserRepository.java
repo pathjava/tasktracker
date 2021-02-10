@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param email проверяемый электронный адрес
      * @return true - если email есть в БД и false - если нет
      */
-    boolean existsByEmail(String email);
+    boolean existsByEmailIgnoreCase(String email);
 
     /**
      * Метод получения пользователя по адресу электронной почты
@@ -28,5 +28,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param email электронный адрес
      * @return пользователь
      */
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailIgnoreCase(String email);
 }

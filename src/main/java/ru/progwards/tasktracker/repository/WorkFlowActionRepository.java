@@ -20,7 +20,7 @@ public interface WorkFlowActionRepository extends JpaRepository<WorkFlowAction, 
      * @param name имя WorkFlowAction
      * @return true - если в БД есть WorkFlowAction с проверяемым именем и false - если нет
      */
-    boolean existsByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
     /**
      * Метод получения WorkFlowAction по имени
@@ -28,7 +28,7 @@ public interface WorkFlowActionRepository extends JpaRepository<WorkFlowAction, 
      * @param name имя WorkFlowAction
      * @return WorkFlowAction
      */
-    Optional<WorkFlowAction> findByName(String name);
+    Optional<WorkFlowAction> findByNameIgnoreCase(String name);
 
     // https://docs.spring.io/spring-data/jpa/docs/1.5.0.RELEASE/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
     // https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
