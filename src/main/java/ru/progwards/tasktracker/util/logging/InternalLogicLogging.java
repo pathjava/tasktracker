@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.util.log;
+package ru.progwards.tasktracker.util.logging;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

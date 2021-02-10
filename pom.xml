@@ -43,7 +43,7 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-        <dependency><!-- Apache Commons IO (for HttpRequestResponseLoggingFilter)-->
+        <dependency><!-- Apache Commons IO -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.5</version>
