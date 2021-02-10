@@ -18,6 +18,7 @@ import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,7 +75,7 @@ public class WorkFlowStatusController {
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkFlowStatusDtoFull> get(
-            @PathVariable("id") @Min(0) Long id
+            @PathVariable("id") @Positive Long id
     ) {
         WorkFlowStatus vo = getService.get(id);
         WorkFlowStatusDtoFull entity = dtoConverter.toDto(vo);
@@ -113,7 +114,7 @@ public class WorkFlowStatusController {
      */
     @PostMapping(value = "/{id}/update")
     public ResponseEntity<WorkFlowStatusDtoFull> update(
-            @PathVariable("id") @Min(0) Long id,
+            @PathVariable("id") @Positive Long id,
             @RequestBody @Validated(Update.class) WorkFlowStatusDtoFull entity
     ) {
         entity.setId(id);
@@ -131,10 +132,10 @@ public class WorkFlowStatusController {
      *
      * @param id идентификатор удаляемого объекта
      */
-    @PostMapping("/delete")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.OK)
     public void delete(
-            @PathVariable("id") @Min(0) Long id
+            @PathVariable("id") @Positive Long id
     ) {
         WorkFlowStatus vo = getService.get(id);
         removeService.remove(vo);

@@ -36,6 +36,7 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
      *
      * @param workFlow новый Workflow
      */
+    @Transactional
     @Override
     public void create(WorkFlow workFlow) {
         repository.save(workFlow);
@@ -75,7 +76,7 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
     @Transactional
     @Override
     public void refresh(WorkFlow workFlow) {
-        if(workFlow.getPattern()) {
+        if(!workFlow.getPattern()) {
             throw new OperationIsNotPossibleException("Workflow is a pattern. Can't update");
         }
         repository.save(workFlow);

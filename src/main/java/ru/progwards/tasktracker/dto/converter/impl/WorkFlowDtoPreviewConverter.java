@@ -45,7 +45,8 @@ public class WorkFlowDtoPreviewConverter implements Converter<WorkFlow, WorkFlow
         if (model != null) {
             dto = new WorkFlowDtoPreview(
                     model.getId(),
-                    model.getName()
+                    model.getName(),
+                    model.getPattern()
             );
         }
         return dto;

@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -51,7 +52,7 @@ public class TaskAttachmentContentController {
      */
     @GetMapping(value = "{id}/download/{name}")
     public void download(
-            @PathVariable("id") @Min(0) Long id,
+            @PathVariable("id") @Positive Long id,
             @PathVariable("name") String name,
             HttpServletResponse response
     ) {
@@ -79,7 +80,7 @@ public class TaskAttachmentContentController {
     @PostMapping(value = "{attach_id}/upload",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskAttachmentContentDtoFull> upload(
-            @PathVariable("attach_id") @Min(0) Long attach_id,
+            @PathVariable("attach_id") @Positive Long attach_id,
             @RequestParam("file") @NotNull MultipartFile file
     ) {
         TaskAttachment attachment = attachmentGetService.get(attach_id);

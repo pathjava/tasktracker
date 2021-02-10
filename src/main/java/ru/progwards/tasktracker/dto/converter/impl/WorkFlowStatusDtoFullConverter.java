@@ -84,7 +84,7 @@ public class WorkFlowStatusDtoFullConverter implements Converter<WorkFlowStatus,
         WorkFlowStatusDtoFull dto = null;
         if (model != null) {
             dto = new WorkFlowStatusDtoFull(
-                    null,
+                    model.getId(),
                     workflowDtoConverter.toDto(model.getWorkflow()),
                     model.getName(),
                     stateDtoConverter.toDto(model.getState()),
