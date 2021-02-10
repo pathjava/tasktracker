@@ -38,9 +38,9 @@ public class WorkFlowActionDtoFullConverter implements Converter<WorkFlowAction,
         else if (dto.getId() == null) {
             return new WorkFlowAction(
                     null,
-                    workFlowStatusGetService.get(dto.getParentStatus_id()),
+                    checkCounterStatusDto(dto.getParentStatus_id()),
                     dto.getName().trim(),
-                    workFlowStatusGetService.get(dto.getNextStatus_id()));
+                    checkCounterStatusDto(dto.getNextStatus_id()));
         } else {
             WorkFlowAction workFlowAction = workFlowActionGetService.get(dto.getId());
             workFlowAction.setId(dto.getId());
@@ -49,8 +49,18 @@ public class WorkFlowActionDtoFullConverter implements Converter<WorkFlowAction,
             workFlowAction.setNextStatus(workFlowStatusGetService.get(dto.getNextStatus_id()));
             return workFlowAction;
         }
-
     }
+
+    /**
+     * Метод проверки существования встречного типа отношения
+     *
+     * @param id идентификатор WorkFlowStatus
+     * @return WorkFlowStatus или null
+     */
+    private WorkFlowStatus checkCounterStatusDto(Long id) {
+        return id != null ? workFlowStatusGetService.get(id) : null;
+    }
+
 
     /**
      * Преобразовать в сущность dto

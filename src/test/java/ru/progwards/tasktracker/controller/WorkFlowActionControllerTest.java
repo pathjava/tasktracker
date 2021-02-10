@@ -43,8 +43,7 @@ import static ru.progwards.tasktracker.objects.GetModel.getWorkFlowAction;
 
 /**
  * Тестирование методов контроллера WorkFlowActionController
- *
- * @author Oleg Kiselev
+ * @author Aleksandr Sidelnikov
  */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -61,7 +60,6 @@ class WorkFlowActionControllerTest {
 
     private static final String GET_PATH = "/rest/workflowaction/{id}";
     private static final String GET_LIST_PATH = "/rest/workflowaction/list";
-//    private static final String GET_LIST_BY_PROJECT_PATH = "/rest/workflowaction/{id}/list";
     private static final String CREATE_PATH = "/rest/workflowaction/create";
     private static final String DELETE_PATH = "/rest/workflowaction/{id}/delete";
     private static final String UPDATE_PATH = "/rest/workflowaction/{id}/update";

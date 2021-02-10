@@ -28,8 +28,8 @@ public class WorkFlowActionService implements
         GetService<Long, WorkFlowAction>,
         RemoveService<WorkFlowAction>,
         RefreshService<WorkFlowAction>,
-        GetListService<WorkFlowAction>,
-        GetListByParentService<Long, WorkFlowAction> {
+        GetListService<WorkFlowAction>
+         {
 //        TemplateService<WorkFlowAction> {
 
     private final WorkFlowActionRepository workFlowActionRepository;
@@ -115,8 +115,8 @@ public class WorkFlowActionService implements
 //  sidnet1964  добавлено согласно списку интерфейсов исходного файла
 //  что делать с перечеркнутым интерфейсом?
 
-    @Override
-    public Collection<WorkFlowAction> getListByParentId(Long parentId) {
-        return null;
-    }
+//    @Override
+//    public Collection<WorkFlowAction> getListByParentId(Long parentId) {
+//        return null;
+//    }
 }

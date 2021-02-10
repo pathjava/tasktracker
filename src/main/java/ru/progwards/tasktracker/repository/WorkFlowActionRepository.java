@@ -8,7 +8,7 @@ import ru.progwards.tasktracker.model.WorkFlowAction;
 import java.util.Optional;
 
 /**
- * @author Oleg Kiselev
+ * @author Aleksandr Sidelnikov
  */
 @Repository
 @Transactional(readOnly = true)
