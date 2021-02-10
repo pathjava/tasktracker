@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.dto.TaskDtoFull;
 import ru.progwards.tasktracker.dto.TaskDtoPreview;
 import ru.progwards.tasktracker.dto.TaskNoteDtoFull;
 import ru.progwards.tasktracker.dto.UserDtoPreview;

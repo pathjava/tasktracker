@@ -18,11 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
+import ru.progwards.tasktracker.dto.UserRoleDtoFull;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.model.AccessRule;
-import ru.progwards.tasktracker.model.types.AccessObject;
-import ru.progwards.tasktracker.repository.AccessRuleRepository;
+import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.repository.UserRoleRepository;
 
 import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
@@ -34,11 +33,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.progwards.tasktracker.objects.GetDtoFull.getAccessRuleDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getAccessRule;
+import static ru.progwards.tasktracker.objects.GetDtoFull.getUserRoleDtoFull;
+import static ru.progwards.tasktracker.objects.GetModel.getUserRole;
 
 /**
- * Тестирование методов контроллера AccessRuleController
+ * Тестирование методов контроллера UserRoleController
  *
  * @author Konstantin Kishkin
  */
@@ -46,16 +45,16 @@ import static ru.progwards.tasktracker.objects.GetModel.getAccessRule;
 @AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
-public class AccessRuleControllerTest {
+public class UserRoleControllerTest {
     private MockMvc mockMvc;
     @Autowired
-    private AccessRuleRepository accessRuleRepository;
+    private UserRoleRepository userRoleRepository;
 
-    private static final String GET_PATH = "/rest/accessRule/{id}";
-    private static final String CREATE_PATH = "/rest/accessRule/create";
-    private static final String GET_LIST = "/rest/accessRule/list";
-    private static final String UPDATE_PATH = "/rest/accessRule/{id}/update";
-    private static final String DELETE_PATH = "/rest/accessRule/{id}/delete";
+    private static final String GET_PATH = "/rest/userRole/{id}";
+    private static final String CREATE_PATH = "/rest/userRole/create";
+    private static final String GET_LIST = "/rest/userRole/list";
+    private static final String UPDATE_PATH = "/rest/userRole/{id}/update";
+    private static final String DELETE_PATH = "/rest/userRole/{id}/delete";
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {
@@ -113,8 +112,8 @@ public class AccessRuleControllerTest {
 
     @Test
     @Order(1)
-    void create_AccessRule() throws Exception {
-        AccessRuleDtoFull dto = getDtoFull();
+    void create_UserRole() throws Exception {
+        UserRoleDtoFull dto = getDtoFull();
 
         MvcResult result = mockMvc.perform(
                 postJson(CREATE_PATH, dto))
@@ -129,12 +128,12 @@ public class AccessRuleControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class));
         } finally {
-            accessRuleRepository.deleteById(id);
+            userRoleRepository.deleteById(id);
         }
     }
 
-    private AccessRuleDtoFull getDtoFull() {
-        AccessRuleDtoFull dto = getAccessRuleDtoFull();
+    private UserRoleDtoFull getDtoFull() {
+        UserRoleDtoFull dto = getUserRoleDtoFull();
 
         return dto;
     }
@@ -146,14 +145,14 @@ public class AccessRuleControllerTest {
 
     @Test
     @Order(2)
-    void create_AccessRule_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
-        AccessRuleDtoFull dto = getDtoFull();
+    void create_UserRole_BadRequest_Validation_If_Id_is_NotNull() throws Exception {
+        UserRoleDtoFull dto = getDtoFull();
 
         dto.setId(1L);
         mockMvcPerformPost(dto);
     }
 
-    private void mockMvcPerformPost(AccessRuleDtoFull dto) throws Exception {
+    private void mockMvcPerformPost(UserRoleDtoFull dto) throws Exception {
         mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andExpect(status().isBadRequest())
@@ -162,26 +161,26 @@ public class AccessRuleControllerTest {
     }
 
     @Test
-    void getList_AccessRule() throws Exception {
-        AccessRule accessRule1 = getAccessRule();
-        accessRule1.setObject(AccessObject.PROJECT);
-        AccessRule accessRule2 = getAccessRule();
-        accessRule2.setObject(AccessObject.TASK);
-        List<AccessRule> accessRuleList = List.of(accessRule1, accessRule2);
-        accessRuleRepository.saveAll(accessRuleList);
+    void getList_UserRole() throws Exception {
+        UserRole userRole = getUserRole();
+        userRole.setName("Администраторы");
+        UserRole userRole2 = getUserRole();
+        userRole2.setName("Пользователи");
+        List<UserRole> userRoleList = List.of(userRole, userRole2);
+        userRoleRepository.saveAll(userRoleList);
 
         try {
             mockMvc.perform(
                     getListUriAndMediaType(GET_LIST))
                     .andExpect(status().isOk());
         } finally {
-            accessRuleRepository.deleteAll(accessRuleList);
+            userRoleRepository.deleteAll(userRoleList);
         }
     }
 
 
     @Test
-    void getList_AccessRule_Validation_when_Id_is_negative() throws Exception {
+    void getList_UserRole_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformGet(GET_LIST, -1L);
     }
 
@@ -194,7 +193,7 @@ public class AccessRuleControllerTest {
     }
 
     @Test
-    void getList_AccessRule_when_return_Empty_List() throws Exception {
+    void getList_UserRole_when_return_Empty_List() throws Exception {
         mockMvc.perform(
                 getUriAndMediaType(GET_LIST, Long.MAX_VALUE))
                 .andExpect(status().isNotFound())
@@ -203,14 +202,14 @@ public class AccessRuleControllerTest {
     }
 
     @Test
-    void update_AccessRule() throws Exception {
-        AccessRule accessRule = getAccessRule();
-        AccessRuleDtoFull dto = getDtoFull();
-        dto.setObject(AccessObject.ACCESS_RULE);
-        dto.setId(accessRule.getId());
+    void update_UserRole() throws Exception {
+        UserRole userRole = getUserRole();
+        UserRoleDtoFull dto = getDtoFull();
+        dto.setName("Администраторы");
+        dto.setId(userRole.getId());
 
         MvcResult result = mockMvc.perform(
-                putJson(UPDATE_PATH, accessRule.getId(), dto))
+                putJson(UPDATE_PATH, userRole.getId(), dto))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -222,13 +221,13 @@ public class AccessRuleControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id", is(id), Long.class));
         } finally {
-            accessRuleRepository.deleteById(id);
+            userRoleRepository.deleteById(id);
         }
     }
 
     @Test
-    void update_AccessRule_when_NotFound() throws Exception {
-        AccessRuleDtoFull dto = getDtoFull();
+    void update_UserRole_when_NotFound() throws Exception {
+        UserRoleDtoFull dto = getDtoFull();
         dto.setId(Long.MAX_VALUE);
 
         mockMvc.perform(
@@ -239,20 +238,20 @@ public class AccessRuleControllerTest {
     }
 
     @Test
-    void delete_AccessRule() {
-        AccessRule accessRule = getAccessRule();
+    void delete_UserRole() {
+        UserRole userRole = getUserRole();
 
         try {
             mockMvc.perform(
-                    deleteUriAndMediaType(DELETE_PATH, accessRule.getId()))
+                    deleteUriAndMediaType(DELETE_PATH, userRole.getId()))
                     .andExpect(status().isOk());
         } catch (Exception e) {
-            accessRuleRepository.deleteById(accessRule.getId());
+            userRoleRepository.deleteById(userRole.getId());
         }
     }
 
     @Test
-    void delete_AccessRule_Validation_when_Id_is_negative() throws Exception {
+    void delete_UserRole_Validation_when_Id_is_negative() throws Exception {
         mockMvcPerformDelete(-1L);
     }
 
