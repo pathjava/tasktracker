@@ -1,6 +1,10 @@
 # TaskPriority
 
-1. Получить список всех объектов [**TaskPriority**](#model) в JSON формате
+Объект [***TaskPriority***](#model) - это приоритет выполнения задачи. При помощи ТaskPriority пользователь видит, какой приоритет
+у поставленных ему задач и на основании этого принимает решение по очередности их выполнения. Вот список приоритетов
+от самого низкого к самому высокому: Lowest, Low, Medium, High, Highest.
+
+### 1. Получить список всех объектов [**TaskPriority**](#model) в JSON формате
 
    Запрос:<br/>
    ````
@@ -42,7 +46,7 @@
    
    Метод ***get()***
 
-2. Получить один объект [**TaskPriority**](#model) в JSON формате
+### 2. Получить один объект [**TaskPriority**](#model) в JSON формате
    
    Запрос:<br/>
    ````
@@ -71,7 +75,7 @@
   
    Метод ***get(Long id)***
    
-3. Создать объект [**TaskPriority**](#model)
+### 3. Создать объект [**TaskPriority**](#model)
       
    Запрос:<br/>
    ````
@@ -112,7 +116,7 @@
  
    Метод ***create(TaskPriorityDtoFull dto)***
    
-4. Обновить объект [**TaskPriority**](#model)
+### 4. Обновить объект [**TaskPriority**](#model)
          
    Запрос:<br/>
    ````
@@ -140,7 +144,7 @@
     
    Метод ***update(Long id, TaskPriorityDtoFull dto)***
    
-5. Удалить объект [**TaskPriority**](#model)
+### 5. Удалить объект [**TaskPriority**](#model)
 
    Запрос:<br/>
    ````
@@ -159,7 +163,9 @@
    
    <br/>
    
-<a name="dtoPreview">**TaskPriorityDtoPreview**</a>
+### <a name="dtoPreview">**TaskPriorityDtoPreview**</a>
+
+*Используется для ссылочного отображения, для использования в списках*
 
 Свойство | Тип данных | Описание
 :--- | :--- | :---
@@ -168,7 +174,9 @@
 
 <br/>
 
-<a name="dtoFull">**TaskPriorityDtoFull**</a>
+### <a name="dtoFull">**TaskPriorityDtoFull**</a>
+
+*Используется для создания объекта TaskPriority, для модификации и для просмотра*
   
 Свойство | Тип данных | Описание
 :--- | :--- | :--- 
@@ -178,7 +186,9 @@
 
 <br/>
 
-<a name="model">**TaskPriority**</a>
+### <a name="model">**TaskPriority**</a>
+ 
+*Используется для хранения в СУБД, для реализации внутренней бизнес-логики*
 
 Свойство | Тип данных | Описание
 :--- | :--- | :---
