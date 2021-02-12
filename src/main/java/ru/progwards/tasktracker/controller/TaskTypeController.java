@@ -85,7 +85,7 @@ public class TaskTypeController {
                 .map(dtoFullConverter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("List TaskTypeDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);

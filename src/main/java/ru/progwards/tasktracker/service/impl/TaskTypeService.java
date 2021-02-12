@@ -17,6 +17,8 @@ import ru.progwards.tasktracker.service.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Бизнес-логика типов задачи
  *
@@ -76,7 +78,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     @Override
     public TaskType get(Long id) {
         return taskTypeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("TaskType id=" + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("TaskType id=%s not found", id)));
     }
 
     /**
@@ -90,7 +92,7 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     public void remove(TaskType model) {
         if (checkingOtherDependenciesTaskType(model))
             throw new OperationIsNotPossibleException(
-                    "Удаление невозможно, TaskType id=" + model.getId() + " используется!"
+                    format("Удаление невозможно, TaskType id=%s используется!", model.getId())
             );
         taskTypeRepository.delete(model);
     }

@@ -71,7 +71,7 @@ public class WorkLogController {
                 .map(workLogDtoFullConverter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("List WorkLogDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);

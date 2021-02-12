@@ -77,7 +77,7 @@ public class RelatedTaskController {
                 .map(relatedTaskDtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("List RelatedTaskDtoFull is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
