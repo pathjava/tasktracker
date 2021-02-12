@@ -1,14 +1,14 @@
 # TaskPriority
 
-Объект [***TaskPriority***](#model) - это приоритет выполнения задачи. При помощи ТaskPriority пользователь видит, какой приоритет
-у поставленных ему задач и на основании этого принимает решение по очередности их выполнения. Вот список приоритетов
-от самого низкого к самому высокому: Lowest, Low, Medium, High, Highest.
+Объект [***TaskPriority***](#model) - это приоритет выполнения задачи. При помощи ТaskPriority пользователь видит, 
+какой приоритет у поставленных ему задач и на основании этого принимает решение по очередности их выполнения. 
+Вот список приоритетов от самого низкого к самому высокому: Lowest, Low, Medium, High, Highest.
 
 ### 1. Получить список всех объектов [**TaskPriority**](#model) в JSON формате
 
    Запрос:<br/>
    ````
-   GET /rest/task-priority/list
+   GET /rest/taskpriority/list
    ````
    
    Результат:<br/>
@@ -16,7 +16,7 @@
    
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/list
+   http://localhost:8080/rest/taskpriority/list
    ````
    
    <details>
@@ -50,7 +50,7 @@
    
    Запрос:<br/>
    ````
-   GET /rest/task-priority/{id}
+   GET /rest/taskpriority/{id}
    ````
   
    Результат:<br/>
@@ -58,7 +58,7 @@
   
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/3
+   http://localhost:8080/rest/taskpriority/3
    ````
   
    <details>
@@ -79,7 +79,7 @@
       
    Запрос:<br/>
    ````
-   POST /rest/task-priority/create
+   POST /rest/taskpriority/create
    ````
  
    Результат:<br/>
@@ -87,7 +87,7 @@
  
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/create
+   http://localhost:8080/rest/taskpriority/create
    ````
    
    <details>
@@ -120,7 +120,7 @@
          
    Запрос:<br/>
    ````
-   POST /rest/task-priority/{id}/update
+   POST /rest/taskpriority/{id}/update
    ````
     
    Результат:<br/>
@@ -128,7 +128,7 @@
     
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/1/update
+   http://localhost:8080/rest/taskpriority/1/update
    ````
       
    <details>
@@ -148,7 +148,7 @@
 
    Запрос:<br/>
    ````
-   POST /rest/task-priority/{id}/delete
+   POST /rest/taskpriority/{id}/delete
    ````
        
    Результат:<br/>
@@ -156,7 +156,7 @@
    
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/1/delete
+   http://localhost:8080/rest/taskpriority/1/delete
    ````
    
    Метод ***delete(Long id)***

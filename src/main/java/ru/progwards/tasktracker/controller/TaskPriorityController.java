@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RestController
-@RequestMapping(value = "/rest/task-priority/")
+@RequestMapping(value = "/rest/taskpriority/")
 public class TaskPriorityController {
     /**
      * конвертер TaskPriority <-> TaskPriorityDtoFull
