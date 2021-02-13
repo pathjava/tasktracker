@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.UserRole;
 import ru.progwards.tasktracker.model.types.SystemRole;
@@ -20,16 +21,15 @@ import static java.lang.String.format;
  */
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class UserRoleService implements CreateService<UserRole>, GetListService<UserRole>, GetService<Long, UserRole>,
         RefreshService<UserRole>, RemoveService<UserRole>, TemplateService<UserRole> {
 
-//    private final List<User> users1 = new ArrayList<>();
-//    private final List<User> users2 = new ArrayList<>();
-
     private final UserRoleRepository userRoleRepository;
     private final AccessRuleService accessRuleService;
 
+    @Transactional
     @Override
     public void create(UserRole model) {
         userRoleRepository.save(model);
@@ -46,11 +46,13 @@ public class UserRoleService implements CreateService<UserRole>, GetListService<
                 .orElseThrow(() -> new NotFoundException(format("UserRole id=%s not found", id)));
     }
 
+    @Transactional
     @Override
     public void refresh(UserRole model) {
         userRoleRepository.save(model);
     }
 
+    @Transactional
     @Override
     public void remove(UserRole model) {
         userRoleRepository.deleteById(model.getId());

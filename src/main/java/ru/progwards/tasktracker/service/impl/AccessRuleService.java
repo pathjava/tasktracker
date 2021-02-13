@@ -22,12 +22,14 @@ import static java.lang.String.format;
  */
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class AccessRuleService implements CreateService<AccessRule>, GetListService<AccessRule>, GetService<Long, AccessRule>,
         RefreshService<AccessRule>, RemoveService<AccessRule>, TemplateService<AccessRule> {
 
     private final AccessRuleRepository accessRuleRepository;
 
+    @Transactional
     @Override
     public void create(AccessRule model) {
         accessRuleRepository.save(model);
@@ -44,11 +46,13 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
                 .orElseThrow(() -> new NotFoundException(format("AccessRule id=%s not found", id)));
     }
 
+    @Transactional
     @Override
     public void refresh(AccessRule model) {
-        accessRuleRepository.saveAndFlush(model);
+        accessRuleRepository.save(model);
     }
 
+    @Transactional
     @Override
     public void remove(AccessRule model) {
         accessRuleRepository.deleteById(model.getId());
