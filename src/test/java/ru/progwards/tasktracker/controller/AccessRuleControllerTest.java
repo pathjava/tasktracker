@@ -206,7 +206,7 @@ public class AccessRuleControllerTest {
     void update_AccessRule() throws Exception {
         AccessRule accessRule = getAccessRule();
         AccessRuleDtoFull dto = getDtoFull();
-        dto.setObject(AccessObject.ACCESS_RULE);
+        dto.setAccessObject(AccessObject.ACCESS_RULE.name());
         dto.setId(accessRule.getId());
 
         MvcResult result = mockMvc.perform(

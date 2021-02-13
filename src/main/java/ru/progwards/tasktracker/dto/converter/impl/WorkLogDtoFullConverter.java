@@ -96,18 +96,8 @@ public class WorkLogDtoFullConverter implements Converter<WorkLog, WorkLogDtoFul
                     userDtoConverter.toDto(model.getWorker()),
                     model.getStart(),
                     model.getDescription(),
-                    enumToString(model.getEstimateChange()),
+                    model.getEstimateChange().name(),
                     model.getEstimateValue()
             );
-    }
-
-    /**
-     * Метод конвертации ENUM в строку
-     *
-     * @param estimateChange enum перечисление
-     * @return строковое значение
-     */
-    private String enumToString(EstimateChange estimateChange) {
-        return estimateChange == null ? null : estimateChange.toString();
     }
 }

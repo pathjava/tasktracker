@@ -6,12 +6,15 @@ import org.springframework.stereotype.Component;
 import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.dto.UserRoleDtoPreview;
 import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.model.types.AccessObject;
+import ru.progwards.tasktracker.model.types.AccessType;
 import ru.progwards.tasktracker.service.GetService;
 
 /**
- * @author Artem Dikov
+ * @author Artem Dikov, Oleg Kiselev
  */
 
 @Component
@@ -30,19 +33,43 @@ public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessR
             return new AccessRule(
                     null,
                     userRole,
-                    dto.getObject(),
+                    stringAccessObjectToEnum(dto.getAccessObject()),
                     dto.getPropertyName(),
                     dto.getObjectId(),
-                    dto.getAccessType()
+                    stringAccessTypeToEnum(dto.getAccessType())
             );
         }
         AccessRule accessRule = accessRuleGetService.get(dto.getId());
         accessRule.setUserRole(userRole);
-        accessRule.setObject(dto.getObject());
+        accessRule.setObject(stringAccessObjectToEnum(dto.getAccessObject()));
         accessRule.setPropertyName(dto.getPropertyName());
         accessRule.setObjectId(dto.getObjectId());
-        accessRule.setAccessType(dto.getAccessType());
+        accessRule.setAccessType(stringAccessTypeToEnum(dto.getAccessType()));
         return accessRule;
+    }
+
+    private AccessObject stringAccessObjectToEnum(String accessObject) {
+        if (accessObject != null)
+            for (AccessObject value : AccessObject.values()) {
+                if (value.name().equalsIgnoreCase(accessObject))
+                    return value;
+            }
+
+        throw new BadRequestException(
+                accessObject + " does not match any enumeration AccessObject!"
+        );
+    }
+
+    private AccessType stringAccessTypeToEnum(String accessType) {
+        if (accessType != null)
+            for (AccessType value : AccessType.values()) {
+                if (value.name().equalsIgnoreCase(accessType))
+                    return value;
+            }
+
+        throw new BadRequestException(
+                accessType + " does not match any enumeration AccessType!"
+        );
     }
 
     @Override
@@ -52,10 +79,10 @@ public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessR
         return new AccessRuleDtoFull(
                 model.getId(),
                 userRoleDtoPreviewConverter.toDto(model.getUserRole()),
-                model.getObject(),
+                model.getObject().name(),
                 model.getPropertyName(),
                 model.getObjectId(),
-                model.getAccessType()
+                model.getAccessType().name()
         );
     }
 }

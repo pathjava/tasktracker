@@ -116,7 +116,7 @@ public class GetDtoFull {
         return new UserRoleDtoFull(
                 null,
                 "Администраторы",
-                SystemRole.ADMIN
+                SystemRole.ADMIN.name()
         );
     }
 

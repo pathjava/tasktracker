@@ -29,6 +29,6 @@ public class UserRoleDtoFull {
     private String name;
 
     @NotNull
-    private SystemRole systemRole;
+    private String systemRole;
     //private List<AccessRuleDtoFull> accessRules; //если раскоментить, то будет циклическая зависимость
 }
