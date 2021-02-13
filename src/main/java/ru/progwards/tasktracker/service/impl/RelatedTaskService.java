@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Бизнес-логика связанной задачи (RelatedTask)
  *
@@ -48,7 +50,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
             if (model.getRelationType().getCounterRelation() != null) {
                 Long id = model.getRelationType().getCounterRelation().getId();
                 RelationType counterType = relationTypeRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("RelationType id=" + id + " not found"));
+                        .orElseThrow(() -> new NotFoundException(format("RelationType id=%s not found", id)));
                 RelatedTask counter = new RelatedTask(
                         null, counterType, model.getAttachedTask(), model.getCurrentTask(), false
                 );
@@ -80,7 +82,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     @Override
     public RelatedTask get(Long id) {
         return relatedTaskRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new NotFoundException("RelatedTask id=" + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("RelatedTask id=%s not found", id)));
     }
 
     /**

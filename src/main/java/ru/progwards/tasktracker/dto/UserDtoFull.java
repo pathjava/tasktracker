@@ -7,10 +7,7 @@ import ru.progwards.tasktracker.util.validator.annotation.PasswordValid;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.*;
 import java.util.List;
 
 /**
@@ -26,17 +23,18 @@ public class UserDtoFull {
     @Null(groups = Create.class)
     private Long id;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String name;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     @Email(groups = {Create.class, Update.class})
     private String email;
 
-    @NotEmpty(groups = {Create.class, Update.class})
+    @NotBlank(groups = {Create.class, Update.class})
     private String password;
 
-    private String passwordConfirm;
+    @NotBlank(groups = {Create.class, Update.class})
+    transient private String passwordConfirm;
 
     private List<UserRoleDtoPreview> roles;
 

@@ -7,6 +7,7 @@ import ru.progwards.tasktracker.model.AccessRule;
 
 @Component
 public class AccessRuleDtoPreviewConverter implements Converter<AccessRule, AccessRuleDtoPreview> {
+
     @Override
     public AccessRule toModel(AccessRuleDtoPreview dto) {
         return null;

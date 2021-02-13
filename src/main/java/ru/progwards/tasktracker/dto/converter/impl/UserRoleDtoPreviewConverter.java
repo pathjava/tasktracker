@@ -1,20 +1,20 @@
 package ru.progwards.tasktracker.dto.converter.impl;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.dto.UserRoleDtoPreview;
-import ru.progwards.tasktracker.service.GetService;
-import ru.progwards.tasktracker.model.AccessRule;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.service.GetService;
 
 /**
  * @author Artem Dikov
  */
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class UserRoleDtoPreviewConverter implements Converter<UserRole, UserRoleDtoPreview> {
 
     private final GetService<Long, UserRole> userRoleGetService;
@@ -30,6 +30,10 @@ public class UserRoleDtoPreviewConverter implements Converter<UserRole, UserRole
     public UserRoleDtoPreview toDto(UserRole model) {
         if (model == null)
             return null;
-        return new UserRoleDtoPreview(model.getId(), model.getName(), model.getSystemRole());
+        return new UserRoleDtoPreview(
+                model.getId(),
+                model.getName(),
+                model.getSystemRole().name()
+        );
     }
 }

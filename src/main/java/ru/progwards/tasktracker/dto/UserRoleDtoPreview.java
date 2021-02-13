@@ -12,8 +12,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Data
 public class UserRoleDtoPreview {
+
     @NotNull
     private Long id;
+
     private String name;
-    SystemRole role;
+
+    private String systemRole;
+
 }

@@ -3,43 +3,33 @@ package ru.progwards.tasktracker.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
-import ru.progwards.tasktracker.model.*;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.UserRole;
 import ru.progwards.tasktracker.model.types.SystemRole;
-import ru.progwards.tasktracker.repository.AccessRuleRepository;
 import ru.progwards.tasktracker.repository.UserRoleRepository;
-//import ru.progwards.tasktracker.repository.deprecated.Repository;
-//import ru.progwards.tasktracker.repository.deprecated.entity.UserRoleEntity;
-//import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 import ru.progwards.tasktracker.service.*;
 
-import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.String.format;
 
 /**
  * @author Artem Dikov, Konstantin Kishkin
  */
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Transactional(readOnly = true)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class UserRoleService implements CreateService<UserRole>, GetListService<UserRole>, GetService<Long, UserRole>,
         RefreshService<UserRole>, RemoveService<UserRole>, TemplateService<UserRole> {
 
-    private List<User> users1 = new ArrayList();
-    private List<User> users2 = new ArrayList();
-
-    @NonNull
     private final UserRoleRepository userRoleRepository;
-
-    @NonNull
     private final AccessRuleService accessRuleService;
 
-    @NonNull
-    private final AccessRuleRepository accessRuleRepository;
-
+    @Transactional
     @Override
     public void create(UserRole model) {
         userRoleRepository.save(model);
@@ -52,14 +42,17 @@ public class UserRoleService implements CreateService<UserRole>, GetListService<
 
     @Override
     public UserRole get(Long id) {
-        return userRoleRepository.findById(id).get();
+        return userRoleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(format("UserRole id=%s not found", id)));
     }
 
+    @Transactional
     @Override
     public void refresh(UserRole model) {
         userRoleRepository.save(model);
     }
 
+    @Transactional
     @Override
     public void remove(UserRole model) {
         userRoleRepository.deleteById(model.getId());

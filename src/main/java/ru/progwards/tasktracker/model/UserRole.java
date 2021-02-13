@@ -1,9 +1,13 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ru.progwards.tasktracker.model.types.SystemRole;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -20,12 +24,10 @@ public class UserRole {
     @Id
     @SequenceGenerator(name = "user_role_seq", sequenceName = "user_role_seq", allocationSize = 1)
     @GeneratedValue(generator = "user_role_seq", strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Basic
-    @Column(name = "name", unique = true)
+    @NotBlank
+    @Column(unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -38,8 +40,8 @@ public class UserRole {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role_user",
-            joinColumns = { @JoinColumn(name = "user_role_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+            joinColumns = {@JoinColumn(name = "user_role_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     List<User> users;
 

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
+
 
 /**
  * Бизнес-логика типа отношения связанных задач RelationType
@@ -42,7 +44,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
     @Override
     public RelationType get(Long id) {
         return relationTypeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("RelationType id=" + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("RelationType id=%s not found", id)));
     }
 
     /**
@@ -73,7 +75,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
                 counterRelation.setCounterRelation(model);
                 relationTypeRepository.save(counterRelation);
             } else
-                throw new BadRequestException("RelationType id=" + counterRelation.getId() + " already exists");
+                throw new BadRequestException(format("RelationType id=%s already exists", counterRelation.getId()));
         } else
             relationTypeRepository.save(model);
     }
@@ -99,7 +101,7 @@ public class RelationTypeService implements GetService<Long, RelationType>, Crea
     public void remove(RelationType model) {
         if (relatedTaskRepository.existsRelatedTaskByRelationType(model))
             throw new OperationIsNotPossibleException(
-                    "Removing RelationType id=" + model.getId() + " is not possible, this RelationType is in use!"
+                    format("Removing RelationType id=%s is not possible, this RelationType is in use!", model.getId())
             );
 
         relationTypeRepository.delete(model);

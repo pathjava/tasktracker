@@ -28,13 +28,13 @@ public class AccessRuleDtoFull {
     @NotNull
     private UserRoleDtoPreview userRole;
 
-    @NotNull
-    AccessObject object;
+    @NotBlank
+    private String accessObject;
 
     private String propertyName; // null == all
 
     private Long objectId; // null == all
 
-    @NotNull
-    private AccessType accessType;
+    @NotBlank
+    private String accessType;
 }

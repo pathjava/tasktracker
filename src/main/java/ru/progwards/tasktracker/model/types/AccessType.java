@@ -5,5 +5,10 @@ package ru.progwards.tasktracker.model.types;
  * @author Pavel Khovaylo
  */
 public enum AccessType {
-    NONE, CALL, READ_ONLY, MODIFY, MODIFY_AND_DELETE, ADMIN
+    NONE,
+    CALL,
+    READ_ONLY,
+    MODIFY,
+    MODIFY_AND_DELETE,
+    ADMIN
 }

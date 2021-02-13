@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.String.format;
+
 /**
  * Бизнес-логика создания задачи (Task)
  *
@@ -94,7 +96,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     @Override
     public Task get(Long id) {
         return taskRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new NotFoundException("Task id=" + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("Task id=%s not found", id)));
     }
 
     /**
@@ -150,7 +152,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     @Override
     public void updateOneField(UpdateOneValue oneValue) {
         Task task = taskRepository.findById(oneValue.getId())
-                .orElseThrow(() -> new NotFoundException("Task id=" + oneValue.getId() + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("Task id=%s not found", oneValue.getId())));
 
         for (Field declaredField : task.getClass().getDeclaredFields()) {
             if (declaredField.getName().equals(oneValue.getFieldName())) {

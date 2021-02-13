@@ -19,6 +19,6 @@ public class AccessTypeDtoPreviewConverter implements Converter<AccessType, Acce
 
     @Override
     public AccessTypeDtoPreview toDto(AccessType model) {
-        return new AccessTypeDtoPreview(model.toString());
+        return new AccessTypeDtoPreview(model.name());
     }
 }

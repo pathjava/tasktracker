@@ -26,6 +26,8 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 /**
  * Контроллер для работы с задачами (Task)
  *
@@ -90,7 +92,7 @@ public class TaskController {
                 .map(dtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("List TaskDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -108,7 +110,7 @@ public class TaskController {
                 .map(dtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("List TaskDtoPreview is empty!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -181,7 +183,9 @@ public class TaskController {
                                                          @Validated(Update.class) @RequestBody UpdateOneValue oneValue) {
 
         if (oneValue.getFieldName().equals("id"))
-            throw new OperationIsNotPossibleException("Update field: " + oneValue.getFieldName() + " is not possible!");
+            throw new OperationIsNotPossibleException(
+                    format("Update field: %s is not possible!", oneValue.getFieldName())
+            );
 
         if (!id.equals(oneValue.getId()))
             throw new BadRequestException("This operation is not possible!");

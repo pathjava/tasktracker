@@ -10,6 +10,8 @@ import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.repository.TaskRepository;
 import ru.progwards.tasktracker.service.GetService;
 
+import static java.lang.String.format;
+
 /**
  * Бизнес-логика получения задачи (Task) по коду
  *
@@ -17,7 +19,7 @@ import ru.progwards.tasktracker.service.GetService;
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor_={@Autowired, @NonNull})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskByCodeGetService implements GetService<String, Task> {
 
     private final TaskRepository taskRepository;
@@ -31,6 +33,6 @@ public class TaskByCodeGetService implements GetService<String, Task> {
     @Override
     public Task get(String code) {
         return taskRepository.findByCodeAndDeletedFalse(code)
-                .orElseThrow(() -> new NotFoundException("Task code=" + code + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("Task code=%s not found", code)));
     }
 }

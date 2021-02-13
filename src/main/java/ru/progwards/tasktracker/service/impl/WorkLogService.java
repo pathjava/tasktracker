@@ -19,6 +19,8 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Бизнес-логика лога (Журнала работ) задачи
  *
@@ -105,7 +107,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
     @Override
     public WorkLog get(Long id) {
         return workLogRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("WorkLog id=" + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("WorkLog id=%s not found", id)));
     }
 
     /**
@@ -165,7 +167,7 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
      */
     private Task getTask(Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Task id=" + id + " not found"));
+                .orElseThrow(() -> new NotFoundException(format("Task id=%s not found", id)));
     }
 
     /**
