@@ -24,8 +24,7 @@ public class UserRole {
     @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Basic
-    @Column(name = "name", unique = true)
+    @Column(unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -38,8 +37,8 @@ public class UserRole {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role_user",
-            joinColumns = { @JoinColumn(name = "user_role_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+            joinColumns = {@JoinColumn(name = "user_role_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     List<User> users;
 

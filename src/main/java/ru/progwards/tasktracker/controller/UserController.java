@@ -17,7 +17,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,7 +63,7 @@ public class UserController {
      * @return возвращает пользователя
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDtoFull> getUser(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<UserDtoFull> getUser(@PathVariable @Min(1) Long id) {
 
         UserDtoFull user = converter.toDto(getService.get(id));
 
@@ -96,7 +95,7 @@ public class UserController {
      * @return возвращает обновленного пользователя
      */
     @PutMapping(value = "/{id}/update")
-    public ResponseEntity<UserDtoFull> updateUser(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id,
+    public ResponseEntity<UserDtoFull> updateUser(@PathVariable @Min(1) Long id,
                                                   @Validated(Update.class) @RequestBody UserDtoFull userDtoFull) {
 
         if (!id.equals(userDtoFull.getId()))
@@ -116,7 +115,7 @@ public class UserController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<UserDtoFull> deleteUser(@PathVariable @Min(1) @Max(Long.MAX_VALUE) Long id) {
+    public ResponseEntity<UserDtoFull> deleteUser(@PathVariable @Min(1) Long id) {
 
         User user = getService.get(id);
         removeService.remove(user);

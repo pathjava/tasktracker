@@ -4,29 +4,28 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import ru.progwards.tasktracker.repository.deprecated.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.progwards.tasktracker.model.UserRole;
+import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.types.AccessObject;
 import ru.progwards.tasktracker.model.types.AccessType;
 import ru.progwards.tasktracker.repository.AccessRuleRepository;
-//import ru.progwards.tasktracker.repository.deprecated.entity.AccessRuleEntity;
 import ru.progwards.tasktracker.service.*;
-import ru.progwards.tasktracker.model.AccessRule;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.String.format;
 
 /**
  * @author Artem Dikov, Konstantin Kishkin
  */
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class AccessRuleService implements CreateService<AccessRule>, GetListService<AccessRule>, GetService<Long, AccessRule>,
         RefreshService<AccessRule>, RemoveService<AccessRule>, TemplateService<AccessRule> {
 
-    @NonNull
     private final AccessRuleRepository accessRuleRepository;
 
     @Override
@@ -41,7 +40,8 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
 
     @Override
     public AccessRule get(Long id) {
-        return accessRuleRepository.findById(id).get();
+        return accessRuleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(format("AccessRule id=%s not found", id)));
     }
 
     @Override
@@ -56,17 +56,16 @@ public class AccessRuleService implements CreateService<AccessRule>, GetListServ
 
     /**
      * Метод создания AccessRule по шаблону
-     *
      */
     @Transactional
     @Override
     public List<AccessRule> createFromTemplate(Object... args) {
         List<AccessRule> accessRuleList = new ArrayList<>();
-        for (AccessObject accessObject : AccessObject.values()){
+        for (AccessObject accessObject : AccessObject.values()) {
             if (accessObject != AccessObject.ACCESS_RULE
                     && accessObject != AccessObject.USER_ROLE
                     && accessObject != AccessObject.USER
-            ){
+            ) {
                 AccessRule accessRule = new AccessRule();
                 accessRule.setId(null);
                 accessRule.setAccessType(AccessType.MODIFY);
