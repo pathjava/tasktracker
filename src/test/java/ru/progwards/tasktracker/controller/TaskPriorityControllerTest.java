@@ -76,7 +76,7 @@ public class TaskPriorityControllerTest {
         String json = objectMapper.registerModule(new JavaTimeModule()).
                 writeValueAsString(taskPriorityDtoFull);
 
-        mockMvc.perform(post("/rest/task-priority/create")
+        mockMvc.perform(post("/rest/taskpriority/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andDo(print())
@@ -90,7 +90,7 @@ public class TaskPriorityControllerTest {
         TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(getService.get(1L));
         String expectedJsonResponse = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
 
-        String url = "/rest/task-priority/1";
+        String url = "/rest/taskpriority/1";
         mockMvc.perform(get(url))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -105,7 +105,7 @@ public class TaskPriorityControllerTest {
                 .map(dtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
-        String url = "/rest/task-priority/list";
+        String url = "/rest/taskpriority/list";
         MvcResult mvcResult = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
 
         String actualJsonResponse = mvcResult.getResponse().getContentAsString();
@@ -124,7 +124,7 @@ public class TaskPriorityControllerTest {
         TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(taskPriority);
         String updated = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
 
-        String urlUpdate = "/rest/task-priority/1/update";
+        String urlUpdate = "/rest/taskpriority/1/update";
 
         mockMvc.perform(post(urlUpdate)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -132,7 +132,7 @@ public class TaskPriorityControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        String urlGet = "/rest/task-priority/1";
+        String urlGet = "/rest/taskpriority/1";
 
         mockMvc.perform(get(urlGet))
                 .andExpect(status().isOk())
@@ -144,10 +144,10 @@ public class TaskPriorityControllerTest {
     @Test
     @Order(5)
     public void deleteTest() throws Exception {
-        String url = "/rest/task-priority/4/delete";
+        String url = "/rest/taskpriority/4/delete";
         mockMvc.perform(post(url)).andExpect(status().isOk());
 
-        String urlGet = "/rest/task-priority/4";
+        String urlGet = "/rest/taskpriority/4";
 
         mockMvc.perform(get(urlGet))
                 .andDo(print())
@@ -158,7 +158,7 @@ public class TaskPriorityControllerTest {
     @Test
     @Order(6)
     public void checkingId() throws Exception {
-        mockMvc.perform(get("/rest/task-priority/" + (Long.MAX_VALUE + 1)))
+        mockMvc.perform(get("/rest/taskpriority/" + (Long.MAX_VALUE + 1)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ConstraintViolationException));
@@ -171,7 +171,7 @@ public class TaskPriorityControllerTest {
         TaskPriorityDtoFull taskPriorityDtoFull = dtoFullConverter.toDto(taskPriority);
         String updatedTaskPriority = objectMapper.registerModule(new JavaTimeModule()).writeValueAsString(taskPriorityDtoFull);
 
-        String url = "/rest/task-priority/7/update";
+        String url = "/rest/taskpriority/7/update";
         mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedTaskPriority))

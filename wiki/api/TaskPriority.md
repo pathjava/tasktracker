@@ -1,10 +1,14 @@
 # TaskPriority
 
-1. Получить список всех объектов [**TaskPriority**](#model) в JSON формате
+Объект [***TaskPriority***](#model) - это приоритет выполнения задачи. При помощи ТaskPriority пользователь видит, 
+какой приоритет у поставленных ему задач и на основании этого принимает решение по очередности их выполнения. 
+Вот список приоритетов от самого низкого к самому высокому: Lowest, Low, Medium, High, Highest.
+
+### 1. Получить список всех объектов [**TaskPriority**](#model) в JSON формате
 
    Запрос:<br/>
    ````
-   GET /rest/task-priority/list
+   GET /rest/taskpriority/list
    ````
    
    Результат:<br/>
@@ -12,7 +16,7 @@
    
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/list
+   http://localhost:8080/rest/taskpriority/list
    ````
    
    <details>
@@ -42,11 +46,11 @@
    
    Метод ***get()***
 
-2. Получить один объект [**TaskPriority**](#model) в JSON формате
+### 2. Получить один объект [**TaskPriority**](#model) в JSON формате
    
    Запрос:<br/>
    ````
-   GET /rest/task-priority/{id}
+   GET /rest/taskpriority/{id}
    ````
   
    Результат:<br/>
@@ -54,7 +58,7 @@
   
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/3
+   http://localhost:8080/rest/taskpriority/3
    ````
   
    <details>
@@ -71,11 +75,11 @@
   
    Метод ***get(Long id)***
    
-3. Создать объект [**TaskPriority**](#model)
+### 3. Создать объект [**TaskPriority**](#model)
       
    Запрос:<br/>
    ````
-   POST /rest/task-priority/create
+   POST /rest/taskpriority/create
    ````
  
    Результат:<br/>
@@ -83,7 +87,7 @@
  
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/create
+   http://localhost:8080/rest/taskpriority/create
    ````
    
    <details>
@@ -112,11 +116,11 @@
  
    Метод ***create(TaskPriorityDtoFull dto)***
    
-4. Обновить объект [**TaskPriority**](#model)
+### 4. Обновить объект [**TaskPriority**](#model)
          
    Запрос:<br/>
    ````
-   POST /rest/task-priority/{id}/update
+   POST /rest/taskpriority/{id}/update
    ````
     
    Результат:<br/>
@@ -124,7 +128,7 @@
     
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/1/update
+   http://localhost:8080/rest/taskpriority/1/update
    ````
       
    <details>
@@ -140,11 +144,11 @@
     
    Метод ***update(Long id, TaskPriorityDtoFull dto)***
    
-5. Удалить объект [**TaskPriority**](#model)
+### 5. Удалить объект [**TaskPriority**](#model)
 
    Запрос:<br/>
    ````
-   POST /rest/task-priority/{id}/delete
+   POST /rest/taskpriority/{id}/delete
    ````
        
    Результат:<br/>
@@ -152,14 +156,16 @@
    
    Пример строки запроса:<br/>
    ````
-   http://localhost:8080/rest/task-priority/1/delete
+   http://localhost:8080/rest/taskpriority/1/delete
    ````
    
    Метод ***delete(Long id)***
    
    <br/>
    
-<a name="dtoPreview">**TaskPriorityDtoPreview**</a>
+### <a name="dtoPreview">**TaskPriorityDtoPreview**</a>
+
+*Используется для ссылочного отображения, для использования в списках*
 
 Свойство | Тип данных | Описание
 :--- | :--- | :---
@@ -168,7 +174,9 @@
 
 <br/>
 
-<a name="dtoFull">**TaskPriorityDtoFull**</a>
+### <a name="dtoFull">**TaskPriorityDtoFull**</a>
+
+*Используется для создания объекта TaskPriority, для модификации и для просмотра*
   
 Свойство | Тип данных | Описание
 :--- | :--- | :--- 
@@ -178,7 +186,9 @@
 
 <br/>
 
-<a name="model">**TaskPriority**</a>
+### <a name="model">**TaskPriority**</a>
+ 
+*Используется для хранения в СУБД, для реализации внутренней бизнес-логики*
 
 Свойство | Тип данных | Описание
 :--- | :--- | :---
