@@ -1,10 +1,7 @@
 package ru.progwards.tasktracker.objects;
 
 import ru.progwards.tasktracker.model.*;
-import ru.progwards.tasktracker.model.types.AccessObject;
-import ru.progwards.tasktracker.model.types.AccessType;
-import ru.progwards.tasktracker.model.types.EstimateChange;
-import ru.progwards.tasktracker.model.types.SystemRole;
+import ru.progwards.tasktracker.model.types.*;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -127,12 +124,26 @@ public class GetModel {
         );
     }
 
-    public static WorkFlowAction getWorkFlowAction() {
+    public static WorkFlowAction getWorkFlowActionModel() {
         return new WorkFlowAction(
                 null,
                 null,
                 "name " + randomChar(),
                 null
+        );
+    }
+
+    public static WorkFlowStatus getWorkFlowStatusModel() {
+        return new WorkFlowStatus(
+                null,
+                null,
+                "name " + randomChar(),
+                WorkFlowState.DONE,
+                Collections.emptyList(),
+                false,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList()
         );
     }
 

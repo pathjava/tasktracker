@@ -45,6 +45,7 @@ public class WorkFlowStatus {
      * Состояние задачи
      */
     @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
     WorkFlowState state;
 
     /**

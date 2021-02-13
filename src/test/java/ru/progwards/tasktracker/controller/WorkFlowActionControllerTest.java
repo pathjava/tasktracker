@@ -16,13 +16,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import ru.progwards.tasktracker.dto.TaskTypeDtoPreview;
 import ru.progwards.tasktracker.dto.WorkFlowActionDtoFull;
+import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.model.Project;
-import ru.progwards.tasktracker.model.WorkFlowAction;
-import ru.progwards.tasktracker.repository.ProjectRepository;
+import ru.progwards.tasktracker.model.*;
 import ru.progwards.tasktracker.repository.WorkFlowActionRepository;
+import ru.progwards.tasktracker.repository.WorkFlowStatusRepository;
 
 import javax.validation.ConstraintViolationException;
 import java.io.UnsupportedEncodingException;
@@ -38,8 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.progwards.tasktracker.objects.GetDtoFull.getWorkFlowActionDtoFull;
-import static ru.progwards.tasktracker.objects.GetModel.getProjectModel;
-import static ru.progwards.tasktracker.objects.GetModel.getWorkFlowAction;
+import static ru.progwards.tasktracker.objects.GetModel.*;
 
 /**
  * Тестирование методов контроллера WorkFlowActionController
@@ -54,9 +54,11 @@ class WorkFlowActionControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private Converter<TaskType, TaskTypeDtoPreview> workFlowStatusDtoPreviewConverter;
+    @Autowired
     private WorkFlowActionRepository workFlowActionRepository;
     @Autowired
-    private ProjectRepository projectRepository;
+    private WorkFlowStatusRepository workFlowStatusRepository;
 
     private static final String GET_PATH = "/rest/workflowaction/{id}";
     private static final String GET_LIST_PATH = "/rest/workflowaction/list";
@@ -105,12 +107,35 @@ class WorkFlowActionControllerTest {
             throw new RuntimeException(e);
         }
     }
+    private WorkFlowAction getWorkFlowAction() {
+        WorkFlowStatus workFlowStatus = workFlowStatusCreator();
+
+        WorkFlowAction workFlowAction = getWorkFlowActionModel();
+        workFlowAction.setParentStatus(workFlowStatus);
+        workFlowAction.setNextStatus(workFlowStatus);
+        return workFlowActionRepository.save(workFlowAction);
+    }
+
+    private WorkFlowStatus workFlowStatusCreator() {
+        WorkFlowStatus workFlowStatus = getWorkFlowStatusModel();
+        workFlowStatusRepository.save(workFlowStatus);
+        return workFlowStatus;
+    }
+
+    private WorkFlowActionDtoFull getWorkFlowActionDto() {
+        WorkFlowActionDtoFull dto = getWorkFlowActionDtoFull();
+        dto.setParentStatus_id(workFlowStatusCreator().getId());
+        dto.setNextStatus_id(workFlowStatusCreator().getId());
+        return dto;
+    }
 
     @Test
     @Order(1)
     void create_WorkFlowAction() throws Exception {
+        WorkFlowActionDtoFull dto = getWorkFlowActionDto();
+        //  getWorkFlowActionDtoFull()
         MvcResult result = mockMvc.perform(
-                postJson(CREATE_PATH, getWorkFlowActionDtoFull()))
+                postJson(CREATE_PATH, dto))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -169,15 +194,14 @@ class WorkFlowActionControllerTest {
     @Test
     @Order(5)
     void get_WorkFlowAction() throws Exception {
-        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowAction());
-
+        WorkFlowAction workFlowAction = getWorkFlowAction();
         try {
             mockMvc.perform(
-                    getUriAndMediaType(GET_PATH, tt.getId()))
+                    getUriAndMediaType(GET_PATH, workFlowAction.getId()))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.id", is(tt.getId()), Long.class));
+                    .andExpect(jsonPath("$.id", is(workFlowAction.getId()), Long.class));
         } finally {
-            workFlowActionRepository.deleteById(tt.getId());
+            workFlowActionRepository.deleteById(workFlowAction.getId());
         }
     }
 
@@ -209,11 +233,7 @@ class WorkFlowActionControllerTest {
     @Order(9)
     void getList_WorkFlowAction() throws Exception {
         WorkFlowAction one = getWorkFlowAction();
-        one.setName("name one");
-        WorkFlowAction two = getWorkFlowAction();
-        two.setName("name two");
-        List<WorkFlowAction> listType = List.of(one, two);
-        workFlowActionRepository.saveAll(listType);
+        List<WorkFlowAction> listType = List.of(one);
 
         try {
             mockMvc.perform(
@@ -227,7 +247,7 @@ class WorkFlowActionControllerTest {
     @Test
     @Order(15)
     void delete_WorkFlowAction() {
-        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowAction());
+        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowActionModel());
 
         try {
             mockMvc.perform(
@@ -255,7 +275,7 @@ class WorkFlowActionControllerTest {
     @Test
     @Order(18)
     void update_WorkFlowAction() throws Exception {
-        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowAction());
+        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowActionModel());
         WorkFlowActionDtoFull dto = getWorkFlowActionDtoFull();
         dto.setName("updated name");
         dto.setId(tt.getId());
@@ -281,7 +301,7 @@ class WorkFlowActionControllerTest {
     @Test
     @Order(19)
     void update_WorkFlowAction_when_Request_Id_is_different_Dto_Id() throws Exception {
-        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowAction());
+        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowActionModel());
         WorkFlowActionDtoFull dto = getWorkFlowActionDtoFull();
         dto.setName("another name");
         dto.setId(tt.getId() + 1);
@@ -300,7 +320,7 @@ class WorkFlowActionControllerTest {
     @Test
     @Order(20)
     void update_WorkFlowAction_when_Name_is_already_used_another_WorkFlowAction() throws Exception {
-        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowAction());
+        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowActionModel());
         WorkFlowActionDtoFull dto = getWorkFlowActionDtoFull();
         dto.setId(tt.getId() + 1);
 

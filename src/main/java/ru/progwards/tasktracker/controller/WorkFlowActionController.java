@@ -53,11 +53,13 @@ public class WorkFlowActionController {
      */
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WorkFlowActionDtoPreview>> getList() {
-        List<WorkFlowActionDtoPreview> list = new ArrayList<>();
-        for (WorkFlowAction workFlowAction : workFlowActionGetListService.getList()) {
-            WorkFlowActionDtoPreview workFlowActionDtoPreview = dtoPreviewConverter.toDto(workFlowAction);
-            list.add(workFlowActionDtoPreview);
-        }
+        List<WorkFlowActionDtoPreview> list = workFlowActionGetListService.getList().stream()
+                .map(dtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
+//        for (WorkFlowAction workFlowAction : workFlowActionGetListService.getList()) {
+//            WorkFlowActionDtoPreview workFlowActionDtoPreview = dtoPreviewConverter.toDto(workFlowAction);
+//            list.add(workFlowActionDtoPreview);
+//        }
 
         if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
             throw new NotFoundException("Список WorkFlowActionDtoFull пустой!");
