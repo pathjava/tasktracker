@@ -1,8 +1,12 @@
 package ru.progwards.tasktracker.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -19,17 +23,16 @@ public class User {
     @Id
     @SequenceGenerator(name = "users_seq", sequenceName = "users_seq", allocationSize = 1)
     @GeneratedValue(generator = "users_seq", strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", updatable = false)
     private Long id;
 
-    @NonNull
+    @NotBlank
     private String name;
 
-    @NonNull
+    @NotBlank
     @Column(unique = true)
     private String email;
 
-    @NonNull
+    @NotBlank
     private String password;
 
     @ManyToMany(mappedBy = "users")
