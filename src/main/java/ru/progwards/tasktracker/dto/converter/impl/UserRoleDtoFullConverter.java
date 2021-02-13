@@ -4,15 +4,18 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.dto.UserRoleDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.UserRole;
 import ru.progwards.tasktracker.model.types.EstimateChange;
 import ru.progwards.tasktracker.model.types.SystemRole;
 import ru.progwards.tasktracker.service.GetService;
 
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * @author Artem Dikov, Oleg Kiselev
@@ -23,6 +26,7 @@ import java.util.Collections;
 public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDtoFull> {
 
     private final GetService<Long, UserRole> userRoleGetService;
+    private final Converter<AccessRule, AccessRuleDtoFull> accessRuleDtoFullConverter;
 
     @Override
     public UserRole toModel(UserRoleDtoFull dto) {
@@ -39,7 +43,8 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
         UserRole userRole = userRoleGetService.get(dto.getId());
         userRole.setName(dto.getName());
         userRole.setSystemRole(stringToEnum(dto.getSystemRole()));
-        //userRole.setAccessRules(dto.getAccessRules().stream().map(accessRuleDtoFullConverter::toModel).collect(Collectors.toList()));
+        userRole.setAccessRules(dto.getAccessRules().stream()
+                .map(accessRuleDtoFullConverter::toModel).collect(Collectors.toList()));
         return userRole;
     }
 
@@ -62,7 +67,9 @@ public class UserRoleDtoFullConverter implements Converter<UserRole, UserRoleDto
         return new UserRoleDtoFull(
                 model.getId(),
                 model.getName(),
-                model.getSystemRole().name()
+                model.getSystemRole().name(),
+                model.getAccessRules().stream()
+                        .map(accessRuleDtoFullConverter::toDto).collect(Collectors.toList())
         );
     }
 }

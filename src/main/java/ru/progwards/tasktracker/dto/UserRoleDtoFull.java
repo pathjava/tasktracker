@@ -2,8 +2,6 @@ package ru.progwards.tasktracker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import ru.progwards.tasktracker.model.types.SystemRole;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
@@ -30,5 +28,6 @@ public class UserRoleDtoFull {
 
     @NotNull
     private String systemRole;
-    //private List<AccessRuleDtoFull> accessRules; //если раскоментить, то будет циклическая зависимость
+
+    private List<AccessRuleDtoFull> accessRules;
 }
