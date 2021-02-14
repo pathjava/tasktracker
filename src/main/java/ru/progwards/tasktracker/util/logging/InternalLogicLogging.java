@@ -76,9 +76,8 @@ public class InternalLogicLogging {
     @Around("returnPointcut() || voidPointcut()")
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         if (LOGGER.isDebugEnabled()) {
-            String args = getTypesafeArgs(joinPoint.getArgs());
             LOGGER.info("Enter: {} with argument[s] = {}", joinPoint.getSignature().toString(),
-                    args
+                    getTypesafeArgs(joinPoint.getArgs())
             );
         }
         try {
