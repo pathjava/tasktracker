@@ -43,9 +43,9 @@ public class WorkFlowControllerTest {
      * Создать запрос на MVC контроллер
      *
      * @param method "GET" / "POST" / "DELETE"
-     * @param uri API URL
-     * @param id identifier to replace inside URL
-     * @param body request body to send
+     * @param uri    API URL
+     * @param id     identifier to replace inside URL
+     * @param body   request body to send
      * @return
      * @throws JsonProcessingException
      */
@@ -59,7 +59,7 @@ public class WorkFlowControllerTest {
                 .characterEncoding("utf-8")
                 .content(objectMapper.writeValueAsString(body));
 
-        ResultMatcher expectStatus = resultMatcher==null ? MockMvcResultMatchers.status().isOk() : resultMatcher;
+        ResultMatcher expectStatus = resultMatcher == null ? MockMvcResultMatchers.status().isOk() : resultMatcher;
 
         String result = mockMvc.perform(request2)
                 .andDo(MockMvcResultHandlers.print())
@@ -74,18 +74,21 @@ public class WorkFlowControllerTest {
     public String makeRequest(String method, String uri, Long id, Object body) throws Exception {
         return makeRequest(method, uri, id, body, MockMvcResultMatchers.status().isOk());
     }
+
     public String makeRequest(String method, String uri) throws Exception {
         return makeRequest(method, uri, null, null, MockMvcResultMatchers.status().isOk());
     }
 
     static int testNo = 0;
+
     public static WorkFlowDtoFull fullCreator() {
         WorkFlowDtoFull result = new WorkFlowDtoFull();
         testNo++;
-        result.setName("testWF"+testNo);
-        result.setPattern(false);
+        result.setName("testWF" + testNo);
+        result.setPattern(true);
         return result;
     }
+
     public static WorkFlowDtoPreview fullToPreview(WorkFlowDtoFull full) {
         WorkFlowDtoPreview preview = new WorkFlowDtoPreview();
         preview.setId(full.getId());
@@ -97,7 +100,7 @@ public class WorkFlowControllerTest {
     private void checkIsError(String responce) {
         String failStart = "{\"timestamp\":";
         boolean isError = responce.startsWith(failStart);
-        Assertions.assertFalse(isError, "The response have error body '"+responce+"'");
+        Assertions.assertFalse(isError, "The response have error body '" + responce + "'");
     }
 
     @Test
@@ -134,8 +137,8 @@ public class WorkFlowControllerTest {
         Assertions.assertTrue(arr[0] instanceof WorkFlowDtoPreview, "Result array is wrong");
 
         boolean found = false;
-        for(WorkFlowDtoPreview el:arr) {
-            if(el.getId().equals(flowEntity.getId())) {
+        for (WorkFlowDtoPreview el : arr) {
+            if (el.getId().equals(flowEntity.getId())) {
                 found = true;
                 break;
             }
@@ -159,7 +162,7 @@ public class WorkFlowControllerTest {
         Assertions.assertNotNull(flowEntity.getId(), "Identifier was not set. Cannot start test");
 
         WorkFlowDtoFull dto = flowEntity;
-        dto.setName(dto.getName()+" renamed");
+        dto.setName(dto.getName() + " renamed");
         String responce = makeRequest("POST", UPDATE_PATH, dto.getId(), dto);
     }
 
