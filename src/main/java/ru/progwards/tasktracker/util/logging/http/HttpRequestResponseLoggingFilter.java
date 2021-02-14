@@ -2,6 +2,7 @@ package ru.progwards.tasktracker.util.logging.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @author Oleg Kiselev
  */
 @Component
+@Order(1)
 public class HttpRequestResponseLoggingFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestResponseLoggingFilter.class);

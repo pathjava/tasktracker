@@ -43,11 +43,18 @@ public class CachedBodyServletRequestWrapper extends HttpServletRequestWrapper {
         do {
             line = reader.readLine();
             if (null != line) {
+                if (line.contains("password"))
+                    line = getTypesafePassword(line);
                 inputBuffer.append(line.trim());
             }
         } while (line != null);
         reader.close();
         return inputBuffer.toString().trim();
+    }
+
+    private String getTypesafePassword(String line) {
+        String[] str = line.split(": ");
+        return str[0] + ": \"********\",";
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 /**
  * Логика логирования методов, определенных в @Pointcut с помощью Spring AOP
@@ -75,8 +76,9 @@ public class InternalLogicLogging {
     @Around("returnPointcut() || voidPointcut()")
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         if (LOGGER.isDebugEnabled()) {
+            String args = getTypesafeArgs(joinPoint.getArgs());
             LOGGER.info("Enter: {} with argument[s] = {}", joinPoint.getSignature().toString(),
-                    Arrays.toString(joinPoint.getArgs())
+                    args
             );
         }
         try {
@@ -91,6 +93,35 @@ public class InternalLogicLogging {
             );
             throw ex;
         }
+    }
+
+    /**
+     * Метод безопасного логирования запросов, содержащих пароль пользователя
+     *
+     * @param args массив аргументов из joinPoint.getArgs()
+     * @return массив аргументов в котором пароль пользователя заменен на ********
+     */
+    private String getTypesafeArgs(Object[] args) {
+        StringJoiner stringBuilder = new StringJoiner(", ");
+        String[] strArgs = Arrays.toString(args).split(", ");
+        for (String strArg : strArgs) {
+            if (strArg.contains("password"))
+                stringBuilder.add(getReplacedPassword(strArg));
+            else
+                stringBuilder.add(strArg);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Метод замены пароля пользователя на ********
+     *
+     * @param strArg имя поля, содержащее password и пароль пользователя
+     * @return строка, в которой пароль заменен на ********
+     */
+    private String getReplacedPassword(String strArg) {
+        String[] str = strArg.split("=");
+        return str[0] + "=********";
     }
 
 
