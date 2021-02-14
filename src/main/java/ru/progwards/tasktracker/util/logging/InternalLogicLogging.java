@@ -101,15 +101,15 @@ public class InternalLogicLogging {
      * @return массив аргументов в котором пароль пользователя заменен на ********
      */
     private String getTypesafeArgs(Object[] args) {
-        StringJoiner stringBuilder = new StringJoiner(", ");
+        StringJoiner stringJoiner = new StringJoiner(", ");
         String[] strArgs = Arrays.toString(args).split(", ");
         for (String strArg : strArgs) {
             if (strArg.contains("password"))
-                stringBuilder.add(getReplacedPassword(strArg));
+                stringJoiner.add(getReplacedPassword(strArg));
             else
-                stringBuilder.add(strArg);
+                stringJoiner.add(strArg);
         }
-        return stringBuilder.toString();
+        return stringJoiner.toString();
     }
 
     /**
