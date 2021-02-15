@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -56,5 +57,7 @@ public class User {
     @OneToMany(mappedBy = "updater", fetch = FetchType.LAZY)
     private List<TaskNote> taskNotesUpdater;
 
-
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 }
