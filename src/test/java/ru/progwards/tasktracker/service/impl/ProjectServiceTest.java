@@ -39,7 +39,7 @@ public class ProjectServiceTest {
     private User getUserForTest() {
         User user = new User(1L, "Kirill", "kirill@gmail.com", "12345", new ArrayList<>(),
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         return userService.get(1L);
     }
