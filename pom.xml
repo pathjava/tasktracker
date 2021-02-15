@@ -43,6 +43,13 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <dependency><!-- Spring Boot DevTools -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
         <dependency><!-- Apache Commons IO -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
