@@ -79,12 +79,12 @@ public class UserRoleService implements CreateService<UserRole>, GetListService<
 
 
         UserRole userRole1 = new UserRole();
-        userRole1.setSystemRole(SystemRole.ADMIN);
+        userRole1.setSystemRole(SystemRole.ROLE_ADMIN);
         userRole1.setName("Администраторы");
         create(userRole1);
 
         UserRole userRole2 = new UserRole();
-        userRole2.setSystemRole(SystemRole.USER);
+        userRole2.setSystemRole(SystemRole.ROLE_USER);
         userRole2.setAccessRules(accessRuleService.createFromTemplate());
         create(userRole2);
         result.add(userRole1);

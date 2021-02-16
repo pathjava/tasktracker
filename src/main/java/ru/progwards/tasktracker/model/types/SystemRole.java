@@ -8,9 +8,9 @@ public enum SystemRole {
     /**
      * Полные права на роли
      */
-    ADMIN,
+    ROLE_ADMIN,
     /**
      * Права берутся из привязанного к роли AccessRule
      */
-    USER
+    ROLE_USER
 }
