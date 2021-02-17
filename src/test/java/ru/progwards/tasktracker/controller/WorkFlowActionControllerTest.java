@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import ru.progwards.tasktracker.dto.TaskTypeDtoPreview;
 import ru.progwards.tasktracker.dto.WorkFlowActionDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.BadRequestException;
@@ -54,11 +53,11 @@ class WorkFlowActionControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private Converter<TaskType, TaskTypeDtoPreview> workFlowStatusDtoPreviewConverter;
-    @Autowired
     private WorkFlowActionRepository workFlowActionRepository;
     @Autowired
     private WorkFlowStatusRepository workFlowStatusRepository;
+    @Autowired
+    private Converter<WorkFlowAction, WorkFlowActionDtoFull> workFlowActionDtoFullConverter;
 
     private static final String GET_PATH = "/rest/workflowaction/{id}";
     private static final String GET_LIST_PATH = "/rest/workflowaction/list";
@@ -133,7 +132,6 @@ class WorkFlowActionControllerTest {
     @Order(1)
     void create_WorkFlowAction() throws Exception {
         WorkFlowActionDtoFull dto = getWorkFlowActionDto();
-        //  getWorkFlowActionDtoFull()
         MvcResult result = mockMvc.perform(
                 postJson(CREATE_PATH, dto))
                 .andDo(print())
@@ -275,13 +273,13 @@ class WorkFlowActionControllerTest {
     @Test
     @Order(18)
     void update_WorkFlowAction() throws Exception {
-        WorkFlowAction tt = workFlowActionRepository.save(getWorkFlowActionModel());
-        WorkFlowActionDtoFull dto = getWorkFlowActionDtoFull();
+        WorkFlowAction workFlowAction = getWorkFlowAction();
+        WorkFlowActionDtoFull dto = workFlowActionDtoFullConverter.toDto(workFlowAction);
+
         dto.setName("updated name");
-        dto.setId(tt.getId());
 
         MvcResult result = mockMvc.perform(
-                putJson(UPDATE_PATH, tt.getId(), dto))
+                putJson(UPDATE_PATH, dto.getId(), dto))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();

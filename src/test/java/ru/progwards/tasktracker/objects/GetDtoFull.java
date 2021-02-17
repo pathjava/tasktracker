@@ -121,7 +121,6 @@ public class GetDtoFull {
         );
     }
 
-
     public static WorkLogDtoFull getWorkLogDtoFull() {
         return new WorkLogDtoFull(
                 null,
