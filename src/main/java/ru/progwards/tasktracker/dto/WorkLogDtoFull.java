@@ -6,7 +6,10 @@ import lombok.Data;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
@@ -19,7 +22,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class WorkLogDtoFull {
 
-    @Min(value = 0, groups = Update.class)
+    @Positive(groups = Update.class)
     @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;

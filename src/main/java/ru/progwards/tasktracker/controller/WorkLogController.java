@@ -19,7 +19,7 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +50,7 @@ public class WorkLogController {
      * @return возвращает WorkLogDtoFull
      */
     @GetMapping(value = "/workLog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Positive Long id) {
 
         WorkLogDtoFull workLogDto = workLogDtoFullConverter.toDto(workLogGetService.get(id));
 
@@ -64,7 +64,7 @@ public class WorkLogController {
      * @return лист WorkLogDtoFull
      */
     @GetMapping(value = "/task/{id}/workLogs", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Positive Long id) {
 
         Task task = taskGetService.get(id);
         List<WorkLogDtoFull> list = task.getWorkLogs().stream()
@@ -119,7 +119,7 @@ public class WorkLogController {
      */
     @PutMapping(value = "/workLog/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(0) Long id,
+    public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Positive Long id,
                                                  @Validated(Update.class) @RequestBody WorkLogDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -139,7 +139,7 @@ public class WorkLogController {
      * @return статус ответа
      */
     @DeleteMapping(value = "/workLog/{id}/delete")
-    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Positive Long id) {
 
         WorkLog workLog = workLogGetService.get(id);
         workLogRemoveService.remove(workLog);

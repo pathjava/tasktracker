@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
@@ -19,7 +18,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class WorkLogDtoPreview {
 
-    @Min(0)
+    @Positive
     @NotNull
     private Long id;
 

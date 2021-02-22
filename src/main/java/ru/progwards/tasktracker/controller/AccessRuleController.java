@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/rest/accessRule")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class AccessRuleController {
 
     private final CreateService<AccessRule> accessRuleCreateService;
@@ -37,14 +38,14 @@ public class AccessRuleController {
     @GetMapping("/list")
     public ResponseEntity<List<AccessRuleDtoFull>> getAccessRuleList() {
         List<AccessRule> voList = accessRuleGetListService.getList();
-        List<AccessRuleDtoFull> dtoList = voList.stream().map(accessRuleDtoConverter::toDto).collect(Collectors.toList());
+        List<AccessRuleDtoFull> dtoList = voList.stream()
+                .map(accessRuleDtoConverter::toDto)
+                .collect(Collectors.toList());
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AccessRuleDtoFull> getAccessRule(@PathVariable("id") @Positive Long id) {
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);
         if (vo == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -61,8 +62,6 @@ public class AccessRuleController {
 
     @PostMapping("/{id}/delete")
     public ResponseEntity<?> deleteAccessRule(@PathVariable @Positive Long id) {
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);
         if (vo == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -72,8 +71,9 @@ public class AccessRuleController {
     }
 
     @PostMapping("/{id}/update")
-    public ResponseEntity<?> updateAccessRule(@PathVariable @Positive Long id, @RequestBody @Validated(Update.class) AccessRuleDtoFull dto) {
-        if (id == null || !id.equals(dto.getId()))
+    public ResponseEntity<?> updateAccessRule(@PathVariable @Positive Long id,
+                                              @RequestBody @Validated(Update.class) AccessRuleDtoFull dto) {
+        if (!id.equals(dto.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);
         if (vo == null)
