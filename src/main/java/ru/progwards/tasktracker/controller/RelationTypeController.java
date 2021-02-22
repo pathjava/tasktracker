@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/relationtype")
+@RequestMapping(value = "/rest/relationType")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class RelationTypeController {

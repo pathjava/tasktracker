@@ -53,11 +53,11 @@ class RelationTypeControllerTest {
     @Autowired
     private RelationTypeRepository relationTypeRepository;
 
-    private static final String GET_PATH = "/rest/relationtype/{id}";
-    private static final String GET_LIST_PATH = "/rest/relationtype/list";
-    private static final String CREATE_PATH = "/rest/relationtype/create";
-    private static final String DELETE_PATH = "/rest/relationtype/{id}/delete";
-    private static final String UPDATE_PATH = "/rest/relationtype/{id}/update";
+    private static final String GET_PATH = "/rest/relationType/{id}";
+    private static final String GET_LIST_PATH = "/rest/relationType/list";
+    private static final String CREATE_PATH = "/rest/relationType/create";
+    private static final String DELETE_PATH = "/rest/relationType/{id}/delete";
+    private static final String UPDATE_PATH = "/rest/relationType/{id}/update";
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {

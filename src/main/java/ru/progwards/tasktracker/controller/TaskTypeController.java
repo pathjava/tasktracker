@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/tasktype")
+@RequestMapping(value = "/rest/taskType")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class TaskTypeController {

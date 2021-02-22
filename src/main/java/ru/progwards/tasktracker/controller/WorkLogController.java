@@ -49,7 +49,7 @@ public class WorkLogController {
      * @param id идентификатор
      * @return возвращает WorkLogDtoFull
      */
-    @GetMapping(value = "/worklog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/workLog/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> get(@PathVariable @Min(0) Long id) {
 
         WorkLogDtoFull workLogDto = workLogDtoFullConverter.toDto(workLogGetService.get(id));
@@ -63,7 +63,7 @@ public class WorkLogController {
      * @param id идентификатор задачи, для которой необходимо вывести логи
      * @return лист WorkLogDtoFull
      */
-    @GetMapping(value = "/task/{id}/worklogs", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/task/{id}/workLogs", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WorkLogDtoFull>> getListByTask(@PathVariable @Min(0) Long id) {
 
         Task task = taskGetService.get(id);
@@ -82,7 +82,7 @@ public class WorkLogController {
      *
      * @return лист WorkLogDtoFull
      */
-    @GetMapping(value = "/worklog/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/workLog/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WorkLogDtoPreview>> getList() {
         List<WorkLogDtoPreview> list = workLogGetListService.getList().stream()
                 .map(workLogDtoPreviewConverter::toDto)
@@ -100,7 +100,7 @@ public class WorkLogController {
      * @param dtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает созданный WorkLogDtoFull
      */
-    @PostMapping(value = "/worklog/create",
+    @PostMapping(value = "/workLog/create",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> create(@Validated(Create.class) @RequestBody WorkLogDtoFull dtoFull) {
 
@@ -117,7 +117,7 @@ public class WorkLogController {
      * @param dtoFull сущность, приходящая в запросе из пользовательского интерфейса
      * @return возвращает WorkLogDtoFull
      */
-    @PutMapping(value = "/worklog/{id}/update",
+    @PutMapping(value = "/workLog/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WorkLogDtoFull> update(@PathVariable @Min(0) Long id,
                                                  @Validated(Update.class) @RequestBody WorkLogDtoFull dtoFull) {
@@ -138,7 +138,7 @@ public class WorkLogController {
      * @param id идентификатор одной записи журнала работ (WorkLog)
      * @return статус ответа
      */
-    @DeleteMapping(value = "/worklog/{id}/delete")
+    @DeleteMapping(value = "/workLog/{id}/delete")
     public ResponseEntity<WorkLogDtoFull> delete(@PathVariable @Min(0) Long id) {
 
         WorkLog workLog = workLogGetService.get(id);

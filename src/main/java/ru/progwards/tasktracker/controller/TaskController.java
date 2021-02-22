@@ -70,7 +70,7 @@ public class TaskController {
      * @param code текстовый идентификатор (код) задачи, создаваемый на основе префикса проекта
      * @return возвращает найденную TaskDtoFull
      */
-    @GetMapping(value = "/task/{code}/getbycode", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/task/{code}/getByCode", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDtoFull> getByCode(@NotEmpty @PathVariable String code) {
 
         TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code.toUpperCase()));
@@ -177,7 +177,7 @@ public class TaskController {
      * @param oneValue объект, содержащий идентификатор задачи, имя обновляемого поля и новое значение поля
      * @return возвращает UpdateOneValue
      */
-    @PutMapping(value = "/task/{id}/updatefield",
+    @PutMapping(value = "/task/{id}/updateField",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateOneValue> updateOneField(@PathVariable @Min(0) Long id,
                                                          @Validated(Update.class) @RequestBody UpdateOneValue oneValue) {

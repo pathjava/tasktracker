@@ -10,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoPreview;
-import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelatedTask;
@@ -21,7 +20,6 @@ import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.service.RemoveService;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/relatedtask")
+@RequestMapping(value = "/rest/relatedTask")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class RelatedTaskController {
