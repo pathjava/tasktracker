@@ -4,12 +4,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.dto.UserRoleDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.exception.BadRequestException;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.UserRole;
 import ru.progwards.tasktracker.service.*;
@@ -22,7 +25,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Artem Dikov
+ * Контроллер для работы с ролями пользователей (UserRole)
+ *
+ * @author Artem Dikov, Oleg Kiselev
  */
 
 @RestController
@@ -42,39 +47,44 @@ public class UserRoleController {
     /**
      * @return
      */
-    @GetMapping("/list")
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserRoleDtoFull>> getUserRoleList() {
-        List<UserRole> voList = userRoleGetListService.getList();
-        List<UserRoleDtoFull> dtoList = voList.stream()
+        List<UserRoleDtoFull> list = userRoleGetListService.getList().stream()
                 .map(userRoleDtoConverter::toDto)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+
+        if (list.isEmpty())
+            throw new NotFoundException("List UserRoleDtoFull is empty!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     /**
      * @param id
      * @return
      */
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRoleDtoFull> getUserRole(@PathVariable("id") @Positive Long id) {
-        UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(userRoleDtoConverter.toDto(vo), HttpStatus.OK);
+        UserRole userRole = userRoleGetService.get(id);
+
+        return new ResponseEntity<>(userRoleDtoConverter.toDto(userRole), HttpStatus.OK);
     }
 
     /**
      * @param id
      * @return
      */
-    @GetMapping("/{id}/accessRules")
+    @GetMapping(value = "/{id}/accessRules", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AccessRuleDtoFull>> getRules(@PathVariable("id") @Positive Long id) {
-        UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        UserRole userRole = userRoleGetService.get(id);
 
-        List<AccessRuleDtoFull> rules = vo.getAccessRules().stream()
-                .map(accessRuleDtoConverter::toDto).collect(Collectors.toList());
+        List<AccessRuleDtoFull> rules = userRole.getAccessRules().stream()
+                .map(accessRuleDtoConverter::toDto)
+                .collect(Collectors.toList());
+
+        if (rules.isEmpty())
+            throw new NotFoundException("List AccessRuleDtoFull is empty!");
+
         return new ResponseEntity<>(rules, HttpStatus.OK);
     }
 
@@ -82,11 +92,15 @@ public class UserRoleController {
      * @param dto
      * @return
      */
-    @PostMapping("/create")
-    public ResponseEntity<?> createUserRole(@RequestBody @Validated(Create.class) UserRoleDtoFull dto) {
-        UserRole vo = userRoleDtoConverter.toModel(dto);
-        userRoleCreateService.create(vo);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserRoleDtoFull> createUserRole(@RequestBody @Validated(Create.class) UserRoleDtoFull dto) {
+
+        UserRole userRole = userRoleDtoConverter.toModel(dto);
+        userRoleCreateService.create(userRole);
+        UserRoleDtoFull createdUserRole = userRoleDtoConverter.toDto(userRole);
+
+        return new ResponseEntity<>(createdUserRole, HttpStatus.OK);
     }
 
     /**
@@ -96,10 +110,8 @@ public class UserRoleController {
     @PostMapping("/{id}/delete")
     public ResponseEntity<?> deleteUserRole(@PathVariable @Positive Long id) {
         UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         userRoleRemoveService.remove(vo);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -108,15 +120,19 @@ public class UserRoleController {
      * @param dto
      * @return
      */
-    @PostMapping("/{id}/update")
-    public ResponseEntity<?> updateUserRole(@PathVariable @Positive Long id,
+    @PostMapping(value = "/{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserRoleDtoFull> updateUserRole(@PathVariable @Positive Long id,
                                             @RequestBody @Validated(Update.class) UserRoleDtoFull dto) {
-        UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        userRoleRefreshService.refresh(userRoleDtoConverter.toModel(dto));
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (!id.equals(dto.getId()))
+            throw new BadRequestException("This operation is not possible!");
+
+        UserRole userRole = userRoleDtoConverter.toModel(dto);
+        userRoleRefreshService.refresh(userRole);
+        UserRoleDtoFull updatedUserRole = userRoleDtoConverter.toDto(userRole);
+
+        return new ResponseEntity<>(updatedUserRole, HttpStatus.OK);
     }
 
     /**
@@ -124,19 +140,16 @@ public class UserRoleController {
      * @param newRules
      * @return
      */
-    @PostMapping("/{id}/accessRules/add")
+    @PostMapping(value = "/{id}/accessRules/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addRules(@PathVariable @Positive Long id,
                                       @RequestBody List<AccessRuleDtoFull> newRules) {
-        UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        List<AccessRule> newRulesVo = newRules.stream()
+        UserRole userRole = userRoleGetService.get(id);
+        List<AccessRule> rules = userRole.getAccessRules();
+        rules.addAll(newRules.stream()
                 .map(accessRuleDtoConverter::toModel)
-                .collect(Collectors.toList());
-        List<AccessRule> rules = vo.getAccessRules();
-        rules.addAll(newRulesVo);
-        userRoleRefreshService.refresh(vo);
+                .collect(Collectors.toList()));
+        userRoleRefreshService.refresh(userRole);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -145,20 +158,19 @@ public class UserRoleController {
      * @param ruleIdList
      * @return
      */
-    @PostMapping("/{id}/accessRules/delete")
+    @PostMapping(value = "/{id}/accessRules/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteRules(@PathVariable @Positive Long id,
                                          @RequestBody List<Long> ruleIdList) {
-        UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<AccessRule> rules = vo.getAccessRules();
+        UserRole userRole = userRoleGetService.get(id);
+        List<AccessRule> rules = userRole.getAccessRules();
         rules.sort(Comparator.comparing(AccessRule::getId));
         for (long ruleId : ruleIdList) {
             int index = binarySearchById(rules, ruleId);
             if (index > -1)
                 rules.remove(index);
         }
-        userRoleRefreshService.refresh(vo);
+        userRoleRefreshService.refresh(userRole);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -186,16 +198,14 @@ public class UserRoleController {
      * @param ruleDtoList
      * @return
      */
-    @PostMapping("/{id}/accessRules/update")
+    @PostMapping(value = "/{id}/accessRules/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateRules(@PathVariable @Positive Long id,
                                          @RequestBody List<AccessRuleDtoFull> ruleDtoList) {
-        UserRole vo = userRoleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        UserRole userRole = userRoleGetService.get(id);
         List<AccessRule> ruleVOList = ruleDtoList.stream()
                 .map(accessRuleDtoConverter::toModel)
                 .collect(Collectors.toList());
-        List<AccessRule> rules = vo.getAccessRules();
+        List<AccessRule> rules = userRole.getAccessRules();
         rules.sort(Comparator.comparing(AccessRule::getId));
         for (AccessRule rule : ruleVOList) {
             int index = binarySearchById(rules, rule.getId());
@@ -203,6 +213,7 @@ public class UserRoleController {
                 accessRuleRefreshService.refresh(rule);
             }
         }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
