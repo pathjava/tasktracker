@@ -47,7 +47,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
                     null,
                     null,
                     dto.getName().trim(),
-                    dto.getDescription(),
+                    dto.getDescription().trim(),
                     taskTypeDtoConverter.toModel(dto.getType()),
                     checkTaskPriorityDto(dto.getPriority()),
                     projectDtoConverter.toModel(dto.getProject()),
@@ -70,7 +70,7 @@ public class TaskDtoFullConverter implements Converter<Task, TaskDtoFull> {
             Task task = taskGetService.get(dto.getId());
             task.setCode(dto.getCode().trim());
             task.setName(dto.getName().trim());
-            task.setDescription(dto.getDescription());
+            task.setDescription(dto.getDescription().trim());
             task.setType(taskTypeDtoConverter.toModel(dto.getType()));
             task.setPriority(checkTaskPriorityDto(dto.getPriority()));
             task.setProject(projectDtoConverter.toModel(dto.getProject()));

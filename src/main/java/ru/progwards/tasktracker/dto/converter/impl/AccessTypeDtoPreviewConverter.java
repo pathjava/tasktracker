@@ -14,7 +14,7 @@ import ru.progwards.tasktracker.model.types.AccessType;
 public class AccessTypeDtoPreviewConverter implements Converter<AccessType, AccessTypeDtoPreview> {
     @Override
     public AccessType toModel(AccessTypeDtoPreview dto) {
-        return (dto == null) ? null : AccessType.valueOf(dto.getName());
+        return (dto == null) ? null : AccessType.valueOf(dto.getName().trim());
     }
 
     @Override
