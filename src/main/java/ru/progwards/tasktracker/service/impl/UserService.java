@@ -27,7 +27,7 @@ public class UserService implements CreateService<User>, RemoveService<User>, Ge
         RefreshService<User>, GetListService<User> {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
     /**
      * Создание нового User
