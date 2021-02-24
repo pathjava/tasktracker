@@ -16,10 +16,10 @@ import ru.progwards.tasktracker.service.GetService;
  * @author Aleksandr Sidelnikov
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class UserDtoPreviewConverter implements Converter<User, UserDtoPreview> {
 
-    private final @NonNull GetService<Long, User> userGetService;
+    private final GetService<Long, User> userGetService;
 
     @Override
     public User toModel(UserDtoPreview dto) {

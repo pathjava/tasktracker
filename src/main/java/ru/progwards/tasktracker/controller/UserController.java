@@ -81,7 +81,7 @@ public class UserController {
                 .map(previewConverter::toDto)
                 .collect(Collectors.toUnmodifiableList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
+        if (list.isEmpty())
             throw new NotFoundException("Список пользователей пустой!");
 
         return new ResponseEntity<>(list, HttpStatus.OK);

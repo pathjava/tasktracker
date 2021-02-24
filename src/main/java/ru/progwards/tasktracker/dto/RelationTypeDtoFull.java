@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 @RelationTypeNameValid(groups = {Create.class, Update.class})
 public class RelationTypeDtoFull {
 
-    @Min(value = 0, groups = Update.class)
+    @Positive(groups = Update.class)
     @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;

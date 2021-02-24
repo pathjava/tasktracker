@@ -7,7 +7,6 @@ import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.model.User;
 import ru.progwards.tasktracker.model.UserRole;
 import ru.progwards.tasktracker.model.types.SystemRole;
-import ru.progwards.tasktracker.repository.UserRoleRepository;
 import ru.progwards.tasktracker.service.*;
 
 import java.util.ArrayList;
@@ -44,13 +43,13 @@ public class UserRoleTemplateService implements TemplateService<UserRole> {
 //            throw new OperationIsNotPossibleException("TaskNote.createFromTemplate: argument 2 must be User");
 
         UserRole userRole1 = new UserRole();
-        userRole1.setSystemRole(SystemRole.ADMIN);
+        userRole1.setSystemRole(SystemRole.ROLE_ADMIN);
         userRole1.setName("Администраторы");
         userRole1.setUsers(List.of((User)args[1]));
         userRoleCreateService.create(userRole1);
 
         UserRole userRole2 = new UserRole();
-        userRole2.setSystemRole(SystemRole.USER);
+        userRole2.setSystemRole(SystemRole.ROLE_USER);
         userRole2.setName("Пользователи");
         userRole2.setAccessRules(accessRuleTemplateService.createFromTemplate());
         userRoleCreateService.create(userRole2);

@@ -19,7 +19,7 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/tasktype")
+@RequestMapping(value = "/rest/taskType")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class TaskTypeController {
@@ -67,7 +67,7 @@ public class TaskTypeController {
      * @return возвращает TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<TaskTypeDtoFull> get(@PathVariable @Positive Long id) {
 
         TaskTypeDtoFull taskType = dtoFullConverter.toDto(taskTypeGetService.get(id));
 
@@ -98,7 +98,7 @@ public class TaskTypeController {
      * @return возвращает лист TaskTypeDtoFull
      */
     @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<List<TaskTypeDtoPreview>> getListByProject(@PathVariable @Positive Long id) {
 
         Project project = projectGetService.get(id);
         List<TaskTypeDtoPreview> list = project.getTaskTypes().stream()
@@ -120,7 +120,7 @@ public class TaskTypeController {
      */
     @PutMapping(value = "/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable @Min(0) Long id,
+    public ResponseEntity<TaskTypeDtoFull> update(@PathVariable @Positive Long id,
                                                   @Validated(Update.class) @RequestBody TaskTypeDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -140,7 +140,7 @@ public class TaskTypeController {
      * @return возвращает статус ответа
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<TaskTypeDtoFull> delete(@PathVariable @Positive Long id) {
 
         TaskType taskType = taskTypeGetService.get(id);
         taskTypeRemoveService.remove(taskType);

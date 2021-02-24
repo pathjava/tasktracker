@@ -18,6 +18,7 @@ import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/relationtype")
+@RequestMapping(value = "/rest/relationType")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class RelationTypeController {
@@ -46,7 +47,7 @@ public class RelationTypeController {
      * @return полученный по идентификатору RelationTypeDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> get(@PathVariable @Positive Long id) {
 
         RelationTypeDtoFull typeDto = converter.toDto(relationTypeGetService.get(id));
 
@@ -97,7 +98,7 @@ public class RelationTypeController {
      */
     @PutMapping(value = "/{id}/update",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Min(0) Long id,
+    public ResponseEntity<RelationTypeDtoFull> update(@PathVariable @Positive Long id,
                                                       @Validated(Update.class) @RequestBody RelationTypeDtoFull dtoFull) {
 
         if (!id.equals(dtoFull.getId()))
@@ -117,7 +118,7 @@ public class RelationTypeController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<RelationTypeDtoFull> delete(@PathVariable @Positive Long id) {
 
         RelationType relationType = relationTypeGetService.get(id);
         relationTypeRemoveService.remove(relationType);

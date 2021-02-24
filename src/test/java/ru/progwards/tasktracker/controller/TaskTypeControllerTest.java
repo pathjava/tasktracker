@@ -58,12 +58,12 @@ class TaskTypeControllerTest {
     @Autowired
     private ProjectRepository projectRepository;
 
-    private static final String GET_PATH = "/rest/tasktype/{id}";
-    private static final String GET_LIST_PATH = "/rest/tasktype/list";
-    private static final String GET_LIST_BY_PROJECT_PATH = "/rest/tasktype/{id}/list";
-    private static final String CREATE_PATH = "/rest/tasktype/create";
-    private static final String DELETE_PATH = "/rest/tasktype/{id}/delete";
-    private static final String UPDATE_PATH = "/rest/tasktype/{id}/update";
+    private static final String GET_PATH = "/rest/taskType/{id}";
+    private static final String GET_LIST_PATH = "/rest/taskType/list";
+    private static final String GET_LIST_BY_PROJECT_PATH = "/rest/taskType/{id}/list";
+    private static final String CREATE_PATH = "/rest/taskType/create";
+    private static final String DELETE_PATH = "/rest/taskType/{id}/delete";
+    private static final String UPDATE_PATH = "/rest/taskType/{id}/update";
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {

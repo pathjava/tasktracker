@@ -72,12 +72,12 @@ class WorkLogControllerTest {
     @Autowired
     private Converter<User, UserDtoPreview> userDtoPreviewConverter;
 
-    private static final String GET_PATH = "/rest/worklog/{id}";
-    private static final String GET_LIST_PATH = "/rest/worklog/list";
-    private static final String GET_LIST_BY_TASK_PATH = "/rest/task/{id}/worklogs";
-    private static final String CREATE_PATH = "/rest/worklog/create";
-    private static final String DELETE_PATH = "/rest/worklog/{id}/delete";
-    private static final String UPDATE_PATH = "/rest/worklog/{id}/update";
+    private static final String GET_PATH = "/rest/workLog/{id}";
+    private static final String GET_LIST_PATH = "/rest/workLog/list";
+    private static final String GET_LIST_BY_TASK_PATH = "/rest/task/{id}/workLogs";
+    private static final String CREATE_PATH = "/rest/workLog/create";
+    private static final String DELETE_PATH = "/rest/workLog/{id}/delete";
+    private static final String UPDATE_PATH = "/rest/workLog/{id}/update";
     private User user;
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {

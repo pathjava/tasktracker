@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskDtoFull {
 
-    @Min(value = 0, groups = Update.class)
+    @Positive(groups = Update.class)
     @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;

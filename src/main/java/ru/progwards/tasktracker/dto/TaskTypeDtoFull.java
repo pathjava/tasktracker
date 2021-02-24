@@ -6,7 +6,10 @@ import ru.progwards.tasktracker.util.validator.annotation.TaskTypeNameValid;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 
 /**
  * Объект, содержащий полные данные о типе задачи, выводимые в пользовательском интерфейсе
@@ -18,7 +21,7 @@ import javax.validation.constraints.*;
 @TaskTypeNameValid(groups = {Create.class, Update.class})
 public class TaskTypeDtoFull {
 
-    @Min(value = 0, groups = Update.class)
+    @Positive(groups = Update.class)
     @NotNull(groups = Update.class)
     @Null(groups = Create.class)
     private Long id;

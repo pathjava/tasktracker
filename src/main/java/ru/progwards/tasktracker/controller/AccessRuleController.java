@@ -1,13 +1,16 @@
 package ru.progwards.tasktracker.controller;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.AccessRuleDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
+import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.AccessRule;
 import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
@@ -18,11 +21,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Artem Dikov
+ * Контроллер для работы с правилами доступа (AccessRule)
+ *
+ * @author Artem Dikov, Oleg Kiselev
  */
 
 @RestController
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequestMapping(value = "/rest/accessRule")
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+@Validated
 public class AccessRuleController {
 
     private final CreateService<AccessRule> accessRuleCreateService;
@@ -30,55 +37,60 @@ public class AccessRuleController {
     private final GetService<Long, AccessRule> accessRuleGetService;
     private final RefreshService<AccessRule> accessRuleRefreshService;
     private final RemoveService<AccessRule> accessRuleRemoveService;
-
     private final Converter<AccessRule, AccessRuleDtoFull> accessRuleDtoConverter;
 
-    @GetMapping("/rest/accessRule/list")
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AccessRuleDtoFull>> getAccessRuleList() {
-        List<AccessRule> voList = accessRuleGetListService.getList();
-        List<AccessRuleDtoFull> dtoList = voList.stream().map(accessRuleDtoConverter::toDto).collect(Collectors.toList());
-        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+
+        List<AccessRuleDtoFull> list = accessRuleGetListService.getList().stream()
+                .map(accessRuleDtoConverter::toDto)
+                .collect(Collectors.toList());
+
+        if (list.isEmpty())
+            throw new NotFoundException("List AccessRuleDtoFull is empty!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/rest/accessRule/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AccessRuleDtoFull> getAccessRule(@PathVariable("id") @Positive Long id) {
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         AccessRule vo = accessRuleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(accessRuleDtoConverter.toDto(vo), HttpStatus.OK);
     }
 
-    @PostMapping("/rest/accessRule/create")
-    public ResponseEntity<?> createAccessRule(@RequestBody @Validated(Create.class) AccessRuleDtoFull dto) {
-        AccessRule vo = accessRuleDtoConverter.toModel(dto);
-        accessRuleCreateService.create(vo);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AccessRuleDtoFull> createAccessRule(
+            @RequestBody @Validated(Create.class) AccessRuleDtoFull dto) {
+
+        AccessRule accessRule = accessRuleDtoConverter.toModel(dto);
+        accessRuleCreateService.create(accessRule);
+        AccessRuleDtoFull createdAccessRule = accessRuleDtoConverter.toDto(accessRule);
+
+        return new ResponseEntity<>(createdAccessRule, HttpStatus.OK);
     }
 
-    @PostMapping("/rest/accessRule/{id}/delete")
+    @PostMapping("/{id}/delete")
     public ResponseEntity<?> deleteAccessRule(@PathVariable @Positive Long id) {
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         AccessRule vo = accessRuleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         accessRuleRemoveService.remove(vo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/rest/accessRule/{id}/update")
-    public ResponseEntity<?> updateAccessRule(@PathVariable @Positive Long id, @RequestBody @Validated(Update.class) AccessRuleDtoFull dto) {
-        if (id == null || !id.equals(dto.getId()))
+    @PostMapping(value = "/{id}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AccessRuleDtoFull> updateAccessRule(@PathVariable @Positive Long id,
+                                                              @RequestBody @Validated(Update.class) AccessRuleDtoFull dto) {
+        if (!id.equals(dto.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        AccessRule vo = accessRuleGetService.get(id);
-        if (vo == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        accessRuleRefreshService.refresh(accessRuleDtoConverter.toModel(dto));
-        return new ResponseEntity<>(HttpStatus.OK);
+        AccessRule accessRule = accessRuleDtoConverter.toModel(dto);
+        accessRuleRefreshService.refresh(accessRule);
+        AccessRuleDtoFull updatedAccessRule = accessRuleDtoConverter.toDto(accessRule);
+
+        return new ResponseEntity<>(updatedAccessRule, HttpStatus.OK);
     }
 }

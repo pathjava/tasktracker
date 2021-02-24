@@ -159,7 +159,8 @@ public class GetModel {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
-                Collections.emptyList()
+                Collections.emptyList(),
+                false
         );
     }
 
@@ -167,7 +168,7 @@ public class GetModel {
         return new UserRole(
                 null,
                 "Администраторы",
-                SystemRole.ADMIN,
+                SystemRole.ROLE_ADMIN,
                 null,
                 null
         );

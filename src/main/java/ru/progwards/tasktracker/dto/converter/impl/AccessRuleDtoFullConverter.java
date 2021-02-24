@@ -33,16 +33,16 @@ public class AccessRuleDtoFullConverter implements Converter<AccessRule, AccessR
             return new AccessRule(
                     null,
                     userRole,
-                    stringAccessObjectToEnum(dto.getAccessObject()),
-                    dto.getPropertyName(),
+                    stringAccessObjectToEnum(dto.getAccessObject().trim()),
+                    dto.getPropertyName().trim(),
                     dto.getObjectId(),
                     stringAccessTypeToEnum(dto.getAccessType())
             );
         }
         AccessRule accessRule = accessRuleGetService.get(dto.getId());
         accessRule.setUserRole(userRole);
-        accessRule.setObject(stringAccessObjectToEnum(dto.getAccessObject()));
-        accessRule.setPropertyName(dto.getPropertyName());
+        accessRule.setObject(stringAccessObjectToEnum(dto.getAccessObject().trim()));
+        accessRule.setPropertyName(dto.getPropertyName().trim());
         accessRule.setObjectId(dto.getObjectId());
         accessRule.setAccessType(stringAccessTypeToEnum(dto.getAccessType()));
         return accessRule;

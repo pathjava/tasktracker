@@ -67,11 +67,11 @@ class RelatedTaskControllerTest {
     @Autowired
     private Converter<RelationType, RelationTypeDtoPreview> relationTypeDtoPreviewConverter;
 
-    private static final String GET_PATH = "/rest/relatedtask/{id}";
-    private static final String GET_LIST_PATH = "/rest/relatedtask/list";
-    private static final String GET_LIST_BY_TASK_PATH = "/rest/relatedtask/{id}/list";
-    private static final String CREATE_PATH = "/rest/relatedtask/create";
-    private static final String DELETE_PATH = "/rest/relatedtask/{id}/delete";
+    private static final String GET_PATH = "/rest/relatedTask/{id}";
+    private static final String GET_LIST_PATH = "/rest/relatedTask/list";
+    private static final String GET_LIST_BY_TASK_PATH = "/rest/relatedTask/{id}/list";
+    private static final String CREATE_PATH = "/rest/relatedTask/create";
+    private static final String DELETE_PATH = "/rest/relatedTask/{id}/delete";
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {

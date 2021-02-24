@@ -10,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoFull;
 import ru.progwards.tasktracker.dto.RelatedTaskDtoPreview;
-import ru.progwards.tasktracker.dto.TaskTypeDtoFull;
 import ru.progwards.tasktracker.dto.converter.Converter;
 import ru.progwards.tasktracker.exception.NotFoundException;
 import ru.progwards.tasktracker.model.RelatedTask;
@@ -21,8 +20,7 @@ import ru.progwards.tasktracker.service.GetService;
 import ru.progwards.tasktracker.service.RemoveService;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Oleg Kiselev
  */
 @RestController
-@RequestMapping(value = "/rest/relatedtask")
+@RequestMapping(value = "/rest/relatedTask")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 @Validated
 public class RelatedTaskController {
@@ -70,7 +68,7 @@ public class RelatedTaskController {
      * @return лист RelatedTaskDtoFull
      */
     @GetMapping(value = "/{id}/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RelatedTaskDtoPreview>> getListByTask(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<List<RelatedTaskDtoPreview>> getListByTask(@PathVariable @Positive Long id) {
 
         Task task = taskGetService.get(id);
         List<RelatedTaskDtoPreview> list = task.getRelatedTasks().stream()
@@ -90,7 +88,7 @@ public class RelatedTaskController {
      * @return возвращает RelatedTaskDtoFull
      */
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RelatedTaskDtoFull> get(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<RelatedTaskDtoFull> get(@PathVariable @Positive Long id) {
 
         RelatedTaskDtoFull relatedTaskDtoFull = relatedTaskDtoFullConverter.toDto(relatedTaskGetService.get(id));
 
@@ -121,7 +119,7 @@ public class RelatedTaskController {
      * @return статус
      */
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<RelatedTaskDtoFull> delete(@PathVariable @Positive Long id) {
 
         RelatedTask relatedTask = relatedTaskGetService.get(id);
         relatedTaskRemoveService.remove(relatedTask);

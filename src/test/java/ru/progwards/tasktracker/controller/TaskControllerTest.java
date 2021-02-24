@@ -76,13 +76,13 @@ class TaskControllerTest {
     private Converter<User, UserDtoPreview> userDtoPreviewConverter;
 
     private static final String GET_PATH = "/rest/task/{id}";
-    private static final String GET_BY_CODE_PATH = "/rest/task/{code}/getbycode";
+    private static final String GET_BY_CODE_PATH = "/rest/task/{code}/getByCode";
     private static final String GET_LIST_PATH = "/rest/task/list";
     private static final String GET_LIST_BY_PROJECT_PATH = "/rest/project/{id}/tasks";
     private static final String CREATE_PATH = "/rest/task/create";
     private static final String DELETE_PATH = "/rest/task/{id}/delete";
     private static final String UPDATE_PATH = "/rest/task/{id}/update";
-    private static final String UPDATE_FIELD_PATH = "/rest/task/{id}/updatefield";
+    private static final String UPDATE_FIELD_PATH = "/rest/task/{id}/updateField";
 
     public static MockHttpServletRequestBuilder postJson(String uri, Object body) {
         try {

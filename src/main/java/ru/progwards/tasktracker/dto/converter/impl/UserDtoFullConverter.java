@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
  * @author Aleksandr Sidelnikov
  */
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
 
-    private final @NonNull Converter<UserRole, UserRoleDtoPreview> userRoleDtoConverter;
-    private final @NonNull GetService<Long, User> userGetService;
+    private final Converter<UserRole, UserRoleDtoPreview> userRoleDtoConverter;
+    private final GetService<Long, User> userGetService;
 
     /**
      * Преобразовать в бизнес-объект
@@ -50,7 +50,8 @@ public class UserDtoFullConverter implements Converter<User, UserDtoFull> {
                     Collections.emptyList(),
                     Collections.emptyList(),
                     Collections.emptyList(),
-                    Collections.emptyList()
+                    Collections.emptyList(),
+                    false
             );
         } else {
             User user = userGetService.get(dto.getId());

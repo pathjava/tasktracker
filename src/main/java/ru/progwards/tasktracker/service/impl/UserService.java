@@ -3,6 +3,7 @@ package ru.progwards.tasktracker.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
@@ -12,39 +13,43 @@ import ru.progwards.tasktracker.service.*;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Бизнес-логика работы с пользователями
  *
- * @author Aleksandr Sidelnikov
+ * @author Aleksandr Sidelnikov, Oleg Kiselev
  */
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UserService implements CreateService<User>, RemoveService<User>,
-        GetService<Long, User>, RefreshService<User>, GetListService<User> {
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
+public class UserService implements CreateService<User>, RemoveService<User>, GetService<Long, User>,
+        RefreshService<User>, GetListService<User> {
 
-    private final @NonNull UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Создание нового User
      *
-     * @param user новый User
+     * @param model новый User
      */
     @Transactional
     @Override
-    public void create(User user) {
-        userRepository.save(user);
+    public void create(User model) {
+//        model.setPassword(passwordEncoder.encode(model.getPassword()));
+        userRepository.save(model);
     }
 
     /**
      * Удаление User
      *
-     * @param user удаляемый User
+     * @param model удаляемый User
      */
     @Transactional
     @Override
-    public void remove(User user) {
-        userRepository.delete(user);
+    public void remove(User model) {
+        userRepository.markUserAsDeleted(true, model.getId());
     }
 
     /**
@@ -55,20 +60,25 @@ public class UserService implements CreateService<User>, RemoveService<User>,
      */
     @Override
     public User get(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User id=" + id + " not found"));
+        return userRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException(format("User id=%s not found", id)));
     }
 
 
     /**
      * Обновить поля User
      *
-     * @param user измененный User
+     * @param model измененный User
      */
     @Transactional
     @Override
-    public void refresh(User user) {
-        userRepository.save(user);
+    public void refresh(User model) {
+        //TODO - если пароль пуст, то пароль оставляем прежним
+//        String password = passwordEncoder.encode(model.getPassword());
+//        if (!password.equals(get(model.getId()).getPassword())) {
+//            model.setPassword(password);
+//        }
+        userRepository.save(model);
     }
 
     /**
@@ -78,6 +88,6 @@ public class UserService implements CreateService<User>, RemoveService<User>,
      */
     @Override
     public List<User> getList() {
-        return userRepository.findAll();
+        return userRepository.findAllByDeletedFalse();
     }
 }
