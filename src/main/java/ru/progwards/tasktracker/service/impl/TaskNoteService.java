@@ -31,6 +31,7 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
     @NonNull
     private final TaskNoteRepository taskNoteRepository;
 
+    @Transactional
     @Override
     public void create(TaskNote model) {
         taskNoteRepository.save(model);
@@ -47,6 +48,7 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
                 .orElseThrow(() -> new NotFoundException("TaskNote id=" + id + " not found"));
     }
 
+    @Transactional
     @Override
     public void refresh(TaskNote model) {
         User updater = model.getUpdater();
@@ -55,6 +57,7 @@ public class TaskNoteService implements CreateService<TaskNote>, GetService<Long
         taskNoteRepository.save(copyTaskNote);
     }
 
+    @Transactional
     @Override
     public void remove(TaskNote model) {
         taskNoteRepository.delete(model);
