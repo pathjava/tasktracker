@@ -45,9 +45,9 @@ public class WorkFlowStatusControllerTest {
      * Создать запрос на MVC контроллер
      *
      * @param method "GET" / "POST" / "DELETE"
-     * @param uri API URL
-     * @param id identifier to replace inside URL
-     * @param body request body to send
+     * @param uri    API URL
+     * @param id     identifier to replace inside URL
+     * @param body   request body to send
      * @return
      * @throws JsonProcessingException
      */
@@ -61,7 +61,7 @@ public class WorkFlowStatusControllerTest {
                 .characterEncoding("utf-8")
                 .content(objectMapper.writeValueAsString(body));
 
-        ResultMatcher expectStatus = resultMatcher==null ? MockMvcResultMatchers.status().isOk() : resultMatcher;
+        ResultMatcher expectStatus = resultMatcher == null ? MockMvcResultMatchers.status().isOk() : resultMatcher;
 
         String result = mockMvc.perform(request2)
                 .andDo(MockMvcResultHandlers.print())
@@ -76,15 +76,17 @@ public class WorkFlowStatusControllerTest {
     public String makeRequest(String method, String uri, Long id, Object body) throws Exception {
         return makeRequest(method, uri, id, body, MockMvcResultMatchers.status().isOk());
     }
+
     public String makeRequest(String method, String uri) throws Exception {
         return makeRequest(method, uri, null, null, MockMvcResultMatchers.status().isOk());
     }
 
     static int testNo = 0;
+
     public static WorkFlowStatusDtoFull fullCreator() {
         WorkFlowStatusDtoFull result = new WorkFlowStatusDtoFull();
         testNo++;
-        result.setName("testWFstatus"+testNo);
+        result.setName("testWFstatus" + testNo);
         result.setAlwaysAllow(true);
         result.setState(new WorkFlowStateDtoPreview(WorkFlowState.TO_DO.toString()));
         result.setWorkflow(parentEntity);
@@ -94,7 +96,7 @@ public class WorkFlowStatusControllerTest {
     private void checkIsError(String responce) {
         String failStart = "{\"timestamp\":";
         boolean isError = responce.startsWith(failStart);
-        Assertions.assertFalse(isError, "The response have error body '"+responce+"'");
+        Assertions.assertFalse(isError, "The response have error body '" + responce + "'");
     }
 
 
@@ -105,15 +107,15 @@ public class WorkFlowStatusControllerTest {
         checkIsError(responce);
 
         WorkFlowDtoPreview[] arr = objectMapper.readValue(responce, WorkFlowDtoPreview[].class);
-        Assertions.assertTrue(arr[0] instanceof WorkFlowDtoPreview, "Result array is wrong");
+        Assertions.assertTrue(arr.length == 0 || arr[0] instanceof WorkFlowDtoPreview, "Result array is wrong");
 
-        for(WorkFlowDtoPreview el:arr) {
-            if(el.getPattern()) {
+        for (WorkFlowDtoPreview el : arr) {
+            if (el.getPattern()) {
                 parentEntity = el;
                 break;
             }
         }
-        if(parentEntity == null) {
+        if (parentEntity == null) {
             WorkFlowDtoFull dto = WorkFlowControllerTest.fullCreator();
             dto.setPattern(true);
             String responce2 = makeRequest("POST", WorkFlowControllerTest.CREATE_PATH, dto.getId(), dto);
@@ -165,8 +167,8 @@ public class WorkFlowStatusControllerTest {
         Assertions.assertTrue(arr[0] instanceof WorkFlowStatusDtoPreview, "Result array is wrong");
 
         boolean found = false;
-        for(WorkFlowStatusDtoPreview el:arr) {
-            if(el.getId().equals(flowEntity.getId())) {
+        for (WorkFlowStatusDtoPreview el : arr) {
+            if (el.getId().equals(flowEntity.getId())) {
                 found = true;
                 break;
             }
@@ -190,7 +192,7 @@ public class WorkFlowStatusControllerTest {
         Assertions.assertNotNull(flowEntity.getId(), "Identifier was not set. Cannot start test");
 
         WorkFlowStatusDtoFull dto = flowEntity;
-        dto.setName(dto.getName()+" renamed");
+        dto.setName(dto.getName() + " renamed");
         String responce = makeRequest("POST", UPDATE_PATH, dto.getId(), dto);
     }
 

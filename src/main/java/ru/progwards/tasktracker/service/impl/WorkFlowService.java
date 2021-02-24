@@ -77,7 +77,7 @@ public class WorkFlowService implements CreateService<WorkFlow>, RemoveService<W
     @Override
     public void refresh(WorkFlow workFlow) {
         if(!workFlow.getPattern()) {
-            throw new OperationIsNotPossibleException("Workflow is a pattern. Can't update");
+            throw new OperationIsNotPossibleException("Workflow is not a template. Can't update");
         }
         repository.save(workFlow);
     }

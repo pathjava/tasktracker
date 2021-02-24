@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
+import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
+import ru.progwards.tasktracker.model.WorkFlow;
 import ru.progwards.tasktracker.model.WorkFlowStatus;
 import ru.progwards.tasktracker.repository.WorkFlowStatusRepository;
 import ru.progwards.tasktracker.service.*;
@@ -32,6 +34,10 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     @Transactional
     @Override
     public void create(WorkFlowStatus workFlowStatus) {
+        WorkFlow workFlow = workFlowStatus.getWorkflow();
+        if(!workFlow.getPattern()) {
+            throw new OperationIsNotPossibleException("Parent Workflow is not a template. Can't make status insert.");
+        }
         statusRepository.save(workFlowStatus);
     }
 
@@ -44,6 +50,10 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     @Transactional
     @Override
     public void remove(WorkFlowStatus workFlowStatus) {
+        WorkFlow workFlow = workFlowStatus.getWorkflow();
+        if(!workFlow.getPattern()) {
+            throw new OperationIsNotPossibleException("Parent Workflow is not a template. Can't make status remove.");
+        }
         statusRepository.delete(workFlowStatus);
     }
 
@@ -69,6 +79,10 @@ public class WorkFlowStatusService implements CreateService<WorkFlowStatus>, Rem
     @Transactional
     @Override
     public void refresh(WorkFlowStatus workFlowStatus) {
+        WorkFlow workFlow = workFlowStatus.getWorkflow();
+        if(!workFlow.getPattern()) {
+            throw new OperationIsNotPossibleException("Parent Workflow is not a template. Can't make status update.");
+        }
         statusRepository.save(workFlowStatus);
     }
 
