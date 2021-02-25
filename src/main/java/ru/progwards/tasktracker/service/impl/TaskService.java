@@ -105,7 +105,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     /**
      * Метод получения всех отсортированных задач (Task) по id проекта (Project)
      *
-     * @param id id проекта (Project)
+     * @param id   id проекта (Project)
      * @param sort параметр/параметры, по которым происходит сортировка
      * @return лист отсортированных задач проекта
      */
@@ -128,7 +128,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     /**
      * Метод получения страницы пагинации задач (Task) по id проекта (Project)
      *
-     * @param id id проекта (Project)
+     * @param id       id проекта (Project)
      * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
      * @return страница пагинации задач проекта
      */
@@ -220,6 +220,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
 
     CreateService<Task> taskCreateService;
     GetListService<TaskPriority> taskPriorityGetListService;
+
     /**
      * Метод создания Task по шаблону
      *
@@ -248,12 +249,12 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
                         "\n" +
                         "Статус\n" +
                         "Статус представляет собой «состояние» задачи в определенной точке рабочего процесса. Текущий статус вашей задачи можно посмотреть в разделе «Подробности» выше. Когда вы будете готовы перейти к следующему шагу, нажмите соответствующую кнопку перехода."},
-                {"Редактирование задач","Редактирование задач\n" +
+                {"Редактирование задач", "Редактирование задач\n" +
                         "Наведите курсор на контент, который хотите отредактировать, и внесите изменения. Нажмите на галочку, и все готово! Вы также можете редактировать, используя сочетания клавиш или нажав кнопку «Изменить». И не забудьте поручить кому-нибудь задачу.\n" +
                         "\n" +
                         "Комментирование\n" +
                         "Вы можете добавить комментарии к задаче ниже. Комментарии - отличный способ общаться с вашей командой и оставаться в курсе. Кроме того, вы можете уведомить определенных членов команды, используя @mentions."},
-                {"Поиск информации","Поиск информации\n" +
+                {"Поиск информации", "Поиск информации\n" +
                         "Используйте панель поиска в правом верхнем углу, чтобы быстро найти конкретную задачу.\n" +
                         "Для более расширенного поиска нажмите «Искать проблемы» в меню «Проблемы»."}
         };
@@ -261,7 +262,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
         List<TaskType> taskTypes = project.getTaskTypes();
         List<TaskPriority> priorities = taskPriorityGetListService.getList();
         List<Task> result = new ArrayList<>(names.length);
-        for (String[] name: names) {
+        for (String[] name : names) {
             int randomTaskType = random.nextInt(taskTypes.size());
             int randomPriority = random.nextInt(priorities.size());
             Task task = new Task();
