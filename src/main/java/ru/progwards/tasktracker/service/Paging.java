@@ -6,13 +6,14 @@ import org.springframework.data.domain.Pageable;
 /**
  * Получение объектов страницы пагинации
  *
- * @param <E> тип бизнес объекта
+ * @param <T> тип идентификатора
+ * @param <M> тип бизнес объекта
  */
-public interface Paging<E> {
+public interface Paging<T, M> {
 
-    Page<E> getPageableList(Pageable pageable);
+    Page<M> getPageableList(Pageable pageable);
 
-    default Page<E> getPageableListById(Long id, Pageable pageable) {
+    default Page<M> getPageableListById(T id, Pageable pageable) {
         return null;
     }
 

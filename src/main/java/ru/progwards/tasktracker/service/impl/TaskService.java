@@ -35,7 +35,7 @@ import static java.lang.String.format;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskService implements CreateService<Task>, GetListService<Task>, GetService<Long, Task>,
         RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task>, TemplateService<Task>,
-        Sorting<Task>, Paging<Task> {
+        Sorting<Long, Task>, Paging<Long, Task> {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;

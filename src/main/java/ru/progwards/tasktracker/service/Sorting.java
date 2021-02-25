@@ -7,13 +7,14 @@ import java.util.List;
 /**
  * Получение листа отсортированных объектов
  *
- * @param <E> тип бизнес объекта
+ * @param <T> тип идентификатора
+ * @param <M> тип бизнес объекта
  */
-public interface Sorting<E> {
+public interface Sorting<T, M> {
 
-    List<E> getSortList(Sort sort);
+    List<M> getSortList(Sort sort);
 
-    default List<E> getSortListById(Long id, Sort sort) {
+    default List<M> getSortListById(T id, Sort sort) {
         return null;
     }
 

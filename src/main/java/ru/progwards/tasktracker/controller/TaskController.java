@@ -43,8 +43,8 @@ public class TaskController {
 
     private final GetService<Long, Task> taskGetService;
     private final GetListService<Task> taskGetListService;
-    private final Sorting<Task> taskSorting;
-    private final Paging<Task> taskPaging;
+    private final Sorting<Long, Task> taskSorting;
+    private final Paging<Long, Task> taskPaging;
     private final RemoveService<Task> taskRemoveService;
     private final CreateService<Task> taskCreateService;
     private final RefreshService<Task> taskRefreshService;
