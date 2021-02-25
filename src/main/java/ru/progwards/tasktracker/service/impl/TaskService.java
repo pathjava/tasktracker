@@ -98,8 +98,18 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      * @return коллекция задач (может иметь пустое значение)
      */
     @Override
-    public List<Task> getListSort(Sort sort) {
+    public List<Task> getSortList(Sort sort) {
         return taskRepository.findAll(sort);
+    }
+
+    /**
+     * @param id
+     * @param sort
+     * @return
+     */
+    @Override
+    public List<Task> getSortListById(Long id, Sort sort) {
+        return taskRepository.findByProjectId(id, sort);
     }
 
     /**
@@ -109,8 +119,18 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      * @return страница пагинации задач
      */
     @Override
-    public Page<Task> getListPageable(Pageable pageable) {
+    public Page<Task> getPageableList(Pageable pageable) {
         return taskRepository.findAll(pageable);
+    }
+
+    /**
+     * @param id
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<Task> getPageableListById(Long id, Pageable pageable) {
+        return taskRepository.findByProjectId(id, pageable);
     }
 
     /**

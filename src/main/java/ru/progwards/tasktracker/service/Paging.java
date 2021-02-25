@@ -10,6 +10,10 @@ import org.springframework.data.domain.Pageable;
  */
 public interface Paging<E> {
 
-    Page<E> getListPageable(Pageable pageable);
+    Page<E> getPageableList(Pageable pageable);
+
+    default Page<E> getPageableListById(Long id, Pageable pageable) {
+        return null;
+    }
 
 }

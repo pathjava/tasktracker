@@ -11,7 +11,11 @@ import java.util.List;
  */
 public interface Sorting<E> {
 
-    List<E> getListSort(Sort sort);
+    List<E> getSortList(Sort sort);
+
+    default List<E> getSortListById(Long id, Sort sort) {
+        return null;
+    }
 
 }
 

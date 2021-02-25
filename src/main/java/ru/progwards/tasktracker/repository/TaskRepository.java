@@ -1,5 +1,8 @@
 package ru.progwards.tasktracker.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -67,4 +70,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @return true - если у Project есть Task (даже одна) и false - если нет
      */
     boolean existsTaskByProjectId(Long id);
+
+    List<Task> findByProjectId(Long id, Sort sort);
+
+    Page<Task> findByProjectId(Long id, Pageable pageable);
 }

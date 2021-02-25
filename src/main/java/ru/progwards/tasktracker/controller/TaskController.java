@@ -25,7 +25,6 @@ import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,13 +89,24 @@ public class TaskController {
      * @return лист TaskDtoPreview
      */
     @GetMapping(value = "/project/{id}/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable @Positive Long id) {
+    public ResponseEntity<List<TaskDtoPreview>> getListByProject(@PathVariable @Positive Long id,
+                                                                 Sort sort, Pageable pageable) {
 
         Project project = projectGetService.get(id);
-        List<TaskDtoPreview> list = project.getTasks().stream()
-                .map(dtoPreviewConverter::toDto)
-                .collect(Collectors.toList());
-
+        List<TaskDtoPreview> list;
+        if (sort != null && pageable == null) {
+            list = taskSorting.getSortListById(id, sort).stream()
+                    .map(dtoPreviewConverter::toDto)
+                    .collect(Collectors.toList());
+        } else if (pageable != null) {
+            list = taskPaging.getPageableListById(id, pageable).stream()
+                    .map(dtoPreviewConverter::toDto)
+                    .collect(Collectors.toList());
+        } else {
+            list = project.getTasks().stream()
+                    .map(dtoPreviewConverter::toDto)
+                    .collect(Collectors.toList());
+        }
         if (list.isEmpty())
             throw new NotFoundException("List TaskDtoPreview is empty!");
 
@@ -113,11 +123,11 @@ public class TaskController {
 
         List<TaskDtoPreview> list;
         if (sort != null && pageable == null) {
-            list = taskSorting.getListSort(sort).stream()
+            list = taskSorting.getSortList(sort).stream()
                     .map(dtoPreviewConverter::toDto)
                     .collect(Collectors.toList());
         } else if (pageable != null) {
-            list = taskPaging.getListPageable(pageable).stream()
+            list = taskPaging.getPageableList(pageable).stream()
                     .map(dtoPreviewConverter::toDto)
                     .collect(Collectors.toList());
         } else {
