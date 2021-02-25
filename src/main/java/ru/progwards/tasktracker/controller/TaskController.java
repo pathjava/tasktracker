@@ -3,6 +3,8 @@ package ru.progwards.tasktracker.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,9 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,8 @@ public class TaskController {
 
     private final GetService<Long, Task> taskGetService;
     private final GetListService<Task> taskGetListService;
+    private final Sorting<Task> taskSorting;
+    private final Paging<Task> taskPaging;
     private final RemoveService<Task> taskRemoveService;
     private final CreateService<Task> taskCreateService;
     private final RefreshService<Task> taskRefreshService;
@@ -105,12 +109,22 @@ public class TaskController {
      * @return лист TaskDtoPreview
      */
     @GetMapping(value = "/task/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskDtoPreview>> getList() {
+    public ResponseEntity<List<TaskDtoPreview>> getList(Sort sort, Pageable pageable) {
 
-        List<TaskDtoPreview> list = taskGetListService.getList().stream()
-                .map(dtoPreviewConverter::toDto)
-                .collect(Collectors.toList());
-
+        List<TaskDtoPreview> list;
+        if (sort != null && pageable == null) {
+            list = taskSorting.getListSort(sort).stream()
+                    .map(dtoPreviewConverter::toDto)
+                    .collect(Collectors.toList());
+        } else if (pageable != null) {
+            list = taskPaging.getListPageable(pageable).stream()
+                    .map(dtoPreviewConverter::toDto)
+                    .collect(Collectors.toList());
+        } else {
+            list = taskGetListService.getList().stream()
+                    .map(dtoPreviewConverter::toDto)
+                    .collect(Collectors.toList());
+        }
         if (list.isEmpty())
             throw new NotFoundException("List TaskDtoPreview is empty!");
 

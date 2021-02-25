@@ -3,6 +3,9 @@ package ru.progwards.tasktracker.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
@@ -31,7 +34,8 @@ import static java.lang.String.format;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskService implements CreateService<Task>, GetListService<Task>, GetService<Long, Task>,
-        RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task>, TemplateService<Task> {
+        RefreshService<Task>, RemoveService<Task>, UpdateOneFieldService<Task>, TemplateService<Task>,
+        Sorting<Task>, Paging<Task> {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
@@ -80,11 +84,33 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     /**
      * Метод получения всех задач (Task) без привязки к какому-либо проекту
      *
-     * @return коллекцию задач (может иметь пустое значение)
+     * @return коллекция задач (может иметь пустое значение)
      */
     @Override
     public List<Task> getList() {
         return taskRepository.findAllByDeletedFalse();
+    }
+
+    /**
+     * Метод получения всех отсортированных задач (Task) без привязки к какому-либо проекту
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return коллекция задач (может иметь пустое значение)
+     */
+    @Override
+    public List<Task> getListSort(Sort sort) {
+        return taskRepository.findAll(sort);
+    }
+
+    /**
+     * Метод получения страницы пагинации задач (Task) без привязки к какому-либо проекту
+     *
+     * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
+     * @return страница пагинации задач
+     */
+    @Override
+    public Page<Task> getListPageable(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     /**
