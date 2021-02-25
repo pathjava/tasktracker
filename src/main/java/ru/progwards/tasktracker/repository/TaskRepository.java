@@ -87,7 +87,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      */
     Page<Task> findAllByDeletedFalse(Pageable pageable);
 
-
     /**
      * Метод получения сортированного листа Task по id Project, у которых поле deleted имеет значение false
      *
