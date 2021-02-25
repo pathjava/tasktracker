@@ -99,7 +99,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      */
     @Override
     public List<Task> getSortList(Sort sort) {
-        return taskRepository.findAll(sort);
+        return taskRepository.findAllByDeletedFalse(sort);
     }
 
     /**
@@ -111,18 +111,18 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      */
     @Override
     public List<Task> getSortListById(Long id, Sort sort) {
-        return taskRepository.findByProjectId(id, sort);
+        return taskRepository.findByProjectIdAndDeletedFalse(id, sort);
     }
 
     /**
      * Метод получения страницы пагинации задач (Task) без привязки к какому-либо проекту
      *
-     * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
      * @return страница пагинации задач
      */
     @Override
     public Page<Task> getPageableList(Pageable pageable) {
-        return taskRepository.findAll(pageable);
+        return taskRepository.findAllByDeletedFalse(pageable);
     }
 
     /**
@@ -134,7 +134,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      */
     @Override
     public Page<Task> getPageableListById(Long id, Pageable pageable) {
-        return taskRepository.findByProjectId(id, pageable);
+        return taskRepository.findByProjectIdAndDeletedFalse(id, pageable);
     }
 
     /**

@@ -71,7 +71,38 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      */
     boolean existsTaskByProjectId(Long id);
 
-    List<Task> findByProjectId(Long id, Sort sort);
+    /**
+     * Метод получения сортированного листа Task у которых поле deleted имеет значение false
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированных Task
+     */
+    List<Task> findAllByDeletedFalse(Sort sort);
 
-    Page<Task> findByProjectId(Long id, Pageable pageable);
+    /**
+     * Метод получения страницы пагинации объектов Task у которых поле deleted имеет значение false
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return страница пагинации объектов Task
+     */
+    Page<Task> findAllByDeletedFalse(Pageable pageable);
+
+
+    /**
+     * Метод получения сортированного листа Task по id Project, у которых поле deleted имеет значение false
+     *
+     * @param id   идентификатор Project
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированных Task проекта
+     */
+    List<Task> findByProjectIdAndDeletedFalse(Long id, Sort sort);
+
+    /**
+     * Метод получения страницы пагинации объектов Task по id Project у которых поле deleted имеет значение false
+     *
+     * @param id       идентификатор Project
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return страница пагинации объектов Task проекта
+     */
+    Page<Task> findByProjectIdAndDeletedFalse(Long id, Pageable pageable);
 }
