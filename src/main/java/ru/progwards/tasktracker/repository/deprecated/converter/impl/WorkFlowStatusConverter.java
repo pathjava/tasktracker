@@ -6,7 +6,7 @@
 //import ru.progwards.tasktracker.model.WorkFlowStatus;
 //import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 //import ru.progwards.tasktracker.repository.deprecated.entity.WorkFlowStatusEntity;
-//import ru.progwards.tasktracker.service.GetListByParentService;
+//import ru.progwards.tasktracker.service.deprecated.GetListByParentService;
 //
 //
 ///**
