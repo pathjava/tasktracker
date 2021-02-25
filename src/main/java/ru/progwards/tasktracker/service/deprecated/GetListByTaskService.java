@@ -1,4 +1,4 @@
-package ru.progwards.tasktracker.service;
+package ru.progwards.tasktracker.service.deprecated;
 
 import java.util.Collection;
 
