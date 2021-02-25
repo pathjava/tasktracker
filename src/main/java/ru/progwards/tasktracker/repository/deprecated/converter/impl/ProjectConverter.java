@@ -7,7 +7,7 @@
 //import ru.progwards.tasktracker.model.User;
 //import ru.progwards.tasktracker.repository.deprecated.converter.Converter;
 //import ru.progwards.tasktracker.repository.deprecated.entity.ProjectEntity;
-//import ru.progwards.tasktracker.service.GetListByProjectService;
+//import ru.progwards.tasktracker.service.deprecated.GetListByProjectService;
 //import ru.progwards.tasktracker.service.GetService;
 //
 //import java.time.Instant;
