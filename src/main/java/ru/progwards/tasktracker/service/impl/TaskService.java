@@ -95,7 +95,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
      * Метод получения всех отсортированных задач (Task) без привязки к какому-либо проекту
      *
      * @param sort параметр/параметры, по которым происходит сортировка
-     * @return коллекция задач (может иметь пустое значение)
+     * @return лист отсортированных задач
      */
     @Override
     public List<Task> getSortList(Sort sort) {
@@ -103,9 +103,11 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * @param id
-     * @param sort
-     * @return
+     * Метод получения всех отсортированных задач (Task) по id проекта (Project)
+     *
+     * @param id id проекта (Project)
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированных задач проекта
      */
     @Override
     public List<Task> getSortListById(Long id, Sort sort) {
@@ -124,9 +126,11 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     }
 
     /**
-     * @param id
-     * @param pageable
-     * @return
+     * Метод получения страницы пагинации задач (Task) по id проекта (Project)
+     *
+     * @param id id проекта (Project)
+     * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
+     * @return страница пагинации задач проекта
      */
     @Override
     public Page<Task> getPageableListById(Long id, Pageable pageable) {
