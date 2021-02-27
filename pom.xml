@@ -49,6 +49,11 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <dependency><!-- SpringDoc  /swagger-ui.html -->
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.4</version>
+        </dependency>
 
         <dependency><!-- Apache Commons IO -->
             <groupId>commons-io</groupId>
