@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
  * Получение объектов страницы пагинации
  *
  * @param <T> тип идентификатора
- * @param <M> тип бизнес объекта
+ * @param <M> модель бизнес объекта
  */
 public interface Paging<T, M> {
 

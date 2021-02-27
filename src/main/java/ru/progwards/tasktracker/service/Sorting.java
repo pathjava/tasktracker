@@ -8,7 +8,7 @@ import java.util.List;
  * Получение листа отсортированных объектов
  *
  * @param <T> тип идентификатора
- * @param <M> тип бизнес объекта
+ * @param <M> модель бизнес объекта
  */
 public interface Sorting<T, M> {
 

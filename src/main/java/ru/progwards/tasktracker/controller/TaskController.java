@@ -23,12 +23,14 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * Контроллер для работы с задачами (Task)
@@ -75,7 +77,7 @@ public class TaskController {
      * @return возвращает найденную TaskDtoFull
      */
     @GetMapping(value = "/task/{code}/getByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskDtoFull> getByCode(@NotEmpty @PathVariable String code) {
+    public ResponseEntity<TaskDtoFull> getByCode(@NotBlank @PathVariable String code) {
 
         TaskDtoFull task = dtoFullConverter.toDto(byCodeGetService.get(code.toUpperCase()));
 
@@ -118,23 +120,65 @@ public class TaskController {
      *
      * @return лист TaskDtoPreview
      */
-    @GetMapping(value = "/task/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskDtoPreview>> getList(Sort sort, Pageable pageable) {
+//    @GetMapping(value = "/task/list", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<TaskDtoPreview>> getList(Sort sort, Pageable pageable) {
+//
+//        List<TaskDtoPreview> list;
+//        if (nonNull(sort) && isNull(pageable)) {
+//            list = taskSorting.getSortList(sort).stream()
+//                    .map(dtoPreviewConverter::toDto)
+//                    .collect(Collectors.toList());
+//        } else if (nonNull(pageable)) {
+//            list = taskPaging.getPageableList(pageable).stream()
+//                    .map(dtoPreviewConverter::toDto)
+//                    .collect(Collectors.toList());
+//        } else {
+//            list = taskGetListService.getList().stream()
+//                    .map(dtoPreviewConverter::toDto)
+//                    .collect(Collectors.toList());
+//        }
+////        list = taskGetListService.getList().stream()
+////                .map(dtoPreviewConverter::toDto)
+////                .collect(Collectors.toList());
+//        if (list.isEmpty())
+//            throw new NotFoundException("List TaskDtoPreview is empty!");
+//
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
 
-        List<TaskDtoPreview> list;
-        if (sort != null && pageable == null) {
-            list = taskSorting.getSortList(sort).stream()
-                    .map(dtoPreviewConverter::toDto)
-                    .collect(Collectors.toList());
-        } else if (pageable != null) {
-            list = taskPaging.getPageableList(pageable).stream()
-                    .map(dtoPreviewConverter::toDto)
-                    .collect(Collectors.toList());
-        } else {
-            list = taskGetListService.getList().stream()
-                    .map(dtoPreviewConverter::toDto)
-                    .collect(Collectors.toList());
-        }
+    @GetMapping(value = "/task/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskDtoPreview>> getList() {
+
+        List<TaskDtoPreview> list = taskGetListService.getList().stream()
+                .map(dtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
+
+        if (list.isEmpty())
+            throw new NotFoundException("List TaskDtoPreview is empty!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/task/listSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskDtoPreview>> getListSort(Sort sort) {
+
+        List<TaskDtoPreview> list = taskSorting.getSortList(sort).stream()
+                .map(dtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
+
+        if (list.isEmpty())
+            throw new NotFoundException("List TaskDtoPreview is empty!");
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/task/listPage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskDtoPreview>> getListPage(Pageable pageable) {
+
+        List<TaskDtoPreview> list = taskPaging.getPageableList(pageable).stream()
+                .map(dtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
+
         if (list.isEmpty())
             throw new NotFoundException("List TaskDtoPreview is empty!");
 
