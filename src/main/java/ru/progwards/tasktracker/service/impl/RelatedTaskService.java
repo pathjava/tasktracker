@@ -3,25 +3,24 @@ package ru.progwards.tasktracker.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
-import ru.progwards.tasktracker.exception.OperationIsNotPossibleException;
 import ru.progwards.tasktracker.model.RelatedTask;
 import ru.progwards.tasktracker.model.RelationType;
-import ru.progwards.tasktracker.model.Task;
 import ru.progwards.tasktracker.repository.RelatedTaskRepository;
 import ru.progwards.tasktracker.repository.RelationTypeRepository;
 import ru.progwards.tasktracker.service.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.String.format;
 
 /**
- * Бизнес-логика связанной задачи (RelatedTask)
+ * Бизнес-логика связи задачи (RelatedTask)
  *
  * @author Oleg Kiselev
  */
@@ -29,13 +28,14 @@ import static java.lang.String.format;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class RelatedTaskService implements CreateService<RelatedTask>, GetService<Long, RelatedTask>,
-        RemoveService<RelatedTask>, GetListService<RelatedTask> {
+        RemoveService<RelatedTask>, GetListService<RelatedTask>,
+        Paging<Long, RelatedTask>, Sorting<Long, RelatedTask> {
 
     private final RelatedTaskRepository relatedTaskRepository;
     private final RelationTypeRepository relationTypeRepository;
 
     /**
-     * Метод создания связанной задачи RelatedTask
+     * Метод создания связи задачи RelatedTask
      * Первоначально в методе проверяется наличие между двумя задачами Task связей RelatedTask одного типа RelationType,
      * и если есть связь такого типа RelationType как в пришедшей RelatedTask в параметре метода create,
      * новая связь не добавляется.
@@ -74,10 +74,10 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     }
 
     /**
-     * Метод получения связанной задачи RelatedTask по её идентификатору
+     * Метод получения связи задачи RelatedTask по её идентификатору
      *
-     * @param id идентификатор по которому необходимо получить связанную задачу
-     * @return найденную связанную задачу или пусто
+     * @param id идентификатор по которому необходимо получить связь задачи
+     * @return найденную связь задачи или пусто
      */
     @Override
     public RelatedTask get(Long id) {
@@ -86,7 +86,7 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     }
 
     /**
-     * Метод получения всех связанных задач RelatedTask без привязки к определенной задаче
+     * Метод получения всех связей задач RelatedTask без привязки к определенной задаче
      *
      * @return коллекция всех связей задач
      */
@@ -96,7 +96,53 @@ public class RelatedTaskService implements CreateService<RelatedTask>, GetServic
     }
 
     /**
-     * Метод удаления связанной задачи RelatedTask
+     * Метод получения страницы пагинации связей задач (RelatedTask) без привязки к какой-либо задаче
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return страница пагинации связей задач
+     */
+    @Override
+    public Page<RelatedTask> getPageableList(Pageable pageable) {
+        return relatedTaskRepository.findAll(pageable);
+    }
+
+    /**
+     * Метод получения страницы пагинации связей задач (RelatedTask) по id задачи (Task)
+     *
+     * @param id       идентификатор задачи (Task)
+     * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
+     * @return страница пагинации связей задач
+     */
+    @Override
+    public Page<RelatedTask> getPageableListById(Long id, Pageable pageable) {
+        return relatedTaskRepository.findByCurrentTaskIdAndDeletedFalse(id, pageable);
+    }
+
+    /**
+     * Метод получения всех отсортированных связей задач (RelatedTask) без привязки к какой-либо задаче
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированных связей задач
+     */
+    @Override
+    public List<RelatedTask> getSortList(Sort sort) {
+        return relatedTaskRepository.findAll(sort);
+    }
+
+    /**
+     * Метод получения всех отсортированных связей задач (RelatedTask) по id задачи (Task)
+     *
+     * @param id   идентификатор задачи (Task)
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированных связей задач
+     */
+    @Override
+    public List<RelatedTask> getSortListById(Long id, Sort sort) {
+        return relatedTaskRepository.findByCurrentTaskIdAndDeletedFalse(id, sort);
+    }
+
+    /**
+     * Метод удаления связи задачи RelatedTask
      * Если getCounterRelationId() != null, тогда удаляется встречная связь
      *
      * @param model value object - объект бизнес логики, который необходимо удалить

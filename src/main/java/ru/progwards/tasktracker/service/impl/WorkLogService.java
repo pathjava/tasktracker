@@ -3,6 +3,9 @@ package ru.progwards.tasktracker.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
@@ -30,7 +33,8 @@ import static java.lang.String.format;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class WorkLogService implements CreateService<WorkLog>, GetService<Long, WorkLog>,
-        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog> {
+        RefreshService<WorkLog>, RemoveService<WorkLog>, GetListService<WorkLog>,
+        Paging<Long, WorkLog>, Sorting<Long, WorkLog> {
 
     private final WorkLogRepository workLogRepository;
     private final TaskRepository taskRepository;
@@ -227,6 +231,52 @@ public class WorkLogService implements CreateService<WorkLog>, GetService<Long, 
     @Override
     public List<WorkLog> getList() {
         return workLogRepository.findAll();
+    }
+
+    /**
+     * Метод получения страницы пагинации журнала работ WorkLog без привязки к какой-либо задаче
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return страница пагинации журнала работ задачи
+     */
+    @Override
+    public Page<WorkLog> getPageableList(Pageable pageable) {
+        return workLogRepository.findAll(pageable);
+    }
+
+    /**
+     * Метод получения всех отсортированного журнала работ WorkLog без привязки к какой-либо задаче
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированного журнала работ задачи
+     */
+    @Override
+    public List<WorkLog> getSortList(Sort sort) {
+        return workLogRepository.findAll(sort);
+    }
+
+    /**
+     * Метод получения страницы пагинации журнала работ WorkLog по id задачи (Task)
+     *
+     * @param id       идентификатор задачи (Task)
+     * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
+     * @return страница пагинации журнала работ задачи
+     */
+    @Override
+    public Page<WorkLog> getPageableListById(Long id, Pageable pageable) {
+        return workLogRepository.findByTaskId(id, pageable);
+    }
+
+    /**
+     * Метод получения всех отсортированного журнала работ WorkLog по id задачи (Task)
+     *
+     * @param id   идентификатор задачи (Task)
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированного журнала работ задачи
+     */
+    @Override
+    public List<WorkLog> getSortListById(Long id, Sort sort) {
+        return workLogRepository.findByTaskId(id, sort);
     }
 
     /**

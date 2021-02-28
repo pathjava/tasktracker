@@ -3,6 +3,9 @@ package ru.progwards.tasktracker.service.impl;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.progwards.tasktracker.exception.NotFoundException;
@@ -28,7 +31,8 @@ import static java.lang.String.format;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @NonNull})
 public class TaskTypeService implements CreateService<TaskType>, GetService<Long, TaskType>,
-        RemoveService<TaskType>, RefreshService<TaskType>, GetListService<TaskType>, TemplateService<TaskType> {
+        RemoveService<TaskType>, RefreshService<TaskType>, GetListService<TaskType>,
+        TemplateService<TaskType>, Paging<Long, TaskType>, Sorting<Long, TaskType> {
 
     private final TaskTypeRepository taskTypeRepository;
     private final TaskRepository taskRepository;
@@ -126,17 +130,39 @@ public class TaskTypeService implements CreateService<TaskType>, GetService<Long
     }
 
     /**
-     * Метод получения абсолютно всех типов задач
+     * Метод получения листа всех типов задач (TaskType)
      *
-     * @return коллекция типов задач
+     * @return лист типов задач
      */
     @Override
     public List<TaskType> getList() {
         return taskTypeRepository.findAll();
     }
 
+    /**
+     * Метод получения страницы пагинации всех типов задач (TaskType)
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return страница пагинации (TaskType)
+     */
+    @Override
+    public Page<TaskType> getPageableList(Pageable pageable) {
+        return taskTypeRepository.findAll(pageable);
+    }
+
+    /**
+     * Метод получения сортированного листа типов задач (TaskType)
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return сортированный лист (TaskType)
+     */
+    @Override
+    public List<TaskType> getSortList(Sort sort) {
+        return taskTypeRepository.findAll(sort);
+    }
 
     CreateService<TaskType> taskTypeCreateService;
+
     /**
      * Метод создания TaskType по шаблону
      *

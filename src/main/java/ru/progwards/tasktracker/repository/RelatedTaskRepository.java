@@ -1,5 +1,8 @@
 package ru.progwards.tasktracker.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -97,4 +100,22 @@ public interface RelatedTaskRepository extends JpaRepository<RelatedTask, Long> 
      * @return лист RelatedTask
      */
     List<RelatedTask> findAllByCurrentTask(Task currentTask);
+
+    /**
+     * Метод получения сортированного листа RelatedTask по id Task, у которых поле deleted имеет значение false
+     *
+     * @param id   идентификатор Task
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return лист отсортированных RelatedTask задачи
+     */
+    List<RelatedTask> findByCurrentTaskIdAndDeletedFalse(Long id, Sort sort);
+
+    /**
+     * Метод получения страницы пагинации объектов RelatedTask по id Task у которых поле deleted имеет значение false
+     *
+     * @param id       идентификатор Task
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return страница пагинации объектов RelatedTask задачи
+     */
+    Page<RelatedTask> findByCurrentTaskIdAndDeletedFalse(Long id, Pageable pageable);
 }

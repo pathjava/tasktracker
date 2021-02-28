@@ -3,6 +3,8 @@ package ru.progwards.tasktracker.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,6 @@ import ru.progwards.tasktracker.service.*;
 import ru.progwards.tasktracker.util.validator.validationstage.Create;
 import ru.progwards.tasktracker.util.validator.validationstage.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +40,8 @@ public class RelationTypeController {
     private final RefreshService<RelationType> relationTypeRefreshService;
     private final GetListService<RelationType> relationTypeGetListService;
     private final Converter<RelationType, RelationTypeDtoFull> converter;
+    private final Sorting<Long, RelationType> relationTypeSorting;
+    private final Paging<Long, RelationType> relationTypePaging;
 
     /**
      * Метод получения типа отношения (RelationType) связанных задач (RelatedTask)
@@ -55,7 +58,7 @@ public class RelationTypeController {
     }
 
     /**
-     * Метод получения коллекции типов отношений (RelationType) связанных задач (RelatedTask)
+     * Метод получения листа типов отношений (RelationType) связанных задач (RelatedTask)
      *
      * @return лист RelationTypeDtoFull
      */
@@ -65,8 +68,51 @@ public class RelationTypeController {
                 .map(converter::toDto)
                 .collect(Collectors.toList());
 
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод проверки, что полученный лист не пустой
+     *
+     * @param list лист типов отношений RelationTypeDtoFull
+     */
+    private void checkListNotEmpty(List<RelationTypeDtoFull> list) {
         if (list.isEmpty())
             throw new NotFoundException("List RelationTypeDtoFull is empty!");
+    }
+
+    /**
+     * Метод получения сортированного листа типов отношений (RelationType) связанных задач (RelatedTask)
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return сортированный лист RelationTypeDtoFull
+     */
+    @GetMapping(value = "/listSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RelationTypeDtoFull>> getListSort(Sort sort) {
+        List<RelationTypeDtoFull> list = relationTypeSorting.getSortList(sort).stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения листа пагинации типов отношений (RelationType) связанных задач (RelatedTask)
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return лист пагинации RelationTypeDtoFull
+     */
+    @GetMapping(value = "/listPage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RelationTypeDtoFull>> getListPage(Pageable pageable) {
+        List<RelationTypeDtoFull> list = relationTypePaging.getPageableList(pageable).stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

@@ -105,7 +105,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     /**
      * Метод получения всех отсортированных задач (Task) по id проекта (Project)
      *
-     * @param id   id проекта (Project)
+     * @param id   идентификатор проекта (Project)
      * @param sort параметр/параметры, по которым происходит сортировка
      * @return лист отсортированных задач проекта
      */
@@ -128,7 +128,7 @@ public class TaskService implements CreateService<Task>, GetListService<Task>, G
     /**
      * Метод получения страницы пагинации задач (Task) по id проекта (Project)
      *
-     * @param id       id проекта (Project)
+     * @param id       идентификатор проекта (Project)
      * @param pageable параметр/параметры по которым получаем страницу пагинации объектов
      * @return страница пагинации задач проекта
      */

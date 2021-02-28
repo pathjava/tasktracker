@@ -3,6 +3,8 @@ package ru.progwards.tasktracker.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,8 @@ public class TaskTypeController {
     private final Converter<TaskType, TaskTypeDtoFull> dtoFullConverter;
     private final Converter<TaskType, TaskTypeDtoPreview> dtoPreviewConverter;
     private final GetService<Long, Project> projectGetService;
+    private final Paging<Long, TaskType> taskTypePaging;
+    private final Sorting<Long, TaskType> taskTypeSorting;
 
     /**
      * Метод создания типа задачи (TaskType)
@@ -75,7 +79,7 @@ public class TaskTypeController {
     }
 
     /**
-     * Метод получения коллекции всех типов задач (TaskType)
+     * Метод получения листа всех типов задач (TaskType)
      *
      * @return лист TaskTypeDtoFull
      */
@@ -85,8 +89,51 @@ public class TaskTypeController {
                 .map(dtoFullConverter::toDto)
                 .collect(Collectors.toList());
 
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод проверки, что полученный лист не пустой
+     *
+     * @param list лист типов задач TaskTypeDtoFull
+     */
+    private void checkListNotEmpty(List<TaskTypeDtoFull> list) {
         if (list.isEmpty())
             throw new NotFoundException("List TaskTypeDtoFull is empty!");
+    }
+
+    /**
+     * Метод получения сортированного листа всех типов задач (TaskType)
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return сортированный лист TaskTypeDtoFull
+     */
+    @GetMapping(value = "/listSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskTypeDtoFull>> getListSort(Sort sort) {
+        List<TaskTypeDtoFull> list = taskTypeSorting.getSortList(sort).stream()
+                .map(dtoFullConverter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения листа пагинации всех типов задач (TaskType)
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return лист пагинации TaskTypeDtoFull
+     */
+    @GetMapping(value = "/listPage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskTypeDtoFull>> getListPage(Pageable pageable) {
+        List<TaskTypeDtoFull> list = taskTypePaging.getPageableList(pageable).stream()
+                .map(dtoFullConverter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

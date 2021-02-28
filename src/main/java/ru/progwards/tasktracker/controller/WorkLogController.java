@@ -3,6 +3,8 @@ package ru.progwards.tasktracker.controller;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,8 @@ public class WorkLogController {
     private final GetService<Long, Task> taskGetService;
     private final Converter<WorkLog, WorkLogDtoFull> workLogDtoFullConverter;
     private final Converter<WorkLog, WorkLogDtoPreview> workLogDtoPreviewConverter;
+    private final Paging<Long, WorkLog> workLogPaging;
+    private final Sorting<Long, WorkLog> workLogSorting;
 
     /**
      * Метод получения одной записи журнала работ (WorkLog)
@@ -71,8 +75,57 @@ public class WorkLogController {
                 .map(workLogDtoFullConverter::toDto)
                 .collect(Collectors.toList());
 
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод проверки, что полученный лист не пустой
+     *
+     * @param list лист журнала работ
+     */
+    private void checkListNotEmpty(List<?> list) {
         if (list.isEmpty())
-            throw new NotFoundException("List WorkLogDtoFull is empty!");
+            throw new NotFoundException("List WorkLogDto is empty!");
+    }
+
+    /**
+     * Метод получения отсортированного списка журнала работ (WorkLog) по идентификатору задачи (Task)
+     *
+     * @param id   идентификатор задачи, для которой необходимо вывести логи
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return отсортированный лист WorkLogDtoFull
+     */
+    @GetMapping(value = "/task/{id}/workLogsSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<WorkLogDtoFull>> getListSortByTask(@PathVariable @Positive Long id,
+                                                                  Sort sort) {
+
+        List<WorkLogDtoFull> list = workLogSorting.getSortListById(id, sort).stream()
+                .map(workLogDtoFullConverter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения страницы пагинации журнала работ (WorkLog) по идентификатору задачи (Task)
+     *
+     * @param id       идентификатор задачи, для которой необходимо вывести логи
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return лист страницы пагинации WorkLogDtoFull
+     */
+    @GetMapping(value = "/task/{id}/workLogsPage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<WorkLogDtoFull>> getListPageByTask(@PathVariable @Positive Long id,
+                                                                  Pageable pageable) {
+
+        List<WorkLogDtoFull> list = workLogPaging.getPageableListById(id, pageable).stream()
+                .map(workLogDtoFullConverter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -88,8 +141,41 @@ public class WorkLogController {
                 .map(workLogDtoPreviewConverter::toDto)
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) //TODO - пустая коллекция или нет возможно будет проверятся на фронте?
-            throw new NotFoundException("List WorkLogDtoFull is empty!");
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения отсортированного списка всего журнала работ (WorkLog)
+     *
+     * @param sort параметр/параметры, по которым происходит сортировка
+     * @return отсортированный лист WorkLogDtoFull
+     */
+    @GetMapping(value = "/workLog/listSort", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<WorkLogDtoPreview>> getListSort(Sort sort) {
+        List<WorkLogDtoPreview> list = workLogSorting.getSortList(sort).stream()
+                .map(workLogDtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * Метод получения страницы пагинации журнала работ (WorkLog)
+     *
+     * @param pageable параметр/параметры по которым происходит выборка страницы пагинации объектов
+     * @return лист пагинации WorkLogDtoFull
+     */
+    @GetMapping(value = "/workLog/listPage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<WorkLogDtoPreview>> getListPage(Pageable pageable) {
+        List<WorkLogDtoPreview> list = workLogPaging.getPageableList(pageable).stream()
+                .map(workLogDtoPreviewConverter::toDto)
+                .collect(Collectors.toList());
+
+        checkListNotEmpty(list);
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
